@@ -1,0 +1,61 @@
+<template>
+  <div id="app">
+    <router-view/>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'App'
+}
+</script>
+
+<style lang="scss">
+  .w1200{
+    width: 1200px;
+    margin: 0 auto;
+  }
+  .mt48{
+    margin-top: 48px;
+  }
+  .mb24{
+    margin-bottom: 24px;
+  }
+  .pt48{
+    padding-top: 48px;
+  }
+  .ml111{
+    margin-left: 111px;
+  }
+  .ml211{
+    margin-left: 211px;
+  }
+  .wrappy{
+    width: 100%;
+    background:rgba(246,246,246,1);
+    padding-bottom: 80px;
+    padding-top: 48px;
+    box-sizing: border-box;
+  }
+
+
+  .line{
+    width: 1200px;
+    height: 2px;
+    background: #eee;
+    margin-top: 15px;
+  &::after{
+     border: 6px solid #ccc;
+   }
+  }
+  .ml42{
+    margin-left: 40px;
+  }
+  .align{
+    text-align: center;
+  }
+  .fs{
+    font-size: 0;
+  }
+
+</style>

@@ -1,0 +1,17 @@
+<template>
+<div>
+  vc就是不V家族北京
+  xsxjabaanjknka
+  knnkjjbhj
+</div>
+</template>
+
+<script>
+    export default {
+        name: "messageCenter"
+    }
+</script>
+
+<style scoped>
+
+</style>

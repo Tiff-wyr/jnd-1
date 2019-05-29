@@ -1,0 +1,91 @@
+<template>
+  <el-upload
+    class="my-upload"
+    :data="uploadData"
+    action="http://upload-z1.qiniup.com"
+    :show-file-list="false"
+    :on-success="uploadSuccess"
+    :before-upload="beforeUpload">
+    <img :src="currentValue" v-show="currentValue" style="width: 80px;height: 80px;">
+    <i class="el-icon-plus my-upload-icon" v-show="!currentValue"></i>
+  </el-upload>
+</template>
+
+<script>
+  export default {
+    props: {
+      value: {
+        type: String
+      }
+    },
+    data () {
+      return {
+        uploadData: {
+          token: '',
+        },
+        currentValue: this.value
+      }
+    },
+    methods: {
+      uploadSuccess (file) {
+        let url = `http://img.softtrade.top/${file.hash}`
+        this.$emit('input', url)
+        console.log(url);
+      },
+      getToken () { // 获取上传凭证
+        this.$axios.get('/photo/getUptoken').then(res => {
+          this.uploadData.token = res
+        })
+
+      },
+      beforeUpload (file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2
+        if (!isLt2M) {
+          this.$message.warning('上传头像图片大小不能超过 2MB!')
+        }
+        if (!isJPG) {
+          this.$message.warning('上传图片格式不正确!');
+        }
+
+        let formData =new FormData()
+        formData.append('token',this.uploadData.token)
+        formData.append('file', this.currentValue)
+
+        return isJPG && isLt2M;
+      },
+    },
+    watch: {
+      value (val) {
+        this.currentValue = val
+      }
+    },
+    created () {
+      this.getToken()
+    }
+  }
+</script>
+
+<style>
+  .my-upload {
+    position: relative;
+    float: left;
+    display: block;
+    width: 80px;
+    height: 80px;
+    border-radius: 3px;
+    background-color: #ccc;
+  }
+  .my-upload .upload-icon {
+    display: block;
+    width: 100%;
+  }
+  .my-upload-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color: #fff;
+    font-size:45px;
+  }
+</style>

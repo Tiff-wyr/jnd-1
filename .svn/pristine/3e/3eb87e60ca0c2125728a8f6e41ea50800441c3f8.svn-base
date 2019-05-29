@@ -1,0 +1,408 @@
+<template>
+<div>
+  <div class="loan"></div>
+  <div class="wrappy">
+    <div class="w1200">
+      <div class="clearfix">
+        <div class="loan-left fll">
+          <div class="left1 clearfix">
+            <img src="../../static/resource/loans/工资icon.png" alt="" class="fll">
+            <div class="fll left-one">
+              <div class="salary mt4">有打卡工资</div>
+              <div class="credit mt18">北京月入2千信用贷</div>
+            </div>
+            <div class="fll left-two">
+              <div class="same mt14">抵押物:<span class="toge">&nbsp;无抵押</span></div>
+              <div class="same mt18">利率范围:<span class="toge">&nbsp;0.26~0.95%</span></div>
+            </div>
+            <div class="fll left-three">
+              <div class="same mt14">抵押物:<span class="toge">&nbsp;无抵押</span></div>
+              <div class="same mt18">利率范围:<span class="toge">&nbsp;0.26~0.95%</span></div>
+            </div>
+            <div class="btn fll left-four">申请贷款</div>
+          </div>
+          <div class="mt68 left2 clearfix">
+            <img src="../../static/resource/loans/房子icon.png" alt="" class="fll">
+            <div class="fll left-one">
+              <div class="salary mt4">有房</div>
+              <div class="credit mt18">北京按揭房也能贷</div>
+            </div>
+            <div class="fll left-two">
+              <div class="same mt14">抵押物:<span class="toge">&nbsp;房产抵押</span></div>
+              <div class="same mt18">利率范围:<span class="toge">&nbsp;0.26~0.95%</span></div>
+            </div>
+            <div class="fll left-three">
+              <div class="same mt14">抵押物:<span class="toge">&nbsp;3-7个工作日</span></div>
+              <div class="same mt18">贷款金额:<span class="toge">&nbsp;最高3000万</span></div>
+            </div>
+            <div class="btn fll left-four">申请贷款</div>
+          </div>
+          <div class="mt68 left3 clearfix">
+            <img src="../../static/resource/loans/车子icon.png" alt="" class="fll">
+            <div class="fll left-one">
+              <div class="salary mt4">有车</div>
+              <div class="credit mt18">北京不押车当天放款</div>
+            </div>
+            <div class="fll left-two">
+              <div class="same mt14">抵押物:<span class="toge">&nbsp;无抵押</span></div>
+              <div class="same mt18">利率范围:<span class="toge">&nbsp;0.26~0.95%</span></div>
+            </div>
+            <div class="fll left-three">
+              <div class="same mt14">抵押物:<span class="toge">&nbsp;无抵押</span></div>
+              <div class="same mt18">利率范围:<span class="toge">&nbsp;0.26~0.95%</span></div>
+            </div>
+            <div class="btn fll left-four">申请贷款</div>
+          </div>
+          <div class="mt68 left4 clearfix">
+            <img src="../../static/resource/loans/钱袋icon.png" alt="" class="fll">
+            <div class="fll left-one">
+              <div class="salary mt4">有资人士</div>
+              <div class="credit mt18">有经营场所就能贷</div>
+            </div>
+            <div class="fll left-two">
+              <div class="same mt14">抵押物:<span class="toge">&nbsp;无抵押</span></div>
+              <div class="same mt18">利率范围:<span class="toge">&nbsp;0.26~0.95%</span></div>
+            </div>
+            <div class="fll left-three">
+              <div class="same mt14">抵押物:<span class="toge">&nbsp;无抵押</span></div>
+              <div class="same mt18">利率范围:<span class="toge">&nbsp;0.26~0.95%</span></div>
+            </div>
+            <div class="btn fll left-four">申请贷款</div>
+          </div>
+        </div>
+        <div class="loan-right fll">
+          <div class="top">
+
+          </div>
+          <div class="bottom">更多顾问>></div>
+        </div>
+      </div>
+      <div class="clearfix mt48 mb24">
+        <div class="loans-product fll">贷款产品</div>
+        <div class="fll">
+          <div class="organ-more fll" @click="enter">更多</div>
+          <img src="../../static/resource/右边.png" alt="" class="fll img-right">
+        </div>
+      </div>
+
+      <div class="loans-pro">
+        <div class="loans-header clearfix">
+          <div class="header-same fll">名称</div>
+          <div class="header-same fll">利率</div>
+          <div class="header-same fll">放款时间</div>
+          <div class="header-same fll">额度</div>
+          <div class="header-same fll">使用期限</div>
+          <div class="header-same fll">操作</div>
+        </div>
+        <div class="loans-pro-item clearfix">
+          <div class="name fll">个人住房转按揭贷款</div>
+          <div class="rate fll">4.4%</div>
+          <div class="time fll">3天</div>
+          <div class="limit fll">10万-20万</div>
+          <div class="deadline fll">2年</div>
+          <div class="operate fll">查看</div>
+        </div>
+        <div class="loans-pro-item clearfix">
+          <div class="name fll">个人住房转按揭贷款</div>
+          <div class="rate fll">4.4%</div>
+          <div class="time fll">3天</div>
+          <div class="limit fll">10万-20万</div>
+          <div class="deadline fll">2年</div>
+          <div class="operate fll">查看</div>
+        </div>
+      </div>
+
+      <div class="page">
+        <el-pagination
+          background
+          :page-size="10"
+          :pager-count="5"
+          layout="prev, pager, next"
+          :total="200">
+        </el-pagination>
+      </div>
+      <footerSame></footerSame>
+
+    </div>
+  </div>
+
+</div>
+</template>
+
+<script>
+  import router from '../router/index'
+  import footerSame from '../component/footerSame'
+    export default {
+        name: "Loans",
+      components:{
+        footerSame
+      },
+      data() {
+        return {
+          tableData: [
+            {
+              name: '个人住房转按揭贷款',
+              rate: '4.4%',
+              time: '3天',
+              limit:'10～20万',
+              deadline:'2年',
+
+            },
+            {
+              name: '个人住房转按揭贷款',
+              rate: '4.4%',
+              time: '3天',
+              limit:'10～20万',
+              deadline:'2年',
+
+            },
+            {
+              name: '个人住房转按揭贷款',
+              rate: '4.4%',
+              time: '3天',
+              limit:'10～20万',
+              deadline:'2年',
+
+            },
+          ]
+        }
+      },
+      methods:{
+        enter(){
+          router.push('/productDetail')
+        }
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  .loans-pro{
+    width:1200px;
+    height:788px;
+    background:rgba(255,255,255,1);
+    .loans-header{
+      height: 78px;
+      .header-same{
+        text-align: center;
+        width: 200px;
+        height: 78px;
+        font-size:16px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:78px;
+      }
+    }
+
+  }
+  .img-right{
+    margin-top: 14px;
+  }
+  .organ-more{
+    height:14px;
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(155,155,155,1);
+    line-height:14px;
+    margin-top: 14px;
+    margin-left: 1030px;
+  }
+
+
+  .mt18{
+    margin-top: 18px;
+  }
+  .mt14{
+    margin-top: 14px;
+  }
+  .mt4{
+    margin-top: 4px;
+  }
+  .mt68{
+    margin-top: 68px;
+  }
+.loan{
+  width: 100%;
+  height:437px;
+  background-image: url("../../static/resource/loanimg.png");
+  background-size: 100% 100%;
+}
+.loan-left{
+  width:902px;
+  height:604px;
+  background:rgba(255,255,255,1);
+  padding: 60px 49px;
+  box-sizing: border-box;
+}
+.loan-right{
+  margin-left: 30px;
+  .top{
+    width:268px;
+    height:504px;
+    background:rgba(255,255,255,1);
+  }
+  .bottom{
+    text-align: center;
+    width:268px;
+    height:31px;
+    background:rgba(234,234,234,1);
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(155,155,155,1);
+    line-height:31px;
+  }
+  }
+.left1,.left2,.left3,.left4{
+  font-size: 0;
+}
+
+.left-one{
+  width: 126px;
+  height: 68px;
+  margin-left: 30px;
+
+}
+.left-two{
+  width: 149px;
+  height: 68px;
+  margin-left: 76px;
+}
+.left-three{
+   width: 151px;
+   height: 68px;
+   margin-left: 22px;
+ }
+.left-four{
+  text-align: center;
+  margin-left: 38px;
+  width:120px;
+  height:55px;
+  background:rgba(208,172,86,1);
+  border-radius:4px;
+  font-size:18px;
+  font-family:PingFangSC-Regular;
+  font-weight:400;
+  color:rgba(255,255,255,1);
+  line-height:55px;
+  margin-top: 10px;
+}
+  .salary{
+    height:24px;
+    font-size:20px;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(81,81,81,1);
+    line-height:24px;
+  }
+  .credit{
+    height:14px;
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(127,127,127,1);
+    line-height:14px;
+  }
+  .same{
+    height:14px;
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(127,127,127,1);
+    line-height:14px;
+  }
+  .toge{
+    height:14px;
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(168, 14, 14, 1);
+    line-height:14px;
+  }
+.loans-product{
+  width:112px;
+  height:28px;
+  font-size:24px;
+  font-family:PingFangSC-Medium;
+  font-weight:500;
+  color:rgba(0,0,0,1);
+  line-height:28px;
+}
+.loans-pro-item{
+  height: 88px;
+  .rate{
+    text-align: center;
+    width: 200px;
+    font-size:16px;
+    font-weight:bold;
+    color:rgba(168,14,14,1);
+    line-height:88px;
+  }
+  .name{
+    text-align: center;
+    width: 200px;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:88px;
+  }
+  .time{
+    text-align: center;
+    width: 200px;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:88px;
+  }
+  .limit{
+    text-align: center;
+    width: 200px;
+    font-size:16px;
+    font-family:DINAlternate-Bold;
+    font-weight:bold;
+    color:rgba(168,14,14,1);
+    line-height:88px;
+  }
+  .deadline{
+    text-align: center;
+    width: 200px;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:88px;
+  }
+  .operate{
+    text-align: center;
+    width: 200px;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(155,155,155,1);
+    line-height:88px;
+  }
+  &:hover{
+    box-shadow:0px 4px 13px 0px rgba(217,217,217,1);
+  }
+  &:hover .operate{
+    width:99px;
+    height:41px;
+    background:rgba(168,14,14,1);
+    border-radius:4px;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+    line-height:41px;
+    margin: 24px 50px;
+  }
+}
+
+.page{
+  margin-top:24px;
+  text-align: right;
+}
+</style>

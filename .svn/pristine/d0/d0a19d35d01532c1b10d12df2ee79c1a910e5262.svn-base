@@ -1,0 +1,408 @@
+<template>
+    <div>
+      <div class="header clearfix">
+          <div class="w1200">
+            <div class="clearfix fll header-left">
+              <div>
+                <div class="text1 fll" @click="login" v-if="isLogin">登录</div>
+                <div class="text1 fll" v-else v-model="personalMessage.phone" @click="personDetail(personalMessage.roleId,personalMessage.userId)">{{personalMessage.phone}}</div>
+              </div>
+
+
+              <div class="text2 fll">&nbsp;|&nbsp;</div>
+              <div class="text3 fll" @click="register">注册</div>
+              <div class="text4 fll" @click="enter">帮助中心</div>
+            </div>
+          </div>
+      </div>
+      <div class="wrap">
+        <div class="w1200">
+          <div class="link-wrap">
+            <router-link to="/home" >首页</router-link>
+            <router-link to="/loans" >找贷款</router-link>
+            <router-link to="/agent" >找经纪人</router-link>
+            <router-link to="/organization" >找机构</router-link>
+            <router-link to="/help" >贷款帮助</router-link>
+          </div>
+
+        </div>
+      </div>
+      <div class="mask" v-show="isMask"></div>
+      <div class="contain" v-show="isContain">
+        <el-tabs>
+          <el-tab-pane><span slot="label">短信登录</span>
+            <form>
+              <div class="form-con">
+                <input type="text" class="number" placeholder="输入手机号" v-model="loginNum.phone">
+                <div class="clearfix">
+                  <input type="text" class="fll card" placeholder="输入短信验证码" v-model="loginNum.code">
+                  <div class="fll verify">
+                    <div class="send" v-if="showing" @click="send" v-model="verifyCode">{{verifyCode}}</div>
+                    <div v-else class="time send" v-model="time">{{time}}s</div>
+                  </div>
+                </div>
+                <div class="mt12">
+                  <el-checkbox v-model="checked">自动登录</el-checkbox>
+                </div>
+                <div class="btn" @click="handleLogin">登&nbsp;&nbsp;录</div>
+                <div class="form-desc">还没有就能贷账号?<span class="register">&nbsp;立即注册</span></div>
+              </div>
+            </form>
+          </el-tab-pane>
+          <el-tab-pane><span slot="label">账号登录</span>
+            <form>
+              <div class="form-con">
+                <input type="text" class="number" placeholder="输入手机号" v-model="passwordLogin.number">
+                <input type="text" class="fll number" placeholder="输入密码" v-model="passwordLogin.password">
+                <div class="clearfix mt12">
+                  <el-checkbox v-model="checked">自动登录</el-checkbox>
+                  <div class="flr password" @click="findPassword">找回密码?</div>
+                </div>
+                <div class="btn" @click="loginTrue">登&nbsp;&nbsp;录</div>
+                <div class="form-desc">还没有就能贷账号?<span class="register">&nbsp;立即注册</span></div>
+              </div>
+            </form>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+      <router-view></router-view>
+    </div>
+</template>
+
+<script>
+  import router from '../router/index'
+    export default {
+        name: "layout",
+      data(){
+          return {
+            isLogin:true,
+            checked: true,
+            time:20,
+            verifyCode:'发送验证码',
+            showing:true,
+            isMask:false,
+            isContain:false,
+            formLabelAlign:{
+              number:'',
+              verifyCode:''
+            },
+            //验证码登录
+            loginNum:{
+              code:'',
+              phone:''
+            },
+            //密码登录
+            passwordLogin:{
+              number:'',
+              password:''
+            },
+            //用户信息
+            personalMessage:{
+              userId:'',
+              phone:'',
+              roleId:''
+            }
+          }
+      },
+      methods:{
+        //获取验证码
+        send(){
+          if(this.loginNum.phone){
+            this.showing=false;
+            this.$axios.get(`base/getLoginCode/${this.loginNum.phone}`).then(res=>{
+              let timer=setInterval(()=>{
+                this.time--
+                if(this.time < 0){
+                  clearInterval(timer)
+                  this.showing=true
+                  this.verifyCode='重新获取'
+                  this.time=20
+                }
+              },1000)
+            })
+          }else{
+            this.$message.warning('手机号不能为空')
+          }
+        },
+        //短信登录
+        handleLogin(){
+          if(this.loginNum.code){
+            this.$axios.get(`user/loginByPhoneAndCode/${this.loginNum.phone}/${this.loginNum.code}`).then(res=>{
+              console.log('短信登录',res)
+              if(res.status == 200){
+                setTimeout(()=>{
+                  this.$message.success(res.msg)
+                  this.personalMessage=res.data.obj
+                  this.isMask=false
+                  this.isContain=false
+                  this.isLogin=false
+                },500)
+             }
+            })
+          }
+
+        },
+        //密码登录
+        loginTrue(){
+          if(this.passwordLogin.number){
+            if(this.passwordLogin.password){
+              this.$axios.post(`user/loginByPhoneAndPassword/${this.passwordLogin.number}/${this.passwordLogin.password}`).then(res=>{
+                console.log(res)
+
+              })
+            }
+          }
+        },
+        findPassword(){
+          this.$router.push('/findPassword')
+        },
+        login(){
+          this.isMask=true
+          this.isContain=true
+        },
+        loginTrue(){
+          setTimeout(()=>{
+            this.isMask=false
+            this.isContain=false
+          },500)
+        },
+        enter(){
+          router.push('/organMessage')
+        },
+        register(){
+          router.push('/userRegister')
+        },
+        //用户登录后可进入自己的个人页面
+        personDetail(role,id){
+          if(role === 2){
+            this.$router.push(`agentMessage/${id}`)
+          }
+          if(role === 1){
+            this.$router.push(`myMessage/${id}`)
+          }
+          if(role === 3){
+            this.$router.push(`organMessage/${id}`)
+          }
+        }
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  .ml1059{
+    margin-left: 1059px;
+  }
+  .mt12{
+    margin-top: 12px;
+  }
+  .header{
+    width: 100%;
+    height:32px;
+    background:rgba(249,249,249,1);
+      .header-left{
+        width: 212px;
+        margin-left: 988px;
+        .text1,.text2,.text3{
+          font-size:14px;
+          font-weight:400;
+          color:rgba(168,14,14,1);
+          line-height:32px;
+          cursor: pointer;
+        }
+        .text4{
+          height:14px;
+          font-size:14px;
+          font-weight:400;
+          color:rgba(155,155,155,1);
+          line-height:32px;
+          margin-left: 20px;
+          cursor: pointer;
+        }
+      }
+
+  }
+  .wrap{
+    width:100%;
+    height:60px;
+    padding-top: 20px;
+    padding-bottom: 16px;
+    box-sizing: border-box;
+    a{
+      height:24px;
+      font-size:16px;
+      font-weight:400;
+      color:rgba(81,81,81,1);
+      line-height:24px;
+      margin-right: 68px;
+      &:hover{
+        color:rgba(168,14,14,1);
+      }
+    }
+    .link-wrap{
+      margin-left: 49%;
+
+      .router-link-active {
+        color: rgba(168,14,14,1);
+      }
+    }
+  }
+  .mask{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    opacity: 0.7;
+  }
+  .contain{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width:388px;
+    height:368px;
+    background:rgba(255,255,255,1);
+    border-radius:4px;
+    z-index: 999;
+    /deep/ .el-tabs__nav-scroll{
+      position: relative;
+      height: 76px;
+      .el-tabs__nav {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        text-align: center;
+        line-height: 76px;
+        .el-tabs__item{
+          font-size:16px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(81,81,81,1);
+        }
+
+      }
+    }
+    /deep/ .is-active{
+      color:rgba(168,14,14,1) !important;
+    }
+    /deep/ .el-tabs__active-bar {
+      display: none;
+    }
+  }
+.form-con{
+  padding: 8px 44px 40px 44px;
+  .verify{
+    .send{
+      text-align: center;
+      width:95px;
+      height:38px;
+      border-radius:4px;
+      border:1px solid #ccc;
+      font-size:12px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(155,155,155,1);
+      line-height:38px;
+      margin-left: 20px;
+      cursor: pointer;
+    }
+    .time{
+      font-size: 16px;
+      color: #888;
+    }
+  }
+  .number{
+    width: 300px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 10px;
+    box-sizing: border-box;
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:40px;
+    background:rgba(244,244,244,1);
+    margin-bottom: 16px;
+  }
+  .card{
+    width: 180px;
+    height: 40px;
+    background:rgba(244,244,244,1);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 10px;
+    box-sizing: border-box;
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:40px;
+  }
+  .password{
+    height:14px;
+    font-size:12px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(168,14,14,1);
+    line-height:21px;
+    cursor: pointer;
+  }
+  .btn{
+    width:300px;
+    height:40px;
+    background:rgba(168,14,14,1);
+    border-radius:4px;
+    text-align: center;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+    line-height:40px;
+    letter-spacing:3px;
+    margin-top: 30px;
+    cursor: pointer;
+  }
+  .form-desc{
+ text-align: center;
+    height:12px;
+    font-size:12px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(155,155,155,1);
+    line-height:12px;
+    margin-top: 27px;
+    .register{
+      color: #A80E0E;
+      cursor: pointer;
+    }
+  }
+}
+/deep/ .el-checkbox__input.is-checked {
+  .el-checkbox__inner{
+    background-color: rgba(168,14,14,1);
+    border-color: rgba(168,14,14,1);
+  }
+}
+/deep/ .el-checkbox__input.is-checked+ .el-checkbox__label{
+  color:rgba(155,155,155,1);
+}
+/deep/ .el-checkbox__inner:hover {
+  border-color: rgba(155,155,155,1);
+}
+/deep/ .el-checkbox__input.is-focus .el-checkbox__inner{
+  border-color: rgba(155,155,155,1) !important;
+}
+/deep/ .el-checkbox__label{
+  height:14px;
+  font-size:12px;
+  font-family:PingFangSC-Regular;
+  font-weight:400;
+  color:rgba(155,155,155,1);
+  line-height:12px;
+  }
+</style>

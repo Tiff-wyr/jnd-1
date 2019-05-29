@@ -1,0 +1,179 @@
+<template>
+  <div>
+    <div class="wrappy">
+      <div class="w1200">
+        <div class="clearfix">
+          <div class="fll">
+            <div class="main">
+              <div class="img-main">
+                <div class="clearfix" style="width: 76px;height: 76px;margin: 0 auto">
+                  <personImg :value="image" @success="updateImg"></personImg>
+                </div>
+                <div class="clearfix fs" style="width: 120px;text-align: center;margin: 10px auto 0">
+                  <div class="text-main fll">{{this.$store.state.userInfo.phone}}</div>
+                  <div class="fll" v-if="this.$store.state.userInfo.vip !== 0">
+                    <img src="../../../static/resource/organMessage/vip.png" alt="" class="fll vip">
+                  </div>
+                </div>
+              </div>
+
+              <div :class="this.$route.path === `/organMessage/${userIdn}/resourceCen` ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-ziyuanzhongxin-copy-copy icon"></div>
+                <router-link :to="{path:`/organMessage/${userIdn}/resourceCen`}">资源中心</router-link>
+              </div>
+              <div :class="this.$route.path === `/organMessage/${userIdn}/memberCen` ? 'my-item clearfix fs active' : 'my-item clearfix fs' ">
+                <div class="iconfont icon-huiyuanzhongxin-copy icon"></div>
+                <router-link :to="{path:`/organMessage/${userIdn}/memberCen`}">会员中心</router-link>
+              </div>
+              <div :class="this.$route.path ===`/organMessage/${userIdn}/organMess` ? 'my-item clearfix fs active' : 'my-item clearfix fs' "
+              >
+                <div class="iconfont icon-jigougerenzhongxin-copy icon"></div>
+                <router-link :to="{path:`/organMessage/${userIdn}/organMess`}">机构信息</router-link>
+              </div>
+              <div :class="this.$route.path === `/organMessage/${userIdn}/payRes` ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-fufeiziyuan-copy-copy icon"></div>
+                <router-link :to="{path:`/organMessage/${userIdn}/payRes`}">付费资源</router-link>
+              </div>
+              <div :class="this.$route.path === `/organMessage/${userIdn}/applyRecord` ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-shenqingjilu-copy icon"></div>
+                <router-link :to="{path:`/organMessage/${userIdn}/applyRecord`}">申请记录</router-link>
+              </div>
+
+              <div :class="this.$route.path ===`/organMessage/${userIdn}/productCen` ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-Group icon"></div>
+                <router-link :to="{path:`/organMessage/${userIdn}/productCen`}">产品中心</router-link>
+              </div>
+              <div :class="this.$route.path === `/organMessage/${userIdn}/accessRec` ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-fangwenjilu-copy-copy icon" style="margin-left: -4px"></div>
+                <router-link :to="{path:`/organMessage/${userIdn}/accessRec`}" style="margin-left: 2px">访问记录</router-link>
+              </div>
+              <div :class="this.$route.path ===`/organMessage/${userIdn}/messCen` ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-xiaoxizhongxin icon"></div>
+                <router-link :to="{path:`/organMessage/${userIdn}/messCen`}">消息中心</router-link>
+              </div>
+              <div :class="this.$route.path ===`/organMessage/${userIdn}/emailCen` ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-youjianzhongxin-copy-copy icon" style="margin-left: -4px"></div>
+                <router-link :to="{path:`/organMessage/${userIdn}/emailCen`}" style="margin-left: 6px">邮件中心</router-link>
+              </div>
+              <div :class="this.$route.path === `/organMessage/${userIdn}/secuCen` ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-anquanzhongxin-copy-copy icon"></div>
+                <router-link :to="{path:`/organMessage/${userIdn}/secuCen`}">安全中心</router-link>
+              </div>
+            </div>
+          </div>
+          <div class="fll ml30">
+            <router-view></router-view>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import personImg from '../../component/personImg'
+  import {mapMutations, mapState} from 'vuex'
+    export default {
+      name: "organMessage",
+      data(){
+          return {
+            userIdn:'',
+            type: '1',
+            image:'',
+          }
+      },
+      components:{
+        personImg
+      },
+      computed: {
+        ...mapState(['userInfo'])
+      },
+      methods:{
+        ...mapMutations(['SET_USER_IMAGE']),
+        updateImg(val) {
+          this.image = val
+          this.SET_USER_IMAGE(val)
+          let data =new FormData()
+          data.append('image',val)
+          data.append('agencyId',this.$store.state.userInfo.id)
+          this.$axios.post(`userAgency/updateLogoById`,data).then(res=>{
+            if(res.status === 200){
+              this.$message.success("修改头像成功")
+            }
+          })
+        }
+      },
+      created(){
+        let id = this.$route.params.id
+        this.userIdn=id
+        if (this.userInfo.image) {
+          this.image = this.userInfo.image
+        }
+      },
+
+    }
+</script>
+
+<style scoped lang="scss">
+  .mt4{
+  margin-top: 4px;
+}
+  .ml30{
+    margin-left: 30px;
+  }
+  .main{
+    width:226px;
+    height:803px;
+    background:rgba(255,255,255,1);
+  .img-main{
+    height: 150px;
+    padding: 23px 0 0 0;
+    box-sizing: border-box;
+    border-bottom: 1px solid #F0F0F0;
+    text-align: center;
+    .text-main{
+      height:16px;
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:16px;
+    }
+    .vip{
+      width: 11px;
+      height: 10px;
+      margin-left: 3px;
+      margin-top: 3px;
+    }
+
+  }
+  .my-item{
+    height: 66px;
+    padding: 24px 62px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #F0F0F0;
+    color: #999;
+
+    a{
+      display: block;
+      float: left;
+      height:20px;
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:400;
+      color:rgba(81,81,81,1);
+      margin-left: 10px;
+    }
+     .router-link-active{
+       color: rgba(168, 14, 14, 1);
+     }
+    img{
+      float: left;
+      cursor: pointer;
+    }
+  }
+    .active{
+      color: rgba(168, 14, 14, 1);
+    }
+  }
+</style>

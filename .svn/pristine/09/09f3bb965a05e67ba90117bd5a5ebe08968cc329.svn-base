@@ -1,0 +1,15 @@
+<template>
+<div>
+  跳转页
+</div>
+</template>
+
+<script>
+    export default {
+        name: "judge"
+    }
+</script>
+
+<style scoped>
+
+</style>

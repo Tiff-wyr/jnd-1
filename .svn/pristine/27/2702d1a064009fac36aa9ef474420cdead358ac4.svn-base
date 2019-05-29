@@ -1,0 +1,370 @@
+<template>
+  <div>
+    <registerTop></registerTop>
+    <div class="wrappy">
+        <div class="w900">
+          <div class="user-main">
+            <div class="user-title">
+              <div class="title">欢迎注册就能贷网</div>
+              <div class="number">已有账号，</div>
+              <div class="login">立即登陆</div>
+            </div>
+
+            <form action="">
+              <div class="user-form">
+                <div class="person-item clearfix">
+                  <div class="fll person-text">机构名称：</div>
+                  <input type="text" class="fll ml20" v-model="organMess.agencyName">
+                </div>
+                <div class="person-item clearfix">
+                  <div class="fll person-text">机构代码：</div>
+                  <input type="text" class="fll ml20" v-model="organMess.agencyCode">
+                </div>
+                <div class="person-item clearfix">
+                  <div class="fll person-text upload">上传营业执照：</div>
+                  <div class="fll ml20"><imgUpload></imgUpload></div>
+                  <div class="fll text-desc">请上传营业执照正面照，支持JPG/JPEG/PNG格式图片，照片不大于2M</div>
+                </div>
+                <div class="person-item clearfix">
+                  <div class="fll person-text desc">机构简介：</div>
+                  <textarea name="" id="" cols="32" rows="5" class="fll ml20" v-model="organMess.agencyIntroduction"></textarea>
+                </div>
+                <div class="person-item clearfix">
+                  <div class="fll person-text">机构所在地：</div>
+                  <input type="text" class="fll ml20" v-model="organMess.agencyAddress">
+                </div>
+
+                <div class="person-item clearfix">
+                  <div class="fll person-text">营业期限：</div>
+                  <input type="text" class="fll ml20" v-model="organMess.agencyAgeLimit">
+                </div>
+                <div class="person-item clearfix">
+                  <div class="fll person-text">填写人姓名：</div>
+                  <input type="text" class="fll ml20" v-model="organMess.agencyUsername">
+                </div>
+                <div class="person-item clearfix">
+                  <div class="fll person-text">填写人邮箱：</div>
+                  <input type="text" class="fll ml20" v-model="organMess.email">
+                </div>
+                <div class="person-item clearfix">
+                  <div class="fll person-text">填写人手机号：</div>
+                  <input type="text" class="fll ml20" v-model="organMess.phone" @blur="checkPhone">
+                </div>
+                <div class="person-item clearfix">
+                  <div class="fll person-text">验证码：</div>
+                  <input v-model="organMess.password" type="text" class="fll ml20 card">
+                  <div class="fll verify">
+                    <div class="send" v-if="showing" @click="send" v-model="verifyCode">{{verifyCode}}</div>
+                    <div v-else class="time send" v-model="time">{{time}}s</div>
+                  </div>
+                </div>
+                <div class="person-item clearfix">
+                  <div class="fll person-text">填写人身份：</div>
+                  <div class="fll radio">
+                    <el-radio-group v-model="organMess.agencyIdentity">
+                      <el-radio :label="1" :value="1">法定代表人</el-radio>
+                      <el-radio :label="0" :value="0">代理人</el-radio>
+                    </el-radio-group>
+                  </div>
+                </div>
+              </div>
+              <div class="clearfix register">
+                <div class="fll agree" @click="register">同意协议并注册</div>
+                <div class="fll immediate">已有账号？立即登陆</div>
+              </div>
+              <div class="agreement">《就能贷用户注册协议》</div>
+            </form>
+
+          </div>
+        </div>
+    </div>
+
+  </div>
+</template>
+
+<script>
+  import registerTop from '../component/registerTop'
+  import imgUpload from '../component/imgUpload'
+    export default {
+        name: "organRegister",
+      components:{
+        registerTop,
+        imgUpload
+      },
+      data () {
+        return {
+          showing:true,
+          time:20,
+          verifyCode:'发送验证码',
+          radio2: 1,
+          organMess:{
+            agencyName:'',
+            agencyCode:'',
+            agencyIntroduction:'',
+            agencyLicense:'',
+            agencyAgeLimit:'',
+            startBusiness:'',
+            endBusiness:'',
+            agencyURL:'',
+            companyOwned:'',
+            agencyAddress:'',
+            agencyUsername:'',
+            agencyIdentity:'',
+            phone:'',
+            email:'',
+            password:''
+          }
+        };
+      },
+      methods:{
+        //  获取验证码
+        send(){
+          if (this.organMess.phone) {
+            this.showing=false;
+            this.$axios.post(`base/getRegisterCode/${this.organMess.phone}`).then(res => {
+              let timer=setInterval(()=>{
+                this.time--
+                if(this.time < 0){
+                  clearInterval(timer)
+                  this.showing=true
+                  this.verifyCode='重新获取'
+                  this.time=20
+                }
+              },1000)
+            })
+          } else {
+            this.$message.warning('请输入手机号')
+          }
+        },
+        // 注册
+        register(){
+          this.checkForm().then(()=> {
+            let data = new FormData()
+            for(let item in this.organMess) {
+              data.append(item, this.organMess[item])
+            }
+            this.$axios.post('userAgency/registerAgency', data).then(res => {
+              console.log('注册返回信息', res)
+              if (res.status === 500) {
+                this.$message.error(res.msg)
+              } else {
+                this.$message.success('注册成功')
+                this.$router.push('/judge')
+              }
+            })
+          })
+        },
+        //  检测organMess数据
+        checkForm() {
+          return new Promise(resolve => {
+            if (this.organMess.agencyName === '') {
+              this.$message.error('用户名不能为空')
+            } else if(this.organMess.agencyAddress === ''){
+              this.$message.error('所在地不能为空')
+            } else if(this.organMess.phone === '') {
+              this.$message.error('手机号不能为空')
+            } else {
+              resolve()
+            }
+          })
+        },
+        //  检测手机号是否被注册
+        checkPhone() {
+          if (this.organMess.phone) {
+            this.$axios.get(`user/checkUserByPhone/${this.organMess.phone}`).then(res => {
+              if(res.status === 500) {
+                this.$message.warning(res.msg)
+                this.organMess.phone = ''
+              } else {
+                return
+              }
+            })
+          } else {
+            this.$message.warning('手机号不能为空')
+          }
+        }
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  .w900{
+    width: 900px;
+    margin: 0 auto;
+  }
+  .ml20{
+    margin-left: 20px;
+  }
+  .user-main{
+    height:975px;
+    position: relative;
+    background:rgba(255,255,255,1);
+    .user-title{
+      width: 100%;
+      height: 90px;
+      border-bottom: 1px solid #eee;
+      position: relative;
+      .title{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        font-size:24px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(81,81,81,1);
+      }
+      .number{
+        opacity: 0.5;
+        position: absolute;
+        left: 655px;
+        top: 40px;
+        font-size:14px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(81,81,81,1);
+      }
+      .login{
+        position: absolute;
+        left:720px;
+        top: 40px;
+        font-size:14px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color: rgba(168, 14, 14, 1);
+      }
+    }
+    .user-form{
+      width: 370px;
+      margin: 20px auto;
+      margin-left: 220px;
+      .person-item{
+        padding: 10px 0;
+        .text-desc{
+          width:160px;
+          height:34px;
+          font-size:12px;
+          font-family:PingFangSC-Regular;
+          font-weight:300;
+          color:rgba(81,81,81,1);
+          line-height:17px;
+          margin-left: 10px;
+        }
+        textarea{
+          border: 1px solid #ccc;
+          width: 248px;
+          height: 80px;
+        }
+        .send{
+          text-align: center;
+          width:80px;
+          height:38px;
+          border-radius:4px;
+          border:1px solid #ccc;
+          font-size:12px;
+          font-family:PingFangSC-Medium;
+          font-weight:500;
+          color:rgba(155,155,155,1);
+          line-height:38px;
+          margin-left: 20px;
+          cursor: pointer;
+        }
+        .person-text{
+          text-align: right;
+          width:100px;
+          height:40px;
+          font-size:14px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(81,81,81,1);
+          line-height:40px;
+        }
+        .desc{
+          height: 80px;
+          line-height: 80px;
+        }
+        .upload{
+          height: 80px;
+          line-height: 80px;
+        }
+        input{
+          width: 250px;
+          height: 40px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          padding: 13px 10px;
+          box-sizing: border-box;
+          font-size:14px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(81,81,81,1);
+          line-height:40px;
+        }
+        .name,.card{
+          width: 100px;
+          height: 40px;
+        }
+        .radio{
+          margin-top: 9px;
+          margin-left: 19px;
+        }
+        /deep/ .el-radio__label{
+          color: #aaa;
+        }
+        /deep/ .is-checked .el-radio__inner{
+          border-color: #333;
+          background: #fff;
+          &:after{
+            background-color: #333;
+          }
+        }
+        /deep/ .is-checked+.el-radio__label {
+          color: #333;
+        }
+        /deep/ .el-radio__inner:hover{
+          border-color: #333;
+        }
+      }
+    }
+    .agreement{
+      width:132px;
+      height:12px;
+      font-size:12px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(74,144,226,1);
+      line-height:12px;
+      position: absolute;
+      left: 37%;
+      top: 93%;
+    }
+    .immediate{
+      width:108px;
+      height:40px;
+      font-size:12px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(74,144,226,1);
+      line-height:40px;
+      margin-left: 20px;
+    }
+    .agree{
+      width:280px;
+      height:40px;
+      background:rgba(168,14,14,1);
+      font-size:16px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(255,255,255,1);
+      line-height:40px;
+      text-align: center;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .register{
+      position: absolute;
+      left: 28%;
+      top: 87%;
+    }
+  }
+</style>

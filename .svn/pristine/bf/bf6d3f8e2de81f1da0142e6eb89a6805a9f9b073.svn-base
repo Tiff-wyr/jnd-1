@@ -1,0 +1,1046 @@
+<template>
+  <div class="home">
+    <div class="img">
+      <el-carousel>
+        <el-carousel-item>
+          <img src="../../static/resource/banner/1.png" alt="">
+        </el-carousel-item>
+        <el-carousel-item>
+          <img src="../../static/resource/banner/2.png" alt="">
+        </el-carousel-item>
+        <el-carousel-item>
+          <img src="../../static/resource/banner/3.png" alt="">
+        </el-carousel-item>
+      </el-carousel>
+       <div class="apply">
+         <div class="title">贷款申请</div>
+         <div class="app-item clearfix">
+           <input type="text" class="fll" v-model="borrowerData.borrowerName" placeholder="姓名">
+           <div class="fll radio">
+             <el-radio-group v-model="borrowerData.borrowerSex">
+               <el-radio :label="1">男</el-radio>
+               <el-radio :label="0">女</el-radio>
+             </el-radio-group>
+           </div>
+         </div>
+         <div class="app-item">
+           <!--<input type="number" class="name" >-->
+           <!--<input type="text"name="price"id="price"value=""-->
+                  <!--onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"-->
+                  <!--onkeyup="value=value.replace(/[^\d.]/g,'')" />-->
+
+           <input type='text' onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" v-model="borrowerData.loanAmount" placeholder="贷款金额（万元）">
+
+         </div>
+         <div class="app-item clearfix">
+           <el-select v-model="borrowerData.address1" style="width: 140px;float: left" placeholder="地区" @change="getCity">
+             <el-option
+               v-for="item in provinceData"
+               :key="item.pid"
+               :label="item.provincial"
+               :value="item.pid"
+               style="width: 140px;"
+             >
+             </el-option>
+           </el-select>
+           <el-select v-model="borrowerData.address2" style="margin-left: 10px;width: 140px;float: left;" placeholder="地区">
+             <el-option
+               style="width: 140px;"
+               v-for="item in cityData"
+               :key="item.cid"
+               :label="item.city"
+               :value="item.cid">
+             </el-option>
+           </el-select>
+         </div>
+
+        <div class="app-item">
+          <input type="text" class="name" v-model="borrowerData.phone" placeholder="手机号" @change="chPhone">
+        </div>
+         <!--<div class="app-item clearfix">-->
+           <!--<input type="text" class="fll" v-model="borrowerData.code" placeholder="验证码">-->
+           <!--<div class="fll verify">-->
+             <!--<div class="send" v-if="showing" @click="send" v-model="verifyCode">{{verifyCode}}</div>-->
+             <!--<div v-else class="time send" v-model="time">{{time}}s</div>-->
+           <!--</div>-->
+         <!--</div>-->
+         <button @click="apply" class="apply-btn">立即申请</button>
+
+
+
+       </div>
+    </div>
+    <div class="wrap pt48 ">
+        <div class="w1200">
+          <div class="wrap-top clearfix mb24 ml111">
+            <div class="clearfix fll single">
+              <img src="../../static/resource/group9.png" alt="" class="fll">
+              <div class="fll common">
+                <div class="text1">放款快</div>
+                <div class="text2">最快2小时放款</div>
+              </div>
+            </div>
+            <div class="clearfix fll single ml217">
+              <img src="../../static/resource/Group7.png" alt="" class="fll">
+              <div class="fll common">
+                <div class="text1">利率低</div>
+                <div class="text2">利率低至0.26%</div>
+              </div>
+            </div>
+            <div class="clearfix fll single ml227">
+              <img src="../../static/resource/Group3.png" alt="" class="fll">
+              <div class="fll common">
+                <div class="text1">额度高</div>
+                <div class="text2">最高可贷1000万</div>
+              </div>
+            </div>
+          </div>
+          <div class="wrap-bottom clearfix ml111">
+            <div class="clearfix fll single">
+              <img src="../../static/resource/Group.png" alt="" class="fll">
+              <div class="fll common">
+                <div class="text1">门槛低</div>
+                <div class="text2">月入2000即可贷</div>
+              </div>
+
+            </div>
+            <div class="clearfix fll single ml208">
+              <img src="../../static/resource/Group11.png" alt="" class="fll">
+              <div class="fll common">
+                <div class="text1">渠道广</div>
+                <div class="text2">多种贷款方式供您选择</div>
+              </div>
+            </div>
+            <div class="clearfix fll single ml188">
+              <img src="../../static/resource/Group8.png" alt="" class="fll">
+              <div class="fll common">
+                <div class="text1">服务好</div>
+                <div class="text2">资深顾问在线为您解答</div>
+              </div>
+            </div>
+
+          </div>
+          <div class="special mt48 mb24">特别推荐</div>
+          <div class="clearfix special-wrap">
+            <div class="fll com mr20" v-for="(item,index) in specialData">
+              <div class="word1">{{item.productType}}</div>
+              <div>
+                <div class="word2">{{item.productPublisher}}</div>
+              </div>
+              <div class="word3">{{item.productInterest}}<span class="symbol">%</span></div>
+              <div class="word4">利息</div>
+              <div class="word5">{{item.productStartAmount}}-{{item.productEndAmount}}万</div>
+              <div class="btn" @click="specialLook(item.productId)">立即查看</div>
+            </div>
+          </div>
+          <div class="main clearfix">
+            <div class="fll">
+              <div class="clearfix mt48 mb24">
+                <div class="product fll">产品推荐</div>
+                <div class="fll">
+                  <div class="more fll" @click="$router.push('/loans')">更多</div>
+                  <img src="../../static/resource/right.png" alt="" class="fll img-right">
+                </div>
+              </div>
+              <div class="clearfix">
+                <div class="product-wrap fll align">
+                  <div class="mark2">
+                    <div class="agent-write">优质产品 多样选择</div>
+                    <div class="agent-btn" @click="$router.push('/Loans')">立即查看</div>
+                  </div>
+
+                </div>
+                <div class="product-table fll">
+                  <div class="product-item" v-for="(item,index) in productData">
+                    <div class="clearfix">
+                      <div class="fll">
+                        <div class="item1-num">{{item.productName}}</div>
+                        <div class="item-same first">无需抵车即可贷款</div>
+                      </div>
+                      <div class="item1 fll align">
+                        <div class="item-num">{{item.productInterest}}%<span class="percent"></span></div>
+                        <div class="item-same">利息</div>
+                      </div>
+                      <div class="item1 fll align">
+                        <div class="item-num">{{item.producLoanLength}}</div>
+                        <div class="item-same">放款时间</div>
+                      </div>
+                      <div class="item1 fll align">
+                        <div class="item-num">{{item.productLife}}</div>
+                        <div class="item-same">使用年限</div>
+                      </div>
+                      <div class="item1 fll align">
+                        <div class="item-num">{{item.productStartAmount}}万<span class="percent"></span></div>
+                        <div class="item-same">起贷金额</div>
+                      </div>
+                      <div class="flr organ-btn align" @click="proDetail(item.productId)">立即查看</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="clearfix mt48 mb24">
+                <div class="agent fll">经纪人推荐</div>
+                <div class="fll">
+                  <div class="more-agent fll" @click="$router.push('/agent')">更多</div>
+                  <img src="../../static/resource/right.png" alt="" class="fll img-right">
+                </div>
+              </div>
+              <div class="clearfix">
+                <div class="agent-wrap fll align">
+                  <div class="mark3">
+                    <div class="agent-write">资深人士 专业服务</div>
+                    <div class="agent-btn" @click="$router.push('/agent')">立即查看</div>
+                  </div>
+                </div>
+                <div class="agent-table fll">
+                  <div class="clearfix">
+                    <div class="fll align mr42" v-for="(item,index) in agentData">
+
+                      <img v-if="item.userBroker.image" :src="item.userBroker.image" style="width: 100px;height: 98px;cursor: pointer" @click="agDetail(item.userBroker.brokerId)">
+                      <img v-else src="/static/resource/pic/agent.png" style="width: 100px;height: 98px;cursor: pointer" @click="agDetail(item.userBroker.brokerId)">
+                      <div class="agent-name">{{item.userBroker.brokerName}}</div>
+                      <div class="agent-job">{{item.userBroker.job}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="clearfix mt48 mb24">
+                <div class="organize fll">机构推荐</div>
+                <div class="fll">
+                  <div class="more fll" @click="$router.push('/organization')">更多</div>
+                  <img src="../../static/resource/right.png" alt="" class="fll img-right">
+                </div>
+              </div>
+              <div class="clearfix">
+                <div class="organize-wrap fll align">
+                  <div class="mark1">
+                    <div class="agent-write">权威机构 财富保障</div>
+                    <div class="agent-btn" @click="$router.push('/Organization')">立即查看</div>
+                  </div>
+
+                </div>
+                <div class="organize-table fll">
+                  <div class="clearfix">
+                    <div class="fll organW" v-for="(item,index) in organData">
+
+                      <img v-if="item.agencyLogo" :src="item.agencyLogo" alt="" style="width: 100px;height: 98px;cursor: pointer" @click="orDetail(item.agencyId)">
+                      <img v-else src="/static/resource/pic/organ.png" alt="" style="width: 100px;height: 98px;cursor: pointer" @click="orDetail(item.agencyId)">
+                      <div class="organ-text1">{{item.agencyName}}</div>
+                      <div class="organ-text2">{{item.agencyIntroduction}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="fll mt48">
+              <div class="loans clearfix align">
+                <div class="loans-use">贷款用途</div>
+                <div class="loans-left fll mr60">
+                  <img src="../../static/resource/Group16Copy.png" alt="">
+                  <div class="loans-text">装修贷款</div>
+                  <img src="../../static/resource/Group20Copy.png" alt="">
+                  <div class="loans-text">装修贷款</div>
+                  <img src="../../static/resource/Group21Copy.png" alt="">
+                  <div class="loans-text">装修贷款</div>
+                  <img src="../../static/resource/Group27Copy.png" alt="">
+                  <div class="loans-text">装修贷款</div>
+                </div>
+                <div class="loans-right fll">
+                  <img src="../../static/resource/Group17Copy.png" alt="">
+                  <div class="loans-text">装修贷款</div>
+                  <img src="../../static/resource/Group19Copy.png" alt="">
+                  <div class="loans-text">装修贷款</div>
+                  <img src="../../static/resource/Group22Copy.png" alt="">
+                  <div class="loans-text">装修贷款</div>
+                  <img src="../../static/resource/icon.png" alt="">
+                  <div class="loans-text">装修贷款</div>
+                </div>
+              </div>
+              <div class="message clearfix">
+                <img src="../../static/resource/laba.png" alt="" class="fll">
+                <div class="fll mess-main">
+                  <vue-seamless-scroll :data="loanData" class="seamless-warp">
+                    <div class="mess-text" :key="index" v-for="(item,index) in loanData">
+                      {{item.allName}}:{{item.phoneG}}&nbsp;&nbsp;申请了贷款
+                    </div>
+                  </vue-seamless-scroll>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <footerSame></footerSame>
+        </div>
+    </div>
+    <bottomTap></bottomTap>
+  </div>
+</template>
+
+<script>
+  import footerSame from '../component/footerSame'
+  import bottomTap from '../component/bottomTap'
+    export default {
+        name: "Home",
+      components:{
+        footerSame,
+        bottomTap
+      },
+      data(){
+          return {
+            showing: true,
+            time: 60,
+            verifyCode: '发送验证码',
+            borrowerData:{
+              borrowerName:'',
+              borrowerSex:1,
+              loanAmount:'',
+              address1:'',
+              address2:'',
+              phone:'',
+            },
+            //省
+            provinceData:[
+              {
+                pid:'',
+                provincial:'',
+              }
+            ],
+            //市 区
+            cityData:[
+              {
+                cid:'',
+                city:'',
+                pid:'',
+              }
+            ],
+            specialData:[
+              {
+                productId:'',
+                productType:'',
+                productPublisher:'',
+                productInterest:'',
+                productStartAmount:'',
+                productEndAmount:'',
+                productName:'',
+                producLoanLength:'',
+                productLife:'',
+              },
+            ],
+            productData:[
+              {
+                productType:'',
+                productPublisher:'',
+                productInterest:'',
+                productStartAmount:'',
+                productEndAmount:'',
+                productName:'',
+                producLoanLength:'',
+                productLife:'',
+                productStartAmount:''
+              },
+            ],
+            agentData:[
+              {
+                userBroker:  {
+                  brokerId:'',
+                  brokerName:'',
+                  image:'',
+                  job:'',
+                }
+              }
+            ],
+            organData:[
+              {
+                agencyId:'',
+                agencyName:'',
+                agencyIntroduction:'',
+                agencyLogo:''
+              }
+            ],
+            loanData:[]
+          }
+      },
+      methods:{
+        chPhone(){
+          //检查手机号
+          this.borrowerData.phone=this.borrowerData.phone.trim()
+          this.$axios.get(`user/selectPhone/${this.borrowerData.phone}`).then(res=>{
+            console.log(res);
+            if(res.status === 500){
+              this.$message.warning(res.msg)
+            }
+          })
+        },
+        apply(){
+         if(this.$store.state.userInfo){
+           if(this.$store.state.userInfo.roleId === 1){
+             if(this.borrowerData.borrowerName && this.borrowerData.loanAmount && this.borrowerData.address1 && this.borrowerData.address2 && this.borrowerData.phone){
+                  let data =new FormData()
+                  for(let item in this.borrowerData){
+                    data.append(item,this.borrowerData[item])
+                  }
+                  this.$axios.post(`orderPublic/createPublicOrder`,data).then(res=>{
+                    if(res.status === 200){
+                      this.$message.success("申请成功")
+                    }
+                  })
+             }else{
+               this.$message.warning("不能为空")
+             }
+           }else{
+             this.$message.warning("借款人方可申请")
+           }
+         }else{
+           this.$message.warning("请先登录")
+         }
+        },
+        //发送验证码
+        send() {
+          if(this.loginNum.phone){
+            this.showing=false;
+            this.$axios.get(`base/getLoginCode/${this.loginNum.phone}`).then(res=>{
+              let timer=setInterval(()=>{
+                this.time--
+                if(this.time < 0){
+                  clearInterval(timer)
+                  this.showing=true
+                  this.verifyCode='重新获取'
+                  this.time=20
+                }
+              },1000)
+            })
+          }else{
+            this.$message.warning('手机号不能为空')
+          }
+
+        },
+        //获取省
+        getProvince(){
+          this.$axios.get('city/getAllProvincial').then(res=>{
+            this.provinceData=res
+          })
+        },
+        //获取 市 区
+        getCity(val){
+          this.$axios.get(`city/getAllCity/${val}`).then(res=>{
+            this.cityData=res
+          })
+        },
+          //特别推荐详情页
+        specialLook(id){
+          this.$router.push(`/productDetail/${id}`)
+        },
+        proDetail(id){
+          this.$router.push(`/productDetail/${id}`)
+        },
+        orDetail(id){
+          this.$router.push(`/organDetail/${id}`)
+        },
+        agDetail(id){
+          this.$router.push(`/agentDetail/${id}`)
+        },
+
+
+          //特别推荐
+        getSpecial(){
+          this.$axios.get('product/getHotPro/1/4').then(res=>{
+            this.specialData=res
+          })
+        },
+        //产品推荐
+        getProduct(){
+          this.$axios.get('product/getLimitPro/1/3').then(res=>{
+            this.productData=res.list
+          })
+        },
+        //经纪人推荐
+        getAgentData(){
+          this.$axios.get('userBroker/showPageUserBroker').then(res=>{
+            this.agentData=res.rows
+          })
+        },
+        //机构推荐
+        getOrganData(){
+          this.$axios.get(`userAgency/getLimitPage/1/8`).then(res=>{
+                this.organData=res.list
+            console.log('dd',res.list);
+          })
+        },
+        getLoanData(){
+          this.$axios.get('userBorrower/indexBorrower').then(res=>{
+            this.loanData = res.map(item =>{
+              let fristName = item.borrowerName === null ? '无' : item.borrowerName.substr(0,1)
+              let allName = item.borrowerSex === 0 ? `${fristName}女士` : `${fristName}先生`
+              let phoneG = item.phone.substr(0,3)+"*****"+item.phone.substr(8,10)
+              return {...item, allName,phoneG}
+            })
+            console.log('aaa',this.loanData)
+          })
+        }
+      },
+      created(){
+          this.getSpecial()
+          this.getProduct()
+          this.getAgentData()
+          this.getOrganData()
+          this.getLoanData()
+          this.getProvince()
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  .apply-btn{
+    cursor: pointer;
+  }
+  .radio {
+    margin-left: 10px;
+    line-height: 35px;
+  }
+  /deep/ .el-radio__label {
+    color: #aaa;
+  }
+  /deep/ .is-checked .el-radio__inner {
+    border-color: #333;
+    background: #fff;
+    &:after {
+      background-color: #333;
+    }
+  }
+  /deep/ .is-checked + .el-radio__label {
+    color: #333;
+  }
+  /deep/ .el-radio__inner:hover {
+    border-color: #333;
+  }
+  .organW{
+    width: 100px;
+    height: 139px;
+    overflow: hidden;
+    text-align: center;
+    margin-right: 38px;
+    margin-bottom: 24px;
+  }
+  .mb24{
+    margin-bottom: 24px;
+  }
+
+  .mt48{
+    margin-top: 48px;
+  }
+  .mr60{
+    margin-right: 60px;
+  }
+  .mt28{
+    margin-top: 28px;
+  }
+  .align{
+    text-align: center;
+  }
+  .mr42{
+    margin-right: 39px;
+  }
+  .mr20{
+    margin-right: 10px;
+  }
+  .ml188{
+    margin-left: 188px;
+  }
+  .ml208{
+    margin-left: 208px;
+  }
+  .ml227{
+    margin-left: 227px;
+  }
+  .ml217{
+    margin-left: 217px;
+  }
+.home{
+ .img{
+   position: relative;
+  img{
+    width: 100%;
+  }
+   .apply{
+     position: absolute;
+     left: 200px;
+     top: 0;
+     width:400px;
+     height:300px;
+     z-index: 998;
+     background:rgba(0,0,0,1);
+     opacity:0.6964;
+     padding-left: 55px;
+     padding-top: 10px;
+     box-sizing: border-box;
+     .title{
+       margin-left: 108px;
+       height:33px;
+       font-size:20px;
+       font-family:PingFangSC-Regular;
+       font-weight:400;
+       color:rgba(255,255,255,1);
+       line-height:33px;
+       margin-bottom: 10px;
+     }
+     .app-item{
+       margin-bottom: 10px;
+       input{
+         height: 35px;
+         line-height: 35px;
+         padding-left: 10px;
+       }
+       .name{
+         width: 280px;
+       }
+       .verify {
+         .send {
+           text-align: center;
+           width: 80px;
+           height: 35px;
+           border-radius: 4px;
+           border: 1px solid #ccc;
+           background:rgba(255,255,255,1);
+           font-size: 12px;
+           font-family: PingFangSC-Medium;
+           font-weight: 500;
+           color:rgba(81,81,81,1);
+           line-height: 35px;
+           margin-left: 20px;
+           cursor: pointer;
+         }
+         .time {
+           font-size: 16px;
+           color: #888;
+         }
+       }
+     }
+     button{
+       width:200px;
+       height:40px;
+       background:rgba(255,255,255,1);
+       border-radius:4px;
+       font-size:18px;
+       font-family:PingFangSC-Regular;
+       font-weight:400;
+       color:rgba(74,74,74,1);
+       line-height:40px;
+       text-align: center;
+       margin-left: 50px;
+     }
+   }
+ }
+}
+  .wrap{
+    width: 100%;
+    background:rgba(246,246,246,1);
+    padding-bottom: 30px;
+    box-sizing: border-box;
+    .common{
+        margin-left: 24px;
+        margin-top: 11px;
+      }
+  }
+  .single{
+    font-size: 0;
+    .text1{
+      width:54px;
+      height:25px;
+      font-size:18px;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:25px;
+    }
+    .text2{
+      height:17px;
+      font-size:12px;
+      font-weight:400;
+      color:rgba(155,155,155,1);
+      line-height:17px;
+    }
+  }
+  .special{
+    width:112px;
+    height:28px;
+    font-size:24px;
+    font-weight:500;
+    color:rgba(0,0,0,1);
+    line-height:28px;
+  }
+  .special-wrap{
+    width: 1200px;
+    overflow: hidden;
+    .com{
+      position: relative;
+      text-align: center;
+      overflow: hidden;
+      width:285px;
+      height:266px;
+      background:rgba(255,255,255,1);
+      &:hover .btn{
+        bottom: 10px
+      }
+      &:hover{
+        box-shadow:0px 0px 13px 0px rgba(217,217,217,1);
+      }
+      &:hover .word5{
+       transform: scale(0.1,0.1);
+      }
+      .btn{
+        position: absolute;
+        bottom: -50px;
+        width:128px;
+        height:45px;
+        cursor: pointer;
+        background:rgba(168,14,14,1);
+        font-size:14px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(255,255,255,1);
+        line-height:45px;
+        margin: 0 78px 0 78px;
+        transition: bottom .2s ease;
+      }
+    }
+    .word1{
+      height:20px;
+      font-size:14px;
+      font-weight:400;
+      color:rgba(155,155,155,1);
+      line-height:20px;
+      margin: 26px 89px 0 88px;
+    }
+    .word2{
+      width: 100px;
+      height: 24px;
+      background:rgba(168,14,14,1);
+      font-size:14px;
+      font-weight:400;
+      color:rgba(255,255,255,1);
+      line-height:24px;
+      margin-top: 8px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+    .word3{
+      width:85px;
+      height:53px;
+      font-size:38px;
+      font-weight:bold;
+      font-family:DINAlternate-Bold;
+      color:rgba(168,14,14,1);
+      line-height:53px;
+      margin: 22px 100px 0 100px;
+      .symbol{
+        color:rgba(168,14,14,1);
+        font-size: 16px;
+      }
+    }
+    .word4{
+      height:13px;
+      font-size:13px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(155,155,155,1);
+      line-height:13px;
+      margin-bottom: 35px;
+      margin-top: 5px;
+    }
+    .word5{
+      height:24px;
+      font-size:17px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(155,155,155,1);
+      line-height:24px;
+      transition: transform 0.2s ease;
+    }
+  }
+  .main{
+    .more{
+      height:14px;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(155,155,155,1);
+      line-height:14px;
+      margin-top: 14px;
+      margin-left: 747px;
+      cursor: pointer;
+    }
+    .img-right{
+      margin-top: 14px;
+    }
+    .more-agent{
+      height:14px;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(155,155,155,1);
+      line-height:14px;
+      margin-top: 14px;
+      margin-left: 719px;
+      cursor: pointer;
+    }
+    .product,.agent,.organize{
+      height:28px;
+      font-size:24px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(0,0,0,1);
+      line-height:28px;
+    }
+    .product-wrap,.agent-wrap,.organize-wrap{
+      width:280px;
+      height:364px;
+    }
+    .product-wrap{
+      background-image:url("../../static/resource/you.png") ;
+      position: relative;
+      .mark2{
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        background:rgba(0,0,0,1);
+        opacity:0.2;
+      }
+    }
+    .agent-wrap{
+      background-image:url("../../static/resource/agent.png") ;
+      position: relative;
+      .mark3{
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        background:rgba(0,0,0,1);
+        opacity:0.2;
+      }
+    }
+    .organize-wrap{
+      background-image:url("../../static/resource/organ.png") ;
+      position: relative;
+      .mark1{
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        background:rgba(0,0,0,1);
+        opacity:0.2;
+      }
+    }
+    .agent-table,.organize-table{
+      width:590px;
+      height:364px;
+      background:rgba(255,255,255,1);
+      padding: 24px 0 0 32px;
+      box-sizing: border-box;
+      margin-left: 30px;
+    }
+  }
+  .product-table{
+    width: 590px;
+    height: 360px;
+    background:rgba(255,255,255,1);
+    margin-left: 30px;
+    .product-item{
+      width:590px;
+      height:121px;
+      line-height: 121px;
+      &:hover{
+        box-shadow:0px 4px 13px 0px rgba(236,236,236,1);
+      }
+
+      .item1-num{
+        height:16px;
+        font-size:16px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:16px;
+        margin-top: 34px;
+        margin-left: 24px;
+      }
+
+      .item-same{
+        height:14px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        line-height:14px;
+        margin-top: 27px;
+      }
+      .first{
+        margin-left: 24px;
+      }
+      .item6-num{
+        height:16px;
+        font-size:16px;
+        font-family:PingFangSC-Semibold;
+        font-weight:600;
+        color:rgba(81,81,81,1);
+        line-height:16px;
+      }
+      .item-num{
+        height:16px;
+        font-size:16px;
+        font-family:DINAlternate-Bold;
+        font-weight:bold;
+        color:rgba(168,14,14,1);
+        line-height:16px;
+      }
+      .percent{
+        font-size: 12px;
+        color: rgba(81, 81, 81, 1);
+      }
+      .item1{
+        width: 80px;
+        margin-top: 33px;
+        overflow: hidden;
+      }
+      .organ-btn{
+        text-align: center;
+        width:80px;
+        height:50px;
+        background:rgba(168,14,14,1);
+        font-size:14px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(255,255,255,1);
+        line-height:50px;
+        margin-top: 36px;
+        margin-bottom: 35px;
+        margin-right: 20px;
+        cursor: pointer;
+      }
+    }
+
+  }
+  .organ-text1{
+    text-align: center;
+    width: 100px;
+    overflow: hidden;
+    height:16px;
+    font-size:16px;
+    font-family:PingFangSC-Semibold;
+    font-weight:600;
+    color:rgba(81,81,81,1);
+    line-height:16px;
+    margin: 3px 0 6px 0;
+  }
+  .organ-text2{
+    text-align: center;
+    width: 100px;
+    overflow: hidden;
+    height:12px;
+    font-size:12px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(155,155,155,1);
+    line-height:12px;
+  }
+  .loans{
+    width:268px;
+    height:532px;
+    background:rgba(255,255,255,1);
+    margin-left: 20px;
+    padding: 24px 35px 30px;
+    box-sizing: border-box;
+  }
+  .agent-write{
+    height:30px;
+    font-size:30px;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(255,255,255,1);
+    line-height:30px;
+    margin-top: 132px;
+  }
+  .agent-btn{
+    width:180px;
+    height:50px;
+    background:rgba(239,239,239,0.2);
+    border:1px solid rgba(255,255,255,1);
+    font-size:18px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+    line-height:50px;
+    margin: 20px 50px;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+  .agent-name{
+    width: 100px;
+    overflow: hidden;
+    height:16px;
+    font-size:16px;
+    font-family:PingFangSC-Semibold;
+    font-weight:600;
+    color:rgba(81,81,81,1);
+    line-height:16px;
+    margin: 8px 0 6px 0;
+  }
+  .agent-job{
+    width: 100px;
+    overflow: hidden;
+    height:12px;
+    font-size:12px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(155,155,155,1);
+    line-height:12px;
+    margin-bottom: 8px;
+  }
+  .loans-use{
+    height:20px;
+    font-size:20px;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(81,81,81,1);
+    line-height:20px;
+    margin-bottom: 26px;
+  }
+  .loans-text{
+    margin: 5px 0 20px;
+    height:14px;
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:14px;
+  }
+  .message{
+    width:268px;
+    height:146px;
+    background:rgba(255,255,255,1);
+    margin-top:60px;
+    margin-left: 20px;
+    padding: 18px 18px;
+    box-sizing: border-box;
+    overflow: hidden;
+    .mess-main{
+      width: 180px;
+      margin-left: 10px;
+      box-sizing: border-box;
+      overflow: hidden;
+      .mess-text{
+        width: 180px;
+        height:10px;
+        font-size:10px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(121,183,255,1);
+        line-height:10px;
+        margin-bottom: 10px;
+      }
+    }
+
+  }
+
+</style>

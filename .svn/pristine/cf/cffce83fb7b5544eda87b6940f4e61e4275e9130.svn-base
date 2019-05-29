@@ -1,0 +1,309 @@
+<template>
+  <div class="person">
+    <div class="clearfix title">
+      <div class="title-text fll">个人信息</div>
+      <div>
+        <div class="flr edit" v-if="!isEdit" @click="edit">编辑</div>
+
+        <div v-else class="clearfix">
+          <div class="flr edit"  @click="abandonPerson" style="margin-left: 10px">放弃</div>
+          <div class="flr edit"  @click="savePerson">保存</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="person-item clearfix">
+      <div class="fll person-text">姓名：</div>
+      <input type="text" :disabled="!isEdit" class="fll ml20 name" v-model="form.borrowerName">
+    </div>
+    <div class="person-item clearfix">
+      <div class="fll person-text">性别：</div>
+     <div class="fll radio">
+       <el-radio-group v-model="form.borrowerSex">
+         <el-radio :label="1">男</el-radio>
+         <el-radio :label="0">女</el-radio>
+       </el-radio-group>
+     </div>
+    </div>
+    <div class="person-item clearfix">
+      <div class="fll person-text">年龄：</div>
+      <input type="text" :disabled="!isEdit" class="fll ml20 name" v-model="form.borrowerAge">
+    </div>
+    <div class="person-item clearfix">
+      <div class="fll person-text">职业：</div>
+      <div class="fll ml20 age">
+        <el-select  placeholder="请选择" v-model="form.borrowerJob">
+          <el-option
+            v-for="item in jobData"
+            :key="item.jobId"
+            :label="item.jobName"
+            :value="item.jobId">
+          </el-option>
+        </el-select>
+      </div>
+    </div>
+    <div class="person-item clearfix">
+      <div class="fll person-text">月收入：</div>
+      <div class="fll ml20 age">
+        <el-select  placeholder="请选择" v-model="form.income">
+          <el-option
+            v-for="item in monthMoneyData"
+            :key="item.id"
+            :label="item.incomeName"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </div>
+    </div>
+    <div class="person-item clearfix">
+      <div class="fll person-text">所在地区：</div>
+      <div class="fll ml20 area">
+        <el-select v-model="form.borrowerAddress" placeholder="请选择" @change="getCity">
+          <el-option
+            v-for="item in provinceData"
+            :key="item.pid"
+            :label="item.provincial"
+            :value="item.pid">
+          </el-option>
+        </el-select>
+      </div>
+      <div class="fll ml20 area">
+        <el-select v-model="form.borrower2" placeholder="请选择">
+          <el-option
+            v-for="item in cityData"
+            :key="item.cid"
+            :label="item.city"
+            :value="item.cid">
+          </el-option>
+        </el-select>
+      </div>
+    </div>
+    <div class="person-item clearfix">
+      <div class="fll person-text">手机号码：</div>
+      <input type="text" :disabled="!isEdit" class="fll ml20 same" v-model="form.phone">
+    </div>
+    <div class="person-item clearfix">
+      <div class="fll person-text">邮箱：</div>
+      <input type="text" :disabled="!isEdit" class="fll ml20 same input-active" v-model="form.email">
+    </div>
+  </div>
+</template>
+
+<script>
+    export default {
+        name: "personMessage",
+      data () {
+        return {
+          isEdit:false,
+          personData:{
+            borrowerName:'',
+
+          },
+          //省
+          provinceData:[
+            {
+              pid:'',
+              provincial:'',
+            }
+          ],
+          //市 区
+          cityData:[
+            {
+              cid:'',
+              city:'',
+              pid:'',
+            }
+          ],
+          monthMoneyData:[
+            {
+              id:'',
+              incomeName:'',
+            }
+          ],
+          jobData:[
+            {
+              jobId:'',
+              jobName:'',
+            }
+          ],
+          form:{
+            borrowerName:'',
+            borrowerSex:'',
+            borrowerAge:'',
+            borrowerJob:'',
+            income:'',
+            borrowerAddress:'',
+            borrower2:'',
+            phone:'',
+            email:'',
+            borrowerId:this.$store.state.userInfo.id
+          }
+        };
+      },
+      methods:{
+          getData(){
+            this.$axios.get(`/userBorrower/updateBorrowerById/${this.$store.state.userInfo.id}`).then(res=>{
+              this.form=res
+              this.getCity(this.form.borrowerAddress)
+            })
+          },
+        //获取省
+        getProvince(){
+          this.$axios.get('city/getAllProvincial').then(res=>{
+            this.provinceData=res
+          })
+        },
+        //获取 市 区
+        getCity(val){
+          this.$axios.get(`city/getAllCity/${val}`).then(res=>{
+            this.cityData=res
+          })
+        },
+        getMonthMoney(){
+            this.$axios.get('get/getIncome').then(res=>{
+              this.monthMoneyData=res
+            })
+        },
+        getJob(){
+            this.$axios.get('get/getJob').then(res=>{
+              res.forEach(item=>{
+                if(item.jobId === 0){
+                  item.jobName="其他"
+                }
+              })
+              this.jobData=res
+            })
+        },
+        //编辑
+        edit(){
+            this.isEdit=!this.isEdit
+        },
+        //保存
+        savePerson(){
+            let data = new FormData()
+            for(let item in this.form){
+              data.append(item, this.form[item])
+            }
+            this.$axios.post('userBorrower/updateUserBorrower',data).then(res=>{
+              console.log('aaaa',res)
+              this.$message.success(res.success)
+              this.isEdit=!this.isEdit
+            })
+        },
+        //放弃修改
+        abandonPerson(){
+          this.getData()
+          this.isEdit=false
+        },
+
+      },
+      created(){
+         this.getData()
+        this. getProvince()
+        //月收入
+        this.getMonthMoney()
+        //职业
+        this.getJob()
+      }
+
+    }
+</script>
+
+<style scoped lang="scss">
+  /*.input-active{*/
+    /*border-color: transparent;*/
+  /*}*/
+  .ml20{
+    margin-left: 20px;
+  }
+.person{
+  width:882px;
+  height:723px;
+  background:rgba(255,255,255,1);
+  .title{
+    width: 100%;
+    height:70px;
+    padding-left: 54px;
+    padding-right: 90px;
+    box-sizing: border-box;
+    .title-text{
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:70px;
+    }
+    .edit{
+      height:70px;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(208,172,86,1);
+      line-height:70px;
+      cursor: pointer;
+    }
+  }
+
+  .person-item{
+    height: 73px;
+    padding: 15px 54px 15px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #eee;
+    .person-text{
+      text-align: right;
+      width:70px;
+      height:43px;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(81,81,81,1);
+      line-height:43px;
+    }
+    input{
+      height: 42px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 14px 10px;
+      box-sizing: border-box;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(81,81,81,1);
+      line-height:42px;
+    }
+    .name,.age{
+      width: 200px;
+      height: 42px;
+    }
+    .area{
+      width: 100px;
+      height: 42px;
+    }
+    .same{
+      width: 220px;
+      height: 42px;
+    }
+    .radio{
+      margin-top: 9px;
+      margin-left: 19px;
+    }
+    /deep/ .el-radio__label{
+      color: #aaa;
+    }
+    /deep/ .is-checked .el-radio__inner{
+      border-color: #333;
+      background: #fff;
+      &:after{
+        background-color: #333;
+      }
+    }
+    /deep/ .is-checked+.el-radio__label {
+      color: #333;
+    }
+    /deep/ .el-radio__inner:hover{
+      border-color: #333;
+    }
+  }
+}
+</style>

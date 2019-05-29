@@ -1,0 +1,199 @@
+import Vue from 'vue'
+import Router from 'vue-router'
+
+Vue.use(Router)
+const components={
+  home:()=>import('@/views/Home'),
+  loans:()=>import('@/views/Loans'),
+  agent:()=>import('@/views/Agent'),
+  organization:()=>import('@/views/Organization'),
+  help:()=>import('@/views/Help'),
+  layout:()=>import('@/layout/layout'),
+  productDetail:()=>import('@/views/productDetail'),
+  myMessage:()=>import('@/views/myMessage'),
+  personMessage:()=>import('@/views/personMessage'),
+  myCollect:()=>import('@/views/myCollect'),
+  emailCenter:()=>import('@/views/emailCenter'),
+  messageCenter:()=>import('@/views/messageCenter'),
+  secureCenter:()=>import('@/views/secureCenter'),
+  accessRecord:()=>import('@/views/accessRecord'),
+  userRegister:()=>import('@/views/userRegister'),
+  agentRegister:()=>import('@/views/agentRegister'),
+  organRegister:()=>import('@/views/organRegister'),
+
+  agentDetail:()=>import('@/views/agentDetail'),
+  organDetail:()=>import('@/views/organDetail'),
+
+
+  judge:()=>import('@/views/judge'),
+
+  organMessage:()=>import('@/views/organMessage/organMessage'),
+  accessRec:()=>import('@/views/organMessage/item/accessRec'),
+  emailCen:()=>import('@/views/organMessage/item/emailCen'),
+  memberCen:()=>import('@/views/organMessage/item/memberCen'),
+  organMess:()=>import('@/views/organMessage/item/organMess'),
+  payRes:()=>import('@/views/organMessage/item/payRes'),
+  productCen:()=>import('@/views/organMessage/item/productCen'),
+  resourceCen:()=>import('@/views/organMessage/item/resourceCen'),
+  secuCen:()=>import('@/views/organMessage/item/secuCen'),
+  messCen:()=>import('@/views/organMessage/item/messCen'),
+
+  agentCollect:()=>import('@/views/myCollect/agentCollect'),
+  organCollect:()=>import('@/views/myCollect/organCollect'),
+  productCollect:()=>import('@/views/myCollect/productCollect'),
+
+
+
+
+
+}
+
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      component:components.layout,
+      redirect:'/home',
+      children:[
+        {
+          path:'home',
+          component:components.home
+        },
+        {
+          path:'loans',
+          component:components.loans
+        },
+        {
+          path:'agent',
+          component:components.agent
+        },
+        {
+          path:'organization',
+          component:components.organization
+        },
+        {
+          path:'help',
+          component:components.help
+        },
+        {
+          path:'judge',
+          component:components.judge
+        },
+        {
+          path:'myMessage',
+          component:components.myMessage,
+          redirect:'/myMessage/personMessage',
+          children:[
+            {
+              path:'personMessage',
+              component:components.personMessage
+            },
+            {
+              path:'myCollect',
+              component:components.myCollect,
+              redirect:'/myMessage/myCollect/agentCollect',
+              children:[
+                {
+                  path:'agentCollect',
+                  component:components.agentCollect
+                },
+                {
+                  path:'organCollect',
+                  component:components.organCollect
+                },
+                {
+                  path:'productCollect',
+                  component:components.productCollect
+                },
+              ]
+            },
+            {
+              path:'accessRecord',
+              component:components.accessRecord
+            },
+            {
+              path:'messageCenter',
+              component:components.messageCenter,
+            },
+            {
+              path:'emailCenter',
+              component:components.emailCenter
+            },
+            {
+              path:'secureCenter',
+              component:components.secureCenter
+            },
+          ]
+        },
+        {
+          path:'organMessage',
+          component:components.organMessage,
+          redirect:'/organMessage/productCen',
+          children:[
+            {
+              path:'productCen',
+              component:components.productCen
+            },
+            {
+              path:'messCen',
+              component:components.messCen
+            },
+            {
+              path:'secuCen',
+              component:components.secuCen
+            },
+            {
+              path:'resourceCen',
+              component:components.resourceCen
+            },
+            {
+              path:'emailCen',
+              component:components.emailCen
+            },
+            {
+              path:'memberCen',
+              component:components.memberCen
+            },
+            {
+              path:'organMess',
+              component:components.organMess
+            },
+            {
+              path:'accessRec',
+              component:components.accessRec
+            },
+            {
+              path:'payRes',
+              component:components.payRes
+            },
+          ]
+        },
+      ]
+    },
+    {
+      path:'/productDetail',
+      component:components.productDetail,
+    },
+    {
+      path:'/agentDetail',
+      component:components.agentDetail,
+    },
+    {
+      path:'/organDetail',
+      component:components.organDetail,
+    },
+    {
+      path:'/userRegister',
+      component:components.userRegister,
+    },
+    {
+      path:'/agentRegister',
+      component:components.agentRegister,
+    },
+    {
+      path:'/organRegister',
+      component:components.organRegister,
+    },
+
+  ]
+})

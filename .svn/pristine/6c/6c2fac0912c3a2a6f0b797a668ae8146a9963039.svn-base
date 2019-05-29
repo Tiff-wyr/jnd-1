@@ -1,0 +1,15 @@
+<template>
+<div>
+  this is secure center
+</div>
+</template>
+
+<script>
+    export default {
+        name: "secureCenter"
+    }
+</script>
+
+<style scoped>
+
+</style>

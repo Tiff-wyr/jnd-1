@@ -1,0 +1,225 @@
+<template>
+  <div>
+    <div class="agentC">
+      <div class="clearfix main-collect">
+        <div class="agentItem fll" v-for="(item,index) in tableData">
+          <div class="clearfix fs">
+            <img :src="item.agency.agencyLogo" alt="" class="fll pic">
+            <div class="fll ml4">
+              <div class="name">{{item.agency.agencyName}}</div>
+              <div class="job">{{item.agency.agencyURL}}</div>
+              <div class="tel">{{item.agency.phone}}</div>
+            </div>
+            <div class="fll sub" @click="cancelRestore(item.agency.agencyId)">X</div>
+          </div>
+          <div class="mt16 little-item mb20">{{item.agency.agencyIntroduction}}</div>
+          <div class="btn">立即联系</div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="page" style="margin-bottom:-50px;text-align: right">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        background
+        :page-size="size"
+        :pager-count="5"
+        layout="prev, pager, next"
+        :total="count">
+      </el-pagination>
+    </div>
+  </div>
+
+</template>
+
+<script>
+  import {mapState} from 'vuex'
+    export default {
+        name: "organCollect",
+      data(){
+        return {
+          page: 1,
+          size: 6,
+          count: 1,
+          tableData:[
+            {
+              agency:{
+                agencyName:'',
+                agencyURL:'',
+                agencyLogo:'',
+                agencyIntroduction:'',
+                phone:'',
+              }
+
+            },
+          ]
+        }
+      },
+      computed: {
+        ...mapState(['userInfo'])
+      },
+      methods:{
+        getOrganColl(){
+            this.$axios.get(`borAgency/selectByBorId/${this.$store.state.userInfo.id}/${this.page}/${this.size}`).then(res=>{
+             this.tableData=res.list
+              console.log(this.tableData,'1111')
+              this.count=res.totalCount
+            })
+        },
+        handleCurrentChange (val) {
+          this.page = val
+          this.getOrganColl()
+
+        },
+        handleSizeChange (val) {
+          this.size = val
+          this.getOrganColl()
+        },
+        //取消机构
+        cancelRestore(id){
+          this.$axios.post(`borAgency/deleteBorAgency?borId=${this.$store.state.userInfo.id}&agencyId=${id}`).then(res=>{
+            this.$message.success("取消收藏")
+            this.getOrganColl()
+          })
+        },
+      },
+      created(){
+        this.getOrganColl()
+      },
+
+    }
+</script>
+
+<style scoped lang="scss">
+  .main-collect{
+    height: 600px;
+  }
+  .mt16{
+    margin-top: 16px;
+  }
+  .mb20{
+    margin-bottom: 20px;
+  }
+  .mt8{
+    margin-top: 8px;
+  }
+  .mb16{
+    margin-bottom: 16px;
+  }
+  .ml4{
+    margin-left: 4px;
+  }
+
+  .agentC{
+    height: 510px;
+    padding: 20px 24px 20px 56px;
+    box-sizing: border-box;
+    .agentItem{
+      width:248px;
+      height:216px;
+      background:rgba(255,255,255,1);
+      border-radius:4px;
+      margin-right: 40px;
+      padding: 10px 0 0 24px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      border: 1px solid #eee;
+      &:hover{
+        box-shadow:0px 0px 13px 0px rgba(217,217,217,1);
+      }
+      &:hover .sub{
+        display: block;
+      }
+      .sub{
+        color: #A80E0E;
+        font-size: 15px;
+        display: none;
+        cursor: pointer;
+      }
+      .pic{
+        width:80px;
+        height:78px;
+      }
+      .name{
+        height:16px;
+        font-size:16px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(81,81,81,1);
+        line-height:16px;
+      }
+      .job{
+        margin-top: 4px;
+        width:72px;
+        height:12px;
+        font-size:12px;
+        font-family:PingFangSC-Light;
+        font-weight:300;
+        color:rgba(155,155,155,1);
+        line-height:12px;
+      }
+      .tel{
+        margin-top: 15px;
+        width:111px;
+        height:16px;
+        font-size:16px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(81,81,81,1);
+        line-height:16px;
+        letter-spacing:1px;
+      }
+      .little-item{
+        width:192px;
+        height:51px;
+        font-size:12px;
+        font-family:PingFangSC-Light;
+        font-weight:300;
+        color:rgba(155,155,155,1);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+        line-height: 17px;
+      }
+      .btn{
+        text-align: center;
+        width:70px;
+        height:24px;
+        border-radius:4px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        line-height:24px;
+        margin: 0 auto;
+        border:1px solid rgba(217,217,217,1);
+      }
+      &:hover .btn{
+        background:rgba(168,14,14,1);
+        color:rgba(255,255,255,1);
+      }
+    }
+    /deep/ .el-pager .number{
+      color:rgba(165,165,165,1);
+    }
+    /deep/ .el-pagination.is-background .el-pager li{
+      color:rgba(165,165,165,1);
+      width:28px;
+      height:28px;
+      border-radius:4px;
+      border:1px solid rgba(235,235,235,1);
+    }
+    /deep/ .el-pagination.is-background .el-pager li:not(.disabled).active{
+      background:rgba(245,245,245,1);
+      color:rgba(81,81,81,1);
+      border-style: none;
+    }
+    /deep/ .el-pager li:disabled :hover{
+      color:rgba(165,165,165,1);
+    }
+  }
+
+</style>

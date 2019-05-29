@@ -1,0 +1,79 @@
+<template>
+<div>
+  <div class="wrappy">
+    <div class="w1200">
+      <div class="help clearfix">
+          <div class="fll">
+            <div class="help-left">
+              <router-link to="/help/guide">贷款指南</router-link>
+              <i class="el-icon-arrow-right flr"></i>
+            </div>
+            <div class="help-left">
+              <router-link to="/help/manage">如何办理贷款</router-link>
+              <i class="el-icon-arrow-right flr"></i>
+            </div>
+            <div class="help-left">
+              <router-link to="/help/matter">资质相关问题</router-link>
+              <i class="el-icon-arrow-right flr"></i>
+            </div>
+            <div class="help-left">
+              <router-link to="/help/question">相关注意事项</router-link>
+              <i class="el-icon-arrow-right flr"></i>
+            </div>
+            <div class="help-left">
+              <router-link to="/help/elseQues">其他问题</router-link>
+              <i class="el-icon-arrow-right flr"></i>
+            </div>
+            <div class="add1"></div>
+          </div>
+          <div class="fll ml30">
+            <router-view></router-view>
+          </div>
+      </div>
+      <footerSame></footerSame>
+    </div>
+  </div>
+</div>
+</template>
+
+<script>
+  import footerSame from '../component/footerSame'
+    export default {
+        name: "Help",
+      components:{
+        footerSame
+      },
+      data(){
+          return {
+
+          }
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+.ml30{
+  margin-left: 30px;
+}
+  .help-left{
+    width: 268px;
+    height: 73px;
+    background:rgba(255,255,255,1);
+    padding: 53px 54px 0 36px;
+    box-sizing: border-box;
+    a{
+      width:120px;
+      height:20px;
+      font-size:16px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(81,81,81,1);
+      line-height:20px;
+    }
+  }
+  .add1{
+    width: 268px;
+    height: 55px;
+    background:rgba(255,255,255,1);
+  }
+</style>

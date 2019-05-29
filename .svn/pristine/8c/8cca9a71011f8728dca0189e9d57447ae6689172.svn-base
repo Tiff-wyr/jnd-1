@@ -1,0 +1,343 @@
+<template>
+  <div>
+    <div class="resource mb24">
+      <div class="title">资源中心</div>
+      <div class="table">
+        <div class="loans-pro">
+          <div class="loans-header clearfix">
+            <div class="header-same fll">贷款人</div>
+            <div class="header-same fll">注册地区</div>
+            <div class="header-same fll">性别</div>
+            <div class="header-same fll">手机号</div>
+            <div class="header-same fll">操作</div>
+          </div>
+
+          <div class="loans-pro-item clearfix" v-for="(item,index) in tableData">
+            <div class="fll pro-item-same">{{item.borrowerName}}</div>
+            <div class="fll pro-item-same">{{item.borrowerAddress}}</div>
+            <div class="fll pro-item-same">{{item.borrowerSex}}</div>
+            <div class="fll pro-item-same">{{item.phone}}</div>
+            <div class="fll pro-item-same">
+              <div class="operate" @click="look">
+                立即查看
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div style="text-align: right">
+      <div class="page">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          background
+          :page-size="size"
+          :pager-count="5"
+          layout="prev, pager, next"
+          :total="count">
+        </el-pagination>
+      </div>
+    </div>
+    <div class="mask" v-show="isMask"></div>
+    <div class="contain-resource" v-show="isContain">
+      <div class="res-title clearfix">
+        <img src="../../../../static/resource/vip/vip.png" alt="">
+        <div class="fll text1-vip">就能贷VIP会员</div>
+        <input type="checkbox" v-model="checked">
+        <div class="fll agree-fw">同意《服务条款》</div>
+      </div>
+      <div class="res-main">
+        <div class="kait">开通账户：15833678427</div>
+        <div class="clearfix">
+          <div class="fll">
+            <div class="money-item">
+              <div class="money">1元/次</div>
+              <div class="dash"></div>
+              <div class="times">1次</div>
+            </div>
+          </div>
+          <div class="fll ml60">
+            <div class="money-item">
+              <div class="money">20元/月</div>
+              <div class="dash"></div>
+              <div class="times">不限次数</div>
+            </div>
+          </div>
+          <div class="fll ml60">
+            <div class="money-item">
+              <div class="money">200元/年</div>
+              <div class="dash"></div>
+              <div class="times">不限次数</div>
+            </div>
+          </div>
+        </div>
+        <div class="zf">支付方式</div>
+        <div class="con-zf clearfix">
+          <div class="fll zf-left">
+            <img src="../../../../static/resource/vip/zfb.png" alt="">
+          </div>
+          <div class="flr zf-right">
+            <img src="../../../../static/resource/vip/wx.png" alt="">
+          </div>
+        </div>
+        <div class="zf-btn">去支付</div>
+      </div>
+    </div>
+
+  </div>
+
+</template>
+
+<script>
+  import {mapState} from 'vuex'
+  export default {
+    name: "agentResource",
+    data(){
+      return {
+        checked:true,
+        isMask:false,
+        isContain:false,
+        tableData: [
+          {
+            borrowerName: '',
+            borrowerAddress: '',
+            borrowerSex:'',
+            phone:''
+          },
+        ],
+        page: 1,
+        size: 6,
+        count: 100,
+      }
+    },
+    methods:{
+      handleSelectionChange(val) {
+
+      },
+      handleCurrentChange (val) {
+        this.page = val
+
+      },
+      handleSizeChange (val) {
+        this.size = val
+      },
+      look(){
+        this.isMask=true
+        this.isContain=true
+      },
+      //资源中心列表
+      getData(){
+        this.$axios.get(`brokerResource/getBorrowerByBrokerId/${this.$store.state.uid}`).then(res=>{
+          this.tableData=res.data
+        })
+      }
+
+    },
+    created(){
+      this.getData()
+    },
+    computed: {
+      ...mapState(['uid'])
+    },
+  }
+</script>
+
+<style scoped lang="scss">
+  .ml60{
+    margin-left: 60px;
+  }
+  .resource{
+    width:944px;
+    height:648px;
+    background:rgba(255,255,255,1);
+    .title{
+      width: 100%;
+      height:66px;
+      padding-left: 56px;
+      box-sizing: border-box;
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:66px;
+    }
+    .table{
+      .loans-pro{
+        padding: 0 38px;
+        box-sizing: border-box;
+        background:rgba(255,255,255,1);
+        .loans-header{
+          width:866px;
+          height:40px;
+          background:rgba(250,250,250,1);
+          .header-same{
+            text-align: center;
+            width: 173px;
+            height:14px;
+            font-size:14px;
+            font-family:PingFangSC-Regular;
+            font-weight:400;
+            color:rgba(155,155,155,1);
+            line-height:40px;
+          }
+        }
+
+        .loans-pro-item{
+          height: 52px;
+          border-bottom: 1px solid #f0f0f0;
+          .pro-item-same{
+            font-size:14px;
+            font-family:PingFangSC-Regular;
+            font-weight:400;
+            color:rgba(81,81,81,1);
+            width: 173px;
+            line-height:52px;
+            height: 52px;
+            text-align: center;
+          }
+          &:hover .operate{
+            width:80px;
+            height:32px;
+            background:rgba(168,14,14,1);
+            border-radius:4px;
+            background:rgba(168,14,14,1);
+            color:rgba(255,255,255,1);
+            margin-top: 10px;
+            line-height: 32px;
+            margin-left: 50px;
+          }
+
+        }
+      }
+    }
+  }
+  .mask{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    opacity: 0.7;
+  }
+  .contain-resource{
+    position: fixed;
+    left: 50%;
+    top: 10%;
+    transform: translateX(-50%);
+    width:694px;
+    height:496px;
+    background:rgba(249,249,249,1);
+    border-radius:4px;
+    z-index: 999;
+    .res-title{
+      text-align: center;
+      width:694px;
+      height:60px;
+      background:linear-gradient(180deg,rgba(255,255,255,1) 0%,
+        rgba(247,247,247,1) 57%,
+        rgba(238,238,238,1) 100%);
+      .text1-vip{
+        font-size:16px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(208,172,86,1);
+        line-height:60px;
+      }
+      .agree-fw{
+        font-size:10px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        line-height:60px;
+      }
+    }
+    .res-main{
+      width:694px;
+      height:435px;
+      background:rgba(249,249,249,1);
+      padding: 29px 90px 0 90px;
+      box-sizing: border-box;
+      .kait{
+        height:14px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:14px;
+        margin-bottom: 16px;
+      }
+      .money-item{
+        width:130px;
+        height:150px;
+        background:rgba(255,255,255,1);
+        border:1px solid rgba(217,217,217,1);
+        padding: 54px 0 14px 0;
+        box-sizing: border-box;
+        text-align: center;
+        cursor: pointer;
+        .money{
+          height:55px;
+          font-size:24px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(81,81,81,1);
+          border-bottom: 1px dashed #f0f0f0;
+        }
+        .times{
+          margin-top: 10px;
+          height:14px;
+          font-size:14px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(81,81,81,1);
+          line-height:14px;
+        }
+      }
+      .zf{
+        width:56px;
+        height:14px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:14px;
+        margin-top: 32px;
+        margin-bottom: 24px;
+      }
+      .con-zf{
+        width: 360px;
+        height: 60px;
+        margin: 0 auto;
+        .zf-left,.zf-right{
+          cursor: pointer;
+          padding: 12px 26px;
+          width:140px;
+          box-sizing: border-box;
+          height:56px;
+          background:rgba(255,255,255,1);
+          border-radius:4px;
+          border:1px solid rgba(217,217,217,1);
+        }
+      }
+      .zf-btn{
+        cursor: pointer;
+        width:100px;
+        height:40px;
+        background:rgba(208,172,86,1);
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        line-height:40px;
+        letter-spacing:1px;
+        text-align: center;
+        margin: 30px auto;
+      }
+    }
+  }
+</style>
+

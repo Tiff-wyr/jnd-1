@@ -1,0 +1,111 @@
+<template>
+    <div>
+      <div class="wrappy">
+        <div class="w1200">
+          <div class="clearfix">
+            <div class="fll">
+              <div class="main">
+                <div class="img-main align">
+                  <img src="../../static/resource/myMessage/头像.png" alt="">
+                  <div class="court-num mt4">1765506929</div>
+                </div>
+                <div :class="this.$route.path === '/myMessage/personMessage' ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                  <div class="iconfont icon-jigougerenzhongxin-copy icon"></div>
+                 <router-link to="/myMessage/personMessage">个人信息</router-link>
+                </div>
+                <div class="my-item clearfix fs">
+                  <img src="../../static/resource/myMessage/足迹.png" alt="" class="fll">
+                  <router-link to="/myMessage/accessRecord">浏览记录</router-link>
+                </div>
+                <div class="my-item clearfix fs">
+                  <img src="../../static/resource/myMessage/Star.png" alt="" class="fll">
+                  <router-link to="/myMessage/myCollect">我的收藏</router-link>
+                </div>
+                <div class="my-item clearfix fs">
+                  <img src="../../static/resource/myMessage/消息.png" alt="" class="fll">
+                  <router-link to="/myMessage/messageCenter">消息中心</router-link>
+                </div>
+                <div class="my-item clearfix fs">
+                  <img src="../../static/resource/myMessage/信封.png" alt="" class="fll">
+                  <router-link to="/myMessage/emailCenter">邮件中心</router-link>
+                </div>
+                <div class="my-item clearfix fs">
+                  <img src="../../static/resource/myMessage/secure.png" alt="" class="fll">
+                  <router-link to="/myMessage/secureCenter">安全中心</router-link>
+                </div>
+              </div>
+            </div>
+            <div class="fll ml30">
+              <router-view></router-view>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</template>
+
+<script>
+    export default {
+      name: "myMessage",
+      data(){
+          return {
+
+          }
+        },
+
+    }
+</script>
+
+<style scoped lang="scss">
+.mt4{
+  margin-top: 4px;
+}
+.ml30{
+  margin-left: 30px;
+}
+.main{
+  width:226px;
+  height:624px;
+  background:rgba(255,255,255,1);
+  .img-main{
+    height: 150px;
+    padding: 23px 50px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #f0f0f0;
+    .court-num{
+      height:16px;
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:16px;
+    }
+
+  }
+    .my-item{
+      height: 66px;
+      padding: 24px 55px;
+      box-sizing: border-box;
+      border-bottom: 1px solid #f0f0f0;
+      a{
+        display: block;
+        float: left;
+        height:20px;
+        font-size:16px;
+        font-family:PingFangSC-Medium;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:20px;
+        margin-left: 18px;
+      }
+      .router-link-active{
+        color: rgba(168, 14, 14, 1);
+      }
+      .active{
+        color: rgba(168, 14, 14, 1);
+      }
+    }
+
+  }
+
+</style>

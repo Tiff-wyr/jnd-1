@@ -1,0 +1,471 @@
+<template>
+  <div>
+    <div class="vip">
+      <div class="mask"></div>
+      <div class="mem-main">
+        <div class="top">
+          <img src="../../../../static/resource/vip/memVip.png" alt="">
+          <div class="clearfix w168">
+            <div class="left-line fll"></div>
+            <div class="member-cen fll">会员中心</div>
+            <div class="right-line fll"></div>
+          </div>
+
+        </div>
+        <div class="open-mem">/开&nbsp;&nbsp;通&nbsp;&nbsp;会&nbsp;&nbsp;员/</div>
+        <div class="text-open">OPENINGOFTHEMEMBER</div>
+        <div class="vip-money">
+          <div class="clearfix">
+            <div class="fll">
+              <div class="money-item">
+                <div class="money">1元/次</div>
+                <div class="times" @click="look('1')">立即购买</div>
+              </div>
+            </div>
+            <div class="fll ml60">
+              <div class="money-item">
+                <div class="money">20元/月</div>
+                <div class="times" @click="look('2')">立即开通</div>
+              </div>
+            </div>
+            <div class="fll ml60">
+              <div class="money-item">
+                <div class="money">200元/年</div>
+                <div class="times" @click="look('3')">立即开通</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="open-mem">/会&nbsp;&nbsp;员&nbsp;&nbsp;等&nbsp;&nbsp;级/</div>
+        <div class="text-open" style="width: 125px;">MEMBERSHIPGRADE</div>
+
+        <div class="clearfix" style="width: 480px;margin: 20px auto 44px">
+          <div class="fll">
+            <img src="../../../../static/resource/vip/normal.png" alt="" style="width: 180px;height: 112px;margin-right: 120px">
+          </div>
+          <div class="fll">
+            <img src="../../../../static/resource/vip/vipmem.png" alt="" style="width: 180px;height: 112px;">
+          </div>
+        </div>
+
+        <div class="open-mem">/会&nbsp;&nbsp;员&nbsp;&nbsp;特&nbsp;&nbsp;权/</div>
+        <div class="text-open" style="width: 140px;">MEMBERSHIPPRIVILEGES</div>
+
+        <div class="table-item">
+          <table cellspacing="0">
+            <tr>
+              <th></th>
+              <th>普通会员</th>
+              <th>VIP会员</th>
+              <th>年费会员</th>
+            </tr>
+            <tr>
+              <td>查看客户</td>
+              <td>1元/次</td>
+              <td style="color: #FFD87B;">不限次数</td>
+              <td style="color: #FFD87B;">不限次数</td>
+            </tr>
+            <tr>
+              <td>短信提醒</td>
+              <td>无</td>
+              <td style="color: #FFD87B;">有</td>
+              <td style="color: #FFD87B;">有</td>
+            </tr>
+            <tr>
+              <td>排名上升</td>
+              <td>无</td>
+              <td style="color: #FFD87B;">有</td>
+              <td style="color: #FFD87B;">有</td>
+            </tr>
+            <tr>
+              <td>会员标识</td>
+              <td>无</td>
+              <td style="color: #FFD87B;">有</td>
+              <td style="color: #FFD87B;">有</td>
+            </tr>
+          </table>
+        </div>
+        <div class="mess">短信提醒：离线状态下更加快捷便利的了解到贷款人的消息。</div>
+        <div class="mess">排名上升：曝光量高，7×24h全天候固定展示。</div>
+        <div class="mess">查看客户：随时获取客户第一手资源。</div>
+
+
+
+      </div>
+    </div>
+    <div class="masking" v-show="isMask" @click="closeMask"></div>
+    <div class="contain-resource" v-show="isContain">
+      <div class="res-title clearfix">
+        <div class="w400">
+          <div class="fll">
+            <img src="../../../../static/resource/vip/vip.png" alt="" style="width: 20px;height: 19px;margin-top: 20px">
+          </div>
+          <div class="fll text1-vip">就能贷VIP会员</div>
+          <div class="fll">
+            <input type="checkbox" v-model="checked" style="margin-top: 24px;margin-left: 8px">
+          </div>
+          <div class="fll agree-fw">同意《服务条款》</div>
+        </div>
+
+      </div>
+      <div class="res-main">
+        <div class="zf">支付方式</div>
+        <div class="con-zf clearfix">
+          <label>
+            <input class="pay" v-model="payType" value="1" type="radio" name="pay">
+            <div class="pay_type fll zf-left">
+              <img src="../../../../static/resource/vip/zfb.png" alt="">
+            </div>
+          </label>
+          <label>
+            <input class="pay" v-model="payType" value="2" type="radio" name="pay">
+            <div class="pay_type flr zf-right">
+              <img src="../../../../static/resource/vip/wx.png" alt="">
+            </div>
+          </label>
+
+        </div>
+        <div class="zf-btn" @click="pay">去支付</div>
+      </div>
+    </div>
+
+
+  </div>
+
+</template>
+
+<script>
+    export default {
+      name: "agentMember",
+      data(){
+          return {
+            checked:true,
+            vipType:'',
+            isMask:false,
+            isContain:false,
+            payType:'',
+            payId:'',
+          }
+      },
+      methods:{
+        //  关闭蒙版
+        closeMask() {
+          this.isMask = false
+          this.isContain = false
+        },
+        //支付
+        pay(){
+          //付款
+          this.$axios.get(`alipay/pay/${this.$store.state.userInfo.phone}/${this.vipType}/${this.payType}`).then(res=>{
+            window.open(`http://192.168.0.123:8082/alipay/pay/${this.$store.state.userInfo.phone}/${this.vipType}/${this.payType}`);
+          })
+
+        },
+        look(id){
+          this.isMask=true
+          this.isContain=true
+          this.payId=id
+          console.log( this.payId)
+        },
+      },
+    }
+</script>
+
+<style scoped lang="scss">
+  .w400{
+    width: 250px;
+    height: 62px;
+    margin: 0 auto;
+  }
+  .ml60{
+    margin-left: 60px;
+  }
+
+  .w168{
+    width: 168px;
+    margin: 10px auto;
+    line-height: 20px;
+  }
+  .vip{
+  padding: 40px 142px;
+  box-sizing: border-box;
+  position: relative;
+  width:944px;
+  height:1075px;
+  background-image: url("../../../../static/resource/Vip.png");
+  .mask{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:rgba(0,0,0,1);
+    opacity:0.6;
+    z-index: 100;
+  }
+  .mem-main{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 998;
+    .top{
+      width:660px;
+      height:120px;
+      background:linear-gradient(270deg,rgba(0,0,0,0) 0%,rgba(0,0,0,1) 39%,rgba(0,0,0,1) 62%,rgba(0,0,0,0) 100%);
+      opacity:0.5;
+      margin: 40px auto;
+      padding-top: 25px;
+      box-sizing: border-box;
+      text-align: center;
+      .left-line,.right-line{
+        width:50px;
+        height:1px;
+        background:rgba(208,172,86,1);
+        margin-top: 9px;
+      }
+      .member-cen{
+        width:56px;
+        height:20px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(208,172,86,1);
+        line-height:20px;
+        margin: 0 6px 0 6px;
+      }
+
+    }
+    .open-mem{
+      width:86px;
+      height:12px;
+      font-size:12px;
+      font-family:Helvetica-Light;
+      font-weight:300;
+      color:rgba(255,255,255,1);
+      line-height:12px;
+      margin: 44px auto 10px;
+    }
+    .text-open{
+      width:151px;
+      height:12px;
+      font-size:12px;
+      font-family:Helvetica-Light;
+      font-weight:300;
+      color:rgba(255,255,255,1);
+      line-height:12px;
+      margin: 0 auto;
+    }
+    .vip-money{
+      width: 540px;
+      margin: 20px auto 43px;
+      .money-item{
+        text-align: center;
+        cursor: pointer;
+        .money{
+          width:140px;
+          height:90px;
+          background:rgba(250,250,250,1);
+          border-radius:4px 4px 0px 0px;
+          font-size:24px;
+          font-family:PingFangSC-Regular;
+          line-height: 90px;
+          font-weight:400;
+          color:rgba(81,81,81,1);
+        }
+        .times{
+          width: 140px;
+          height: 34px;
+          font-size:14px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(255,255,255,1);
+          line-height:34px;
+          background:rgba(213,173,88,1);
+        }
+      }
+    }
+
+    .mess{
+      height:20px;
+      font-size:12px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(255,255,255,1);
+      line-height:20px;
+      margin-left: 240px;
+    }
+    .table-item{
+      width: 550px;
+      margin: 20px auto 12px;
+      tr th{
+        width: 137px;
+        height: 40px;
+        text-align: center;
+        line-height: 40px;
+        color:rgba(255,255,255,1);
+        font-size:14px;
+        font-family:PingFangSC-Light;
+        font-weight:400;
+        border: 1px dashed #fff;
+
+      }
+      tr td{
+        width: 137px;
+        height: 40px;
+        text-align: center;
+        line-height: 40px;
+        color:rgba(255,255,255,1);
+        font-size:14px;
+        font-family:PingFangSC-Light;
+        font-weight:300;
+        border: 1px dashed #fff;
+
+      }
+    }
+
+
+
+  }
+
+}
+  .masking{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    opacity: 0.7;
+    z-index: 998
+  }
+  .contain-resource{
+    position: fixed;
+    left: 50%;
+    top: 10%;
+    transform: translateX(-50%);
+    width:694px;
+    height:284px;
+    background:rgba(249,249,249,1);
+    border-radius:4px;
+    z-index: 999;
+    .res-title{
+      text-align: center;
+      width:694px;
+      height:60px;
+      background:linear-gradient(180deg,rgba(255,255,255,1) 0%,
+        rgba(247,247,247,1) 57%,
+        rgba(238,238,238,1) 100%);
+      .text1-vip{
+        font-size:16px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(208,172,86,1);
+        line-height:60px;
+      }
+      .agree-fw{
+        font-size:10px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        line-height:60px;
+      }
+    }
+    .res-main{
+      width:694px;
+      height:224px;
+      background:rgba(249,249,249,1);
+      box-sizing: border-box;
+      padding-top: 30px;
+      padding-left: 90px;
+      padding-right: 90px;
+      .zf{
+        width:56px;
+        height:14px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:14px;
+        margin-bottom: 24px;
+      }
+      .con-zf{
+        width: 360px;
+        height: 60px;
+        margin: 0 auto;
+        .pay {
+          display: none;
+        }
+        .pay:checked+.pay_type {
+          box-shadow:0px 4px 8px 0px rgba(208,172,86,0.4);
+          border-radius:4px;
+          border:1px solid rgba(208,172,86,1);
+        }
+        .pay:checked+.pay_type::after {
+          position: absolute;
+          content: '';
+          top: -8px;
+          right: -8px;
+          width: 16px;
+          height: 16px;
+          background: #fff;
+          border-radius: 50%;
+          border:1px solid rgba(208,172,86,1);
+        }
+        .pay:checked+.pay_type::before {
+          position: absolute;
+          content: '';
+          top: -5px;
+          right: -2px;
+          z-index: 998;
+          width: 4px;
+          height: 6px;
+          border:1px solid rgba(208,172,86,1);
+          border-top-color: transparent;
+          border-left-color: transparent;
+          transform: rotate(45deg);
+        }
+        .pay_type {
+          position: relative;
+        }
+        .zf-left,.zf-right{
+          position: relative;
+          cursor: pointer;
+          padding: 12px 26px;
+          width:140px;
+          box-sizing: border-box;
+          height:56px;
+          background:rgba(255,255,255,1);
+          border-radius:4px;
+          border:1px solid rgba(217,217,217,1);
+        }
+        .zf-active{
+          position:absolute;
+          border:1px solid rgba(208,172,86,1);
+          box-shadow:0px 4px 8px 0px rgba(208,172,86,0.4);
+          &::after{
+
+          }
+
+        }
+      }
+      .zf-btn{
+        cursor: pointer;
+        width:100px;
+        height:40px;
+        background:rgba(208,172,86,1);
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        line-height:40px;
+        letter-spacing:1px;
+        text-align: center;
+        margin: 30px auto;
+      }
+    }
+  }
+
+
+</style>

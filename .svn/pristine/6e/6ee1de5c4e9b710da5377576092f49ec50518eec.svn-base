@@ -1,0 +1,60 @@
+<template>
+<div>
+<div class="wrappy">
+  <div class="w1200">
+    <div class="main">
+      <div class="text">恭喜您注册成为就能贷平台会员，可享受更多平台服务。您的初始密码就是您的验证码，请您妥善保管并及时修改。</div>
+      <div class="clearfix">
+        <div class="fll align">
+          <img src="../../static/resource/judge/agent.png" alt="" class="img">
+          <div class="agent-text">找经纪人</div>
+        </div>
+        <div class="fll align">
+          <img src="../../static/resource/judge/organ.png" alt="" class="img">
+          <div class="agent-text">找机构</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</template>
+
+<script>
+    export default {
+        name: "judge"
+    }
+</script>
+
+<style scoped lang="scss">
+ .align{
+    text-align: center;
+  }
+.main{
+  height:470px;
+  background:rgba(255,255,255,1);
+  text-align: center;
+  padding: 20px 50px;
+  box-sizing: border-box;
+  .text{
+    height:16px;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(168,14,14,1);
+    line-height:16px;
+  }
+  .agent-text{
+    height:30px;
+    font-size:25px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:30px;
+  }
+  .img{
+    width: 250px;
+    height: 250px;
+  }
+}
+</style>

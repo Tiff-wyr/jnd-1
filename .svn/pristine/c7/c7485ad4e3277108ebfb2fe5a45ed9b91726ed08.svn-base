@@ -1,0 +1,57 @@
+<template>
+    <div>
+      <div class="footer mt48">
+        <div class="clearfix">
+          <div class="partner fll">合作机构</div>
+          <div class="city fll">城市分站</div>
+        </div>
+        <div class="line"></div>
+        <div style="margin-top: 28px">
+          <img src="../../static/resource/bank1.png" alt="" class="ml42">
+          <img src="../../static/resource/bank2.png" alt=""  class="ml42">
+          <img src="../../static/resource/bank3.png" alt=""  class="ml42">
+          <img src="../../static/resource/bank4.png" alt=""  class="ml42">
+          <img src="../../static/resource/bank5.png" alt=""  class="ml42">
+          <img src="../../static/resource/bank6.png" alt=""  class="ml42">
+        </div>
+      </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: "footerSame"
+    }
+</script>
+
+<style scoped lang="scss">
+  .footer{
+    width:1200px;
+    height:228px;
+    background:rgba(255,255,255,1);
+  .partner{
+    width:96px;
+    height:24px;
+    font-size:20px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(168,14,14,1);
+    line-height:24px;
+    margin-top: 28px;
+    margin-left: 40px;
+    cursor: pointer;
+  }
+  .city{
+    width:96px;
+    height:24px;
+    font-size:20px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:24px;
+    margin-top: 28px;
+    margin-left: 30px;
+    cursor: pointer;
+  }
+  }
+</style>

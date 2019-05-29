@@ -1,0 +1,697 @@
+<template>
+<div>
+  <div class="organ"></div>
+  <div class="wrappy">
+    <div class="w1200">
+
+      <div class="area">
+        <div class="area-item clearfix mb20">
+          <div class="fll city">所在地区</div>
+          <div :class="cityUp? 'fll radio-wrap clearfix radio-wrap-active' : 'fll radio-wrap clearfix'">
+            <wradio :radios="cities" name="city" v-model="query.city" class="fll"></wradio>
+          </div>
+          <div class="up" @click="citySpread">展开<span :class="cityUp? 'arrow rotate' : 'arrow' "></span></div>
+        </div>
+        <div class="clearfix mb20">
+          <div class="fll city">贷款类型</div>
+          <wradio :radios="loans" name="loan" v-model="query.loan" class="fll"></wradio>
+        </div>
+        <div class="clearfix mb20">
+          <div class="fll city">业务分类</div>
+          <wradio :radios="business" name="business" v-model="query.business" class="fll"></wradio>
+        </div>
+        <div class="clearfix">
+          <div class="fll city">擅长业务</div>
+          <wradio :radios="goods" name="good" v-model="query.good" class="fll"></wradio>
+        </div>
+      </div>
+
+      <div class="clearfix mt48 mb24">
+        <div class="organ-loan fll">北京贷款顾问</div>
+        <div class="fll">
+          <div class="organ-more fll">更多</div>
+          <img src="../../static/resource/右边.png" alt="" class="fll img-right">
+        </div>
+      </div>
+      <div class="adviser clearfix"  v-for="item in tableData">
+        <div class="pic fll">
+          <img :src="item.image || '../../static/resource/person1.png' " alt="">
+        </div>
+        <div class="fll ml36">
+          <div class="adviser-name">{{item.brokerName}}</div>
+          <div class="clearfix">
+            <div class="fll adviser-same">业务范畴:&nbsp;</div>
+            <div class="fll adviser-same ww320">{{item.businessScopeInfo}}</div>
+          </div>
+          <div class="clearfix mt10">
+            <div class="fll adviser-same">业务介绍:&nbsp;</div>
+            <div class="fll adviser-same w320">{{item.businessIntroduction}}</div>
+          </div>
+        </div>
+        <div class="fll num">{{item.phone}}</div>
+        <div class="fll adviser-btn" @click="mask">申请贷款</div>
+      </div>
+
+      <div class="page">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          background
+          :page-size="page"
+          :pager-count="5"
+          layout="prev, pager, next"
+          :total="count">
+        </el-pagination>
+      </div>
+      <footerSame></footerSame>
+    </div>
+  </div>
+
+  <div class="mask" v-if="isMask"></div>
+  <div v-if="viewing" style="z-index: 9999">
+    <div class="contain" v-if="isShowing">
+      <div class="progress clearfix">
+        <div class="fll align">
+          <div class="text">申请贷款</div>
+          <img src="../../static/resource/agent/申请贷款icon.png" alt="">
+        </div>
+        <div class="fll pro-line">
+          <div class="yellow"></div>
+        </div>
+        <div class="fll align">
+          <div class="text">成功了</div>
+          <img src="../../static/resource/agent/成功icon.png" alt="">
+        </div>
+      </div>
+      <div class="clearfix mt20">
+        <div class="middle">
+          <div class="fll">
+            <el-form :label-position="labelPosition" label-width="100px" :model="formLabelAlign">
+              <el-form-item label="您的姓名：">
+                <el-input v-model="formLabelAlign.name" placeholder="输入姓名" style="width: 230px"></el-input>
+              </el-form-item>
+              <el-form-item label="贷款金额：">
+                <el-input v-model="formLabelAlign.money" placeholder="输入金额(万元)" style="width: 230px"></el-input>
+              </el-form-item>
+              <el-form-item label="联系手机：">
+                <el-input v-model="formLabelAlign.number" placeholder="输入手机号" style="width: 230px"></el-input>
+              </el-form-item>
+              <el-form-item label="手机验证码：">
+                <el-input v-model="formLabelAlign.card" placeholder="输入手机验证码" style="width: 130px"></el-input>
+                <div class="flr verify">
+                  <div class="send" v-if="showing" @click="send" v-model="verifyCode">{{verifyCode}}</div>
+                  <div v-else class="time send" v-model="time">{{time}}s</div>
+                </div>
+              </el-form-item>
+            </el-form>
+          </div>
+          <div class="fll form-line"></div>
+          <div class="fll">
+            <div class="special">特别声明：</div>
+            <div class="text1">您的信息将只作为产品推荐，贷款过 程中
+              遇到的任何预先收费行为均为诈 骗，请您时刻保持警惕避免损失。</div>
+            <div class="text2">填写虚假信息将对您办理贷款带来不 利影响，建议您不要这么做。</div>
+          </div>
+        </div>
+      </div>
+      <div class="mask-btn" @click="applyLoan">立即申请贷款</div>
+    </div>
+    <div class="victory" v-else>
+      <div class="progress clearfix">
+        <div class="fll align">
+          <div class="text">申请贷款</div>
+          <img src="../../static/resource/agent/申请贷款icon.png" alt="">
+        </div>
+        <div class="fll pro-line">
+          <div class="yellow"></div>
+        </div>
+        <div class="fll align">
+          <div class="text">成功了</div>
+          <img src="../../static/resource/agent/成功icon.png" alt="">
+        </div>
+      </div>
+      <div class="victory-text1 align mt40 mb20">您的申请已经提交。</div>
+      <div class="victory-text1 align">请保持联系电话通畅，以便贷款经纪人可以尽快联系到您！</div>
+      <div class="clearfix" style="width: 182px;margin: 40px auto">
+        <div class="fll return" @click="returnF">返回首页</div>
+        <div class="flr close" @click="closeW">关闭窗口</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</template>
+
+<script>
+  import footerSame from '../component/footerSame'
+  import wradio from '../component/w-radios'
+    export default {
+      name: "Agent",
+      components:{
+        footerSame,
+        wradio
+      },
+      data(){
+          return {
+            isMask:false,
+            viewing:false,
+            isShowing:true,
+            showing:true,
+            cityUp: false,    // 城市是否展开
+            verifyCode:'获取验证码',
+            time:'60',
+            labelPosition: 'right',
+            formLabelAlign:{
+              name:'',
+              money:'',
+              number:'',
+              card:''
+            },
+            tableData:[],
+
+            cities: [
+              {value: '00',label: '不限'},
+              {value: '01',label: '北京'},
+              {value: '02',label: '天津'},
+              {value: '03',label: '上海'},
+              {value: '04',label: '郑州'},
+              {value: '01',label: '北京'},
+              {value: '02',label: '天津'},
+              {value: '03',label: '上海'},
+              {value: '04',label: '郑州'},
+              {value: '01',label: '北京'},
+              {value: '02',label: '天津'},
+              {value: '03',label: '上海'},
+              {value: '04',label: '郑州'},
+              {value: '01',label: '北京'},
+              {value: '02',label: '天津'},
+              {value: '03',label: '上海'},
+              {value: '04',label: '郑州'},
+              {value: '01',label: '北京'},
+              {value: '02',label: '天津'},
+              {value: '03',label: '上海'},
+              {value: '04',label: '郑州'},
+              {value: '01',label: '北京'},
+              {value: '02',label: '天津'},
+              {value: '03',label: '上海'},
+              {value: '04',label: '郑州'},
+            ],
+            loans:[
+              {value: '00',label: '不限'},
+              {value: '01',label: '信用贷款'},
+              {value: '02',label: '抵押贷款'},
+            ],
+            business:[
+              {value: '00',label: '不限'},
+              {value: '01',label: '个人贷款'},
+              {value: '02',label: '企业贷款'},
+            ],
+            goods:[],     // 擅长业务
+            query: {
+              city: '',
+              loan:'',
+              business:'',
+              good:''
+            },
+            pn: 1,
+            page: 5,
+            count: 0,
+          }
+      },
+      watch: {
+        'query.city': function(val) {
+          this.$message.info(val)
+        },
+        'query.loan':function (val) {
+          this.$message.info(val)
+        }
+
+      },
+      methods:{
+        send(){
+          this.showing=false;
+          let timer=setInterval(()=>{
+            this.time--
+            if(this.time < 0){
+              clearInterval(timer)
+              this.showing=true
+              this.verifyCode='重新获取'
+              this.time=60
+            }
+          },1000)
+
+
+        },
+        // 获取列表数据
+        getData () {
+          let data = {
+            pn: this.pn,
+            page: this.page
+          }
+          this.$axios.get(`userBroker/showPageUserBrokerByCondition`, data).then(res => {
+            this.tableData = res.rows
+            this.count = res.total
+          })
+        },
+        // 获取擅长业务
+        getGoods () {
+          this.$axios.get(`business/getAllBusiness`).then(res => {
+            this.goods = res.map(item => {
+              return {value: item.businessId, label: item.business }
+            })
+          })
+        },
+        handleCurrentChange (val) {
+          this.pn = val
+          this.getData()
+        },
+        handleSizeChange (val) {
+          this.page = val
+          this.getData()
+        },
+        mask(){
+          this.isMask=true
+          this.viewing=true
+        },
+        applyLoan(){
+          setTimeout(()=>{
+            this.isShowing=false
+          },500)
+        },
+        returnF(){
+          setTimeout(()=>{
+           this.$router.push('/home')
+          },500)
+        },
+        closeW(){
+          setTimeout(()=>{
+            this.isMask=false
+            this.viewing=false
+            this.isShowing=true
+          },500)
+        },
+        //  展开或关闭城市
+        citySpread() {
+          this.cityUp = !this.cityUp
+        }
+      },
+      created () {
+        this.getData()
+        this.getGoods()
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  .mt40{
+    margin-top: 40px;
+  }
+  .mt20{
+    margin-top: 20px;
+  }
+.mb20{
+  margin-bottom: 20px;
+}
+  .mt10{
+    margin-top: 10px;
+  }
+  .ml36{
+    margin-left: 36px;
+  }
+  .organ{
+    width: 100%;
+    height:437px;
+    background-image: url("../../static/resource/loanimg.png");
+    background-size: 100% 100%;
+  }
+  .area{
+    width:1200px;
+    padding: 20px 18px;
+    box-sizing: border-box;
+    background:rgba(255,255,255,1);
+    .area-item {
+      position: relative;
+      .up {
+        position: absolute;
+        right: 0;
+        top: 13px;
+        height:14px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        line-height:14px;
+        cursor: pointer;
+        .arrow {
+          display: inline-block;
+          vertical-align: middle;
+          margin-top: 3px;
+          margin-left: 3px;
+          width: 0;
+          height: 0;
+          border: 7px solid transparent;
+          border-top-color: rgba(155,155,155,1);
+        }
+
+        .rotate {
+          transform: rotateZ(180deg);
+          margin-top: -10px;
+        }
+      }
+
+    }
+    .radio-wrap {
+      box-sizing: border-box;
+      width: 1000px;
+      height: 30px;
+      overflow: hidden;
+      padding-bottom: 20px;
+      transition: height ease .5s;
+    }
+    .radio-wrap-active {
+      height: auto;
+    }
+
+    .city{
+      width:112px;
+      height:40px;
+      background:rgba(208,172,86,1);
+      text-align: center;
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(255,255,255,1);
+      line-height:40px;
+    }
+  }
+  .organ-loan{
+    width:168px;
+    height:28px;
+    font-size:24px;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(0,0,0,1);
+    line-height:28px;
+  }
+  .img-right{
+    margin-top: 14px;
+  }
+  .organ-more{
+    height:14px;
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(155,155,155,1);
+    line-height:14px;
+    margin-top: 14px;
+    margin-left: 973px;
+  }
+  .page{
+    margin-top:24px;
+    text-align: right;
+  }
+  .adviser{
+    position: relative;
+    width:1200px;
+    height:180px;
+    background:rgba(255,255,255,1);
+    padding: 26px 40px;
+    box-sizing: border-box;
+    img{
+      width:128px;
+      height:128px;
+      border-radius: 50%;
+    }
+    .adviser-name{
+      width:60px;
+      height:20px;
+      font-size:20px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:20px;
+      margin-top: 27px;
+      margin-bottom: 10px;
+    }
+    .adviser-same{
+      height:14px;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(127,127,127,1);
+      line-height:14px;
+    }
+    .ww320{
+      width: 270px;
+      height: 14px;
+      line-height:14px;
+      overflow: hidden;
+    }
+    .w320{
+      line-height: 18px;
+      width: 270px;
+      height: 36px;
+      overflow: hidden;
+    }
+    .num{
+      width:135px;
+      height:24px;
+      font-size:20px;
+      font-family:DINAlternate-Bold;
+      font-weight:bold;
+      color:rgba(81,81,81,1);
+      margin-top: 52px;
+      margin-left: 184px;
+      overflow: hidden;
+    }
+    .adviser-btn{
+      width:100px;
+      height:50px;
+      background:rgba(255,255,255,1);
+      border-radius:4px;
+      font-size:16px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(81,81,81,1);
+      line-height:50px;
+      text-align: center;
+      margin-top: 39px;
+      margin-left: 184px;
+    }
+    &:hover{
+      z-index: 998;
+      box-shadow:0px 0px 14px 0px rgba(217,217,217,1);
+    }
+    &:hover .adviser-btn{
+      background:rgba(168,14,14,1);
+      color:rgba(255,255,255,1);
+    }
+  }
+
+  .mask{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    opacity: 0.7;
+  }
+.contain{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width:700px;
+  height:500px;
+  background-color:#fff;
+  padding: 36px 0;
+  box-sizing: border-box;
+  .progress{
+    height:92px;
+    background:rgba(240,240,240,1);
+    padding: 20px 30px;
+    box-sizing: border-box;
+    .text{
+      height:12px;
+      font-size:12px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(81,81,81,1);
+      line-height:12px;
+      margin-bottom: 5px;
+    }
+    img{
+      width: 36px;
+      height: 36px;
+    }
+    .pro-line{
+      position: relative;
+      width:550px;
+      height:8px;
+      background:rgba(217,217,217,1);
+      margin-top: 30px;
+      margin-right: 5px;
+      border-radius: 3px;
+      overflow: hidden;
+      .yellow{
+        position: absolute;
+        left: 0;
+        top: 0;
+        width:275px;
+        height:6px;
+        margin-top: 1px;
+        background:rgba(208,172,86,1);
+        border-radius: 3px;
+      }
+    }
+  }
+ .form-line{
+   width:1px;
+   height:229px;
+   background-color: #ccc;
+   margin: 0 30px;
+ }
+  .special{
+    margin-top: 40px;
+    width:70px;
+    height:14px;
+    font-size:14px;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(81,81,81,1);
+    line-height:14px;
+  }
+  .text1{
+    width:200px;
+    height: 51px;
+    font-size:12px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(155,155,155,1);
+    line-height:17px;
+    margin-top: 16px;
+  }
+  .text2{
+    width:200px;
+    height: 34px;
+    margin-top: 20px;
+    line-height:17px;
+    font-size:12px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(155,155,155,1);
+  }
+  .mask-btn{
+    width:330px;
+    height:46px;
+    background:rgba(208,172,86,1);
+    border-radius:4px;
+    text-align: center;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+    line-height:46px;
+    margin: 20px auto;
+    cursor: pointer;
+  }
+  .middle{
+    width: 600px;
+    height: 240px;
+    margin: 0 auto;
+  }
+  .verify{
+    .send{
+      text-align: center;
+      width:85px;
+      height:38px;
+      border-radius:6px;
+      border:1px solid #ccc;
+      font-size:12px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:38px;
+      margin-left: 15px;
+      cursor: pointer;
+      background:rgba(216,216,216,1);
+    }
+    .time{
+      font-size: 16px;
+      color: #888;
+    }
+  }
+}
+  .victory{
+    width:700px;
+    height:337px;
+    background:rgba(255,255,255,1);
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    background-color:#fff;
+    padding: 36px 0;
+    box-sizing: border-box;
+    .progress{
+      height:92px;
+      background:rgba(240,240,240,1);
+      padding: 20px 30px;
+      box-sizing: border-box;
+      .text{
+        height:12px;
+        font-size:12px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:12px;
+        margin-bottom: 5px;
+      }
+      img{
+        width: 36px;
+        height: 36px;
+      }
+      .pro-line{
+        position: relative;
+        width:550px;
+        height:8px;
+        background:rgba(217,217,217,1);
+        margin-top: 30px;
+        margin-right: 5px;
+        border-radius: 3px;
+        overflow: hidden;
+        .yellow{
+          position: absolute;
+          left: 0;
+          top: 0;
+          width:550px;
+          height:6px;
+          margin-top: 1px;
+          background:rgba(208,172,86,1);
+          border-radius: 3px;
+        }
+      }
+    }
+    .victory-text1{
+      height:14px;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(81,81,81,1);
+      line-height:14px;
+    }
+    .return,.close{
+      cursor: pointer;
+      width:56px;
+      height:20px;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(81,81,81,1);
+      line-height:20px;
+    }
+  }
+
+
+</style>

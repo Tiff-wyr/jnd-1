@@ -1,0 +1,225 @@
+<template>
+    <div class="pro-center">
+      <div class="title">产品中心</div>
+      <div class="product clearfix fll" @click="addItem">
+        <div class="clearfix my-upload-icon">
+          <div class="add-num fll">+</div>
+          <div class="add-pro fll">添加产品</div>
+        </div>
+      </div>
+      <div class="product-item fll" v-for="(item,index) in tableData" style="margin-right: 40px;margin-bottom: 29px">
+          <div class="clearfix mt20">
+              <div class="name fll">产品名称：</div>
+              <div class="fll">
+                <el-select :disabled="!item.save" style="width: 100px;height: 20px;">
+                  <el-option
+                    v-for="item in provinceData"
+                    :key="item.pid"
+                    :label="item.provincial"
+                    :value="item.pid"
+                    style="width: 100px;"
+                  >
+                  </el-option>
+                </el-select>
+              </div>
+            </div>
+          <div class="clearfix mt20">
+            <div class="name fll">最高贷款额度：</div>
+            <input :disabled="!item.save" type="text" class="fll">
+          </div>
+          <div class="clearfix mt20">
+            <div class="name fll">利息区间：</div>
+            <input :disabled="!item.save" type="text" class="fll">
+          </div>
+          <div class="clearfix mt20">
+            <div class="name fll">最快放贷时间：</div>
+            <input :disabled="!item.save" type="text" class="fll">
+          </div>
+          <div class="clearfix mt20">
+            <div class="name fll">最长贷款期限：</div>
+            <input :disabled="!item.save" type="text" class="fll">
+          </div>
+          <div class="clearfix" v-if="item.save">
+            <button class="save-btn" @click="saveProduct(index)">保存</button>
+          </div>
+          <div class="clearfix" v-else>
+            <div class="save fll" @click="delectProduct(index)">删除</div>
+            <div class="edit fll" @click="editProduct(index)">编辑</div>
+          </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+      name: "agentProduct",
+      data(){
+          return {
+            tableData:[
+              {
+                name:'ddd',
+                money:'ddd',
+                save: true
+              },
+              {
+                name:'ddd',
+                money:'sas',
+                save: false
+              },
+              {
+                name:'sddd',
+                money:'aaaa',
+                save: false
+              },
+            ],
+            provinceData:[]
+          }
+      },
+      methods:{
+        editProduct(index) {
+          this.$set(this.tableData[index], 'save', true)
+        },
+        saveProduct(index) {
+          this.$set(this.tableData[index], 'save', false)
+        },
+        addItem() {
+          if (this.tableData.length < 4) {
+            let product =  {
+              name:'ddd',
+              money:'ddd',
+              save: true
+            }
+            this.tableData.unshift(product)
+          } else {
+            this.$message.warning('产品已满')
+          }
+        },
+        delectProduct(index) {
+          this.tableData.splice(index, 1)
+        }
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  .mb15{
+    margin-bottom: 15px;
+  }
+  .pro-center{
+    width:944px;
+    height:667px;
+    background:rgba(255,255,255,1);
+    padding: 0 0 0 56px;
+    box-sizing: border-box;
+    .title{
+      height:66px;
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:66px;
+    }
+    .product-item{
+      width:252px;
+      height:255px;
+      background:rgba(255,255,255,1);
+      border:1px solid rgba(217,217,217,1);
+      margin-right: 36px;
+      position: relative;
+      box-sizing: border-box;
+      &:hover{
+        box-shadow:0px 0px 14px 0px rgba(217,217,217,1);
+      }
+      input{
+        width: 100px;
+        height: 20px;
+        box-sizing: border-box;
+        /*border: none;*/
+      }
+     /deep/ .el-input__inner{
+        height: 20px;
+        line-height: 20px;
+      }
+      .name{
+        width:84px;
+        height:12px;
+        font-size:12px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        line-height:20px;
+        margin-left: 22px;
+      }
+      .edit,.save{
+        text-align: center;
+        height:26px;
+        font-size:12px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        width:124px;
+        line-height:26px;
+        background:rgba(217,217,217,1);
+        color:rgba(255,255,255,1);
+        border-radius: 3px;
+      }
+      .edit{
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        cursor: pointer;
+      }
+      .save{
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        cursor: pointer;
+      }
+    }
+    .product{
+      width:252px;
+      height:255px;
+      background:rgba(255,255,255,1);
+      border:1px dashed rgba(217,217,217,1);
+      margin-right: 36px;
+      position: relative;
+      cursor: pointer;
+      .my-upload-icon{
+        position: absolute;
+        left: 50%;
+        top: 40%;
+        .add-num{
+          height: 53px;
+          font-weight: 200;
+          color:rgba(155,155,155,1);
+          line-height:53px;
+          font-size: 35px;
+        }
+        .add-pro{
+          width:64px;
+          height:53px;
+          font-size:16px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(155,155,155,1);
+          line-height:53px;
+          margin-left: 5px;
+        }
+      }
+    }
+    .save-btn {
+      position: absolute;
+      bottom: 0;
+      display: block;
+      cursor: pointer;
+      height:26px;
+      width: 100%;
+      color: #fff;
+      border: none;
+      background:rgba(208,172,86,1);
+      outline: none;
+    }
+  }
+/deep/ .el-select__caret {
+  line-height: 20px;
+}
+</style>

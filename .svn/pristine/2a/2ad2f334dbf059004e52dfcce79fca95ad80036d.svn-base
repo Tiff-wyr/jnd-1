@@ -1,0 +1,331 @@
+<template>
+    <div class="pro-center">
+      <div class="title">产品中心</div>
+      <div class="product clearfix fll" @click="addItem">
+        <div class="clearfix my-up">
+          <div class="add-num fll">+</div>
+          <div class="add-pro fll">添加产品</div>
+        </div>
+      </div>
+      <div class="product-item fll" v-for="(item,index) in tableData" style="margin-right: 40px;margin-bottom: 29px">
+          <div class="clearfix mt20">
+              <div class="name fll">产品名称：</div>
+              <div class="fll">
+                <el-select :disabled="!item.save" style="width: 100px;height: 20px;" v-model="item.loanName">
+                  <el-option
+                    v-for="pro in provinceData"
+                    :key="pro.id"
+                    :label="pro.loanName"
+                    :value="pro.id"
+                    style="width: 100px;"
+                  >
+                  </el-option>
+                </el-select>
+              </div>
+            </div>
+          <div class="clearfix mt20">
+            <div class="name fll">最高贷款额度：</div>
+            <input :disabled="!item.save" type="text" class="fll" v-model="item.loanAmount" @change="checkAmount(item.loanAmount)">
+          </div>
+          <div class="clearfix mt20">
+            <div class="name fll">利息区间：</div>
+            <input :disabled="!item.save" type="number" class="fll" v-model="item.minRate" style="width: 40px;">
+            <span class="fll">~</span>
+            <input :disabled="!item.save" type="number" class="fll" v-model="item.maxRate" style="width: 40px;">
+            <span class="fll" style="font-size: 15px;color: #555;">%</span>
+
+          </div>
+          <div class="clearfix mt20">
+            <div class="name fll">最快放贷时间：</div>
+            <input :disabled="!item.save" type="text" class="fll" v-model="item.loanTime" @change="checkloanTime(item.loanTime)">
+          </div>
+          <div class="clearfix mt20">
+            <div class="name fll">最长贷款期限：</div>
+            <input :disabled="!item.save" type="text" class="fll" v-model="item.loanTerm" @change="checkloanTerm(item.loanTerm)">
+          </div>
+          <div class="clearfix" v-if="item.save">
+            <button class="save-btn" @click="saveProduct(item.id, index)">保存</button>
+          </div>
+          <div class="clearfix" v-else>
+            <div class="save fll" @click="delectProduct(item.id)">删除</div>
+            <div class="edit fll" @click="editProduct(index)">编辑</div>
+          </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+      name: "agentProduct",
+      data(){
+          return {
+            tableData:[
+              // {
+              //   id:'',
+              //   minRate:'',
+              //   maxRate:'',
+              //   loanTerm:'',
+              //   loanAmount:'',
+              //   loanTime:'',
+              //   save:false
+              // }
+            ],
+            provinceData:[]
+          }
+      },
+      methods:{
+        checkloanTerm(id){
+          var regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im,
+            regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im;
+
+          if(regEn.test(id) || regCn.test(id)) {
+            this.$message.warning("名称不能包含特殊字符");
+            return false;
+          }
+        },
+        checkAmount(id){
+          var regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im,
+            regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im;
+
+          if(regEn.test(id) || regCn.test(id)) {
+            this.$message.warning("名称不能包含特殊字符");
+            return false;
+          }
+        },
+        checkloanTime(id){
+          var regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im,
+            regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im;
+
+          if(regEn.test(id) || regCn.test(id)) {
+            this.$message.warning("名称不能包含特殊字符");
+            return false;
+          }
+        },
+
+        editProduct(index) {
+          this.$set(this.tableData[index], 'save', true)
+        },
+
+        saveProduct(id, index) {
+          let obj = this.tableData[index]
+          if(obj.id === ''){
+            this.$message.warning("请选择产品名称")
+          }
+          else if(obj.loanAmount === ''){
+            this.$message.warning("贷款额度不能为空")
+          }
+          else if(obj.minRate === ''){
+            this.$message.warning("利息不能为空")
+          }
+          else if(obj.maxRate === ''){
+            this.$message.warning("利息不能为空")
+          }
+          else if(obj.loanTime === ''){
+            this.$message.warning("放款时间不能为空")
+          }
+          else if(obj.loanTerm === ''){
+            this.$message.warning("贷款期限不能为空")
+          }
+          else{
+            let data=new FormData()
+            data.append('brokerId',this.$store.state.userInfo.id)
+            for (let item in obj) {
+              if(item === id){
+                data.append(item,id)
+              }else{
+                data.append(item,obj[item])
+              }
+
+            }
+            for (let i=0; i < this.provinceData.length; i++) {
+              if (this.provinceData[i].id === obj.id) {
+                data.append('loanName', this.provinceData[i].loanName)
+              }
+            }
+            data.delete('save')
+            this.$axios.post(`loanInfo/saveLoanInfo`,data).then(res=>{
+              console.log(res)
+              if(res.status === 200){
+                this.$message.success(res.msg)
+                this.getProduct()
+              }else{
+                this.$message.warning(res.msg)
+                this.getProduct()
+              }
+            })
+          }
+
+        },
+        addItem() {
+          if (this.tableData.length < 4) {
+            let product =  {
+              id:'',
+              minRate:'',
+              maxRate:'',
+              loanTerm:'',
+              loanAmount:'',
+              loanTime:'',
+              save: true
+            }
+            this.tableData.unshift(product)
+          } else {
+            this.$message.warning('产品已满')
+          }
+        },
+        delectProduct(id) {
+          this.$axios.get(`loanInfo/removeLoanInfo/${id}/${this.$store.state.userInfo.id}`).then(res=>{
+            console.log('ss',res);
+            if(res.status === 200){
+              this.$message.success(res.msg)
+            }
+            this.getProduct()
+          })
+        },
+        getProduct(){
+          this.$axios.get(`loanInfo/getAllLoanInfoByBrokerId/${this.$store.state.userInfo.id}`).then(res=>{
+            console.log('aa',res);
+            // res = res.map(item=>{
+            //   let minRate=item.rate.split("~")[0]
+            //   let maxRate=item.rate.split("~")[1].split("%")[0]
+            //   return {...item,save:false,minRate,maxRate}
+            // })
+            this.tableData=res
+
+          })
+        },
+        proSheng(){
+          this.$axios.get(`loanInfo/showIdAndName/${this.$store.state.userInfo.id}`).then(res=>{
+            this.provinceData=res
+          })
+        }
+      },
+      created(){
+        //根据经纪人id查所贷产品
+        this.getProduct()
+        this.proSheng()
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  .mb15{
+    margin-bottom: 15px;
+  }
+  .pro-center{
+    width:944px;
+    height:667px;
+    background:rgba(255,255,255,1);
+    padding: 0 0 0 56px;
+    box-sizing: border-box;
+    .title{
+      height:66px;
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:66px;
+    }
+    .product-item{
+      width:252px;
+      height:255px;
+      background:rgba(255,255,255,1);
+      border:1px solid rgba(217,217,217,1);
+      margin-right: 36px;
+      position: relative;
+      box-sizing: border-box;
+      &:hover{
+        box-shadow:0px 0px 14px 0px rgba(217,217,217,1);
+      }
+      input{
+        width: 100px;
+        height: 20px;
+        box-sizing: border-box;
+        /*border: none;*/
+      }
+     /deep/ .el-input__inner{
+        height: 20px;
+        line-height: 20px;
+      }
+      .name{
+        width:84px;
+        height:12px;
+        font-size:12px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        line-height:20px;
+        margin-left: 22px;
+      }
+      .edit,.save{
+        text-align: center;
+        height:26px;
+        font-size:12px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        width:124px;
+        line-height:26px;
+        background:rgba(217,217,217,1);
+        color:rgba(255,255,255,1);
+        border-radius: 3px;
+      }
+      .edit{
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        cursor: pointer;
+      }
+      .save{
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        cursor: pointer;
+      }
+    }
+    .product{
+      width:252px;
+      height:255px;
+      background:rgba(255,255,255,1);
+      border:1px dashed rgba(217,217,217,1);
+      margin-right: 36px;
+      position: relative;
+      cursor: pointer;
+      .my-up{
+        position: absolute;
+        left: 33%;
+        top: 35%;
+        .add-num{
+          height: 53px;
+          font-weight: 200;
+          color:rgba(155,155,155,1);
+          line-height:53px;
+          font-size: 35px;
+        }
+        .add-pro{
+          width:64px;
+          height:53px;
+          font-size:16px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(155,155,155,1);
+          line-height:53px;
+          margin-left: 5px;
+        }
+      }
+    }
+    .save-btn {
+      position: absolute;
+      bottom: 0;
+      display: block;
+      cursor: pointer;
+      height:26px;
+      width: 100%;
+      color: #fff;
+      border: none;
+      background:rgba(208,172,86,1);
+      outline: none;
+    }
+  }
+/deep/ .el-select__caret {
+  line-height: 20px;
+}
+</style>

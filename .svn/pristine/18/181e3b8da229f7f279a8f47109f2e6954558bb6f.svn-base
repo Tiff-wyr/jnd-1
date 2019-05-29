@@ -1,0 +1,15 @@
+<template>
+<div>
+  ddfg
+</div>
+</template>
+
+<script>
+    export default {
+        name: "elseQues"
+    }
+</script>
+
+<style scoped>
+
+</style>

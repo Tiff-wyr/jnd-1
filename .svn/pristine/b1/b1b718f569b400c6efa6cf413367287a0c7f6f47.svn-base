@@ -1,0 +1,547 @@
+<template>
+    <div>
+      <div class="wrappy">
+        <div class="w1200">
+          <div>
+            <div class="detail-title">产品详情</div>
+            <div class="clearfix">
+              <div class="fll">
+                <div class="detail-left">
+                  <div class="clearfix">
+                    <div class="fll" v-if="productDetailData.productLogo"><img :src="productDetailData.productLogo" alt="" style="width: 90px;height: 90px;border-radius: 50%"></div>
+                    <div class="fll" v-else><img src="/static/resource/pic/pro.png" alt="" style="width: 90px;height: 90px;border-radius: 50%"></div>
+                    <div class="fll">
+                      <div class="detail-loan-title">{{productDetailData.productName}}</div>
+                      <div class="clearfix re-star">
+                        <img src="../../static/resource/product-detail/star.png" alt="" class="fll star">
+                        <div class="fll">
+                          <div class="fll restore" @click="restore" v-if="isCollect">加入收藏</div>
+                          <div class="fll restore" @click="cancelRestore" v-else>取消收藏</div>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div class="flr">
+                      <div class="btn" @click="hurryUpApply">快速申请</div>
+                    </div>
+
+                  </div>
+                  <div class="left-line"></div>
+                  <div class="left-limit">额度：<span class="limit-same">{{productDetailData.productStartAmount}}万起</span></div>
+                  <div class="left-limit mt22">期限：<span class="limit-same">{{productDetailData.productLife}}</span></div>
+                  <div class="left-limit mt22">利息：<span class="limit-same">{{productDetailData.productInterest}}%</span></div>
+                  <div class="left-limit mt22">身份要求：<span class="limit-same">{{productDetailData.productIdentity}}</span></div>
+                  <div class="left-limit mt22">贷款类型：<span class="limit-same">{{productDetailData.productLoanType}}</span></div>
+                  <div class="left-limit mt22">发行机构：<span class="limit-same">{{productDetailData.productPublisher}}</span></div>
+                  <div class="clearfix mt25">
+                    <div class="fll yellow-line"></div>
+                    <div class="fll ml10 apply">申请条件</div>
+                    <img src="../../static/resource/product-detail/apply.png" alt="" class="fll ml400">
+                  </div>
+                  <div class="line2"></div>
+                  <div class="left-limit">年龄要求：<span class="limit-same">{{productDetailData.productAge}}</span></div>
+                  <div class="left-limit mt22">职业要求：<span class="limit-same">{{productDetailData.productOccupation}}</span></div>
+                  <div class="left-limit mt22">资产要求：<span class="limit-same">{{productDetailData.productProperty}}</span></div>
+                  <div class="clearfix mt22">
+                    <div class="fll left-limit">其他要求:</div>
+                    <div class="fll same">{{productDetailData.productCondition}}</div>
+                  </div>
+                  <div class="clearfix mt25">
+                    <div class="fll yellow-line"></div>
+                    <div class="fll ml10 feature">产品特点</div>
+                  </div>
+                  <div class="line2"></div>
+                  <div class="clearfix mt22">
+                    <div class="fll left-limit">产品特点:</div>
+                    <div class="fll same">{{productDetailData.productCharacteristic}}</div>
+                  </div>
+
+                  <div class="clearfix mt25">
+                    <div class="fll yellow-line"></div>
+                    <div class="fll ml10 feature">热门产品推荐</div>
+                  </div>
+                  <div class="line2"></div>
+                  <div class="clearfix">
+                    <div class="product-tui fll clearfix" v-for="(item,index) in hotProductData">
+                      <div class="fll">
+                          <img :src="item.productLogo" v-if="item.productLogo" alt="" @click="enterProduct(item.productId)" style="width: 60px;height: 60px;cursor: pointer">
+                        <img src="/static/resource/pic/pro.png" v-else alt="" @click="enterProduct(item.productId)" style="width: 60px;height: 60px;cursor: pointer">
+                        </div>
+                      <div class="fll ml10">
+                        <div class="name">{{item.productName}}</div>
+                        <div class="rate">月利率：<span style="color:#A80E0E">{{item.productInterest}}%</span></div>
+                        <div class="limit">额度：<span style="color:#A80E0E">{{item.productStartAmount}}~{{item.productEndAmount}}万</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="fll ml30">
+                <div class="detail-top">
+                  <div class="top-title">代理该产品的机构</div>
+                  <div class="top-item">
+                    <div class="clearfix">
+                      <img :src="organData.agencyLogo" v-if="organData.agencyLogo" alt="" @click="enterOrgan(organData.agencyId)" class="fll" style="width: 60px;height: 60px;cursor: pointer">
+                      <img src="/static/resource/pic/organ.png" v-else alt="" @click="enterOrgan(organData.agencyId)" class="fll" style="width: 60px;height: 60px;cursor: pointer">
+                      <div class="fll ml10">
+                        <div class="title">{{organData.agencyName}}</div>
+                        <div class="area">{{organData.address}}</div>
+                        <div class="wang">{{organData.agencyURL}}</div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</template>
+
+<script>
+  import footerSame from '../component/footerSame'
+  import {mapState} from 'vuex'
+    export default {
+      name: "productDetail",
+      components:{
+        footerSame
+      },
+      computed: {
+        ...mapState(['userInfo'])
+      },
+      data(){
+        return {
+          isCollect:true,//收藏
+          productTable:[
+            {
+              name:'消费贷',
+              rate:'aa',
+              limit:'aa'
+            },
+            {
+              name:'消费贷',
+              rate:'aa',
+              limit:'aa'
+            },
+          ],
+          tableData:[
+            {
+              name:'冯巧蕊',
+              number:'273笔',
+            },
+          ],
+          formData:[
+
+          ],
+          productDetailData:{
+            productName:'',
+            productCharacteristic:'',//特点
+            productPublisher:'',//发型机构
+            productInterest:'',//利率
+            productLoanType:'',//贷款类型
+            productOccupation:'',//职业
+            productIdentity:'',//身份
+            productMinAge:'',
+            productMaxAge:'',
+            productProperty:'',//资产
+            productStartAmount:'',//额度
+            productEndAmount:'',
+            productLife:'',//年限
+            productCondition:'',//条件
+          },
+          organData:{
+            agencyName:'',
+            agencyLogo:'',
+            agencyAddress:'',
+            agencyURL:''
+          },
+          productId:'',
+          hotProductData:[
+            {
+              productName:'',
+              productLogo:'',
+              productStartAmount:'',
+              productEndAmount:'',
+              productInterest:'',
+            }
+          ]
+        }
+      },
+      methods:{
+        //机构详情页
+        enterOrgan(id){
+          this.$router.push(`/organDetail/${id}`)
+        },
+        //产品详情页
+        enterProduct(id){
+          this.$router.push(`/productDetail/${id}`)
+          this.getDetail(id)
+        },
+        //快速申请
+        hurryUpApply(){
+          if(this.$store.state.userInfo){
+            if(this.$store.state.userInfo.roleId === 1){
+              this.$axios.post(`orderAgency/createOrderPro?borId=${this.$store.state.userInfo.id}&proId=${this.productId}`).then(res=>{
+                  if(res.status === 200){
+                    this.$message.success(res.msg)
+                  }
+              })
+            }else{
+              this.$message.warning("借款人方可申请")
+            }
+
+          }else{
+            this.$message.warning("请先登录")
+          }
+        },
+        //产品详情
+        getDetail(id){
+          this.$axios.get(`product/selectProductById/${id}`).then(res=>{
+            this.productDetailData=res
+          })
+        },
+        //代理该产品的机构
+        getOrgan(id){
+          this.$axios.get(`product/selectAgencyByProId/${id}`).then(res=>{
+            this.organData=res
+            console.log('aa',res);
+          })
+        },
+        //收藏产品
+        restore(){
+          if(this.$store.state.userInfo){
+            if(this.$store.state.userInfo.roleId === 1){
+              this.$axios.post(`borpro/addBorPro?borId=${this.$store.state.userInfo.id}&productId=${this.productId}`).then(res=>{
+                this.isCollect=false
+                this.$message.success("收藏成功")
+              })
+            }else{
+              this.$message.warning("借款人方可收藏")
+            }
+          }else{
+            this.$message.warning("请先登录")
+          }
+
+        },
+        //取消产品
+        cancelRestore(){
+            this.$axios.post(`borpro/deleteBorPro?borId=${this.$store.state.userInfo.id}&productId=${this.productId}`).then(res=>{
+              this.isCollect=true
+              this.$message.success("取消收藏")
+            })
+        },
+        // 热门产品推荐
+        getHotProduct(){
+          this.$axios.get(`product/getHotPro/1/6`).then(res=>{
+            this.hotProductData=res
+          })
+        },
+        collectPan(){
+          let data=new FormData()
+          data.append('borId',this.$store.state.userInfo.id)
+          data.append('productId',this.productId)
+          this.$axios.post(`borpro/selectBorPro`,data).then(res=>{
+            if(res === 0){
+              this.isCollect=true
+            }else{
+              this.isCollect=false
+            }
+          })
+        },
+        skimRecord(){
+          if(this.$store.state.userInfo){
+            if(this.$store.state.userInfo.roleId === 1){
+              let data=new FormData()
+              data.append('borId',this.$store.state.userInfo.id)
+              data.append('proId',this.productId)
+              this.$axios.post(`borLookPro/addLookPro`,data).then(res=>{
+                if(res.status === 200){
+                  this.$message.success("浏览该产品")
+                }
+
+              })
+            }
+          }
+        }
+
+      },
+      created(){
+        let id=this.$route.params.id
+        this.productId=id
+        this.getDetail(id)
+        this.getOrgan(id)
+        this.getHotProduct()
+        //收藏判断
+        this.collectPan()
+        this.skimRecord()
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  .ml400{
+    margin-left: 400px;
+  }
+  .mt25{
+    margin-top: 25px;
+  }
+  .mt22{
+    margin-top: 10px;
+  }
+  .ml10{
+    margin-left: 10px;
+  }
+  .ml16{
+    margin-left: 16px;
+  }
+  .ml128{
+    margin-left: 128px;
+  }
+  .ml15{
+    margin-left: 15px;
+  }
+  .mt12{
+    margin-top: 12px;
+  }
+  .ml30{
+    margin-left: 30px;
+  }
+  .detail-title{
+    width:112px;
+    height:28px;
+    font-size:24px;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(0,0,0,1);
+    line-height:28px;
+    margin-bottom: 24px;
+  }
+.detail-left{
+  width:902px;
+  height:849px;
+  background:rgba(255,255,255,1);
+  padding: 36px 60px 66px 60px;
+  box-sizing: border-box;
+  .btn{
+    margin-top: 25px;
+    text-align: center;
+    width:100px;
+    height:40px;
+    background:rgba(168,14,14,1);
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+    line-height:40px;
+    cursor: pointer;
+
+  }
+.left-line,.line2{
+  width:782px;
+  height:1px;
+  background: #f0f0f0;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+  .left-limit{
+    height:14px;
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(155,155,155,1);
+    line-height:14px;
+  }
+  .limit-same{
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:14px;
+  }
+  .same{
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:14px;
+    width: 465px;
+    margin-left: 10px;
+  }
+.detail-loan-title{
+  font-size:20px;
+  font-family:PingFangSC-Regular;
+  font-weight:400;
+  color:rgba(81,81,81,1);
+  margin-left: 20px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+  .re-star{
+    margin-left: 20px;
+    .restore{
+      width:64px;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(155,155,155,1);
+      margin-left: 5px;
+      cursor: pointer;
+    }
+    .star{
+      width:15px;
+      height:15px;
+      margin-top: 2px;
+
+    }
+  }
+
+  .yellow-line{
+    width:4px;
+    height:16px;
+    background:rgba(208,172,86,1);
+  }
+  .apply{
+    height:16px;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:16px;
+  }
+  .feature{
+    height:16px;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:16px;
+  }
+}
+  .detail-top{
+    width:268px;
+    background:rgba(255,255,255,1);
+    .top-title{
+      text-align: center;
+      width: 268px;
+      height:74px;
+      font-size:20px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:74px;
+    }
+    .top-item{
+      height: 100px;
+      padding: 0 24px 30px 24px;
+      box-sizing: border-box;
+      .title{
+        height:14px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:14px;
+      }
+      .area{
+        height:12px;
+        font-size:12px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(155,155,155,1);
+        line-height:12px;
+        margin-top: 12px;
+        margin-bottom: 8px;
+      }
+      .wang{
+        height:12px;
+        font-size:12px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(155,155,155,1);
+        line-height:12px;
+      }
+    }
+    .top-add{
+      width: 268px;
+      height: 15px;
+    }
+  }
+  .detail-bottom{
+    width:268px;
+    background:rgba(255,255,255,1);
+    margin-top: 40px;
+    .victory-title{
+      text-align: center;
+      height:74px;
+      font-size:20px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:74px;
+    }
+    .victory-item{
+      height: 100px;
+      padding: 0 24px 30px 24px;
+      box-sizing: border-box;
+      .name{
+        height:14px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:14px;
+        margin-top: 15px;
+      }
+      .number{
+        height:12px;
+        font-size:12px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(155,155,155,1);
+        line-height:12px;
+        margin-top: 15px;
+
+      }
+    }
+    .top-add{
+      width: 268px;
+      height: 15px;
+    }
+
+  }
+  .product-tui{
+    width: 250px;
+    margin-bottom: 20px;
+    padding-left: 30px;
+    box-sizing: border-box;
+    .name{
+      height:14px;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(81,81,81,1);
+      line-height:14px;
+    }
+    .rate{
+      height:12px;
+      font-size:12px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(155,155,155,1);
+      line-height:12px;
+      margin: 10px 0 6px 0;
+    }
+    .limit{
+      height:12px;
+      font-size:12px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(155,155,155,1);
+      line-height:12px;
+    }
+  }
+</style>
