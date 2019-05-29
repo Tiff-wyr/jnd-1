@@ -1,0 +1,83 @@
+<template>
+<div>
+<div class="wrappy">
+  <div class="w900">
+    <div class="main align">
+      <div class="text">恭喜您注册成为就能贷平台会员，可享受更多平台服务。您的初始密码就是您的验证码，请您妥善保管并及时修改。</div>
+      <div class="clearfix" style="margin: 40px auto;width: 700px;">
+        <div class="fll align" @click="agent">
+          <img src="../../static/resource/agentimg.png" alt="" class="img">
+          <div class="agent-text">找经纪人</div>
+        </div>
+        <div class="flr align" @click="organ">
+          <img src="../../static/resource/organimg.png" alt="" class="img">
+          <div class="agent-text">找机构</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</template>
+
+<script>
+    export default {
+        name: "judge",
+      methods:{
+        agent(){
+          this.$router.push('/agent')
+        },
+        organ(){
+          this.$router.push('/organization')
+        },
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  .ml92{
+    margin-left: 92px;
+  }
+  .mr92{
+    margin-right: 92px;
+  }
+  .mt40{
+    margin-top: 40px;
+  }
+  .ml120{
+    margin-left: 120px;
+  }
+ .align{
+    text-align: center;
+  }
+.main{
+  width:900px;
+  height:450px;
+  background:rgba(255,255,255,1);
+  padding: 30px 42px;
+  box-sizing: border-box;
+  .text{
+    height:16px;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(168,14,14,1);
+    line-height:16px;
+  }
+  .agent-text{
+    height:30px;
+    font-size:30px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:30px;
+    margin-top: 30px;
+    cursor: pointer;
+  }
+  .img{
+    width: 325px;
+    height: auto;
+    cursor: pointer;
+  }
+}
+</style>

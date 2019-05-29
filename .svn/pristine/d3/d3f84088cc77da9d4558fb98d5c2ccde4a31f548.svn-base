@@ -1,0 +1,452 @@
+<template>
+  <div>
+    <registerTop></registerTop>
+    <div class="wrappy">
+      <div class="w900">
+        <div class="user-main">
+          <div class="user-title">
+            <div class="title">欢迎注册就能贷网</div>
+            <div class="number">已有账号，</div>
+            <div class="login">立即登陆</div>
+          </div>
+
+          <form action="">
+            <div class="user-form">
+              <div class="person-item clearfix">
+                <div class="fll person-text">姓名：</div>
+                <input type="text" class="fll ml20" v-model="formData.broker">
+              </div>
+              <div class="person-item clearfix">
+                <div class="fll person-text">性别：</div>
+                <div class="fll radio">
+                  <el-radio-group v-model="radio2">
+                    <el-radio :label="3">男</el-radio>
+                    <el-radio :label="6">女</el-radio>
+                  </el-radio-group>
+                </div>
+              </div>
+              <div class="person-item clearfix">
+                <div class="fll person-text upload">上传图片：</div>
+                <div class="fll ml20"><imgUpload></imgUpload></div>
+                <div class="fll text-desc">请上传营业执照正面照，支持JPG/JPEG/PNG格式图片，照片不大于2M</div>
+              </div>
+
+              <div class="person-item clearfix">
+                <div class="fll person-text">身份证号：</div>
+                <input type="text" class="fll ml20">
+              </div>
+
+              <div class="person-item clearfix">
+                <div class="fll person-text">所在地：</div>
+                <input type="text" class="fll ml20">
+              </div>
+
+              <div class="person-item clearfix">
+                <div class="fll person-text">擅长业务：</div>
+                <div class="fll ml20">
+                  <div class="business" @click="goodMask"><div class="my-upload-icon">+</div></div>
+                </div>
+              </div>
+              <div class="person-item clearfix">
+                <div class="fll person-text">手机号：</div>
+                <input type="text" class="fll ml20" v-model="formData.phone">
+              </div>
+              <div class="person-item clearfix">
+                <div class="fll person-text">验证码：</div>
+                <input type="text" class="fll ml20 card" v-model="formData.userPassword">
+                <div class="fll verify">
+                  <div class="send" v-if="showing" @click="send" v-model="verifyCode">{{verifyCode}}</div>
+                  <div v-else class="time send" v-model="time">{{time}}s</div>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix register">
+              <div class="fll agree" @click="register">同意协议并注册</div>
+              <div class="fll immediate">已有账号？立即登陆</div>
+            </div>
+            <div class="agreement">《就能贷用户注册协议》</div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+    <div class="mask" v-if="isMask"></div>
+    <div class="goodBuss" v-if="isBusiness">
+      <div class="buss-title">编辑擅长业务标签</div>
+      <div class="buss-tag">
+          <div class="tag-title">常用业务标签</div>
+          <div class="tag-contain">
+            <wcheckbox :radios="tags" name="tag" class="fll" style="margin-right: 15px" v-model="query.tag"></wcheckbox>
+          </div>
+          <div class="always">已添加标签</div>
+
+        <div class="clearfix save-main">
+          <div class="save fll">保存</div>
+          <div class="cancel fll">取消</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import registerTop from '../component/registerTop'
+  import imgUpload from '../component/imgUpload'
+  import wcheckbox from '../component/w-checkBox'
+
+  export default {
+    components:{
+      registerTop,
+      imgUpload,
+      wcheckbox
+    },
+    data () {
+      return {
+        radio2: 3,
+        showing:true,
+        time:60,
+        verifyCode:'发送验证码',
+        formData:{
+          broker:'',
+          phone:'',
+          userPassword:''
+        },
+        isMask:false,
+        isBusiness:false,
+        tags:[
+          {value: '00',label: '不限'},
+          {value: '01',label: '个人贷款'},
+          {value: '02',label: '企业贷款'},
+        ],
+        query:{
+          tag:'',
+        }
+      };
+    },
+    methods:{
+      send(){
+        this.$axios.get(`/base/getRegisterCode/${this.formData.phone}`).then(res=>{
+          console.log(res)
+        })
+        this.showing=false;
+        let timer=setInterval(()=>{
+          this.time--
+          if(this.time < 0){
+            clearInterval(timer)
+            this.showing=true
+            this.verifyCode='重新获取'
+            this.time=60
+          }
+        },1000)
+
+
+      },
+      register(){
+        this.$axios.post('/userBroker/showAllUserBroker',this.formData).then(res=>{
+          console.log(res)
+        })
+      },
+      goodMask(){
+        this.isMask=true
+        this.isBusiness=true
+      }
+    }
+  }
+</script>
+
+<style scoped lang="scss">
+  .ml20{
+    margin-left: 20px;
+  }
+  .user-main{
+    height:900px;
+    position: relative;
+    background:rgba(255,255,255,1);
+    .user-title{
+      width: 100%;
+      height: 90px;
+      border-bottom: 1px solid #eee;
+      position: relative;
+      .title{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        font-size:24px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(81,81,81,1);
+      }
+      .number{
+        opacity: 0.5;
+        position: absolute;
+        left: 655px;
+        top: 40px;
+        font-size:14px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(81,81,81,1);
+      }
+      .login{
+        position: absolute;
+        left:720px;
+        top: 40px;
+        font-size:14px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color: rgba(168, 14, 14, 1);
+      }
+    }
+    .user-form{
+      width: 370px;
+      margin: 20px auto;
+      margin-left: 220px;
+      .person-item{
+        padding: 10px 0;
+        .text-desc{
+          width:160px;
+          height:34px;
+          font-size:12px;
+          font-family:PingFangSC-Regular;
+          font-weight:300;
+          color:rgba(81,81,81,1);
+          line-height:17px;
+          margin-left: 10px;
+        }
+        textarea{
+          border: 1px solid #ccc;
+          width: 248px;
+          height: 80px;
+        }
+        .verify{
+          .send{
+            text-align: center;
+            width:80px;
+            height:38px;
+            border-radius:4px;
+            border:1px solid #ccc;
+            font-size:12px;
+            font-family:PingFangSC-Medium;
+            font-weight:500;
+            color:rgba(155,155,155,1);
+            line-height:38px;
+            margin-left: 20px;
+            cursor: pointer;
+          }
+          .time{
+            font-size: 16px;
+            color: #888;
+          }
+        }
+        .person-text{
+          text-align: right;
+          width:100px;
+          height:40px;
+          font-size:14px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(81,81,81,1);
+          line-height:40px;
+        }
+        .desc{
+          height: 80px;
+          line-height: 80px;
+        }
+        .upload{
+          height: 80px;
+          line-height: 80px;
+        }
+        input{
+          width: 250px;
+          height: 40px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          padding: 13px 10px;
+          box-sizing: border-box;
+          font-size:14px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(81,81,81,1);
+          line-height:40px;
+        }
+        .name,.card{
+          width: 100px;
+          height: 40px;
+        }
+        .radio{
+          margin-top: 9px;
+          margin-left: 19px;
+        }
+        /deep/ .el-radio__label{
+          color: #aaa;
+        }
+        /deep/ .is-checked .el-radio__inner{
+          border-color: #333;
+          background: #fff;
+          &:after{
+            background-color: #333;
+          }
+        }
+        /deep/ .is-checked+.el-radio__label {
+          color: #333;
+        }
+        /deep/ .el-radio__inner:hover{
+          border-color: #333;
+        }
+        .business{
+          cursor: pointer;
+          width: 50px;
+          height: 50px;
+          border-radius: 3px;
+          border: 1px solid #ccc;
+          position: relative;
+          .my-upload-icon {
+            position: absolute;
+            top: 42%;
+            left: 50%;
+            color: #888;
+            font-size:40px;
+            font-weight: lighter;
+          }
+        }
+      }
+    }
+    .agreement{
+      width:132px;
+      height:12px;
+      font-size:12px;
+      cursor: pointer;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(74,144,226,1);
+      line-height:12px;
+      position: absolute;
+      left: 39%;
+      top: 82%;
+    }
+    .immediate{
+      width:108px;
+      height:40px;
+      font-size:12px;
+      cursor: pointer;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(74,144,226,1);
+      line-height:40px;
+      margin-left: 20px;
+    }
+    .agree{
+      width:280px;
+      height:40px;
+      background:rgba(168,14,14,1);
+      font-size:16px;
+      cursor: pointer;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(255,255,255,1);
+      line-height:40px;
+      text-align: center;
+      border-radius: 5px;
+    }
+    .register{
+      position: absolute;
+      left: 31%;
+      top: 74%;
+    }
+  }
+  .mask{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #000;
+    opacity: 0.5;
+    z-index: 100;
+  }
+  .goodBuss{
+    position: fixed;
+    left: 50%;
+    top: 15%;
+    transform: translateX(-50%);
+    width:598px;
+    height:409px;
+    z-index: 999;
+    background:rgba(255,255,255,1);
+    .buss-title{
+      width:598px;
+      height:40px;
+      background:rgba(208,172,86,1);
+     text-align: center;
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(255,255,255,1);
+      line-height:40px;
+    }
+    .buss-tag{
+      padding: 20px 30px;
+      box-sizing: border-box;
+      height: 369px;
+      background:rgba(255,255,255,1);
+        .tag-title{
+          height:14px;
+          font-size:14px;
+          font-family:PingFangSC-Medium;
+          font-weight:500;
+          color:rgba(81,81,81,1);
+          line-height:14px;
+          margin-bottom: 14px;
+        }
+        .tag-contain{
+          width:538px;
+          height:144px;
+          border:1px solid rgba(217,217,217,1);
+        }
+        .always{
+        margin-top: 20px;
+          height:14px;
+          font-size:14px;
+          font-family:PingFangSC-Medium;
+          font-weight:500;
+          color:rgba(81,81,81,1);
+          line-height:14px;
+        }
+      .save-main{
+        width: 212px;
+        height: 40px;
+        margin: 20px auto;
+        .save{
+          cursor: pointer;
+          width:86px;
+          height:40px;
+          background:rgba(208,172,86,1);
+          border-radius:4px;
+          font-size:14px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(255,255,255,1);
+          line-height:40px;
+          text-align: center;
+        }
+        .cancel{
+          cursor: pointer;
+          margin-left: 40px;
+          width:86px;
+          height:40px;
+          background:rgba(217,217,217,1);
+          border-radius:4px;
+          font-size:14px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(155,155,155,1);
+          line-height:40px;
+          text-align: center;
+        }
+      }
+
+
+    }
+  }
+</style>
+

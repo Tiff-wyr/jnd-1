@@ -1,0 +1,152 @@
+<template>
+<div>
+  <div class="wrappy">
+    <div class="w1200">
+      <div class="help clearfix">
+        <div class="fll">
+          <div class="help-left clearfix fs" v-for="(item,index) in formData">
+            <div class="help-text fll">{{item}}</div>
+            <img src="../../static/resource/help/right-gray.png" alt="" class="arrow fll">
+          </div>
+          <div class="add1"></div>
+        </div>
+        <div class="fll ml30">
+          <div class="add-top"></div>
+          <div v-for="(item,index) in problemData" class="right-item">
+              <div class="clearfix fs">
+                <div class="help-right-text fll">{{item.title}}</div>
+                <div class="arrow2 fll"></div>
+              </div>
+              <div class="line-help"></div>
+          </div>
+          <div class="add-bottom"></div>
+          </div>
+      </div>
+      <footerSame></footerSame>
+    </div>
+  </div>
+</div>
+</template>
+
+<script>
+  import footerSame from '../component/footerSame'
+    export default {
+        name: "Help",
+      components:{
+        footerSame
+      },
+      data(){
+          return {
+            formData:[
+              "贷款指南",
+              "如何办理贷款",
+              "资质相关问题",
+              "相关注意事项",
+              "其他问题"
+            ],
+            problemData:[
+              {
+                title:"怎么办贷款？",
+                content:"个空格和客户我和我V好DVD党政领导V中火车都会VV"
+              },
+              {
+                title:"怎么办贷款？",
+                content:"个空格和客户我和我V好DVD党政领导V中火车都会VV"
+              },
+              {
+                title:"怎么办贷款？",
+                content:"个空格和客户我和我V好DVD党政领导V中火车都会VV"
+              },
+              {
+                title:"怎么办贷款？",
+                content:"个空格和客户我和我V好DVD党政领导V中火车都会VV"
+              },
+              {
+                title:"怎么办贷款？",
+                content:"个空格和客户我和我V好DVD党政领导V中火车都会VV"
+              },
+              {
+                title:"怎么办贷款？",
+                content:"个空格和客户我和我V好DVD党政领导V中火车都会VV"
+              },
+
+            ]
+          }
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+.ml30{
+  margin-left: 30px;
+}
+  .help-left{
+    width: 268px;
+    height: 73px;
+    background:rgba(255,255,255,1);
+    padding: 53px 54px 0 36px;
+    box-sizing: border-box;
+  }
+  .help-text{
+    width: 120px;
+    height:20px;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:20px;
+  }
+  .arrow{
+    height: 20px;
+    line-height: 20px;
+    width:8px;
+    margin-left: 50px;
+  }
+  .add1{
+    width: 268px;
+    height: 55px;
+    background:rgba(255,255,255,1);
+  }
+  .add-top{
+    width: 902px;
+    height: 4px;
+    background: #fff;
+  }
+  .right-item{
+    width: 902px;
+    height: 77px;
+    padding: 29px 50px 0 50px;
+    box-sizing: border-box;
+    background:rgba(255,255,255,1);
+    .help-right-text{
+      width:400px;
+      height:16px;
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:16px;
+    }
+    .arrow2{
+      height: 16px;
+      line-height: 16px;
+      width:8px;
+      margin-left: 393px;
+    }
+    .line-help{
+      width: 802px;
+      height: 3px;
+      background: #eee;
+      margin-top: 30px;
+    }
+  }
+  .add-bottom{
+    width: 902px;
+    height: 80px;
+    background: #fff;
+  }
+
+
+
+
+</style>

@@ -1,0 +1,456 @@
+<template>
+<div>
+  <div>
+    <div class="product">
+      <div class="title">产品中心</div>
+      <div class="product-item clearfix fll" @click="addItem">
+        <div class="clearfix my-upload-icon">
+          <div class="add-num fll">+</div>
+          <div class="add-pro fll">添加产品</div>
+        </div>
+      </div>
+      <div v-for="(item, index) in productList"
+           :key="index"
+           class="product-item fll">这是产品{{item.name}}
+      </div>
+    </div>
+    <!--蒙版-->
+    <div v-if="isMask" class="mask"></div>
+
+    <div class="pro-detail" v-if="isProduct">
+      <div class="pro-title">产品详情</div>
+      <div class="pro-main">
+        <div class="pro-item clearfix">
+          <div class="fll">
+            <div class="clearfix item-h31">
+              <div class="fll same">产品名称：</div>
+              <input type="text">
+            </div>
+            <div class="clearfix item-h31">
+              <div class="fll same">归还方式：</div>
+              <el-select v-model="prName" placeholder="请选择" class="checkbox-same">
+                <el-option
+                  v-for="item in returnData"
+                  :key="item.prId"
+                  :label="item.prName"
+                  :value="item.prId">
+                </el-option>
+              </el-select>
+            </div>
+            <div class="clearfix item-h31">
+              <div class="fll same">贷款类型：</div>
+              <el-select v-model="typeName" placeholder="请选择" class="checkbox-same">
+                <el-option
+                  v-for="item in loanTypeData"
+                  :key="item.id"
+                  :label="item.typeName"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </div>
+            <div class="clearfix item-h31">
+              <div class="fll same">业务类型：</div>
+              <el-select v-model="busName" placeholder="请选择" class="checkbox-same">
+                <el-option
+                  v-for="item in businessData"
+                  :key="item.id"
+                  :label="item.busName"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </div>
+            <div class="clearfix item-h31">
+              <div class="fll same">身份要求：</div>
+              <el-select v-model="identityName" placeholder="请选择" class="checkbox-same">
+                <el-option
+                  v-for="item in identifyData"
+                  :key="item.id"
+                  :label="item.identityName"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </div>
+            <div class="clearfix item-h31">
+              <div class="fll same">职业要求：</div>
+              <el-select v-model="jobName" placeholder="请选择" class="checkbox-same">
+                <el-option
+                  v-for="item in jobData"
+                  :key="item.jobId"
+                  :label="item.jobName"
+                  :value="item.jobId">
+                </el-option>
+              </el-select>
+            </div>
+
+          </div>
+          <div class="fll pro-right ml50">
+            <div class="clearfix item-h31">
+              <div class="fll same">额度：</div>
+              <div class="fll same">
+                <input type="text" class="input-w60">～<input type="text" class="input-w60">&nbsp;&nbsp;万
+              </div>
+
+            </div>
+            <div class="clearfix item-h31">
+              <div class="fll same">利息：</div>
+              <div class="fll same">
+                <input type="text" class="input-w60">&nbsp;&nbsp;%
+              </div>
+
+            </div>
+            <div class="clearfix item-h31">
+              <div class="fll same">使用期限：</div>
+              <el-select v-model="lifeName" placeholder="请选择">
+                <el-option
+                  v-for="item in yearData"
+                  :key="item.id"
+                  :label="item.lifeName"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </div>
+            <div class="clearfix item-h31">
+              <div class="fll same">发行机构：</div>
+              <input type="text">
+            </div>
+            <div class="clearfix item-h31">
+              <div class="fll same">放款时间：</div>
+              <input type="text" class="input-w60">
+            </div>
+            <div class="clearfix item-h31">
+              <div class="fll same">年龄要求：</div>
+              <div class="fll same">
+                <input type="text" class="input-w60">～<input type="text" class="input-w60">&nbsp;&nbsp;岁
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix">
+          <div class="fll same">贷款条件：</div>
+          <el-select v-model="lrName" multiple placeholder="请选择" style="min-width:140px ;height: 24px;">
+            <el-option
+              v-for="item in loanData"
+              :key="item.lrId"
+              :label="item.lrName"
+              :value="item.lrId">
+            </el-option>
+          </el-select>
+        </div>
+        <div class="clearfix">
+          <div class="fll same">条件：</div>
+          <div class="fll">
+            <input type="text" style="width: 438px;height: 100px;">
+          </div>
+        </div>
+        <div class="clearfix mt10">
+          <div class="fll same">特点：</div>
+          <div class="fll">
+            <input type="text" style="width: 438px;height: 100px;">
+          </div>
+        </div>
+        <div class="btn">
+          保存
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+</template>
+
+<script>
+    export default {
+      name: "productCen",
+      data(){
+          return {
+            isShowing:true,
+            isMask:false,
+            isProduct:false,
+            productList: [],
+            options: [
+              {
+              value: '选项1',
+              label: '黄金糕'
+              },
+              {
+              value: '选项5',
+              label: '北京烤鸭'
+              }
+              ],
+            value: '',
+
+            jobData:[
+              {
+                jobId:'',
+                jobName:''
+              }
+            ],       //获取职业
+            jobName:'',
+
+            loanData:[
+              {
+                lrId:'',
+                lrName:''
+              }
+            ],       //获取贷款要求
+            lrName:'',
+
+            returnData:[
+              {
+                prId:'',
+                prName:''
+              }
+            ],      //获取归还条件
+            prName:'',
+
+            loanTypeData:[
+              {
+                id:'',
+                typeName:'',
+              }
+            ],    //贷款类型
+            typeName:'',
+
+            yearData:[
+              {
+                id:'',
+                lifeName:'',
+              }
+            ],        //使用年限
+            lifeName:'',
+
+            businessData:[
+              {
+                id:'',
+                busName:'',
+              }
+            ],     //业务类型
+            busName:'',
+
+            identifyData:[
+              {
+                id:'',
+                identityName:'',
+              }
+            ],      //身份要求
+            identityName:'',
+
+
+
+
+          }
+      },
+      methods: {
+        //添加产品
+        addItem() {
+          // this.productList.unshift({name})
+          this.isMask=true
+          this.isProduct = true
+        },
+
+        //获取职业
+        getJob(){
+          this.$axios.get('get/getJob').then(res=>{
+            this.jobData=res
+          })
+        },
+        //获取贷款要求
+        getLoan(){
+          this.$axios.get('get/getLoanRequirements').then(res=>{
+            this.loanData=res
+          })
+        },
+        //获取归还条件
+        getReturn(){
+          this.$axios.get('get/getProductRepaymentMethod').then(res=>{
+            this.returnData=res
+          })
+        },
+        //贷款类型
+        getLoanType(){
+          this.$axios.get('get/getLoanType').then(res=>{
+            this.loanTypeData=res
+          })
+        },
+        //使用年限
+        getYear(){
+          this.$axios.get('get/getServiceLife').then(res=>{
+            this.yearData=res
+          })
+        },
+        //业务类型
+        getBusinessType(){
+          this.$axios.get('get/getType').then(res=>{
+            this.businessData=res
+          })
+        },
+        //身份要求
+        getIdentify(){
+          this.$axios.get('get/getIdentity').then(res=>{
+            this.identifyData=res
+          })
+        }
+
+
+      },
+      created(){
+        this.getJob()
+        this.getLoan()
+        this.getReturn()
+        this.getLoanType()
+        this.getYear()
+        this.getBusinessType()
+        this.getIdentify()
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  .mt10{
+    margin-top: 10px;
+  }
+  .ml50{
+    margin-left: 50px;
+  }
+.product{
+  width:944px;
+  height:667px;
+  background:rgba(255,255,255,1);
+  padding: 24px 0 24px 48px;
+  box-sizing: border-box;
+  .title{
+    width:64px;
+    height:16px;
+    font-size:16px;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(81,81,81,1);
+    line-height:16px;
+  }
+  .product-item{
+    width:252px;
+    height:255px;
+    background:rgba(255,255,255,1);
+    border:1px dashed rgba(217,217,217,1);
+    margin-top: 26px;
+    margin-left: 10px;
+    position: relative;
+    cursor: pointer;
+   .my-upload-icon{
+     position: absolute;
+     left: 33%;
+     top: 40%;
+     .add-num{
+       height: 53px;
+       font-weight: 200;
+       color:rgba(155,155,155,1);
+       line-height:53px;
+       font-size: 35px;
+     }
+     .add-pro{
+       width:64px;
+       height:53px;
+       font-size:16px;
+       font-family:PingFangSC-Regular;
+       font-weight:400;
+       color:rgba(155,155,155,1);
+       line-height:53px;
+       margin-left: 5px;
+     }
+   }
+  }
+}
+.mask{
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #000;
+  opacity: 0.5;
+  z-index: 100;
+}
+.pro-detail{
+  position: fixed;
+  left: 50%;
+  top:5%;
+  transform: translateX(-50%);
+  width:600px;
+  height:538px;
+  background:rgba(255,255,255,1);
+  z-index: 999;
+    .pro-title{
+      width:600px;
+      height:40px;
+      background:rgba(208,172,86,1);
+      font-size:16px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(255,255,255,1);
+      line-height:40px;
+      text-align: center;
+    }
+  .pro-main{
+    padding-left: 50px;
+    padding-right: 50px;
+    box-sizing: border-box;
+    .pro-item{
+      padding-top: 10px;
+      padding-bottom: 10px;
+      box-sizing: border-box;
+      /deep/ .el-input__inner{
+        width: 140px;
+        height: 24px;
+        line-height: 31px;
+        box-sizing: border-box;
+      }
+      /deep/ .el-input__icon{
+        line-height: 24px;
+      }
+      .item-h31{
+        height: 31px;
+        line-height: 31px;
+
+      }
+      input{
+        width: 140px;
+        height: 24px;
+        line-height:31px;
+        box-sizing: border-box;
+
+      }
+      .input-w60{
+        width: 60px;
+        height: 24px;
+        line-height:31px;
+      }
+    }
+    .same{
+      font-size:12px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(155,155,155,1);
+      line-height:31px;
+    }
+
+
+    .btn{
+      width:60px;
+      height:30px;
+      background:rgba(208,172,86,1);
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(255,255,255,1);
+      text-align: center;
+      line-height:30px;
+      margin: 8px auto;
+    }
+  }
+
+
+}
+</style>

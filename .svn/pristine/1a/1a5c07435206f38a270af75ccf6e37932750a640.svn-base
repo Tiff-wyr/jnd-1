@@ -1,0 +1,342 @@
+<template>
+    <div>
+      <layout></layout>
+      <div class="wrappy">
+        <div class="w1200">
+          <div>
+            <div class="detail-title">产品详情</div>
+            <div class="clearfix">
+              <div class="fll">
+                <div class="detail-left">
+                  <div class="clearfix">
+                    <div class="fll"><img src="../../static/resource/product-detail/Oval.png" alt=""></div>
+                    <div class="fll detail-loan-title">个人住房转按揭贷款</div>
+                    <div class="fll restore">加入收藏</div>
+                    <img src="../../static/resource/product-detail/star.png" alt="" class="fll star">
+                  </div>
+                  <div class="left-line"></div>
+                  <div class="left-limit">额度：<span class="limit-same">10万起</span></div>
+                  <div class="left-limit mt22">期限：<span class="limit-same">10万起</span></div>
+                  <div class="left-limit mt22">利息：<span class="limit-same">10万起</span></div>
+                  <div class="left-limit mt22">身份要求：<span class="limit-same">10万起</span></div>
+                  <div class="left-limit mt22">贷款类型：<span class="limit-same">10万起</span></div>
+                  <div class="left-limit mt22">发行机构：<span class="limit-same">10万起</span></div>
+                  <div class="clearfix mt30">
+                    <div class="fll yellow-line"></div>
+                    <div class="fll ml10 apply">申请条件</div>
+                    <img src="../../static/resource/product-detail/apply.png" alt="" class="fll ml400">
+                  </div>
+                  <div class="line2"></div>
+                  <div class="left-limit">年龄要求：<span class="limit-same">10万起</span></div>
+                  <div class="left-limit mt22">职业要求：<span class="limit-same">10万起</span></div>
+                  <div class="left-limit mt22">资产要求：<span class="limit-same">10万起</span></div>
+                  <div class="left-limit mt22">信用要求：<span class="limit-same">10万起</span></div>
+                  <div class="clearfix mt22">
+                    <div class="fll left-limit">其他要求:</div>
+                    <div class="fll same">1.原借款人为本行贷款客户，且无拖欠贷款额固
+                      似乎只是呵呵1长得很vbV家族好好吃的好吃吃海鲜基金净值很常见的好吃吃火车V刊之后V长得很V好VV成</div>
+                  </div>
+                  <div class="clearfix mt30">
+                    <div class="fll yellow-line"></div>
+                    <div class="fll ml10 feature">产品特点</div>
+                  </div>
+                  <div class="line2"></div>
+                  <div class="clearfix mt22">
+                    <div class="fll left-limit">产品特点:</div>
+                    <div class="fll same">1.费用优惠:免律师费,房屋保险自主决定</div>
+                  </div>
+                </div>
+              </div>
+              <div class="fll ml30">
+                <div class="detail-top">
+                  <div class="top-title">产品推荐</div>
+                  <div class="top-item">
+                    <div class="clearfix">
+                      <img src="../../static/resource/product-detail/tj1.png" alt="" class="fll">
+                      <div class="fll ml10">
+                        <div class="title">希财贷款</div>
+                        <div class="desc">个人住房贷款</div>
+                        <div class="clearfix">
+                          <div class="money fll">10～100万</div>
+                          <div class="rate fll ml16">利率：0.5%</div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="top-add"></div>
+                </div>
+                <div class="detail-bottom">
+                  <div class="victory-title">成功贷款案例</div>
+                  <div class="victory-line"></div>
+                  <div class="victory-item"  v-for="(item,index) in tableData">
+                      <div class="clearfix fs">
+                        <div class="fll name">{{item.name}}</div>
+                        <div class="fll">
+                          <img src="../../static/resource/product-detail/victory.png" alt="" class="ml128">
+                        </div>
+                      </div>
+                      <div class="clearfix mt12">
+                        <div class="fll vic-text">{{item.rateDetail}}</div>
+                        <div class="fll vic-text ml15">{{item.moneyDetail}}</div>
+                      </div>
+                  </div>
+                  <div class="bottom-add"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</template>
+
+<script>
+  import layout from '../layout/layout'
+  import footerSame from '../component/footerSame'
+    export default {
+      name: "productDetail",
+      components:{
+          layout,
+        footerSame
+      },
+      data(){
+        return {
+          tableData:[
+            {
+              name:'王先生住房贷',
+              rateDetail:'月利率：0.40～0.70%',
+              moneyDetail:' 贷款金额：100万元'
+            },
+          ],
+          formData:[
+
+          ]
+        }
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  .ml400{
+    margin-left: 400px;
+  }
+  .mt30{
+    margin-top: 30px;
+  }
+  .mt22{
+    margin-top: 22px;
+  }
+  .ml10{
+    margin-left: 10px;
+  }
+  .ml16{
+    margin-left: 16px;
+  }
+  .ml128{
+    margin-left: 128px;
+  }
+  .ml15{
+    margin-left: 15px;
+  }
+  .mt12{
+    margin-top: 12px;
+  }
+  .ml30{
+    margin-left: 30px;
+  }
+  .detail-title{
+    width:112px;
+    height:28px;
+    font-size:24px;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(0,0,0,1);
+    line-height:28px;
+    margin-bottom: 24px;
+  }
+.detail-left{
+  width:902px;
+  height:904px;
+  background: #fff;
+  padding: 36px 60px 66px 60px;
+  box-sizing: border-box;
+.left-line,.line2{
+  width:782px;
+  height:1px;
+  background: #ccc;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+  .left-limit{
+    height:14px;
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(155,155,155,1);
+    line-height:14px;
+  }
+  .limit-same{
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:14px;
+  }
+  .same{
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:14px;
+    width: 465px;
+    margin-left: 10px;
+  }
+.detail-loan-title{
+  height:90px;
+  font-size:20px;
+  font-family:PingFangSC-Regular;
+  font-weight:400;
+  color:rgba(81,81,81,1);
+  line-height:90px;
+  margin-left: 20px;
+}
+  .restore{
+    width:64px;
+    height:90px;
+    font-size:14px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(155,155,155,1);
+    line-height:90px;
+    margin-left: 364px;
+  }
+  .star{
+    width:15px;
+    height:15px;
+    margin-top: 36px;
+    margin-left: -4px;
+  }
+  .yellow-line{
+    width:4px;
+    height:16px;
+    background:rgba(208,172,86,1);
+  }
+  .apply{
+    height:16px;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:16px;
+  }
+  .feature{
+    height:16px;
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:16px;
+  }
+}
+  .detail-top{
+    width:268px;
+    background:rgba(255,255,255,1);
+    .top-title{
+      text-align: center;
+      width: 268px;
+      height:74px;
+      font-size:20px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:74px;
+    }
+    .top-item{
+      height: 100px;
+      padding: 0 24px 30px 24px;
+      box-sizing: border-box;
+      .title{
+        height:14px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:14px;
+        margin-top: 7px;
+      }
+      .desc{
+        height:12px;
+        font-size:12px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(155,155,155,1);
+        line-height:12px;
+        margin-top: 12px;
+        margin-bottom: 8px;
+      }
+      .money,.rate{
+        height:12px;
+        font-size:12px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(155,155,155,1);
+        line-height:12px;
+      }
+    }
+    .top-add{
+      width: 268px;
+      height: 15px;
+    }
+  }
+  .detail-bottom{
+    width:268px;
+    background:rgba(255,255,255,1);
+    margin-top: 40px;
+    text-align: center;
+    .victory-title{
+      height:74px;
+      font-size:20px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:74px;
+    }
+    .victory-line{
+      width:268px;
+      height:1px;
+      background: #ccc;
+    }
+    .victory-item{
+      height: 67px;
+      width: 268px;
+      padding: 12px 14px 12px 14px;
+      box-sizing: border-box;
+      border-bottom: 1px dashed #ccc;
+      .vic-text{
+        height:12px;
+        font-size:12px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:12px;
+      }
+      .name{
+        width:84px;
+        height:14px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:14px;
+        margin-top: 2px;
+      }
+    }
+    .bottom-add{
+      height: 20px;
+      width:268px;
+      background:rgba(255,255,255,1);
+    }
+
+  }
+</style>

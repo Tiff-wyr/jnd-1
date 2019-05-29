@@ -1,0 +1,15 @@
+<template>
+  <div>
+    gfg
+  </div>
+</template>
+
+<script>
+    export default {
+        name: "agentMessage"
+    }
+</script>
+
+<style scoped>
+
+</style>

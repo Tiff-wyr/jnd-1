@@ -1,0 +1,304 @@
+<template>
+    <div>
+      <layout></layout>
+      <div class="image"></div>
+      <div class="wrappy">
+        <div class="w1200">
+          <div class="area">
+            <div class="clearfix mb20">
+              <div class="fll city">所在地区</div>
+              <wradio :radios="cities" name="city" v-model="query.city" class="fll"></wradio>
+            </div>
+            <div class="clearfix mb20">
+              <div class="fll city">贷款类型</div>
+              <wradio :radios="loans" name="loan" v-model="query.loan" class="fll"></wradio>
+            </div>
+            <div class="clearfix mb20">
+              <div class="fll city">业务分类</div>
+              <wradio :radios="business" name="business" v-model="query.business" class="fll"></wradio>
+            </div>
+            <div class="clearfix mb20">
+              <div class="fll city">贷款额度</div>
+              <wradio :radios="loans" name="loan" v-model="query.loan" class="fll"></wradio>
+            </div>
+            <div class="clearfix mb20">
+              <div class="fll city">贷款利率(月)</div>
+              <wradio :radios="business" name="business" v-model="query.business" class="fll"></wradio>
+            </div>
+            <div class="clearfix mb20">
+              <div class="fll city">贷款期限</div>
+              <wradio :radios="loans" name="loan" v-model="query.loan" class="fll"></wradio>
+            </div>
+            <div class="clearfix">
+              <div class="fll city">贷款条件</div>
+              <wcheckBox :radios="business" name="business" v-model="query.business" class="fll"></wcheckBox>
+            </div>
+          </div>
+
+          <div class="mt30 mb24 organ-loan">
+            贷款产品
+          </div>
+
+          <div class="loans-pro">
+            <div class="loans-header clearfix">
+              <div class="header-same fll">产品名称</div>
+              <div class="header-same fll">额度</div>
+              <div class="header-same fll">使用年限</div>
+              <div class="header-same fll">利息</div>
+              <div class="header-same fll">放款时间</div>
+              <div class="header-same fll">发行机构</div>
+              <div class="header-same fll">操作</div>
+            </div>
+
+            <div class="loans-pro-item clearfix" v-for="(item,index) in tableData">
+              <div class="name fll pro-item-same">{{item.name}}</div>
+              <div class="rate fll pro-item-same">{{item.rate}}</div>
+              <div class="time fll pro-item-same">{{item.time}}</div>
+              <div class="limit fll pro-item-same">{{item.limit}}</div>
+              <div class="deadline fll pro-item-same">{{item.deadline}}</div>
+              <div class="bank fll pro-item-same">{{item.bank}}</div>
+              <div class="operate fll pro-item-same">
+                <div class="look">查看</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="page">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              background
+              :page-size="size"
+              :pager-count="5"
+              layout="prev, pager, next"
+              :total="count">
+            </el-pagination>
+          </div>
+          <footerSame></footerSame>
+        </div>
+      </div>
+    </div>
+</template>
+
+<script>
+  import footerSame from '../component/footerSame'
+  import layout from '../layout/layout'
+  import wradio from '../component/w-radios'
+  import wcheckBox from '../component/w-checkBox'
+    export default {
+        name: "productList",
+      components:{
+        footerSame,
+        layout,
+        wradio,
+        wcheckBox
+      },
+      data(){
+          return {
+            tableData: [
+              {
+                name: '个人住房转按揭贷款',
+                rate: '4.4%',
+                time: '3天',
+                limit:'10～20万',
+                deadline:'2年',
+                bank:'民生银行'
+              },
+              {
+                name: '个人住房转按揭贷款',
+                rate: '4.4%',
+                time: '3天',
+                limit:'10～20万',
+                deadline:'2年',
+                bank:'民生银行'
+              },
+              {
+                name: '个人住房转按揭贷款',
+                rate: '4.4%',
+                time: '3天',
+                limit:'10～20万',
+                deadline:'2年',
+                bank:'民生银行'
+              },
+            ],
+
+            cities: [
+              {value: '00',label: '不限'},
+              {value: '01',label: '北京'},
+              {value: '02',label: '天津'},
+              {value: '03',label: '上海'},
+              {value: '04',label: '郑州'},
+            ],
+            loans:[
+              {value: '00',label: '不限'},
+              {value: '01',label: '信用贷款'},
+              {value: '02',label: '抵押贷款'},
+            ],
+            business:[
+              {value: '00',label: '不限'},
+              {value: '01',label: '个人贷款'},
+              {value: '02',label: '企业贷款'},
+            ],
+            query: {
+              city: '',
+              loan:'',
+              business:'',
+              good:''
+            },
+            page: 1,
+            size: 6,
+            count: 100
+          }
+      },
+      watch: {
+        'query.city': function(val) {
+          this.$message.info(val)
+        },
+        'query.loan':function (val) {
+          this.$message.info(val)
+        }
+
+      },
+      methods:{
+        handleCurrentChange (val) {
+          this.page = val
+
+        },
+        handleSizeChange (val) {
+          this.size = val
+
+        },
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  .mb20{
+    margin-bottom: 20px;
+  }
+  .image{
+  width: 100%;
+  height:437px;
+  background-image: url("../../static/resource/loanimg.png");
+  background-size: 100% 100%;
+}
+  .area{
+    padding: 20px 18px;
+    box-sizing: border-box;
+    width:1200px;
+    height:440px;
+    background:rgba(255,255,255,1);
+    .city{
+      width:112px;
+      height:40px;
+      background:rgba(208,172,86,1);
+      text-align: center;
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(255,255,255,1);
+      line-height:40px;
+    }
+  }
+  .organ-loan{
+    width:96px;
+    height:24px;
+    font-size:24px;
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(0,0,0,1);
+    line-height:24px;
+  }
+  .loans-pro{
+    width:1200px;
+
+    background:rgba(255,255,255,1);
+
+    .loans-header{
+      height: 53px;
+      box-shadow:2px 2px 4px 1px #fefefe;
+      .header-same{
+        text-align: center;
+        width: 171px;
+        height: 53px;
+        font-size:16px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:53px;
+      }
+    }
+
+    .loans-pro-item{
+      height: 80px;
+      .pro-item-same{
+        width: 171px;
+        line-height:80px;
+        text-align: center;
+      }
+      .rate{
+        font-size:16px;
+        font-weight:bold;
+        color:rgba(168,14,14,1);
+      }
+      .name{
+        font-size:16px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+      }
+      .time{
+        font-size:16px;
+        font-family:PingFangSC-Regular;
+        font-weight:bold;
+        color:rgba(168,14,14,1);
+      }
+      .limit{
+        font-size:16px;
+        font-family:DINAlternate-Bold;
+        font-weight:bold;
+        color:rgba(168,14,14,1);
+      }
+      .deadline{
+        font-size:16px;
+        font-family:PingFangSC-Regular;
+        font-weight:bold;
+        color:rgba(168,14,14,1);
+      }
+      .bank{
+        font-size:16px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+      }
+      .operate{
+        font-size:16px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        .look{
+          width: 120px;
+          height: 50px;
+          line-height: 50px;
+          margin-top: 14px;
+          margin-left: 27px;
+        }
+      }
+
+      &:hover{
+        box-shadow:0px 4px 13px 0px rgba(217,217,217,1);
+        background:rgba(250,250,250,1);
+      }
+      &:hover .operate .look{
+        background:rgba(168,14,14,1);
+        color:rgba(255,255,255,1);
+      }
+    }
+  }
+  .page{
+    margin-top:24px;
+    text-align: right;
+    margin-bottom: 30px;
+  }
+</style>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <title>finance-project</title>
+  <link href=./static/css/app.fb42b800e33598ff95b3e7f4bfeb3372.css rel=stylesheet>
+</head>
+<body>
+<div id=app></div>
+<script type=text/javascript src=./static/js/manifest.9f9074b651a0942b1f6d.js></script>
+<script type=text/javascript src=./static/js/vendor.c8e5757264d2dcda83a6.js></script>
+<script type=text/javascript src=./static/js/app.bc4a04ffa6016f02bb33.js></script>
+</body>
+</html>

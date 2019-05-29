@@ -1,0 +1,227 @@
+<template>
+  <div>
+    <div class="apply">
+      <div class="title">申请记录 </div>
+      <div class="header clearfix">
+        <div class="fll text">名称</div>
+        <div class="fll text">贷款金额</div>
+        <div class="fll text">手机号</div>
+        <div class="fll text">申请时间</div>
+        <div class="fll text">操作</div>
+      </div>
+      <div class="table clearfix" v-for="(item,index) in tableData">
+        <div class="fll table-text">{{item.name}}</div>
+        <div class="fll table-text">{{item.amount}}</div>
+        <div class="fll table-text">{{item.phone}}</div>
+        <div class="fll table-text">{{item.time}}</div>
+        <div class="fll btn" @click="loanFail(item.orderId,item.phone)">贷款失败</div>
+        <div class="fll btn" @click="loanVictory(item.orderId,item.phone)">贷款成功</div>
+      </div>
+
+    </div>
+    <div class="page">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        background
+        :page-size="size"
+        :pager-count="5"
+        layout="prev, pager, next"
+        :total="count">
+      </el-pagination>
+    </div>
+  </div>
+
+</template>
+
+<script>
+  export default {
+    data(){
+      return {
+        phoneId:'',
+        loanId:'',
+        isVictory:false,
+        isMask:false,
+        page: 1,
+        size: 8,
+        count: 1,
+        tableData:[],
+        loanData:[],
+        xiuData:{
+          orderId:'',
+          phone:'',
+          loanType:'',
+          loanAmount:'',
+          interest:''
+        }
+      }
+    },
+    methods:{
+
+      handleCurrentChange (val) {
+        this.page = val
+        this.getData()
+
+      },
+      handleSizeChange (val) {
+        this.size = val
+        this.getData()
+      },
+      loanFail(){
+        let data=new FormData()
+
+      },
+      loanVictory(order,phone){
+
+
+      },
+      getData(){
+        this.$axios.get(`orderAgency/getOrderByBor/${this.$store.state.userInfo.id}/${this.page}/${this.size}`).then(res=>{
+          console.log('aaa',res.data.list);
+          if(res.status === 200){
+            this.tableData=res.data.list
+            this.count=res.data.totalCount
+          }
+
+        })
+      },
+
+    },
+    created(){
+      this.getData()
+
+    }
+  }
+</script>
+
+<style scoped lang="scss">
+  .mt20{
+    margin-top: 15px;
+  }
+  .mask{
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #000;
+    opacity: 0.5;
+    z-index: 100;
+  }
+  .loan-vic{
+    position: fixed;
+    transform: translateX(-50%);
+    left: 50%;
+    top: 30%;
+    z-index: 900;
+  }
+  .loan-vic .title{
+    width:400px;
+    height:40px;
+    background:rgba(208,172,86,1);
+    font-size:16px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    text-align: center;
+    color:rgba(255,255,255,1);
+    line-height:40px;
+  }
+  .loan-vic .loan-con{
+    padding: 20px 70px;
+    box-sizing: border-box;
+    width:400px;
+    height:300px;
+    background:rgba(255,255,255,1);
+    .text{
+      width: 70px;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(155,155,155,1);
+      line-height:40px;
+    }
+    input{
+      height: 24px;
+      line-height:40px;
+      margin-top: 6px;
+    }
+    button{
+      cursor: pointer;
+      width:60px;
+      height:30px;
+      background:rgba(208,172,86,1);
+      text-align: center;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(255,255,255,1);
+      line-height:30px;
+      margin-top: 30px;
+      margin-left: 100px;
+    }
+  }
+
+
+  .page{
+    float: right;
+    margin-top: 30px;
+  }
+  .apply{
+    width:944px;
+    height:600px;
+    background:rgba(255,255,255,1);
+    padding: 24px 56px;
+    box-sizing: border-box;
+    .title{
+      height: 42px;
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:16px;
+    }
+    .header{
+      width: 832px;
+      height:40px;
+      background:rgba(250,250,250,1);
+      .text{
+        width:166px;
+        text-align: center;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        line-height:40px;
+      }
+    }
+    .table{
+      width: 832px;
+      height: 62px;
+      border-bottom: 1px solid #f0f0f0;
+      .table-text{
+        width: 166px;
+        line-height: 62px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        text-align: center;
+      }
+      .btn{
+        width:60px;
+        height:30px;
+        text-align: center;
+        background:rgba(168,14,14,1);
+        border-radius:4px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        line-height:30px;
+        margin-top: 16px;
+        margin-left: 15px;
+        cursor: pointer;
+      }
+    }
+  }
+</style>

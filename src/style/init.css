@@ -1,0 +1,102 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+input{
+  white-space:nowrap;
+}
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+}
+html,body{
+  height: 100%;
+}
+.content{
+  min-height: 100%;
+}
+a{
+  text-decoration: none;
+  border: none;
+  outline: none;
+  tap-highlight-color: rgba(0,0,0,0);
+  focus-ring-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-focus-ring-color: rgba(0, 0, 0, 0);
+  -moz-tap-highlight-color: rgba(0,0,0,0);
+  -moz-focus-ring-color: rgba(0, 0, 0, 0);
+}
+a:visited{
+  color: inherit;
+}
+input,button{
+  outline: none;
+}
+.fll{
+  float: left;
+}
+.flr{
+  float: right;
+}
+.clearfix::after {
+  content: '';
+  clear: both;
+  overflow: hidden;
+  display: block;
+  width: 0;
+  height: 0;
+}
+.icon {
+  float: left;
+  font-size: 20px !important;
+}
+.position_div {
+  width: 100%;
+  height: 60px;
+  background: #fff;
+}
+.none {
+  display: none;
+}
+.hidden {
+  overflow: hidden;
+}
+.mt20 {
+  margin-top: 20px;
+}
+.filter-container {
+  padding: 20px;
+}
+.filter-container .filter-item {
+  margin: 0 10px 10px 0;
+}
+.filter-container .filter-item-select {
+  width: 200px;
+}
+.my-upload {
+  position: relative;
+  float: left;
+  display: block;
+  width: 80px;
+  height: 80px;
+  border-radius: 3px;
+  background-color: #ccc;
+}
+.micon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 45px;
+}
+.el-message {
+  z-index: 9999!important;
+}
+.empty-list-show {
+  text-align: center;
+  padding: 30px 0;
+}
+.empty-list-show img {
+  width: 200px;
+  margin-bottom: 30px;
+}

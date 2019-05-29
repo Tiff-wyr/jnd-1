@@ -1,0 +1,51 @@
+import Vue from 'vue'
+import Router from 'vue-router'
+
+Vue.use(Router)
+const components={
+  home:()=>import('@/views/Home'),
+  loans:()=>import('@/views/Loans'),
+  agent:()=>import('@/views/Agent'),
+  organization:()=>import('@/views/Organization'),
+  help:()=>import('@/views/Help'),
+  layout:()=>import('@/layout/layout'),
+  productDetail:()=>import('@/views/productDetail'),
+
+}
+
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      component:components.layout,
+      redirect:'/home',
+      children:[
+        {
+          path:'home',
+          component:components.home
+        },
+        {
+          path:'loans',
+          component:components.loans
+        },
+        {
+          path:'agent',
+          component:components.agent
+        },
+        {
+          path:'organization',
+          component:components.organization
+        },
+        {
+          path:'help',
+          component:components.help
+        },
+      ]
+    },
+    {
+      path:'/productDetail',
+      component:components.productDetail,
+    },
+
+  ]
+})

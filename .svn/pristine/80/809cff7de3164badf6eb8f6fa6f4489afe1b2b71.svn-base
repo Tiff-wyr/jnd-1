@@ -1,0 +1,122 @@
+<template>
+  <div>
+    <div class="wrappy">
+      <div class="w1200">
+        <div class="clearfix">
+          <div class="fll">
+            <div class="main">
+              <div class="img-main">
+                <img src="../../../static/resource/organMessage/logo.png" alt="">
+                <div class="clearfix mt4 fs">
+                  <div class="text-main fll">淘钱宝</div>
+                  <img src="../../../static/resource/organMessage/vip.png" alt="" class="fll vip">
+                </div>
+
+              </div>
+              <div class="my-item clearfix fs">
+                <img src="../../../static/resource/organMessage/1.png" alt="">
+                <router-link to="/organMessage/organMess">机构信息</router-link>
+              </div>
+              <div class="my-item clearfix fs">
+                <img src="../../../static/resource/organMessage/2.png" alt="">
+                <router-link to="/organMessage/memberCen">会员中心</router-link>
+              </div>
+              <div class="my-item clearfix fs">
+                <img src="../../../static/resource/organMessage/3.png" alt="">
+                <router-link to="/organMessage/payRes">付费资源</router-link>
+              </div>
+              <div class="my-item clearfix fs">
+                <img src="../../../static/resource/organMessage/4.png" alt="">
+                <router-link to="/organMessage/resourceCen">资源中心</router-link>
+              </div>
+              <div class="my-item clearfix fs">
+                <img src="../../../static/resource/organMessage/5.png" alt="">
+                <router-link to="/organMessage/productCen">产品中心</router-link>
+              </div>
+              <div class="my-item clearfix fs">
+                <img src="../../../static/resource/organMessage/6.png" alt="">
+                <router-link to="/organMessage/accessRec">访问记录</router-link>
+              </div>
+              <div class="my-item clearfix fs">
+                <img src="../../../static/resource/organMessage/7.png" alt="">
+                <router-link to="/organMessage/messCen">消息中心</router-link>
+              </div>
+              <div class="my-item clearfix fs">
+                <img src="../../../static/resource/organMessage/8.png" alt="">
+                <router-link to="/organMessage/emailCen">邮件中心</router-link>
+              </div>
+              <div class="my-item clearfix fs">
+                <img src="../../../static/resource/organMessage/9.png" alt="">
+                <router-link to="/organMessage/secuCen">安全中心</router-link>
+              </div>
+            </div>
+          </div>
+          <div class="fll ml30">
+            <router-view></router-view>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+    export default {
+        name: "organMessage"
+    }
+</script>
+
+<style scoped lang="scss">
+  .mt4{
+  margin-top: 4px;
+}
+  .ml30{
+    margin-left: 30px;
+  }
+  .main{
+    width:226px;
+    height:803px;
+    background:rgba(255,255,255,1);
+  .img-main{
+    height: 150px;
+    padding: 23px 74px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ccc;
+    .text-main{
+      height:16px;
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:16px;
+      margin-left: 10px;
+    }
+    .vip{
+      width: 11px;
+      height: 10px;
+      margin-left: 3px;
+      margin-top: 3px;
+    }
+
+  }
+  .my-item{
+    height: 66px;
+    padding: 24px 62px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ccc;
+  }
+  a{
+    width:64px;
+    height:16px;
+    font-size:16px;
+    font-family:PingFangSC-Medium;
+    font-weight:400;
+    color:rgba(81,81,81,1);
+    line-height:16px;
+    margin-left: 18px;
+  }
+  .router-link-active{
+    color: rgba(168, 14, 14, 1);
+  }
+  }
+</style>

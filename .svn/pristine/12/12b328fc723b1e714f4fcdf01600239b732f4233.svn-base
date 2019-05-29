@@ -1,0 +1,29 @@
+/**
+ * Created by Administrator on 2018/12/13 0013.
+ */
+
+import Vue from 'vue'
+import Vuex from 'vuex'
+import {Store} from 'vuex'
+Vue.use(Vuex)
+
+const store =new Store({
+  state:{
+    uid: '',
+    userInfo: null,
+  },
+  mutations:{
+    "SET_USER": (state, userinfo)=> {
+      state.userInfo = userinfo
+    },
+    "SET_UID": (state, params) => {
+      state.uid = params
+    }
+  },
+  actions: {
+    setUid({commit}, data) {
+      commit('SET_UID', data)
+    }
+  }
+})
+export default store

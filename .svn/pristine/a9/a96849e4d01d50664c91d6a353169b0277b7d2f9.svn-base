@@ -1,0 +1,144 @@
+<template>
+  <div>
+    <div class="wrappy">
+      <div class="w1200">
+        <div class="clearfix">
+          <div class="fll">
+            <div class="main">
+              <div class="img-main">
+                <img src="../../../static/resource/organMessage/logo.png" alt="">
+                <div class="clearfix mt4 fs">
+                  <div class="text-main fll">田修平</div>
+                  <img src="../../../static/resource/organMessage/vip.png" alt="" class="fll vip">
+                </div>
+              </div>
+              <div :class="this.$route.path === '/agentMessage/agentPersonal' ? 'my-item clearfix fs active' : 'my-item clearfix fs' "
+                   @click="organM">
+                <div class="iconfont icon-jingjirengerenzhongxin-copy icon"></div>
+                <router-link to="/agentMessage/agentPersonal">个人信息</router-link>
+              </div>
+              <div :class="this.$route.path === '/agentMessage/agentMember' ? 'my-item clearfix fs active' : 'my-item clearfix fs' ">
+                <div class="iconfont icon-huiyuanzhongxin-copy icon"></div>
+                <router-link to="/agentMessage/agentMember">会员中心</router-link>
+              </div>
+              <div :class="this.$route.path === '/agentMessage/agentPay' ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-fufeiziyuan-copy-copy icon"></div>
+                <router-link to="/agentMessage/agentPay">付费资源</router-link>
+              </div>
+              <div :class="this.$route.path === '/agentMessage/agentResource' ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-ziyuanzhongxin-copy-copy icon"></div>
+                <router-link to="/agentMessage/agentResource">资源中心</router-link>
+              </div>
+              <div :class="this.$route.path === '/agentMessage/agentProduct' ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-Group icon"></div>
+                <router-link to="/agentMessage/agentProduct">产品中心</router-link>
+              </div>
+              <div :class="this.$route.path === '/agentMessage/agentAccess' ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-fangwenjilu-copy-copy icon" style="margin-left: -4px"></div>
+                <router-link to="/agentMessage/agentAccess" style="margin-left: 2px">访问记录</router-link>
+              </div>
+              <div :class="this.$route.path === '/agentMessage/agentMessageCenter' ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-xiaoxizhongxin icon"></div>
+                <router-link to="/agentMessage/agentMessageCenter">消息中心</router-link>
+              </div>
+              <div :class="this.$route.path === '/agentMessage/agentEmail' ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-youjianzhongxin-copy-copy icon" style="margin-left: -4px"></div>
+                <router-link to="/agentMessage/agentEmail" style="margin-left: 6px">邮件中心</router-link>
+              </div>
+              <div :class="this.$route.path === '/agentMessage/agentSecure' ? 'my-item clearfix fs active' : 'my-item clearfix fs'">
+                <div class="iconfont icon-anquanzhongxin-copy-copy icon"></div>
+                <router-link to="/agentMessage/agentSecure">安全中心</router-link>
+              </div>
+            </div>
+          </div>
+          <div class="fll ml30">
+            <router-view></router-view>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+    export default {
+        name: "agentMessage",
+      data(){
+        return {
+          isShowing:true,
+          organ:false,
+          type: '1'
+        }
+      },
+      methods:{
+        organM(){
+          this.organ=true
+        }
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  .mt4{
+    margin-top: 4px;
+  }
+  .ml30{
+    margin-left: 30px;
+  }
+  .main{
+    width:226px;
+    height:803px;
+    background:rgba(255,255,255,1);
+    .img-main{
+      height: 150px;
+      padding: 23px 74px;
+      box-sizing: border-box;
+      border-bottom: 1px solid #F0F0F0;
+      .text-main{
+        height:16px;
+        font-size:16px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(81,81,81,1);
+        line-height:16px;
+        margin-left: 10px;
+      }
+      .vip{
+        width: 11px;
+        height: 10px;
+        margin-left: 3px;
+        margin-top: 3px;
+      }
+
+    }
+    .my-item{
+      height: 66px;
+      padding: 24px 62px;
+      box-sizing: border-box;
+      border-bottom: 1px solid #F0F0F0;
+      cursor: pointer;
+      color: #999;
+
+      a{
+        display: block;
+        float: left;
+        height:20px;
+        font-size:16px;
+        font-family:PingFangSC-Medium;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        margin-left: 10px;
+      }
+      .router-link-active{
+        color: rgba(168, 14, 14, 1);
+      }
+      img{
+        float: left;
+        cursor: pointer;
+      }
+    }
+    .active{
+      color: rgba(168, 14, 14, 1);
+    }
+  }
+</style>

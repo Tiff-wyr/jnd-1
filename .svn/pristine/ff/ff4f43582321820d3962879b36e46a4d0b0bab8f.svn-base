@@ -1,0 +1,40 @@
+<template>
+ <div class="guid">
+   
+ </div>
+</template>
+
+<script>
+    export default {
+        name: "guide",
+      data(){
+          return {
+            tableData:[
+              {
+                title:'怎么办贷款？',
+                content:'dfwaga'
+              },
+              {
+                title:'怎么办贷款？',
+                content:'dfwaga'
+              },
+              {
+                title:'怎么办贷款？',
+                content:'dfwaga'
+              },
+            ]
+          }
+      }
+    }
+</script>
+
+<style scoped>
+.guid{
+  width:902px;
+  padding: 20px 50px;
+  box-sizing: border-box;
+  background:rgba(255,255,255,1);
+
+}
+
+</style>

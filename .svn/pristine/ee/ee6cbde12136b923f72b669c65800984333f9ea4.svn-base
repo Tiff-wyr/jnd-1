@@ -1,0 +1,170 @@
+<template>
+  <div class="agentC">
+    <div class="clearfix">
+      <div class="agentItem fll" v-for="(item,index) in tableData">
+        <div class="clearfix fs">
+          <img src="../../../static/resource/person1.png" alt="" class="fll pic">
+          <div class="fll ml4">
+            <div class="name">{{item.name}}</div>
+            <div class="job">{{item.job}}</div>
+            <div class="tel">{{item.tel}}</div>
+          </div>
+        </div>
+        <div class="mt16 little-item mb20">{{item.content}}</div>
+        <div class="btn">立即联系</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+    export default {
+        name: "organCollect",
+      data(){
+        return {
+          tableData:[
+            {
+              name:'ww',
+              job:'11',
+              tel:'158555554',
+              content:'VU回复VU会产生好的V好的不存在DVD不V就好' +
+              'V回家电锯惊魂就回家关键环节考核考核加工费V刊会尽快' +
+              '好看好几个空间就会看看家家户户高级工程吃'
+            },
+            {
+              name:'44',
+              job:'11',
+              tel:'158555554',
+
+            },
+            {
+              name:'44',
+              job:'11',
+              tel:'158555554',
+
+            },
+            {
+              name:'44',
+              job:'11',
+              tel:'158555554',
+
+            },
+            {
+              name:'44',
+              job:'11',
+              tel:'158555554',
+
+            },
+            {
+              name:'44',
+              job:'11',
+              tel:'158555554',
+
+            },
+          ]
+        }
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  .mt16{
+    margin-top: 16px;
+  }
+  .mb20{
+    margin-bottom: 20px;
+  }
+  .mt8{
+    margin-top: 8px;
+  }
+  .mb16{
+    margin-bottom: 16px;
+  }
+  .ml4{
+    margin-left: 4px;
+  }
+
+  .agentC{
+    padding: 20px 24px 20px 56px;
+    box-sizing: border-box;
+    .agentItem{
+      width:248px;
+      height:216px;
+      background:rgba(255,255,255,1);
+      border-radius:4px;
+      margin-right: 40px;
+      padding: 10px 0 0 24px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      border: 1px solid #eee;
+      &:hover{
+        box-shadow:0px 0px 13px 0px rgba(217,217,217,1);
+      }
+      .pic{
+        width:80px;
+        height:78px;
+      }
+      .name{
+        width:48px;
+        height:16px;
+        font-size:16px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(81,81,81,1);
+        line-height:16px;
+      }
+      .job{
+        margin-top: 4px;
+        width:72px;
+        height:12px;
+        font-size:12px;
+        font-family:PingFangSC-Light;
+        font-weight:300;
+        color:rgba(155,155,155,1);
+        line-height:12px;
+      }
+      .tel{
+        margin-top: 15px;
+        width:111px;
+        height:16px;
+        font-size:16px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(81,81,81,1);
+        line-height:16px;
+        letter-spacing:1px;
+      }
+      .little-item{
+        width:192px;
+        height:51px;
+        font-size:12px;
+        font-family:PingFangSC-Light;
+        font-weight:300;
+        color:rgba(155,155,155,1);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+        line-height: 17px;
+      }
+      .btn{
+        text-align: center;
+        width:70px;
+        height:24px;
+        border-radius:4px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(155,155,155,1);
+        line-height:24px;
+        margin: 0 auto;
+        border:1px solid rgba(217,217,217,1);
+      }
+      &:hover .btn{
+        background:rgba(168,14,14,1);
+        color:rgba(255,255,255,1);
+      }
+    }
+  }
+
+</style>

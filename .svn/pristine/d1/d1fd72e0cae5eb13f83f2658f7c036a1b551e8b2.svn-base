@@ -1,0 +1,505 @@
+<template>
+  <div>
+    <div class="resource mb24">
+      <div class="title">资源中心</div>
+      <div class="table">
+        <div class="loans-pro">
+          <div class="loans-header clearfix">
+            <div class="header-same fll">贷款人</div>
+            <div class="header-same fll">注册地区</div>
+            <div class="header-same fll">性别</div>
+            <div class="header-same fll">手机号</div>
+            <div class="header-same fll">操作</div>
+          </div>
+
+          <div class="loans-pro-item clearfix" v-for="(item,index) in tableData">
+            <div class="fll pro-item-same">{{item.borrowerName}}</div>
+            <div class="fll pro-item-same">{{item.address}}</div>
+            <div class="fll pro-item-same">{{item.borrowerSex === 0 ? '女' : '男'}}</div>
+            <div class="fll pro-item-same">{{item.phone}}</div>
+            <div class="fll pro-item-same">
+              <div class="operate" @click="look" v-if="isJoin">
+                立即查看
+              </div>
+              <div class="operate" @click="joinResource(item.borrowerId)" v-else>
+                加入资源
+              </div>
+
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div style="text-align: right">
+      <div class="page">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          background
+          :page-size="size"
+          :pager-count="5"
+          layout="prev, pager, next"
+          :total="count">
+        </el-pagination>
+      </div>
+    </div>
+
+    <div class="mask" v-show="isMask" @click="closeMask"></div>
+    <div class="contain-resource" v-show="isContain">
+      <div class="res-title clearfix">
+        <div class="w400">
+          <div class="fll">
+            <img src="../../../../static/resource/vip/vip.png" alt="" style="width: 20px;height: 19px;margin-top: 20px">
+          </div>
+          <div class="fll text1-vip">就能贷VIP会员</div>
+          <div class="fll">
+            <input type="checkbox" v-model="checked" style="margin-top: 24px;margin-left: 8px">
+          </div>
+          <div class="fll agree-fw">同意《服务条款》</div>
+        </div>
+
+      </div>
+      <div class="res-main">
+        <div class="kait">开通账户：{{this.$store.state.userInfo.phone}}</div>
+        <div class="clearfix">
+          <label class="fll">
+            <input class="vip_radio" type="radio" value="1" v-model="vipType" name="vip" style="display: none">
+            <div class="money-item">
+              <div class="money">1元/次</div>
+              <div class="dash"></div>
+              <div class="times">1次</div>
+            </div>
+          </label>
+          <label class="fll ml60">
+            <input class="vip_radio" type="radio" value="2"  v-model="vipType" name="vip" style="display: none">
+            <div class="money-item">
+              <div class="money">20元/月</div>
+              <div class="dash"></div>
+              <div class="times">不限次数</div>
+            </div>
+          </label>
+          <label class="fll ml60">
+            <input class="vip_radio" type="radio" value="3"  v-model="vipType" name="vip" style="display: none">
+            <div class="money-item">
+              <div class="money">200元/年</div>
+              <div class="dash"></div>
+              <div class="times">不限次数</div>
+            </div>
+          </label>
+        </div>
+        <div class="zf">支付方式</div>
+        <div class="con-zf clearfix">
+          <label>
+            <input class="pay" v-model="payType" value="1" type="radio" name="pay">
+            <div class="pay_type fll zf-left">
+              <img src="../../../../static/resource/vip/zfb.png" alt="">
+            </div>
+          </label>
+          <label>
+            <input class="pay" v-model="payType" value="2" type="radio" name="pay">
+            <div class="pay_type flr zf-right">
+              <img src="../../../../static/resource/vip/wx.png" alt="">
+            </div>
+          </label>
+
+        </div>
+        <div class="zf-btn" @click="pay">去支付</div>
+      </div>
+    </div>
+
+  </div>
+
+</template>
+
+<script>
+export default {
+  name: "resourceCen",
+  data(){
+      return {
+        checked:true,
+        isMask:false,
+        isContain:false,
+        tableData: [
+          {
+            borrowerName: '',
+            address: '',
+            borrowerSex:'',
+            phone:''
+          },
+        ],
+        page: 1,
+        size: 10,
+        count: 1,
+        vipType: '',
+        payType: '',
+        isJoin:true,
+      }
+  },
+  methods:{
+    handleSelectionChange(val) {
+
+    },
+    handleCurrentChange (val) {
+      this.page = val
+      this.getData()
+
+    },
+    handleSizeChange (val) {
+      this.size = val
+      this.getData()
+    },
+    //立即查看
+    look(){
+        if(this.$store.state.userInfo.vip === 1){
+          this.isJoin=false
+        }else {
+          this.isMask=true
+          this.isContain=true
+        }
+    },
+    //加入资源
+    joinResource(id) {
+      let data = new FormData()
+      data.append('borId', id)
+      data.append('agencyId', this.$store.state.userInfo.id)
+      this.$axios.post(`agencyResource/addAgencyResource`, data).then(res => {
+        if (res.status === 200) {
+          this.$message.success("成功加入")
+          this.getData()
+        }
+
+      })
+    },
+    //支付
+    pay(){
+      //付款
+      if(this.checked){
+        if(this.vipType && this.payType){
+          if(this.payType === '1'){
+            //支付宝付款
+            this.$axios.get(`alipay/pay/${this.$store.state.userInfo.phone}/${this.vipType}/${this.payType}`).then(res=>{
+              window.open(`https://www.rjkf001.com/alipay/pay/${this.$store.state.userInfo.phone}/${this.vipType}/${this.payType}`);
+            })
+          }else{
+            //微信
+            let data =new FormData()
+            data.append('phone',this.$store.state.userInfo.phone)
+            data.append('money',this.vipType)
+            this.$axios.post(`WXPay/createNative`,data).then(res=>{
+              if(res.status === 200){
+                this.weiLu=res.data.urlCode
+                this.$router.push({path:'/weixin',query:{weiLu:this.weiLu}})
+              }
+
+            })
+          }
+
+        }else{
+          this.$message.warning("请选择支付金额或支付方式")
+        }
+      }else{
+        this.$message.warning("需同意《服务条款》")
+      }
+
+
+
+    },
+    getData(){
+      this.$axios.get(`agencyResource/getBorNotByAgency/${this.$store.state.userInfo.id}/${this.page}/${this.size}`).then(res=>{
+        // res.data.list.forEach(item=>{
+        //   item.phone= item.phone.substring(0, 3) + "****" + phone.substring(7);
+        // })
+        this.tableData = res.data.list
+        this.count=res.data.totalCount
+      })
+    },
+
+  //  关闭蒙版
+    closeMask() {
+      this.isMask = false
+      this.isContain = false
+    }
+  },
+  created(){
+    this.getData()
+  }
+}
+</script>
+
+<style scoped lang="scss">
+  .w400{
+    width: 250px;
+    height: 62px;
+    margin: 0 auto;
+  }
+  .ml60{
+    margin-left: 60px;
+  }
+.resource{
+  width:944px;
+  height:648px;
+  background:rgba(255,255,255,1);
+    .title{
+      width: 100%;
+      height:66px;
+      padding-left: 56px;
+      box-sizing: border-box;
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(81,81,81,1);
+      line-height:66px;
+    }
+  .table{
+    .loans-pro{
+      padding: 0 38px;
+      box-sizing: border-box;
+      background:rgba(255,255,255,1);
+      .loans-header{
+        width:866px;
+        height:40px;
+        background:rgba(250,250,250,1);
+        .header-same{
+          text-align: center;
+          width: 173px;
+          height:14px;
+          font-size:14px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(155,155,155,1);
+          line-height:40px;
+        }
+      }
+
+      .loans-pro-item{
+        height: 52px;
+        border-bottom: 1px solid #f0f0f0;
+        .pro-item-same{
+          font-size:14px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(81,81,81,1);
+          width: 173px;
+          line-height:52px;
+          text-align: center;
+        }
+        &:hover .operate{
+          width:80px;
+          height:32px;
+          background:rgba(168,14,14,1);
+          border-radius:4px;
+          background:rgba(168,14,14,1);
+          color:rgba(255,255,255,1);
+          margin-top: 10px;
+          line-height: 32px;
+          margin-left: 50px;
+          cursor: pointer;
+        }
+
+      }
+    }
+  }
+}
+.mask{
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000;
+  opacity: 0.7;
+}
+.contain-resource{
+  position: fixed;
+  left: 50%;
+  top: 10%;
+  transform: translateX(-50%);
+  width:694px;
+  height:496px;
+  background:rgba(249,249,249,1);
+  border-radius:4px;
+  z-index: 999;
+  .res-title{
+    text-align: center;
+    width:694px;
+    height:60px;
+    background:linear-gradient(180deg,rgba(255,255,255,1) 0%,
+      rgba(247,247,247,1) 57%,
+      rgba(238,238,238,1) 100%);
+    .text1-vip{
+      font-size:16px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(208,172,86,1);
+      line-height:60px;
+    }
+    .agree-fw{
+      font-size:10px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(155,155,155,1);
+      line-height:60px;
+    }
+  }
+  .res-main{
+    width:694px;
+    height:435px;
+    background:rgba(249,249,249,1);
+    padding: 29px 90px 0 90px;
+    box-sizing: border-box;
+    .vip_radio:checked+.money-item {
+      box-shadow:0px 4px 8px 0px rgba(208,172,86,0.4);
+      border:1px solid rgba(208,172,86,1);
+    }
+    .vip_radio:checked+.money-item::after {
+      position: absolute;
+      content: '';
+      width: 0;
+      height: 0;
+      top: 0;
+      right: 0;
+      color: #ffffff;
+      border: 13px solid rgba(208,172,86,1);
+      border-bottom-color: transparent;
+      border-left-color: transparent;
+    }
+    .vip_radio:checked+.money-item::before {
+      position: absolute;
+      content: '';
+      width: 4px;
+      height: 4px;
+      top: 1px;
+      right: 3px;
+      z-index: 998;
+      border: 2px solid #fff;
+      border-top-color: transparent;
+      border-left-color: transparent;
+      transform: rotate(45deg);
+    }
+    .kait{
+      height:14px;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(81,81,81,1);
+      line-height:14px;
+      margin-bottom: 16px;
+    }
+    .money-item{
+      position: relative;
+      width:130px;
+      height:150px;
+      background:rgba(255,255,255,1);
+      border:1px solid rgba(217,217,217,1);
+      padding: 54px 0 14px 0;
+      box-sizing: border-box;
+      text-align: center;
+      cursor: pointer;
+      .money{
+        height:55px;
+        font-size:24px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        border-bottom: 1px dashed #f0f0f0;
+      }
+      .times{
+        margin-top: 10px;
+        height:14px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:14px;
+      }
+    }
+    .zf{
+      width:56px;
+      height:14px;
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(81,81,81,1);
+      line-height:14px;
+      margin-top: 32px;
+      margin-bottom: 24px;
+    }
+    .con-zf{
+      width: 360px;
+      height: 60px;
+      margin: 0 auto;
+      .pay {
+        display: none;
+      }
+      .pay:checked+.pay_type {
+        box-shadow:0px 4px 8px 0px rgba(208,172,86,0.4);
+        border-radius:4px;
+        border:1px solid rgba(208,172,86,1);
+      }
+      .pay:checked+.pay_type::after {
+        position: absolute;
+        content: '';
+        top: -8px;
+        right: -8px;
+        width: 16px;
+        height: 16px;
+        background: #fff;
+        border-radius: 50%;
+        border:1px solid rgba(208,172,86,1);
+      }
+      .pay:checked+.pay_type::before {
+        position: absolute;
+        content: '';
+        top: -5px;
+        right: -2px;
+        z-index: 998;
+        width: 4px;
+        height: 6px;
+        border:1px solid rgba(208,172,86,1);
+        border-top-color: transparent;
+        border-left-color: transparent;
+        transform: rotate(45deg);
+      }
+      .pay_type {
+        position: relative;
+      }
+      .zf-left,.zf-right{
+        position: relative;
+        cursor: pointer;
+        padding: 12px 26px;
+        width:140px;
+        box-sizing: border-box;
+        height:56px;
+        background:rgba(255,255,255,1);
+        border-radius:4px;
+        border:1px solid rgba(217,217,217,1);
+      }
+      .zf-active{
+        position:absolute;
+        border:1px solid rgba(208,172,86,1);
+        box-shadow:0px 4px 8px 0px rgba(208,172,86,0.4);
+        &::after{
+
+        }
+
+      }
+    }
+    .zf-btn{
+      cursor: pointer;
+      width:100px;
+      height:40px;
+      background:rgba(208,172,86,1);
+      font-size:14px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(255,255,255,1);
+      line-height:40px;
+      letter-spacing:1px;
+      text-align: center;
+      margin: 30px auto;
+    }
+  }
+}
+</style>

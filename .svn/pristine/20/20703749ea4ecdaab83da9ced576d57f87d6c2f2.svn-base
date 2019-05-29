@@ -1,0 +1,605 @@
+<template>
+  <div>
+    <div class="person">
+      <div class="clearfix title">
+        <div class="title-text fll">个人信息</div>
+        <div>
+          <div class="flr edit" v-if="!isEdit" @click="edit">编辑</div>
+          <div v-else class="clearfix">
+            <div class="flr edit"  @click="abandonPerson" style="margin-left: 10px">放弃</div>
+            <div class="flr edit"  @click="savePerson">保存</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="person-item clearfix">
+        <div class="fll person-text">姓名：</div>
+        <input type="text" :disabled="!isEdit" class="fll ml20 name" v-model="formData.brokerName">
+      </div>
+      <div class="person-item clearfix">
+        <div class="fll person-text">性别：</div>
+        <div class="fll radio">
+          <el-radio-group v-model="formData.sex" :disabled="!isEdit">
+            <el-radio :label="1">男</el-radio>
+            <el-radio :label="0">女</el-radio>
+          </el-radio-group>
+        </div>
+      </div>
+      <div class="person-item clearfix">
+        <div class="fll person-text">年龄：</div>
+        <input type="text" :disabled="!isEdit" class="fll ml20" v-model="formData.age" style="width: 100px;" @change="checkAge">
+        <div class="fll year-text">岁</div>
+      </div>
+      <div class="person-item clearfix">
+        <div class="fll person-text">身份证号：</div>
+        <input type="text" :disabled="!isEdit" class="fll ml20 name" v-model="formData.identity">
+      </div>
+      <div class="person-item clearfix">
+        <div class="fll person-text">擅长业务：</div>
+        <div class="business-wrap fll ml20 clearfix">
+          <div class="fll tags-item" v-for="(item,index) in formData.businessList">{{item.business}}</div>
+          <div class="business fll" @click="goodMask" :disabled="!isEdit"><div class="my-upload-icon">+</div></div>
+        </div>
+      </div>
+      <div class="person-item clearfix">
+        <div class="fll person-text">个人介绍：</div>
+        <textarea name="" id="" :disabled="!isEdit" cols="30" rows="10" class="fll ml20" style="resize:none;width: 250px;height:100px;border-color: #ccc;padding: 8px;box-sizing: border-box" v-model="formData.introduction"></textarea>
+      </div>
+
+      <div class="person-item clearfix">
+        <div class="fll person-text">业务地区：</div>
+        <el-select style="margin-left: 20px;width: 100px;" :disabled="!isEdit" v-model="formData.businessArea">
+          <el-option
+            v-for="item in cities"
+            :key="item.hid"
+            :label="item.cname"
+            :value="item.hid"
+            style="width: 100px;"
+          >
+          </el-option>
+        </el-select>
+      </div>
+
+      <div class="person-item clearfix">
+        <div class="fll person-text">从业年限：</div>
+        <input type="text" :disabled="!isEdit" class="fll ml20" style="width: 100px;" v-model="formData.workingYears">
+        <div class="fll year-text">年</div>
+      </div>
+      <div class="person-item clearfix">
+        <div class="fll person-text">所属机构：</div>
+        <input type="text" :disabled="!isEdit" class="fll ml20 same" v-model="formData.company">
+      </div>
+      <div class="person-item clearfix">
+        <div class="fll person-text">所在地：</div>
+        <el-select style="margin-left: 20px;width: 100px;"  @change="getCity" :disabled="!isEdit" v-model="formData.address1">
+          <el-option
+            v-for="item in provinceData"
+            :key="item.pid"
+            :label="item.provincial"
+            :value="item.pid"
+            style="width: 100px;"
+          >
+          </el-option>
+        </el-select>
+        <el-select style="margin-left: 10px;width: 100px;" :disabled="!isEdit" v-model="formData.address2">
+          <el-option
+            style="width: 100px;"
+            v-for="item in cityData"
+            :key="item.cid"
+            :label="item.city"
+            :value="item.cid">
+          </el-option>
+        </el-select>
+      </div>
+      <div class="person-item clearfix">
+        <div class="fll person-text">手机号码：</div>
+        <input type="text" :disabled="true" class="fll ml20 same" v-model="formData.phone">
+      </div>
+      <div class="person-item clearfix">
+        <div class="fll person-text">邮箱：</div>
+        <input type="text" :disabled="!isEdit" class="fll ml20 same" v-model="formData.email">
+      </div>
+    </div>
+    <div class="mask" v-if="isMask" @click="closeMask"></div>
+    <div class="goodBuss" v-if="isBusiness">
+      <div class="buss-title">编辑擅长业务标签</div>
+      <div class="buss-tag">
+        <div class="tag-title">常用业务标签</div>
+        <div class="tag-contain clearfix">
+          <div :class="businessNameList.indexOf(item.business) !== -1? 'tag tag-active fll clearfix' : 'tag fll clearfix'"
+               @click="HandleSelsectTags(item)"
+               v-for="(item,index) in tags">
+            +{{item.business}}
+          </div>
+        </div>
+        <div class="always">已添加标签</div>
+        <div class="select-tag-contain clearfix" >
+          <div class="select-tag fll" v-for="(item, index) in businessList">
+            <span class="jian" @click="removeSelectTag(index)">-</span><span class="tag-item">{{item.business}}</span>
+          </div>
+        </div>
+        <div class="clearfix save-main">
+          <button class="save" @click="saveTag">保存</button>
+          <button class="cancel" @click="cancelTag">取消</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</template>
+
+<script>
+  import {mapState} from 'vuex'
+  export default {
+    data () {
+      return {
+        isEdit:false,
+        //省
+        provinceData:[
+          {
+            pid:'',
+            provincial:'',
+          }
+        ],
+        //市 区
+        cityData:[
+          {
+            cid:'',
+            city:'',
+            pid:'',
+          }
+        ],
+        formData:{
+          brokerName:'',
+          identity:'',
+          phone:'',
+          sex:'',
+          introduction:'',
+          email:'',
+          address1:'',
+          address2:'',
+          businessArea:'',//业务地区
+          workingYears:'',
+          company:'',
+          businessList:[],
+        },
+        businessNameList: [],  // 已选的tag的name
+        businessList: [], // 暂存 选中的tag
+        isMask:false,
+        isBusiness:false,
+        cities:[]
+
+      };
+    },
+    computed: {
+      ...mapState(['userInfo'])
+    },
+    methods:{
+      // 校验年龄
+      checkAge() {
+        console.log("asd")
+        this.form.borrowerAge = this.form.borrowerAge.replace(/^(0+)|[^\d]+/g,'')
+        let age = parseInt(this.form.borrowerAge)
+        if (age < 18 || age > 150) {
+          this.$message.info('年龄只能在18到150之间')
+          this.form.borrowerAge=''
+        }
+      },
+      closeMask(){
+        this.isMask=false
+        this.isBusiness=false
+      },
+      //编辑
+      edit(){
+        this.isEdit=!this.isEdit
+      },
+      //保存
+      savePerson(){
+        let data = new FormData()
+        for(let item in this.organMessData){
+          data.append(item, this.organMessData[item])
+        }
+        this.$axios.post('userAgency/updateUserAgency',data).then(res=>{
+          console.log('aaaa',res)
+          this.$message.success(res.msg)
+          this.isEdit=!this.isEdit
+        })
+      },
+      //放弃修改
+      abandonPerson(){
+        this.getPersonal()
+        this.isEdit=false
+      },
+      //保存标签
+      saveTag(){
+        this.formData.businessList = [...this.businessList]
+        this.isMask=false
+        this.isBusiness=false
+      },
+      //取消标签
+      cancelTag(){
+        this.isMask=false
+        this.isBusiness=false
+      },
+      //获取省
+      getProvince(){
+        this.$axios.get('city/getAllProvincial').then(res=>{
+          this.provinceData=res
+        })
+      },
+      //获取 市 区
+      getCity(val){
+        this.$axios.get(`city/getAllCity/${val}`).then(res=>{
+          this.cityData=res
+        })
+      },
+      //获取业务地区
+      getBusinessCity(){
+        this.$axios.get('city/getAHotCity').then(res=>{
+          // this.cities= res.filter(item=>{
+          //   return item.hid !==0
+          // })
+          this.cities=res
+        })
+      },
+      goodMask(){
+        this.businessList = [...this.formData.businessList]
+        this.businessNameList = this.formData.businessList.map(item => item.business)
+        this.isMask=true
+        this.isBusiness=true
+      },
+      // 添加选择的业务标签
+      HandleSelsectTags(item) {
+        if (item.business === '不限') {
+          let index = this.businessNameList.indexOf(item.business)
+          if ( index === -1) {
+            this.businessList = [item]
+            this.businessNameList = ['不限']
+          } else {
+            this.businessList = []
+            this.businessNameList = []
+          }
+        } else {
+          let buxian = this.businessNameList.indexOf('不限')
+          if (buxian !== -1)  {
+            this.businessList.splice(buxian, 1)
+            this.businessNameList.splice(buxian, 1)
+          }
+          let index = this.businessNameList.indexOf(item.business)
+          if ( index !== -1) {
+            this.businessList.splice(index, 1)
+            this.businessNameList.splice(index, 1)
+          } else {
+            this.businessList.push(item)
+            this.businessNameList.push(item.business)
+          }
+        }
+      },
+      //获取擅长业务标签
+      getGoodBusiness(){
+        this.$axios.get('business/getAllBusiness').then(res=>{
+          this.tags=res
+        })
+      },
+      // 移除选中的业务标签
+      removeSelectTag(index){
+        this.businessList.splice(index, 1)
+        this.businessNameList.splice(index, 1)
+      },
+      //初始化经纪人个人信息
+      getPersonal(){
+        this.$axios.get(`userBroker/getUserBrokerById/${this.userInfo.id}`).then(res=>{
+          console.log('ger',res)
+          this.formData=res.userBroker
+          this.formData.businessList=res.businessList
+          this.getCity(this.formData.address1)
+        })
+      }
+
+    },
+    created(){
+      this.getProvince()
+      this.getGoodBusiness()
+      this.getPersonal()
+      this.getBusinessCity()
+    }
+
+  }
+</script>
+
+<style scoped lang="scss">
+  .ml20{
+    margin-left: 20px;
+  }
+  .person{
+    width:882px;
+    background:rgba(255,255,255,1);
+    .title{
+      width: 100%;
+      height:70px;
+      padding-left: 54px;
+      padding-right: 90px;
+      box-sizing: border-box;
+      .title-text{
+        font-size:16px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(81,81,81,1);
+        line-height:70px;
+      }
+      .edit{
+        height:70px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(208,172,86,1);
+        line-height:70px;
+        cursor: pointer;
+      }
+    }
+
+    .person-item{
+      padding: 15px 54px 15px 30px;
+      box-sizing: border-box;
+      border-bottom: 1px solid #eee;
+      .year-text{
+        width:14px;
+        height:14px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:40px;
+        margin-left: 10px;
+      }
+      .person-text{
+        text-align: right;
+        width: 90px;
+        height:43px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:43px;
+      }
+      input{
+        height: 42px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 14px 10px;
+        box-sizing: border-box;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(81,81,81,1);
+        line-height:42px;
+      }
+      .name,.age{
+        width: 200px;
+        height: 42px;
+      }
+      .area{
+        width: 100px;
+        height: 42px;
+      }
+      .same{
+        width: 220px;
+        height: 42px;
+      }
+      .radio{
+        margin-top: 9px;
+        margin-left: 19px;
+      }
+      /deep/ .el-radio__label{
+        color: #aaa;
+      }
+      /deep/ .is-checked .el-radio__inner{
+        border-color: #333;
+        background: #fff;
+        &:after{
+          background-color: #333;
+        }
+      }
+      /deep/ .is-checked+.el-radio__label {
+        color: #333;
+      }
+      /deep/ .el-radio__inner:hover{
+        border-color: #333;
+      }
+      .business-wrap {
+        width: 500px;
+      }
+      .business{
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 3px;
+        border: 1px solid #ccc;
+        position: relative;
+        .my-upload-icon {
+          position: absolute;
+          top: 37%;
+          left: 50%;
+          color: #888;
+          font-size:40px;
+          font-weight: lighter;
+        }
+      }
+      .tags-item{
+        width: auto;
+        padding: 0 3px;
+        box-sizing: border-box;
+        height:40px;
+        background:rgba(208,172,86,1);
+        border-radius:4px;
+        line-height: 40px;
+        margin-right: 8px;
+        font-size:14px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        margin-bottom: 8px;
+      }
+    }
+  }
+  .mask{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #000;
+    opacity: 0.5;
+    z-index: 100;
+  }
+  .goodBuss{
+    position: fixed;
+    left: 50%;
+    top: 15%;
+    transform: translateX(-50%);
+    width:598px;
+    min-height:409px;
+    z-index: 999;
+    background:rgba(255,255,255,1);
+    .buss-title{
+      width:598px;
+      height:40px;
+      background:rgba(208,172,86,1);
+      text-align: center;
+      font-size:16px;
+      font-family:PingFangSC-Medium;
+      font-weight:500;
+      color:rgba(255,255,255,1);
+      line-height:40px;
+    }
+    .buss-tag{
+      position: relative;
+      padding: 20px 30px;
+      box-sizing: border-box;
+      background:rgba(255,255,255,1);
+      .tag-title{
+        height:14px;
+        font-size:14px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(81,81,81,1);
+        line-height:14px;
+        margin-bottom: 14px;
+      }
+      .tag-contain{
+        width:538px;
+        min-height:144px;
+        border:1px solid rgba(217,217,217,1);
+        .tag {
+          box-sizing: border-box;
+          cursor: pointer;
+          height:28px;
+          text-align: center;
+          padding: 5px;
+          margin:10px 15px;
+          font-size:12px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(81,81,81,1);
+          line-height:15px;
+          border-radius:14px;
+          border:1px solid rgba(217,217,217,1);
+        }
+        .tag-active {
+          color: #fff;
+          background:rgba(208,172,86,1);
+        }
+      }
+      .select-tag-contain{
+        box-sizing: border-box;
+        width:538px;
+        min-height: 30px;
+        padding: 5px;
+
+        .select-tag {
+          margin: 5px 10px;
+
+          .jian {
+            display: inline-block;
+            width: 19px;
+            height: 19px;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 500;
+            line-height: 16px;
+            color: #fff;
+            background:rgba(208,172,86,1);
+            user-select: none;
+            cursor: pointer;
+          }
+          .tag-item {
+            display: inline-block;
+            box-sizing: border-box;
+            cursor: pointer;
+            height:28px;
+            text-align: center;
+            padding: 5px;
+            margin:0 5px;
+            font-size:12px;
+            font-family:PingFangSC-Regular;
+            font-weight:400;
+            color:#fff;
+            background:rgba(208,172,86,1);
+            line-height:15px;
+            border-radius:14px;
+            border:1px solid rgba(217,217,217,1);
+          }
+        }
+      }
+      .always{
+        margin-top: 20px;
+        height:14px;
+        font-size:14px;
+        font-family:PingFangSC-Medium;
+        font-weight:500;
+        color:rgba(81,81,81,1);
+        line-height:14px;
+      }
+      .save-main{
+        height: 40px;
+        width: 100%;
+        text-align: center;
+        .save{
+          cursor: pointer;
+          width:86px;
+          height:40px;
+          background:rgba(208,172,86,1);
+          border-radius:4px;
+          font-size:14px;
+          outline: none;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(255,255,255,1);
+          line-height:40px;
+          text-align: center;
+          border: none;
+        }
+        .cancel{
+          cursor: pointer;
+          margin-left: 40px;
+          width:86px;
+          height:40px;
+          background:rgba(217,217,217,1);
+          border-radius:4px;
+          font-size:14px;
+          font-family:PingFangSC-Regular;
+          font-weight:400;
+          color:rgba(155,155,155,1);
+          line-height:40px;
+          text-align: center;
+          border: none;
+          outline: none;
+        }
+      }
+
+
+    }
+  }
+</style>
