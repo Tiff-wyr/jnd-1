@@ -350,7 +350,7 @@ export default {
         // brokerId:'',//经纪人编号
         brokerName: "", //经纪人姓名
         phone: "", //手机号
-        image: "", //图片
+        image: "http://jnd-image.oss-cn-beijing.aliyuncs.com/image/17638106794.png", //图片
         sex: 1, //性别
         introduction: "", //个人简介
         job: "", //部门职位
@@ -484,9 +484,11 @@ export default {
               this.time = 60;
             }
           }, 1000);
+          console.log(1)
           this.$axios
             .get(`/base/getRegisterCode/${this.formData.phone}`)
             .then(res => {
+          console.log(res)
               if (res.status !== 200) {
                 this.$message.warning(res.msg);
                 clearInterval(timer);

@@ -3,12 +3,12 @@
     <div class="img">
       <el-carousel trigger="click">
         <el-carousel-item v-for="(item, index) in bannerList" :key="item" @click.native="handleBanner(index)">
-          <div :style="{ width: 100 + '%', height: 448 + 'px', background: 'url(' + item + ') center center no-repeat' }"></div>
+          <div :style="{ width: 100 + '%', height: 100 + '%', background: 'url(' + item + ') top center no-repeat', backgroundSize: '100% 100%' }"></div>
         </el-carousel-item>
       </el-carousel>
       <div class="apply">
         <div class="title">贷款申请</div>
-        <el-form :model="borrowerData" ref="borrowerData" :rules="borrowerDataRules" style="margin-left: 60px;">
+        <el-form :model="borrowerData" ref="borrowerData" :rules="borrowerDataRules" style="margin-left: 40px;">
           <el-form-item prop="borrowerName">
             <el-input placeholder="请输入姓名" v-model="borrowerData.borrowerName" :disabled="isUpdate" class="name-input"></el-input>
             <el-radio-group v-model="borrowerData.sex" :disabled="isUpdate" style="margin-left: 10px;">
@@ -17,7 +17,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item class="input-item" prop="loanAmount">
-            <el-input placeholder="贷款金额（万元）" v-model="borrowerData.loanAmount"></el-input>
+            <el-input placeholder="贷款金额（万元）" v-model="borrowerData.loanAmount" style="width: 256px"></el-input>
           </el-form-item>
 
           <el-form-item prop="address">
@@ -52,7 +52,7 @@
             </el-select>
           </el-form-item>
           <el-form-item class="input-item" prop="phone">
-            <el-input type="text" v-model="borrowerData.phone" placeholder="手机号" :disabled="isUpdate"></el-input>
+            <el-input type="text" v-model="borrowerData.phone" placeholder="手机号" :disabled="isUpdate" style="width: 256px"></el-input>
           </el-form-item>
           <el-form-item prop="code">
             <el-input
@@ -175,12 +175,12 @@
                     <span>利息</span>
                   </li>
                   <li>
-                    <span>{{ item.producLoanLength }} %</span>
+                    <span>{{ item.producLoanLength }}</span>
                     <br>
                     <span>放款时间</span>
                   </li>
                   <li>
-                    <span>{{ item.productLife }} %</span>
+                    <span>{{ item.productLife }}</span>
                     <br>
                     <span>使用年限</span>
                   </li>
@@ -212,18 +212,10 @@
               <div class="agent-table fll">
                 <div class="clearfix">
                   <div class="fll align mr42" v-for="(item,index) in agentData" :key="index">
-                    <img
-                      v-if="item.image"
-                      :src="item.image"
-                      style="width: 100px;height: 98px;cursor: pointer"
+                    <div
+                      :style="{width: '100px', height: '100px', cursor: 'pointer', backgroundImage: 'url(' + item.image + ')', backgroundSize: '100% auto', 'background-position-y': '-16px'}"
                       @click="agDetail(item.brokerId)"
-                    >
-                    <img
-                      v-else
-                      src="/static/resource/pic/agent.png"
-                      style="width: 100px;height: 98px;cursor: pointer"
-                      @click="agDetail(item.brokerId)"
-                    >
+                    ></div>
                     <div class="agent-name">{{item.brokerName}}</div>
                     <div class="agent-job">金融顾问</div>
                   </div>
@@ -279,21 +271,21 @@
                 <img src="../../static/resource/Group16Copy.png" alt="">
                 <div class="loans-text">装修贷款</div>
                 <img src="../../static/resource/Group20Copy.png" alt="">
-                <div class="loans-text">装修贷款</div>
+                <div class="loans-text">创业贷款</div>
                 <img src="../../static/resource/Group21Copy.png" alt="">
-                <div class="loans-text">装修贷款</div>
+                <div class="loans-text">购车贷款</div>
                 <img src="../../static/resource/Group27Copy.png" alt="">
-                <div class="loans-text">装修贷款</div>
+                <div class="loans-text">购房贷款</div>
               </div>
               <div class="loans-right fll">
                 <img src="../../static/resource/Group17Copy.png" alt="">
-                <div class="loans-text">装修贷款</div>
+                <div class="loans-text">资金周转</div>
                 <img src="../../static/resource/Group19Copy.png" alt="">
-                <div class="loans-text">装修贷款</div>
+                <div class="loans-text">经营贷款</div>
                 <img src="../../static/resource/Group22Copy.png" alt="">
-                <div class="loans-text">装修贷款</div>
+                <div class="loans-text">旅行贷款</div>
                 <img src="../../static/resource/icon.png" alt="">
-                <div class="loans-text">装修贷款</div>
+                <div class="loans-text">结婚贷款</div>
               </div>
             </div>
             <div class="message clearfix">
@@ -340,17 +332,17 @@ export default {
         if (validaterLoanAmount(value)) {
           callback();
         } else {
-          callback(new Error("贷款金额格式错误"));
+          callback(new Error("×"));
         }
       } else {
-        callback(new Error("贷款金额不能为空"));
+        callback(new Error("×"));
       }
     };
     const validateAddress = (rule, value, callback) => {
       if (this.borrowerData.address1 && this.borrowerData.address2) {
         callback();
       } else {
-        callback(new Error("请选择地址"));
+        callback(new Error("×"));
       }
     };
     const validatePhone = (rule, value, callback) => {
@@ -358,10 +350,10 @@ export default {
         if (validaterPhone(value)) {
           callback();
         } else {
-          callback(new Error("手机号格式错误"));
+          callback(new Error("×"));
         }
       } else {
-        callback(new Error("手机号不能为空"));
+        callback(new Error("×"));
       }
     };
     const validateName = (rule, value, callback) => {
@@ -369,10 +361,10 @@ export default {
         if (validaterName(value)) {
           callback();
         } else {
-          callback(new Error("姓名格式错误"));
+          callback(new Error("×"));
         }
       } else {
-          callback(new Error("姓名不能为空"));
+          callback(new Error("×"));
       }
     };
     return {
@@ -397,17 +389,17 @@ export default {
         code: ""
       },
       borrowerDataRules: {
-        code: [{ required: true, message: '验证码不能为空', trigger: "change" }],
+        code: [{ required: true, message: '×', trigger: "blur" }],
         borrowerName: [
-          { required: true, trigger: "change", validator: validateName }
+          { required: true, trigger: "blur", validator: validateName }
         ],
         loanAmount: [
-          { required: true, trigger: "change", validator: validateLoanAmount }
+          { required: true, trigger: "blur", validator: validateLoanAmount }
         ],
         address: [
-          { required: true, trigger: "change", validator: validateAddress }
+          { required: true, trigger: "blur", validator: validateAddress }
         ],
-        phone: [{ required: true, trigger: "change", validator: validatePhone }]
+        phone: [{ required: true, trigger: "blur", validator: validatePhone }]
       },
       //省
       provinceData: [],
@@ -663,7 +655,7 @@ export default {
 </script>
 <style lang="scss">
 .el-carousel, .el-carousel__container {
-  height: 448px!important;
+  height: 368px!important;
   min-width: 1200px;
 }
 .el-dropdown-menu__item {
@@ -684,7 +676,16 @@ export default {
     font-size: 16px;
   }
   .el-form-item {
-    margin-bottom: 18px;
+    margin-bottom: 10px;
+  }
+  .el-form-item__error {
+    top: 50%;
+    right: 10px;
+    left: auto;
+    margin-top: -14px;
+    font-size: 20px;
+    font-weight: bold;
+    color: red
   }
 }
 </style>
@@ -758,19 +759,19 @@ $gray: #333;
 .home {
   .img {
     position: relative;
-    height:448px;
+    height:368px;
     img {
       width: 100%;
-    height:448px;
+      height: 368px;
     }
     .apply {
       position: absolute;
-      left: 200px;
+      left: 12.5%;
       top: 0;
-      width: 376px;
+      width: 336px;
       height: 100%;
       z-index: 998;
-      background: rgba(0,0,0,.5);
+      background: rgba(36,31,33,.95);
       padding-top: 5px;
       box-sizing: border-box;
       font-family: PingFangSC-Regular;
@@ -784,9 +785,6 @@ $gray: #333;
       }
       .name-input {
         width: 120px;
-      }
-      .input-item {
-        width: 256px;
       }
       .send {
         margin-left: 12px;

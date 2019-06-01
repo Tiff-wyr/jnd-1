@@ -1,12 +1,5 @@
 <template>
   <div>
-    <div class="organ">
-      <el-carousel trigger="click">
-        <el-carousel-item v-for="item in bannerList" :key="item">
-          <div :style="{ width: 100 + '%', height: 448 + 'px', background: 'url(' + item + ') center center no-repeat' }"></div>
-        </el-carousel-item>
-      </el-carousel>
-    </div>
     <div class="wrappy">
       <div class="w1200">
         <div class="clearfix">
@@ -79,13 +72,11 @@
                 :src="item.image"
                 v-if="item.image"
                 alt=""
-                style="width: 128px;height: 128px;border-radius: 50%;display: inline-block;"
               >
               <img
                 src="/static/resource/pic/agent.png"
                 v-else
                 alt=""
-                style="width: 128px;height: 128px;border-radius: 50%"
               >
             </div>
             <div class="fll ml36">
@@ -127,13 +118,11 @@
                 v-if="item.image"
                 alt="头像"
                 title="头像"
-                style="width: 128px;height: 128px;border-radius: 50%"
               >
               <img
                 src="/static/resource/pic/agent.png"
                 v-else
                 alt="头像"
-                style="width: 128px;height: 128px;border-radius: 50%"
               >
             </div>
             <div class="fll ml36">
@@ -163,6 +152,7 @@
         <footerSame></footerSame>
       </div>
     </div>
+    <router-view></router-view>
     <bottomTap></bottomTap>
   </div>
 </template>
@@ -178,6 +168,7 @@ import banner01 from '@/assets/banner01.png'
 import banner02 from '@/assets/banner02.png'
 import banner03 from '@/assets/banner03.png'
 const bannerList = [banner01, banner02, banner03]
+import router from "../router/index";
 export default {
   name: "Agent",
   components: {
@@ -220,14 +211,14 @@ export default {
         good: ""
       },
       pn: 1,
-      page: 5,
+      page: 10,
       count: 1,
       Searchpn: 1,
-      Searchpage: 5,
+      Searchpage: 10,
       Searchcount: 1,
       listQuery: {
         page: 1,
-        pageSize: 5,
+        pageSize: 10,
         roleId: 2,
         q: ''
       }
@@ -236,27 +227,34 @@ export default {
   watch: {
     "query.city": function(val) {
       this.pn = 1;
-      this.page = 5;
+      this.page = 10;
       this.isJianSuo = true;
       this.getCondition();
     },
     "query.loan": function(val) {
       this.pn = 1;
-      this.page = 5;
+      this.page = 10;
       this.isJianSuo = true;
       this.getCondition();
     },
     "query.business": function(val) {
       this.pn = 1;
-      this.page = 5;
+      this.page = 10;
       this.isJianSuo = true;
       this.getCondition();
     },
     "query.good": function(val) {
       this.pn = 1;
-      this.page = 5;
+      this.page = 10;
       this.isJianSuo = true;
       this.getCondition();
+    },
+    '$route': function(val) {
+      console.log(val)
+      if (val.path === '/home' && val.query.login === 1) {
+        this.isMask = true;
+        this.isContain = true;
+      }
     }
   },
   methods: {
@@ -606,10 +604,16 @@ export default {
   background: rgba(255, 255, 255, 1);
   padding: 26px 40px;
   box-sizing: border-box;
-  img {
+  .pic {
     width: 128px;
     height: 128px;
     border-radius: 50%;
+    overflow: hidden;
+    text-align: center;
+    img {
+      width: 100%;
+      transform: translateY(-14px);
+    }
   }
   .adviser-name {
     height: 20px;

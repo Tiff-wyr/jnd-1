@@ -1,12 +1,5 @@
 <template>
   <div>
-    <div class="organ">
-      <el-carousel trigger="click">
-        <el-carousel-item v-for="item in bannerList" :key="item">
-          <div :style="{ width: 100 + '%', height: 448 + 'px', background: 'url(' + item + ') center center no-repeat' }"></div>
-        </el-carousel-item>
-      </el-carousel>
-    </div>
     <div class="wrappy">
       <div class="w1200">
         <div class="clearfix">
@@ -63,18 +56,18 @@
           </div>
           <div class="organ-item clearfix mb30" v-for="(item,index) in formData" :key="index">
             <div class="fll align fs img-box">
-              <img
-                :src="item.agency.agencyLogo"
-                v-if="item.agency.agencyLogo"
-                alt=""
-                style="width: 128px;height: 128px;border-radius: 50%"
-              >
-              <img
-                src="/static/resource/pic/organ.png"
-                v-else
-                alt=""
-                style="width: 128px;height: 128px;border-radius: 50%"
-              >
+              <div class="logo">
+                <img
+                  :src="item.agency.agencyLogo"
+                  v-if="item.agency.agencyLogo"
+                  alt=""
+                >
+                <img
+                  src="/static/resource/pic/organ.png"
+                  v-else
+                >
+              </div>
+              
               <div class="name">{{item.agency.agencyName}}</div>
             </div>
             <div class="fll organ-info">
@@ -89,7 +82,7 @@
                   <a
                     :href="'http://' + item.agency.agencyURL"
                     target="_blank"
-                  >网址：&nbsp; {{item.agency.agencyURL}}</a>
+                  >网址：&nbsp; {{item.agency.agencyURL ? item.agency.agencyURL : ''}}</a>
                 </div>
               </div>
               <div class="desc">机构简介：&nbsp;{{item.agency.agencyIntroduction}}</div>
@@ -157,13 +150,11 @@
                 :src="item.agencyLogo"
                 v-if="item.agencyLogo"
                 alt=""
-                style="width: 128px;height: 128px;border-radius: 50%"
               >
               <img
                 src="/static/resource/pic/organ.png"
                 v-else
                 alt=""
-                style="width: 128px;height: 128px;border-radius: 50%"
               >
               <div class="name" v-html="item.agencyName">{{item.agencyName}}</div>
             </div>
@@ -278,10 +269,10 @@ export default {
       formData: [],
       cityUp: false, // 城市是否展开
       page: 1,
-      size: 5,
+      size: 10,
       count: 100,
       Searchpn: 1,
-      Searchpage: 5,
+      Searchpage: 10,
       Searchcount: 1,
       cities: [],
       loans: [],
@@ -302,14 +293,14 @@ export default {
   watch: {
     "query.city": function(val) {
       this.page = 1;
-      this.size = 5;
+      this.size = 10;
       this.isJianSuo = true;
       this.searchCon = "";
       this.getCondition();
     },
     "query.loan": function(val) {
       this.page = 1;
-      this.size = 5;
+      this.size = 10;
       this.isJianSuo = true;
       this.searchCon = "";
       if (val === "1") {
@@ -323,10 +314,13 @@ export default {
     },
     "query.business": function(val) {
       this.page = 1;
-      this.size = 5;
+      this.size = 10;
       this.isJianSuo = true;
       this.searchCon = "";
       this.getCondition();
+    },
+    '$route': function(val) {
+      console.log(val)
     }
   },
   methods: {
@@ -670,13 +664,20 @@ export default {
   }
   .img-box {
     width: 128px;
+    .logo {
+      width: 100%;
+      height: 128px;
+      line-height: 128px;
+      border-radius: 50%;
+      overflow: hidden;
+      text-align: center;
+      img {
+        width: 100%;
+      }
+    }
   }
   .organ-info {
     width: calc(100% - 128px);
-  }
-  img {
-    width: 128px;
-    height: 128px;
   }
   .name {
     text-align: center;

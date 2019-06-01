@@ -68,11 +68,11 @@
       </el-form-item>
       <el-form-item label="机构网址" prop="agencyURL">
         <el-input v-if="isEdit" v-model="organMessData.agencyURL" class="input-item"></el-input>
-        <span v-else>{{ resultData.agencyURL }}</span>
+        <span v-else>{{ resultData.agencyURL ? resultData.agencyURL : '' }}</span>
       </el-form-item>
       <el-form-item label="所属公司" prop="companyOwned">
         <el-input v-if="isEdit" v-model="organMessData.companyOwned" class="input-item"></el-input>
-        <span v-else>{{ resultData.companyOwned }}</span>
+        <span v-else>{{ resultData.companyOwned ? resultData.companyOwned : '' }}</span>
       </el-form-item>
       <el-form-item label="所在地区" prop="address">
         <div v-if="isEdit">

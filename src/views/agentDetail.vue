@@ -662,6 +662,10 @@ export default {
   .input-item {
     width: 210px;
   }
+  .el-button:focus, .el-button:hover {
+    background: #a80e0e;
+    color: #fff;
+  }
   // .el-form-item {
   //   margin-bottom: 16px;
   // }

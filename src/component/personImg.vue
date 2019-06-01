@@ -55,6 +55,7 @@ export default {
       this.uploadData.phone = this.phone;
       const isJPG = file.type === "image/jpeg" || file.type === "image/png";
       const isLt2M = file.size / 1024 / 1024 < 1;
+      console.log(isLt2M, 'false, 提示过大，true 通过验证')
       if (!isLt2M) {
         this.$message.warning("上传头像图片大小不能超过 1MB!");
       }

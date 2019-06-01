@@ -23,12 +23,13 @@
       <div class="w1200">
         <div class="link-wrap clearfix">
           <div class="fll">
-            <img
-              src="/static/1.png"
-              alt=""
-              style="width: 45px;line-height: 60px;margin-top: 7px;float: left"
-            >
-            <div class="text fll">9能贷</div>
+            <a href="#/home">
+              <img
+                src="/static/1.png"
+                style="margin-top: 8px;float: left"
+              >
+            </a>
+            
           </div>
           <div class="flr">
             <router-link

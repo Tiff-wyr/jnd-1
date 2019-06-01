@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div class="image">
-      <img src="../../static/resource/loanimg.png" alt="">
-    </div>
     <div class="wrappy">
       <div class="w1200">
         <div class="clearfix">

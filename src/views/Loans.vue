@@ -175,7 +175,6 @@ export default {
     getAgentNum() {
       this.$axios.get("userBroker/getUserBrokerByOrderCountDesc").then(res => {
         this.agentNumData = res;
-        console.log(res);
       });
     }
   },
