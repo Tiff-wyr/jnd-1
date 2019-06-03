@@ -470,9 +470,8 @@ export default {
     send() {
       if (this.borrowerData.phone) {
         let value = this.borrowerData.phone;
-        if (!/^[1][34578]\d{9}$/.test(value) || !/^[1-9]\d*$/.test(value) || value.length !== 11) {
-          this.$message.warning("手机号不符合规范");
-          this.borrowerData.phone = "";
+        if (!validaterPhone(value)) {
+          this.$message.warning("手机号码不符合规范");
         } else {
           this.showing = false;
           this.timer = setInterval(() => {
