@@ -212,10 +212,7 @@
               <div class="agent-table fll">
                 <div class="clearfix">
                   <div class="fll align mr42" v-for="(item,index) in agentData" :key="index">
-                    <div
-                      :style="{width: '100px', height: '100px', cursor: 'pointer', backgroundImage: 'url(' + item.image + ')', backgroundSize: '100% auto', 'background-position-y': '-16px'}"
-                      @click="agDetail(item.brokerId)"
-                    ></div>
+                    <a :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', backgroundImage: 'url(' + item.image + ')', backgroundSize: '100% auto', 'background-position-y': '-16px'}" :href="'#/agentDetail/' + item.brokerId" target="_blank"></a>
                     <div class="agent-name">{{item.brokerName}}</div>
                     <div class="agent-job">金融顾问</div>
                   </div>
@@ -243,20 +240,8 @@
                     <p>暂无数据...</p>
                   </div>
                   <div class="fll organW" v-for="(item,index) in organData" :key="index">
-                    <img
-                      v-if="item.agencyLogo"
-                      :src="item.agencyLogo"
-                      alt=""
-                      style="width: 100px;height: 98px;cursor: pointer"
-                      @click="orDetail(item.agencyId)"
-                    >
-                    <img
-                      v-else
-                      src="/static/resource/pic/organ.png"
-                      alt=""
-                      style="width: 100px;height: 98px;cursor: pointer"
-                      @click="orDetail(item.agencyId)"
-                    >
+                    <a :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', background: 'url(' + item.agencyLogo + ') center center no-repeat', backgroundSize: '100% auto'}" :href="'#/organDetail/' + item.agencyId" target="_blank" v-if="item.agencyLogo"></a>
+                    <a :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', background: 'url(/static/resource/pic/organ.png) center center no-repeat', backgroundSize: '100% auto'}" :href="'#/organDetail/' + item.agencyId" target="_blank" v-else></a>
                     <div class="organ-text1">{{item.agencyName}}</div>
                     <div class="organ-text2">{{item.agencyIntroduction}}</div>
                   </div>
@@ -628,7 +613,6 @@ export default {
       });
     },
     handleBanner(val) {
-      console.log(val)
       if (val === 0) {
         this.$router.push('/agent')
       } else if (val === 2) {
@@ -654,10 +638,14 @@ export default {
 };
 </script>
 <style lang="scss">
+
 .el-carousel, .el-carousel__container {
   height: 368px!important;
   min-width: 1200px;
 }
+</style>
+
+<style lang="scss">
 .el-dropdown-menu__item {
   color: #4a90e2;
 }

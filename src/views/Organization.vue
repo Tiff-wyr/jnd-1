@@ -323,6 +323,11 @@ export default {
       console.log(val)
     }
   },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.getData()
+    })
+  },
   methods: {
     search() {
       this.isJianSuo = false;
@@ -440,13 +445,6 @@ export default {
   }
 };
 </script>
-<style lang="scss">
-.el-carousel, .el-carousel__container {
-  height: 448px!important;
-  min-width: 1200px;
-}
-</style>
-
 <style scoped lang="scss">
 .mb40 {
   margin-bottom: 40px;

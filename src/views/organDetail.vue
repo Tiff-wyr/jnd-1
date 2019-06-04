@@ -61,7 +61,7 @@
                   >
                   <div class="fll">
                     <div class="text1">电话咨询贷款，最快捷，最方便！</div>
-                    <div class="text2">{{organDetail.phone}}</div>
+                    <div class="text2">{{organDetail.phone | phoneFilter}}</div>
                   </div>
                 </div>
               </div>
@@ -233,10 +233,21 @@
 import { mapState } from "vuex";
 import footerSame from "../component/footerSame";
 import { validaterPhone, validaterName, validaterLoanAmount } from "@/util/validate";
+import { formatPhone } from '@/util/util'
 export default {
   name: "organDetail",
   components: {
     footerSame
+  },
+  filters: {
+    phoneFilter(phone) {
+      if (!phone) return
+      if (phone.match('0000')) {
+        return formatPhone(phone)
+      } else {
+        return phone
+      }
+    }
   },
   data() {
     

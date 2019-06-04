@@ -248,14 +248,12 @@ export default {
       this.page = 10;
       this.isJianSuo = true;
       this.getCondition();
-    },
-    '$route': function(val) {
-      console.log(val)
-      if (val.path === '/home' && val.query.login === 1) {
-        this.isMask = true;
-        this.isContain = true;
-      }
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.getCondition()
+    })
   },
   methods: {
     search() { // 搜索
@@ -384,13 +382,6 @@ export default {
   }
 };
 </script>
-<style lang="scss">
-.el-carousel, .el-carousel__container {
-  height: 448px!important;
-  min-width: 1200px;
-}
-</style>
-
 <style scoped lang="scss">
 .mb40 {
   margin-bottom: 40px;

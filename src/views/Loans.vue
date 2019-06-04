@@ -1,12 +1,5 @@
 <template>
   <div>
-    <div class="loan">
-      <el-carousel trigger="click">
-        <el-carousel-item v-for="item in bannerList" :key="item">
-          <div :style="{ width: 100 + '%', height: 448 + 'px', background: 'url(' + item + ') center center no-repeat' }"></div>
-        </el-carousel-item>
-      </el-carousel>
-    </div>
     <div class="wrappy">
       <div class="w1200">
         <div class="clearfix">
@@ -137,6 +130,11 @@ export default {
       proData: []
     };
   },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.getData()
+    })
+  },
   methods: {
     enterAgent(id) {
       this.$router.push(`/agentDetail/${id}`);
@@ -187,18 +185,7 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-.el-carousel, .el-carousel__container {
-  height: 448px!important;
-  min-width: 1200px;
-}
-</style>
 <style scoped lang="scss">
-.loan img {
-  height:448px;
-  width: 100%;
-}
 .w120 {
   width: 120px;
 }

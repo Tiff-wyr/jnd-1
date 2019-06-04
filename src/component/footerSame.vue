@@ -10,9 +10,26 @@
     </div>
   </div>
 </template>
+中国银行：www.boc.cn
 
+工商银行：www.icbc.com.cn
+
+建设银行：www.ccb.com
+
+中信银行：www.citicbank.com
+
+农业银行：www.abchina.com
+
+光大银行：www.cebbank.com
 <script>
-const bankList = ['../../static/resource/bank1.png', '../../static/resource/bank2.png', '../../static/resource/bank3.png', '../../static/resource/bank4.png', '../../static/resource/bank5.png', '../../static/resource/bank6.png']
+const bankList = [
+  { label: '中国银行', id: 1, src: 'www.boc.cn', imgUrl: '../../static/resource/bank1.png' },
+  { label: '中国工商银行', id: 2, src: 'www.icbc.com.cn', imgUrl: '../../static/resource/bank2.png' },
+  { label: '中国建设银行', id: 3, src: 'www.ccb.com', imgUrl: '../../static/resource/bank3.png' },
+  { label: '中信银行', id: 4, src: 'www.citicbank.com', imgUrl: '../../static/resource/bank4.png' },
+  { label: '中国农业银行', id: 5, src: 'www.abchina.com', imgUrl: '../../static/resource/bank5.png' },
+  { label: '中国光大银行', id: 6, src: 'www.cebbank.com', imgUrl: '../../static/resource/bank6.png' },
+]
 export default {
   name: "footerSame",
   data() {

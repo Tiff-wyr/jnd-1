@@ -62,7 +62,7 @@
                   >
                   <div class="fll">
                     <div class="text1">电话咨询贷款，最快捷，最方便！</div>
-                    <div class="text2">{{agentDetail.phone}}</div>
+                    <div class="text2">{{agentDetail.phone | phoneFilter}}</div>
                   </div>
                 </div>
               </div>
@@ -232,11 +232,22 @@ import validateApplyApi from "./api/validateApply";
 import footerSame from "../component/footerSame";
 import { mapState } from "vuex";
 import { validaterPhone, validaterName, validaterLoanAmount } from "@/util/validate";
+import { formatPhone } from '@/util/util'
 export default {
   name: "agentDetail",
   components: {
     layout,
     footerSame
+  },
+  filters: {
+    phoneFilter(phone) {
+      if (!phone) return
+      if (phone.match('0000')) {
+        return formatPhone(phone)
+      } else {
+        return phone
+      }
+    }
   },
   data() {
     const validatePhone = (rule, value, callback) => {
@@ -445,7 +456,6 @@ export default {
     //免费申请
     freeApply() {
       this.$refs.agentApplyForm.validate(valid => {
-        console.log(valid)
         if (valid) {
           let data = new FormData();
           for (let item in this.borrowerData) {
@@ -633,7 +643,6 @@ export default {
   },
   created() {
     if (this.$store.state.userInfo) {
-      console.log(this.$store.state.userInfo.sex)
       this.borrowerData.borrowerName = this.$store.state.userInfo.name
       this.borrowerData.sex = this.$store.state.userInfo.sex
     }
