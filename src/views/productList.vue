@@ -138,18 +138,16 @@
             <div class="loans-pro-item clearfix" v-for="(item,index) in formData" :key="index">
               <div class="name fll pro-item-same" v-html="item.productName">{{item.productName}}</div>
               <div class="rate fll pro-item-same">
-                <span v-html="item.productStartAmount">{{item.productStartAmount}}</span>~
-                <span v-html="item.productEndAmount">{{item.productEndAmount}}</span>万
+                <span>{{item.productStartAmount}}</span>~
+                <span>{{item.productEndAmount}}</span>万
               </div>
               <div
                 class="time fll pro-item-same"
-                v-html="item.producLoanLength"
-              >{{item.producLoanLength}}</div>
+              >{{item.producLoanLength}}年</div>
               <div
                 class="limit fll pro-item-same"
-                v-html="item.productInterest"
               >{{item.productInterest}}%</div>
-              <div class="deadline fll pro-item-same" v-html="item.productLife">{{item.productLife}}</div>
+              <div class="deadline fll pro-item-same">{{item.productLife}}天</div>
               <div
                 class="bank fll pro-item-same"
                 v-html="item.productPublisher"

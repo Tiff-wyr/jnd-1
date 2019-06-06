@@ -90,7 +90,7 @@
                 <div class="fll adviser-same w320">{{item.introduction}}</div>
               </div>
             </div>
-            <div class="fll num">{{item.phone}}</div>
+            <div class="fll num">{{item.phone | phoneFilter}}</div>
             <div class="fll adviser-btn" @click="detail(item.brokerId)">立即查看</div>
           </div>
           <div class="page">
@@ -133,10 +133,10 @@
               </div>
               <div class="clearfix mt10">
                 <div class="fll adviser-same">业务介绍:&nbsp;</div>
-                <div class="fll adviser-same w320">{{item.businessIntroduction}}</div>
+                <div class="fll adviser-same w320">{{item.introduction}}</div>
               </div>
             </div>
-            <div class="fll num">{{item.phone}}</div>
+            <div class="fll num">{{item.phone | phoneFilter}}</div>
             <div class="fll adviser-btn" @click="detail(item.brokerId)">立即查看</div>
           </div>
           <div class="page">
@@ -169,8 +169,19 @@ import banner02 from '@/assets/banner02.png'
 import banner03 from '@/assets/banner03.png'
 const bannerList = [banner01, banner02, banner03]
 import router from "../router/index";
+import { formatPhone } from '@/util/util'
 export default {
   name: "Agent",
+  filters: {
+    phoneFilter(phone) {
+      if (!phone) return
+      if (phone.match('0000')) {
+        return formatPhone(phone)
+      } else {
+        return phone
+      }
+    }
+  },
   components: {
     footerSame,
     wradio,

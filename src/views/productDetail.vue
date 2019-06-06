@@ -669,21 +669,21 @@ export default {
     font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(155, 155, 155, 1);
-    line-height: 14px;
+    line-height: 2;
   }
   .limit-same {
     font-size: 14px;
     font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(81, 81, 81, 1);
-    line-height: 14px;
+    line-height: 2;
   }
   .same {
     font-size: 14px;
     font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(81, 81, 81, 1);
-    line-height: 14px;
+    line-height: 2;
     width: 465px;
     margin-left: 10px;
   }

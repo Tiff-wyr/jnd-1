@@ -77,13 +77,23 @@
                 >
                 <div class="restore fll" @click="sendMess">发送消息</div>
               </div>
-              <div class="clearfix flr" st yle="margin-top: 16px;">
+              <div class="clearfix flr" style="margin-top: 16px;">
+                <img src="../../static/resource/agent/star.png" class="fll" v-if="isCollect" alt="" style="width: 20px; heihgt: 20px; vertical-align: center; margin-right: 10px;" />
+                <img src="../../static/resource/agent/star1.png" class="fll" v-else alt="" style="width: 20px; heihgt: 20px; vertical-align: center; margin-right: 10px;" />
+                <!-- <img
+                  src="../../static/resource/agent/star.png"
+                  alt=""
+                  class="fll"
+                   v-if="isCollect"
+                  style="width: 20px;height: 20px;vertical-align: middle; margin-right: 10px;"
+                >
                 <img
                   src="../../static/resource/agent/star.png"
                   alt=""
                   class="fll"
+                  v-else
                   style="width: 20px;height: 20px;vertical-align: middle; margin-right: 10px;"
-                >
+                > -->
                 <div class="fll">
                   <div class="restore" @click="restore" v-if="isCollect">加入收藏</div>
                   <div class="restore" @click="cancelRestore" v-else>取消收藏</div>
@@ -104,9 +114,10 @@
                     style="height: 18px;line-height: 18px;border-bottom-color:transparent"
                   >推荐指数：</div>
                   <div class="fll">
-                    <el-rate v-model="agentDetail.recommended" disabled text-color="#ff9900"></el-rate>
+                    <el-rate v-model="agentDetail.recommended" disabled text-color="#ff9900" style="margin-top: 8px;"></el-rate>
                   </div>
                 </div>
+                <div class="name">擅长业务：<br>{{agentDetail.businessScopeInfo}}</div>
                 <div class="name">业务地区：{{agentDetail.businessAreaValue}}</div>
                 <div class="name">所属公司：{{agentDetail.company}}</div>
                 <div class="desc-title">个人简介：</div>
@@ -827,18 +838,20 @@ export default {
     box-sizing: border-box;
     .name-same {
       border-bottom: 1px solid #f0f0f0;
-      height: 35px;
+      height: auto;
       padding: 8px 0;
       box-sizing: border-box;
+      line-height: 2;
     }
     .name {
+      line-height: 2;
       border-bottom: 1px solid #f0f0f0;
-      line-height: 35px;
-      height: 35px;
+      height: auto;
       font-size: 14px;
       font-family: PingFangSC-Regular;
       font-weight: 400;
       color: rgba(81, 81, 81, 1);
+      padding: 10px 0;
     }
     .desc,
     .desc-title {

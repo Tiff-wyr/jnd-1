@@ -37,7 +37,7 @@
       </el-form-item>
       <el-form-item label="成立年限" prop="agencyAgeLimit">
         <el-input v-if="isEdit" v-model="organMessData.agencyAgeLimit" class="input-item"></el-input>
-        <span v-else>{{ resultData.agencyAgeLimit }}年</span>
+        <span v-else>{{ resultData.agencyAgeLimit + '年' ? resultData.agencyAgeLimit : '' }}</span>
       </el-form-item>
       <el-form-item label="营业期限" prop="businessTime">
         <div v-if="isEdit">

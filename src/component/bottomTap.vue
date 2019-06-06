@@ -30,8 +30,8 @@
           </div>
           <div class="contact-us">
             <h3>联系我们</h3>
-            <p class="container">市场合作：1415929656@qq.com</p>
-            <p class="container">机构合作：1415929656@qq.com</p>
+            <p class="container">市场合作：15210097461</p>
+            <p class="container">机构合作：15144715931</p>
           </div>
         </div>
       </div>

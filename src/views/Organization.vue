@@ -71,12 +71,12 @@
               <div class="name">{{item.agency.agencyName}}</div>
             </div>
             <div class="fll organ-info">
-              <div class="clearfix">
-                <div class="organ-rate fll ml40 w180">
+              <div class="clearfix" :class="{ isProduct: !item.interest}">
+                <div class="organ-rate fll ml40 w180" v-if="item.interest">
                   利率：
                   <span class="percent-rate">{{item.interest}}</span>
                 </div>
-                <div class="organ-rate fll mt4 w180">注册地:&nbsp;{{item.agency.address}}</div>
+                <div class="organ-rate fll mt4 w180"  :class="{ml40: !item.interest}">注册地:&nbsp;{{item.agency.address}}</div>
                 <div class="organ-rate fll mt4 w250">机构类型：&nbsp;{{item.agency.agencyProperty}}</div>
                 <div class="organ-rate fll mt4 w250">
                   <a
@@ -86,8 +86,8 @@
                 </div>
               </div>
               <div class="desc">机构简介：&nbsp;{{item.agency.agencyIntroduction}}</div>
-              <div class="line-desc"></div>
-              <div class="clearfix">
+              <div class="line-desc" v-if="item.interest"></div>
+              <div class="clearfix" v-if="item.product">
                 <div class="item2 fll">
                   <div class="item1-num">{{item.product.productName}}</div>
                   <div class="item-same">产品名称</div>
@@ -139,6 +139,7 @@
             ></el-pagination>
           </div>
         </div>
+        <!-- 搜索显示 -->
         <div v-else>
           <div class="empty-list" v-if="tableData.length == 0">
             <img :src="emptyList" alt="" class="empty-img">
@@ -146,17 +147,19 @@
           </div>
           <div class="organ-item clearfix mb30" v-for="(item,index) in tableData" :key="index">
             <div class="fll align fs img-box">
-              <img
-                :src="item.agencyLogo"
-                v-if="item.agencyLogo"
-                alt=""
-              >
-              <img
-                src="/static/resource/pic/organ.png"
-                v-else
-                alt=""
-              >
-              <div class="name" v-html="item.agencyName">{{item.agencyName}}</div>
+              <div class="logo">
+                <img
+                  :src="item.agencyLogo"
+                  v-if="item.agencyLogo"
+                  alt=""
+                >
+                <img
+                  src="/static/resource/pic/organ.png"
+                  v-else
+                  alt=""
+                >
+              </div>
+              <div class="name" v-html="item.agencyName"></div>
             </div>
             <div class="fll organ-info">
               <div class="clearfix">
@@ -166,11 +169,11 @@
                 </div>
                 <div class="organ-rate fll mt4 w180">
                   注册地:&nbsp;
-                  <span v-html="item.address">{{item.address}}</span>
+                  <span>{{item.address}}</span>
                 </div>
                 <div class="organ-rate fll mt4 w250">
                   机构类型：&nbsp;
-                  <span v-html="item.agencyProperty">{{item.agencyProperty}}</span>
+                  <span v-html="item.agencyProperty"></span>
                 </div>
                 <div class="organ-rate fll mt4 w180">
                   网址：&nbsp;
@@ -183,26 +186,26 @@
               <div class="line-desc"></div>
               <div class="clearfix">
                 <div class="item2 fll">
-                  <div class="item1-num" v-html="item.productName">{{item.productName}}</div>
+                  <div class="item1-num">{{item.productName}}</div>
                   <div class="item-same">产品名称</div>
                 </div>
                 <div class="item1 fll align">
-                  <div class="item-num" v-html="item.productInterest">
-                    {{item.productInterest}}
+                  <div class="item-num">
+                    {{item.interest}}
                     <span class="percent">%</span>
                   </div>
                   <div class="item-same">利息</div>
                 </div>
                 <div class="item1 fll align">
-                  <div class="item-num" v-html="item.producLoanLength">{{item.producLoanLength}}</div>
+                  <div class="item-num">{{item.producLoanLength}}天</div>
                   <div class="item-same">放款时间</div>
                 </div>
                 <div class="item1 fll align">
-                  <div class="item-num" v-html="item.productLife">{{item.productLife}}</div>
+                  <div class="item-num">{{item.productLife}}年</div>
                   <div class="item-same">使用年限</div>
                 </div>
                 <div class="item1 fll align">
-                  <div class="item-num" v-html="item.productStartAmount">
+                  <div class="item-num">
                     {{item.productStartAmount}}
                     <span class="percent">万起</span>
                   </div>
@@ -211,12 +214,11 @@
                 <div class="item1 fll">
                   <div
                     class="item6-num"
-                    v-html="item.productRepaymentMethod"
                   >{{item.productRepaymentMethod}}</div>
                   <div class="item-same">归还方式</div>
                 </div>
                 <div class="item1 fll">
-                  <div class="item6-num" v-html="item.productPublisher">{{item.productPublisher}}</div>
+                  <div class="item6-num">{{item.productPublisher}}</div>
                   <div class="item-same">发行机构</div>
                 </div>
                 <div class="flr organ-btn align" @click="lookDetail(item.agencyId)">立即查看</div>
@@ -446,6 +448,9 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+.isProduct {
+  margin: 35px 0 50px;
+}
 .mb40 {
   margin-bottom: 40px;
 }

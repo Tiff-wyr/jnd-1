@@ -77,12 +77,9 @@
                 <div class="restore fll" @click="sendMess">发送消息</div>
               </div>
               <div class="clearfix flr" style="margin-top: 16px;">
-                <img
-                  src="../../static/resource/agent/star.png"
-                  alt=""
-                  class="fll"
-                  style="width: 20px;height: 20px;vertical-align: middle; margin-right: 10px;"
-                >
+                
+                <img src="../../static/resource/agent/star.png" class="fll" v-if="isCollect" alt="" style="width: 20px; heihgt: 20px; vertical-align: center; margin-right: 10px;" />
+                <img src="../../static/resource/agent/star1.png" class="fll" v-else alt="" style="width: 20px; heihgt: 20px; vertical-align: center; margin-right: 10px;" />
                 <div class="fll">
                   <div class="restore" @click="restore" v-if="isCollect">加入收藏</div>
                   <div class="restore" @click="cancelRestore" v-else>取消收藏</div>
@@ -106,7 +103,7 @@
                     style="height: 18px;line-height: 18px; border: none;"
                   >推荐指数：</div>
                   <div class="fll">
-                    <el-rate v-model="organDetail.agencyStar" disabled text-color="#ff9900"></el-rate>
+                    <el-rate v-model="organDetail.agencyStar" disabled text-color="#ff9900" style="margin-top: 8px;"></el-rate>
                   </div>
                 </div>
                 

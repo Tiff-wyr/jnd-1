@@ -259,6 +259,7 @@ import validater from "../util/validater";
 import { randomWord } from "@/util/util";
 import { mapState, mapMutations } from "vuex";
 import { validaterPhone, validaterName } from "@/util/validate";
+import { registerAccount } from './api/register'
 const reg = /^\d+(\.(?!.*0$)\d{1,2})?$/;
 const regZ = /^\d+$/;
 export default {
@@ -579,34 +580,13 @@ export default {
       this.$refs.formData.validate(valid => {
         if (valid) {
           if (this.isChecked) {
-            let data = new FormData();
-            let arr = [];
-            for (let i = 0; i < this.formData.loanInfos.length; i++) {
-              if (this.formData.loanInfos[i]) {
-                arr.push(this.formData.loanInfos[i]);
-              }
-            }
-            let businessScope = this.formData.businessScope
-              .map(item => item.businessId)
-              .join(",");
-            let loanInfos = JSON.stringify(this.formData.loanInfos);
-            for (let item in this.formData) {
-              if (item === "businessType") {
-                data.append(item, this.formData[item].join(","));
-              } else if (item === "loanType") {
-                data.append(item, this.formData[item].join(","));
-              } else if (item === "businessScope") {
-                data.append("businessScope", businessScope);
-              } else if (item === "loanInfos") {
-                data.append("loanInfos", loanInfos);
-              } else if (item === "code") {
-                data.append("password", this.formData.code);
-              } else {
-                data.append(item, this.formData[item]);
-              }
-            }
-            this.$axios.post("/userBroker/registerUserBroker", this.formData).then(res => {
-              if (res.status === 200) {
+            let params = Object.assign({}, this.formData)
+            params.businessScope =  params.businessScope.map(item => item.businessId).join(",");
+            params.loanInfos = JSON.stringify(params.loanInfos);
+            params.businessType = params.businessType.join(',');
+            params.loanType = params.loanType.join(',');
+            registerAccount(params).then(res => {
+              if (res.data.status === 200) {
                 this.formData.businessScope = [];
                 this.formData.loanInfos = [];
                 this.$router.push({
@@ -614,9 +594,9 @@ export default {
                   query: { number: this.formData.phone }
                 });
               } else {
-                this.$message.warning(res.msg);
+                this.$message.warning(res.data.msg);
               }
-            });
+            })
           } else {
             this.$message.warning('注册前请阅读并同意相关协议');
           }
