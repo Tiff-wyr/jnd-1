@@ -281,7 +281,7 @@
                     class="mess-text"
                     :key="index"
                     v-for="(item,index) in loanData"
-                  >{{item.allName}}:{{item.phoneG}}&nbsp;&nbsp;申请了贷款</div>
+                  >{{item.borrowerName}}:{{item.phone}}&nbsp;&nbsp;申请了贷款</div>
                 </vue-seamless-scroll>
               </div>
             </div>
@@ -613,13 +613,9 @@ export default {
     getLoanData() {
       this.$axios.get("userBorrower/indexBorrower").then(res => {
         this.loanData = res.map(item => {
-          let fristName =
-            item.borrowerName === null ? "无" : item.borrowerName.substr(0, 1);
-          let allName =
-            item.sex === 0 ? `${fristName}女士` : `${fristName}先生`;
-          let phoneG =
-            item.phone.substr(0, 3) + "*****" + item.phone.substr(8, 10);
-          return { ...item, allName, phoneG };
+            const phone = item.phone.substr(0, 3) + "*****" + item.phone.substr(8, 10)
+            item.phone = phone
+          return item
         });
       });
     },
