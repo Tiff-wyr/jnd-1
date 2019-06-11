@@ -144,7 +144,8 @@ export default {
         borrowerAddress: "",
         borrower2: "",
         password: "",
-        loanAmount: ""
+        loanAmount: "",
+        flag: false
       },
       //省
       provinceData: [],
@@ -209,13 +210,12 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           if (this.isChecked) {
-            let data = new FormData();
-            for (let item in this.form) {
-              data.append(item, this.form[item]);
-            }
-            this.$axios
-              .post("userBorrower/registerBorrower", data)
-              .then(res => {
+            if (!this.flag) {
+              let data = new FormData();
+              for (let item in this.form) {
+                data.append(item, this.form[item]);
+              }
+              this.$axios.post("userBorrower/registerBorrower", data).then(res => {
                 if (res.status === 200) {
                   setTimeout(() => {
                     this.$router.push({
@@ -227,6 +227,15 @@ export default {
                   this.$message.warning(res.msg);
                 }
               });
+              this.flag = true
+              if (this.flag) {
+                setTimeout(() => {
+                  this.flag = false
+                }, 5000);
+              }
+            } else {
+              this.$message.warning('请不要重复点击')
+            }
           } else {
             this.$message.warning("注册前请阅读并同意相关协议");
           }

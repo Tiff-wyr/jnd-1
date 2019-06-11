@@ -308,6 +308,7 @@ export default {
       }
     }
     return {
+      flag: false,
       isCollect: true, //收藏
       productTable: [],
       tableData: [],
@@ -423,22 +424,22 @@ export default {
       this.$refs.applyForm.validate(valid => {
         if (valid) {
           if (this.checked) {
-            this.clickInterval = true
-            setTimeout(() => {
-              this.clickInterval = false
-            }, 5000);
-            if (!this.clickInterval) {
-              this.$message.warning('操作不要太快哦！')
-              return
+            if(!this.clickInterval) {
+              saveNotLoginProductOrder(this.applyForm).then(res => {
+                if (res.data.status === 200) {
+                  this.stepStatus = 1
+                  this.isApply = false
+                } else {
+                  this.$message.warning(res.data.msg)
+                }
+              })
+              this.clickInterval = true
+              setTimeout(() => {
+                this.clickInterval = false
+              }, 5000);
+            } else {
+              this.$message.warning('请不要重复点击')
             }
-            saveNotLoginProductOrder(this.applyForm).then(res => {
-              if (res.data.status === 200) {
-                this.stepStatus = 1
-                this.isApply = false
-              } else {
-                this.$message.warning(res.data.msg)
-              }
-            })
           } else {
             this.$message.warning('请阅读并同意《就能贷用户注册协议》')
           }
@@ -638,7 +639,6 @@ export default {
 }
 .detail-left {
   width: 902px;
-  height: 849px;
   background: rgba(255, 255, 255, 1);
   padding: 36px 60px 66px 60px;
   box-sizing: border-box;

@@ -318,6 +318,7 @@ export default {
       }
     }
     return {
+      flag: false,
       Agree: true,
       isCollect: true,
       businessArea1: "",
@@ -563,7 +564,6 @@ export default {
     //免费申请
     freeApply() {
       this.$refs.agentApplyForm.validate(valid => {
-        console.log(valid)
         if (valid) {
           let data = new FormData();
           this.borrowerData.agencyId = this.organId
@@ -591,26 +591,34 @@ export default {
               this.$message.warning("借款人方可申请");
             }
           } else {
-            this.$axios.post("orderAll/saveNoLoginOrder", data).then(res => {
-              if (res.status === 200) {
-                this.$message.success(res.msg);
-                this.$router.push({
-                  path: "/applyVictory",
-                  query: {
-                    number: this.borrowerData.phone
-                  }
-                });
-              } else {
-                this.$message.warning(res.msg);
-              }
+            if (!this.flag) {
+              this.$axios.post("orderAll/saveNoLoginOrder", data).then(res => {
+                if (res.status === 200) {
+                  this.$message.success(res.msg);
+                  this.$router.push({
+                    path: "/applyVictory",
+                    query: {
+                      number: this.borrowerData.phone
+                    }
+                  });
+                } else {
+                  this.$message.warning(res.msg);
+                }
+                setTimeout(() => {
+                  this.resetForm();
+                }, 100);
+                
+                if (this.timer !== null) {
+                  this.clearTimer();
+                }
+              });
+              this.flag = true
               setTimeout(() => {
-                this.resetForm();
-              }, 100);
-              
-              if (this.timer !== null) {
-                this.clearTimer();
-              }
-            });
+                this.flag = false
+              }, 5000);
+            } else {
+              this.$message.warning('请不要重复点击')
+            }
           }
         }
       })

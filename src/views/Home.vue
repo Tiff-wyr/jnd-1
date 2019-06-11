@@ -373,6 +373,7 @@ export default {
         phone: "",
         code: ""
       },
+      flag: false,
       borrowerDataRules: {
         code: [{ required: true, message: '×', trigger: "blur" }],
         borrowerName: [
@@ -517,31 +518,41 @@ export default {
       this.$refs.borrowerData.validate(valid => {
         if (valid) {
           if (this.isChecked) {
-            let data = new FormData();
-            for (let item in this.borrowerData) {
-              data.append(item, this.borrowerData[item]);
-            }
-            this.$axios.post(`orderAll/saveNoLoginOrder`, data).then(res2 => {
-              if (res2.status === 200) {
-                this.clearTimer();
-                if (this.$store.state.userInfo === null) {
-                  this.$message.success("申请并注册成功");
-                  this.$router.push({
-                    path: "/applyVictory",
-                    query: {
-                      number: this.borrowerData.phone
-                    }
-                  });
-                  this.$refs.borrowerData.resetFields()
-                } else {
-                  this.$message.success("申请成功");
-                  this.$refs.borrowerData.resetFields()
-                  this.resetForm()
-                }
-              } else {
-                this.$message.warning(res2.msg);
+            if (!flag) {
+              let data = new FormData();
+              for (let item in this.borrowerData) {
+                data.append(item, this.borrowerData[item]);
               }
-            })
+              this.$axios.post(`orderAll/saveNoLoginOrder`, data).then(res2 => {
+                if (res2.status === 200) {
+                  this.clearTimer();
+                  if (this.$store.state.userInfo === null) {
+                    this.$message.success("申请并注册成功");
+                    this.$router.push({
+                      path: "/applyVictory",
+                      query: {
+                        number: this.borrowerData.phone
+                      }
+                    });
+                    this.$refs.borrowerData.resetFields()
+                  } else {
+                    this.$message.success("申请成功");
+                    this.$refs.borrowerData.resetFields()
+                    this.resetForm()
+                  }
+                } else {
+                  this.$message.warning(res2.msg);
+                }
+              })
+              this.flag = true
+              if (this.flag) {
+                setTimeout(() => {
+                  this.flag = false
+                }, 5000);
+              }
+            } else {
+              this.$message.warning('请不要重复点击')
+            }
           } else {
             this.$message.warning('请阅读并同意9能贷用户相关协议')
           }

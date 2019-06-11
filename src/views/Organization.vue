@@ -61,10 +61,12 @@
                   :src="item.agency.agencyLogo"
                   v-if="item.agency.agencyLogo"
                   alt=""
+                  @click="lookDetail(item.agency.agencyId)"
                 >
                 <img
                   src="/static/resource/pic/organ.png"
                   v-else
+                  @click="lookDetail(item.agency.agencyId)"
                 >
               </div>
               
@@ -151,25 +153,27 @@
                 <img
                   :src="item.agencyLogo"
                   v-if="item.agencyLogo"
+                   @click="lookDetail(item.agency.agencyId)"
                   alt=""
                 >
                 <img
                   src="/static/resource/pic/organ.png"
                   v-else
                   alt=""
+                   @click="lookDetail(item.agency.agencyId)"
                 >
               </div>
               <div class="name" v-html="item.agencyName"></div>
             </div>
             <div class="fll organ-info">
-              <div class="clearfix">
+              <div class="clearfix" :class="{ isProduct: !item.interest}">
                 <div class="organ-rate fll ml40 w180">
                   利率：
                   <span class="percent-rate">{{item.productInterest}}</span>
                 </div>
                 <div class="organ-rate fll mt4 w180">
                   注册地:&nbsp;
-                  <span>{{item.address}}</span>
+                  <span v-html="item.address"></span>
                 </div>
                 <div class="organ-rate fll mt4 w250">
                   机构类型：&nbsp;

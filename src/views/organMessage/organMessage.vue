@@ -96,6 +96,7 @@
 <script>
 import personImg from "../../component/personImg";
 import { mapMutations, mapState } from "vuex";
+import { randomWord } from "@/util/util";
 export default {
   name: "organMessage",
   data() {
@@ -121,7 +122,6 @@ export default {
   },
   watch: {
     userInfos(val) {
-      console.log(val)
       this.name = val.name
     }
   },
@@ -135,13 +135,14 @@ export default {
         if (res.status === 200) {
           this.$message.success("修改头像成功");
           this.SET_USER_IMAGE(val)
+          this.image = val
         }
       });
     }
   },
   created() {
+    this.phone = new Date().getTime() + randomWord(false, 10);
     if (this.$store.state.userInfo !== null) {
-      this.phone = this.$store.state.userInfo.phone
       this.name = this.$store.state.userInfo.name
     }
     let id = this.$route.params.id;

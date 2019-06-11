@@ -132,7 +132,6 @@
                     v-model="organMess.phone"
                     class="name"
                     autocomplete="off"
-                    @change="checkPhone"
                   ></el-input>
                 </el-form-item>
               </div>
@@ -164,7 +163,11 @@
                       @click="$router.push({path:'/home',query:{login:1}})"
                     >已有账号？立即登陆</div>
                   </div>
-                  <div class="agreement"><el-checkbox v-model="isChecked"></el-checkbox> 阅读并同意 <a href="#/agreement?loanOfficerRegister" target="_blank">《9能贷信贷员注册协议》</a><a href="#/agreement?loanOfficerCodeConduct" target="_blank">《9能贷信贷员行为规范》</a></div>
+                  <div class="agreement">
+                    <el-checkbox v-model="isChecked"></el-checkbox>阅读并同意
+                    <a href="#/agreement?loanOfficerRegister" target="_blank">《9能贷信贷员注册协议》</a>
+                    <a href="#/agreement?loanOfficerCodeConduct" target="_blank">《9能贷信贷员行为规范》</a>
+                  </div>
                 </el-form-item>
               </div>
             </div>
@@ -239,11 +242,11 @@ export default {
     };
     const validateAddress = (rule, value, callback) => {
       if (this.organMess.agencyAddress && this.organMess.agencyAddress1) {
-        callback()
+        callback();
       } else {
-        callback(new Error('请选择地址'))
+        callback(new Error("请选择地址"));
       }
-    }
+    };
     return {
       isChecked: true,
       phone: "",
@@ -276,12 +279,15 @@ export default {
           label: "自有资金"
         }
       ],
+      flag: false,
       //省
       provinceData: [],
       //市 区
       cityData: [],
       rules: {
-        phone: [{ required: true, trigger: "change", validator: validatePhone }],
+        phone: [
+          { required: true, trigger: "change", validator: validatePhone }
+        ],
         email: [
           { validator: validater.emailValue, trigger: "change" },
           { required: true, trigger: "change", message: "邮箱不能为空" }
@@ -325,7 +331,7 @@ export default {
   },
   methods: {
     ...mapMutations(["SET_USER"]),
-    //  获取验证码
+    // 检测手机号是否被注册
     send() {
       const reg = /^1\d{10}$/;
       if (this.organMess.phone) {
@@ -341,14 +347,22 @@ export default {
             }
           }, 1000);
           this.$axios
-            .get(`base/getRegisterCode/${this.organMess.phone}`)
+            .get(`user/selectPhone/${this.organMess.phone}`)
             .then(res => {
-              if (res.status !== 200) {
-                this.$message.warning(res.msg);
-                clearInterval(timer);
-                this.showing = true;
-                this.verifyCode = "重新获取";
-                this.time = 60;
+              if (res.status === 200) {
+                this.$message.warning("手机号已注册");
+              } else if (res.status === 500) {
+                this.$axios
+                  .get(`base/getRegisterCode/${this.organMess.phone}`)
+                  .then(res2 => {
+                    if (res2.status !== 200) {
+                      this.$message.warning(res2.msg);
+                      clearInterval(timer);
+                      this.showing = true;
+                      this.verifyCode = "重新获取";
+                      this.time = 60;
+                    }
+                  });
               }
             });
         }
@@ -361,46 +375,42 @@ export default {
       this.$refs.organMess.validate(valid => {
         if (valid) {
           if (this.isChecked) {
-            let data = new FormData();
-            for (let item in this.organMess) {
-              if (item === "agencyProperty") {
-                data.append(item, this.organMess[item].join(","));
-              } else {
-                data.append(item, this.organMess[item]);
+            if (!this.flag) {
+              let data = new FormData();
+              for (let item in this.organMess) {
+                if (item === "agencyProperty") {
+                  data.append(item, this.organMess[item].join(","));
+                } else {
+                  data.append(item, this.organMess[item]);
+                }
               }
+              this.$axios.post("userAgency/registerAgency", data).then(res => {
+                if (res.status === 200) {
+                  this.$message.success(res.msg);
+                  this.$router.push({
+                    path: "/registerJump",
+                    query: { number: this.organMess.phone }
+                  });
+                } else {
+                  this.$message.warning(res.msg);
+                }
+              });
+              this.flag = true
+              if (this.flag) {
+                setTimeout(() => {
+                  this.flag = false
+                }, 5000);
+              }
+            } else {
+              this.$message.warning('请不要重复点击')
             }
-            this.$axios.post("userAgency/registerAgency", data).then(res => {
-              if (res.status === 200) {
-                this.$message.success(res.msg);
-                this.$router.push({
-                  path: "/registerJump",
-                  query: { number: this.organMess.phone }
-                });
-              } else {
-                this.$message.warning(res.msg);
-              }
-            });
           } else {
-            this.$message.warning('注册前请阅读并同意相关协议');
+            this.$message.warning("注册前请阅读并同意相关协议");
           }
         } else {
           return false;
         }
       });
-    },
-    //  检测手机号是否被注册
-    checkPhone() {
-      if (this.organMess.phone) {
-        this.organMess.phone = this.organMess.phone.trim();
-        this.$axios
-          .get(`user/selectPhone/${this.organMess.phone}`)
-          .then(res => {
-            if (res.status === 200) {
-              this.$message.warning("手机号已注册");
-              this.organMess.phone = "";
-            }
-          });
-      }
     },
     //获取省
     getProvince() {

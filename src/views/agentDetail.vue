@@ -80,20 +80,6 @@
               <div class="clearfix flr" style="margin-top: 16px;">
                 <img src="../../static/resource/agent/star.png" class="fll" v-if="isCollect" alt="" style="width: 20px; heihgt: 20px; vertical-align: center; margin-right: 10px;" />
                 <img src="../../static/resource/agent/star1.png" class="fll" v-else alt="" style="width: 20px; heihgt: 20px; vertical-align: center; margin-right: 10px;" />
-                <!-- <img
-                  src="../../static/resource/agent/star.png"
-                  alt=""
-                  class="fll"
-                   v-if="isCollect"
-                  style="width: 20px;height: 20px;vertical-align: middle; margin-right: 10px;"
-                >
-                <img
-                  src="../../static/resource/agent/star.png"
-                  alt=""
-                  class="fll"
-                  v-else
-                  style="width: 20px;height: 20px;vertical-align: middle; margin-right: 10px;"
-                > -->
                 <div class="fll">
                   <div class="restore" @click="restore" v-if="isCollect">加入收藏</div>
                   <div class="restore" @click="cancelRestore" v-else>取消收藏</div>
@@ -333,6 +319,7 @@ export default {
     }
     return {
       agree: true,
+      flag: false,
       monthMoneyData: [],
       jobData: [],
       ageData: [],
@@ -432,7 +419,7 @@ export default {
     send() {
       let value = this.borrowerData.phone;
       if (this.borrowerData.phone) {
-        if (!/^[1][34578]\d{9}$/.test(value) || !/^[1-9]\d*$/.test(value) || value.length !== 11) {
+        if (validaterPhone(this.borrowerData.phone)) {
           this.$message.warning("手机号码不符合规范");
         } else {
           this.showing = false;
@@ -497,26 +484,34 @@ export default {
               this.$message.warning("借款人方可申请");
             }
           } else {
-            this.$axios.post("orderAll/saveNoLoginOrder", data).then(res => {
-              if (res.status === 200) {
-                this.$message.success(res.msg);
-                this.$router.push({
-                  path: "/applyVictory",
-                  query: {
-                    number: this.borrowerData.phone
-                  }
-                });
-              } else {
-                this.$message.warning(res.msg);
-              }
+            if (!this.flag) {
+              this.$axios.post("orderAll/saveNoLoginOrder", data).then(res => {
+                if (res.status === 200) {
+                  this.$message.success(res.msg);
+                  this.$router.push({
+                    path: "/applyVictory",
+                    query: {
+                      number: this.borrowerData.phone
+                    }
+                  });
+                } else {
+                  this.$message.warning(res.msg);
+                }
+                setTimeout(() => {
+                  this.resetForm();
+                }, 100);
+                
+                if (this.timer !== null) {
+                  this.clearTimer();
+                }
+              });
+              this.flag = true
               setTimeout(() => {
-                this.resetForm();
-              }, 100);
-              
-              if (this.timer !== null) {
-                this.clearTimer();
-              }
-            });
+                this.flag = false
+              }, 5000);
+            } else {
+              this.$message.warning('请不要重复点击')
+            }
           }
         }
       })

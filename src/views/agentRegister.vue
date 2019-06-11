@@ -413,7 +413,8 @@ export default {
         ],
         image: [{ required: true, trigger: "change", message: "头像不能为空" }],
         sex: [{ required: true, trigger: "change", message: "性别不能为空" }]
-      }
+      },
+      flag: false
     };
   },
   methods: {
@@ -580,23 +581,33 @@ export default {
       this.$refs.formData.validate(valid => {
         if (valid) {
           if (this.isChecked) {
-            let params = Object.assign({}, this.formData)
-            params.businessScope =  params.businessScope.map(item => item.businessId).join(",");
-            params.loanInfos = JSON.stringify(params.loanInfos);
-            params.businessType = params.businessType.join(',');
-            params.loanType = params.loanType.join(',');
-            registerAccount(params).then(res => {
-              if (res.data.status === 200) {
-                this.formData.businessScope = [];
-                this.formData.loanInfos = [];
-                this.$router.push({
-                  path: "/registerJump",
-                  query: { number: this.formData.phone }
-                });
-              } else {
-                this.$message.warning(res.data.msg);
+            if (!flag) {
+              let params = Object.assign({}, this.formData)
+              params.businessScope =  params.businessScope.map(item => item.businessId).join(",");
+              params.loanInfos = JSON.stringify(params.loanInfos);
+              params.businessType = params.businessType.join(',');
+              params.loanType = params.loanType.join(',');
+              registerAccount(params).then(res => {
+                if (res.data.status === 200) {
+                  this.formData.businessScope = [];
+                  this.formData.loanInfos = [];
+                  this.$router.push({
+                    path: "/registerJump",
+                    query: { number: this.formData.phone }
+                  });
+                } else {
+                  this.$message.warning(res.data.msg);
+                }
+              })
+              this.flag = true
+              if (this.flag) {
+                setTimeout(() => {
+                  this.flag = false
+                }, 5000);
               }
-            })
+            } else {
+              this.$message.warning('请不要重复点击')
+            }
           } else {
             this.$message.warning('注册前请阅读并同意相关协议');
           }

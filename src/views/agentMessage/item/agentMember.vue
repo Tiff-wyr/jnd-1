@@ -357,7 +357,11 @@ export default {
       this.dialogVisible = true;
     },
     handlePayFail() {
-      this.handleConfirmPay()
+      this.handlePayComplete()
+      this.dialogSuccessVisible = false;
+      this.dialogVisible = false;
+      this.isMask = false
+      this.payTypeMask = false
     },
     handleConfirmPay() {
       this.dialogSuccessVisible = false;
