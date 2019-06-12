@@ -332,6 +332,32 @@ export default {
   methods: {
     ...mapMutations(["SET_USER"]),
     // 检测手机号是否被注册
+    checkPhone(timer) {
+      this.$axios.get(`user/selectPhone/${this.organMess.phone}`).then(res => {
+        if (res.status === 200) {
+          this.$message.warning("手机号已注册");
+          this.clearTimer(timer)
+        } else if (res.status === 500) {
+          // 手机号未被注册
+          this.getCode()
+        }
+      });
+    },
+    getCode() {
+      this.$axios.get(`base/getRegisterCode/${this.organMess.phone}`).then(res => {
+        if (res.status === 200) {
+          console.log('发送成功')
+        } else {
+          this.$message.warning(res.msg);
+        }
+      });
+    },
+    clearTimer(timer) {
+      clearInterval(timer);
+      this.showing = true;
+      this.verifyCode = "重新获取";
+      this.time = 60;
+    },
     send() {
       const reg = /^1\d{10}$/;
       if (this.organMess.phone) {
@@ -340,31 +366,10 @@ export default {
           let timer = setInterval(() => {
             this.time--;
             if (this.time < 0) {
-              clearInterval(timer);
-              this.showing = true;
-              this.verifyCode = "重新获取";
-              this.time = 60;
+              this.clearTimer()
             }
           }, 1000);
-          this.$axios
-            .get(`user/selectPhone/${this.organMess.phone}`)
-            .then(res => {
-              if (res.status === 200) {
-                this.$message.warning("手机号已注册");
-              } else if (res.status === 500) {
-                this.$axios
-                  .get(`base/getRegisterCode/${this.organMess.phone}`)
-                  .then(res2 => {
-                    if (res2.status !== 200) {
-                      this.$message.warning(res2.msg);
-                      clearInterval(timer);
-                      this.showing = true;
-                      this.verifyCode = "重新获取";
-                      this.time = 60;
-                    }
-                  });
-              }
-            });
+          this.checkPhone(timer)
         }
       } else {
         this.$message.warning("请输入手机号");

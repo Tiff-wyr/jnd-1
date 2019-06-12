@@ -304,7 +304,9 @@ import { validaterPhone, validaterLoanAmount, validaterName } from "@/util/valid
 import banner01 from '@/assets/banner01.png'
 import banner02 from '@/assets/banner02.png'
 import banner03 from '@/assets/banner03.png'
-const bannerList = [banner01, banner02, banner03]
+import banner04 from '@/assets/banner04.png'
+import { getGetStatus } from '@/views/api/activity'
+const bannerList = [banner04, banner01, banner03]
 export default {
   name: "Home",
   components: {
@@ -621,8 +623,25 @@ export default {
     },
     handleBanner(val) {
       if (val === 0) {
+        if (this.getUser) {
+          if (this.getUser.roleId === 2) {
+            getGetStatus(this.getUser.phone).then(res => {
+              if (res.data.status === 200) {
+                this.$router.push(`/agentMessage/${this.getUser.id}/agentMember`)
+              } else {
+                this.$message.warning(res.data.msg)
+              }
+            })
+          } else {
+            this.$message.warning('只有经纪人可以领取')
+          }
+        } else {
+          this.$message.warning('登录后方可领取')
+        }
+        
+      } else if (val === 1) {
         this.$router.push('/agent')
-      } else if (val === 2) {
+      } else {
         this.$router.push('/organization')
       }
     },

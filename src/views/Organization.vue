@@ -54,19 +54,17 @@
             <img :src="emptyList" alt="" class="empty-img">
             <p>暂无数据...</p>
           </div>
-          <div class="organ-item clearfix mb30" v-for="(item,index) in formData" :key="index">
+          <div class="organ-item clearfix mb30" v-for="(item,index) in formData" :key="index" @click="lookDetail(item.agency.agencyId)">
             <div class="fll align fs img-box">
               <div class="logo">
                 <img
                   :src="item.agency.agencyLogo"
                   v-if="item.agency.agencyLogo"
                   alt=""
-                  @click="lookDetail(item.agency.agencyId)"
                 >
                 <img
                   src="/static/resource/pic/organ.png"
                   v-else
-                  @click="lookDetail(item.agency.agencyId)"
                 >
               </div>
               
@@ -124,7 +122,7 @@
                   <div class="item6-num">{{item.product.productPublisher}}</div>
                   <div class="item-same">发行机构</div>
                 </div>
-                <div class="flr organ-btn align" @click="lookDetail(item.agency.agencyId)">立即查看</div>
+                <div class="flr organ-btn align">立即查看</div>
               </div>
             </div>
           </div>
@@ -147,20 +145,18 @@
             <img :src="emptyList" alt="" class="empty-img">
             <p>暂无数据...</p>
           </div>
-          <div class="organ-item clearfix mb30" v-for="(item,index) in tableData" :key="index">
+          <div class="organ-item clearfix mb30" v-for="(item,index) in tableData" :key="index" @click="lookDetail(item.agency.agencyId)">
             <div class="fll align fs img-box">
               <div class="logo">
                 <img
                   :src="item.agencyLogo"
                   v-if="item.agencyLogo"
-                   @click="lookDetail(item.agency.agencyId)"
                   alt=""
                 >
                 <img
                   src="/static/resource/pic/organ.png"
                   v-else
                   alt=""
-                   @click="lookDetail(item.agency.agencyId)"
                 >
               </div>
               <div class="name" v-html="item.agencyName"></div>
@@ -225,7 +221,7 @@
                   <div class="item6-num">{{item.productPublisher}}</div>
                   <div class="item-same">发行机构</div>
                 </div>
-                <div class="flr organ-btn align" @click="lookDetail(item.agencyId)">立即查看</div>
+                <div class="flr organ-btn align">立即查看</div>
               </div>
             </div>
           </div>

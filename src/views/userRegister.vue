@@ -63,7 +63,6 @@
                     type="text"
                     v-model="form.phone"
                     autocomplete="off"
-                    @change="checkPhone"
                   ></el-input>
                 </el-form-item>
               </div>
@@ -180,31 +179,48 @@ export default {
     loginPush() {
       this.$router.push({ path: "/home", query: { login: 1 } });
     },
+    clearTimer(timer) {
+      clearInterval(timer);
+      this.showing = true;
+      this.verifyCode = "重新获取";
+      this.time = 60;
+    },
+    //  检测手机号是否被注册
+    checkPhone(timer) {
+      this.$axios.get(`user/selectPhone/${this.form.phone}`).then(res => {
+        if (res.status === 200) {
+          this.$message.warning("手机号已注册");
+          this.clearTimer(timer)
+        } else if (res.status === 500) {
+          // 手机号未被注册
+          this.getCode()
+        }
+      });
+    },
+    getCode() {
+      this.$axios.get(`base/getRegisterCode/${this.form.phone}`).then(res => {
+        if (res.status === 200) {
+          console.log('发送成功')
+        } else {
+          this.$message.warning(res.msg);
+        }
+      });
+    },
     //  获取验证码
     send() {
       if (this.form.phone) {
-        this.$axios.get(`base/getRegisterCode/${this.form.phone}`).then(res => {
-          if (res.status === 200) {
-            this.showing = false;
-            let timer = setInterval(() => {
-              this.time--;
-              if (this.time < 0) {
-                clearInterval(timer);
-                this.showing = true;
-                this.verifyCode = "重新获取";
-                this.time = 60;
-              }
-            }, 1000);
-          } else {
-            this.$message.warning(res.msg);
-            this.verifyCode = "重新获取";
+        this.showing = false;
+        let timer = setInterval(() => {
+          this.time--;
+          if (this.time < 0) {
+            this.clearTimer(timer)
           }
-        });
+        }, 1000);
+        this.checkPhone(timer)
       } else {
         this.$message.warning("请输入手机号");
       }
     },
-    checkLoanAmount() {},
     // 注册
     register() {
       this.$refs.form.validate(valid => {
@@ -243,20 +259,6 @@ export default {
           return false;
         }
       });
-    },
-    //  检测手机号是否被注册
-    checkPhone() {
-      if (this.form.phone) {
-        this.form.phone = this.form.phone.trim();
-        this.$axios.get(`user/selectPhone/${this.form.phone}`).then(res => {
-          if (res.status === 200) {
-            this.$message.warning("手机号已注册");
-            this.form.phone = "";
-          } else {
-            return;
-          }
-        });
-      }
     },
     //获取省
     getProvince() {

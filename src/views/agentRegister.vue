@@ -193,7 +193,7 @@
               </div>
               <div class="person-item clearfix">
                 <el-form-item label="手机号:" prop="phone" style="width: 350px;">
-                  <el-input type="text" v-model="formData.phone" @change="checkPhone"></el-input>
+                  <el-input type="text" v-model="formData.phone"></el-input>
                 </el-form-item>
               </div>
               <div class="person-item clearfix">
@@ -470,6 +470,33 @@ export default {
       this.isBusiness = false;
       this.isShowTag = false;
     },
+    //  检测手机号是否被注册
+    checkPhone(timer) {
+      this.$axios.get(`user/selectPhone/${this.formData.phone}`).then(res => {
+        if (res.status === 200) {
+          this.$message.warning("手机号已注册");
+          this.clearTimer(timer)
+        } else if (res.status === 500) {
+          // 手机号未被注册
+          this.getCode()
+        }
+      });
+    },
+    getCode() {
+      this.$axios.get(`base/getRegisterCode/${this.formData.phone}`).then(res => {
+        if (res.status === 200) {
+          console.log('发送成功')
+        } else {
+          this.$message.warning(res.msg);
+        }
+      });
+    },
+    clearTimer(timer) {
+      clearInterval(timer);
+      this.showing = true;
+      this.verifyCode = "重新获取";
+      this.time = 60;
+    },
     //发送验证码
     send() {
       const reg = /^1\d{10}$/;
@@ -479,23 +506,10 @@ export default {
           let timer = setInterval(() => {
             this.time--;
             if (this.time < 0) {
-              clearInterval(timer);
-              this.showing = true;
-              this.verifyCode = "重新获取";
-              this.time = 60;
+              this.clearTimer(timer)
             }
           }, 1000);
-          this.$axios
-            .get(`/base/getRegisterCode/${this.formData.phone}`)
-            .then(res => {
-              if (res.status !== 200) {
-                this.$message.warning(res.msg);
-                clearInterval(timer);
-                this.showing = true;
-                this.verifyCode = "重新获取";
-                this.time = 60;
-              }
-            });
+          this.checkPhone(timer)
         }
       } else {
         this.$message.warning("请输入手机号");
@@ -581,7 +595,7 @@ export default {
       this.$refs.formData.validate(valid => {
         if (valid) {
           if (this.isChecked) {
-            if (!flag) {
+            if (!this.flag) {
               let params = Object.assign({}, this.formData)
               params.businessScope =  params.businessScope.map(item => item.businessId).join(",");
               params.loanInfos = JSON.stringify(params.loanInfos);
@@ -616,21 +630,6 @@ export default {
         }
       });
     },
-    //  检测手机号是否被注册
-    checkPhone() {
-      if (this.formData.phone) {
-        this.formData.phone = this.formData.phone.trim();
-        this.$axios.get(`user/selectPhone/${this.formData.phone}`).then(res => {
-          if (res.status === 200) {
-            this.$message.warning("手机号已注册");
-            this.formData.phone = "";
-          } else {
-            return;
-          }
-        });
-      }
-    },
-
     goodMask() {
       this.isMask = true;
       this.isBusiness = true;

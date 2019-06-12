@@ -103,7 +103,7 @@
                     <el-rate v-model="agentDetail.recommended" disabled text-color="#ff9900" style="margin-top: 8px;"></el-rate>
                   </div>
                 </div>
-                <div class="name">擅长业务：<br>{{agentDetail.businessScopeInfo}}</div>
+                <div class="name">擅长业务：<br><span v-for="item in agentDetail.businessScopeInfo" :key="item" class="tag">{{ item }}</span></div>
                 <div class="name">业务地区：{{agentDetail.businessAreaValue}}</div>
                 <div class="name">所属公司：{{agentDetail.company}}</div>
                 <div class="desc-title">个人简介：</div>
@@ -419,7 +419,7 @@ export default {
     send() {
       let value = this.borrowerData.phone;
       if (this.borrowerData.phone) {
-        if (validaterPhone(this.borrowerData.phone)) {
+        if (!validaterPhone(this.borrowerData.phone)) {
           this.$message.warning("手机号码不符合规范");
         } else {
           this.showing = false;
@@ -437,7 +437,14 @@ export default {
                 this.clearTimer();
                 this.resetForm();
               } else {
-                this.$axios.get(`base/getUpdatePhoneCode/${this.borrowerData.phone}`).then(res => {});
+                this.$axios.get(`base/getUpdatePhoneCode/${this.borrowerData.phone}`).then(res => {
+                  console.log(res)
+                  if (res.status === 200) {
+                    this.$message.success(res.msg)
+                  } else {
+                    this.$message.warning(res.msg)
+                  }
+                });
               }
             });
         }
@@ -519,7 +526,8 @@ export default {
     //经纪人详情
     getAgentData(id) {
       this.$axios.get(`userBroker/getUserBrokerById/${id}`).then(res => {
-        this.agentDetail = res;
+        res.businessScopeInfo = res.businessScopeInfo.split(',')
+        this.agentDetail = Object.assign({}, res);
       });
     },
     //经纪人成功案例
@@ -847,6 +855,18 @@ export default {
       font-weight: 400;
       color: rgba(81, 81, 81, 1);
       padding: 10px 0;
+      .tag {
+        display: inline-block;
+        width: 60px;
+        height: 24px;
+        line-height: 24px;
+        font-size: 12px;
+        background: #F0F0F0;
+        border: 1px solid #D9D9D9;
+        border-radius: 4px;
+        text-align: center;
+        margin: 10px;
+      }
     }
     .desc,
     .desc-title {

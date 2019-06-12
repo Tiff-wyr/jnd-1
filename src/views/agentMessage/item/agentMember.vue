@@ -1,5 +1,6 @@
 <template>
   <div class="jnd-container">
+    <activityBox :visible="activityVisble" :phone="phone" @close="handleCloseAvtivity" @useMember="useMember"></activityBox>
     <div class="top">
       <div class="member-info">
         <div class="left" :class="{'member0': vipLevel == 0, 'member1': vipLevel == 1, 'member2': vipLevel == 2, 'member3': vipLevel == 3, }">
@@ -129,9 +130,12 @@ import memberBox from '@/component/memberBox'
 import payTypeBox from '@/component/payTypeBox'
 import { checkAliPayRusult, createAliPayOrderSn, getMemberDatas, reviewAliPay } from '@/util/pay.alipay'
 import { getQrCodes, checkWxPayRusult, reviewWxPay } from '@/util/pay.wxpay'
+import activityBox from '@/component/activityBox'
+import { getGetStatus } from '@/views/api/activity'
 export default {
   name: "agentMember",
   components: {
+    activityBox,
     memberBox,
     payTypeBox
   },
@@ -157,7 +161,8 @@ export default {
       payType: "",
       vipType: '',
       month: '',
-      businessType: 0
+      businessType: 0,
+      activityVisble: false
     };
   },
   filters: {
@@ -199,9 +204,26 @@ export default {
       this.phone = this.$store.state.userInfo.phone
       this.getMember()
     }
+    this.getStatus()
   },
   methods: {
     ...mapMutations(["SET_USER_VIP"]),
+    getStatus() {
+      getGetStatus(this.phone).then(res => {
+        if (res.data.status === 200) {
+          this.activityVisble = true
+        }
+      })
+    },
+    useMember() {
+      this.activityVisble = false
+      this.SET_USER_VIP(1)
+      this.vipLevel = 1
+      this.getMember()
+    },
+    handleCloseAvtivity() {
+      this.activityVisble = false
+    },
     getMember() {
       getMember(this.phone).then(res => {
         this.memberData = res.data

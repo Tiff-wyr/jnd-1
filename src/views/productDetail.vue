@@ -25,11 +25,8 @@
                   <div class="fll">
                     <div class="detail-loan-title">{{productDetailData.productName}}</div>
                     <div class="clearfix re-star">
-                      <img
-                        src="../../static/resource/product-detail/star.png"
-                        alt=""
-                        class="fll star"
-                      >
+                      <img src="../../static/resource/agent/star.png" class="fll" v-if="isCollect" alt="" />
+                      <img src="../../static/resource/agent/star1.png" class="fll" v-else alt="" />
                       <div class="fll">
                         <div class="fll restore" @click="restore" v-if="isCollect">加入收藏</div>
                         <div class="fll restore" @click="cancelRestore" v-else>取消收藏</div>
