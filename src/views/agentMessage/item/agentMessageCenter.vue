@@ -2,7 +2,7 @@
   <div>
     <div class="collect mb24">
       <div class="title">消息中心</div>
-      <el-tabs>
+      <el-tabs @tab-click="tabClick" v-model="activeName">
         <el-tab-pane><span slot="label">收件箱</span>
           <div>
             <div v-if="isInbox" class="inbox">
@@ -10,7 +10,6 @@
                 ref="multipleTable"
                 :data="shouData"
                 tooltip-effect="dark"
-                @row-click="rowClick"  
                 v-loading="listLoading"
                 element-loading-text="数据正在加载中..."
                 element-loading-spinner="el-icon-loading"
@@ -152,16 +151,20 @@
           startTime:'',
           type:2,
           isRead:0
-        }
+        },
+        activeName: ''
       }
     },
     methods: {
+      tabClick() {
+        this.isInbox=true
+        this.isChange=false
+        this.sendMessData.content = "";
+      },
       returnS(){
         this.isInbox=true
         this.isChange=false
-      },
-      rowClick(row, event, column) {
-
+        this.sendMessData.content = "";
       },
       lookShouRow(id){
         this.isInbox = false
@@ -280,6 +283,7 @@
           this.$axios.post('message/saveMessage', data).then(res => {
             if (res.status === 200) {
               this.$message.success(res.msg)
+              this.activeName = '1'
               this.sendMessData.content = ''
               this.getFMessage()
             }

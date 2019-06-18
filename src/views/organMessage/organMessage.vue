@@ -7,7 +7,7 @@
             <div class="main">
               <div class="img-main">
                 <div class="clearfix" style="width: 76px;height: 76px;margin: 0 auto">
-                  <personImg v-model="image" @success="uploadSuccess" :phone="phone"></personImg>
+                  <upload-img class="fll" @uploadSuccess="uploadSuccess" @uploadFail="uploadFail" :imgUrl="image"></upload-img>
                 </div>
                 <div
                   class="clearfix fs"
@@ -94,14 +94,12 @@
 </template>
 
 <script>
-import personImg from "../../component/personImg";
 import { mapMutations, mapState } from "vuex";
-import { randomWord } from "@/util/util";
+import uploadImg from '@/component/uploadImg'
 export default {
   name: "organMessage",
   data() {
     return {
-      phone: '',
       userIdn: "",
       type: "1",
       image: "",
@@ -109,7 +107,7 @@ export default {
     };
   },
   components: {
-    personImg
+    uploadImg
   },
   computed: {
     ...mapState(["userInfo"]),
@@ -127,21 +125,26 @@ export default {
   },
   methods: {
     ...mapMutations(["SET_USER_IMAGE"]),
-    uploadSuccess(val) {
+    uploadFail(val) {
+      console.log('上传失败', val)
+    },
+    uploadSuccess(val, field) {
+      console.log('上传成功', val, field)
       let data = new FormData();
-      data.append("image", val);
+      data.append("image", val.jsonData.data);
       data.append("agencyId", this.$store.state.userInfo.id);
-      this.$axios.post(`userAgency/updateLogoById`, data).then(res => {
+      this.$axios.post("/userAgency/updateLogoById", data).then(res => {
         if (res.status === 200) {
+          this.SET_USER_IMAGE(val.jsonData.data)
+          this.image = val.jsonData.data;
           this.$message.success("修改头像成功");
-          this.SET_USER_IMAGE(val)
-          this.image = val
+        } else {
+          this.$message.warning(res.msg);
         }
       });
     }
   },
   created() {
-    this.phone = new Date().getTime() + randomWord(false, 10);
     if (this.$store.state.userInfo !== null) {
       this.name = this.$store.state.userInfo.name
     }

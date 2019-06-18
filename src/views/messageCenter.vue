@@ -2,15 +2,14 @@
   <div>
     <div class="collect mb24">
       <div class="title">消息中心</div>
-      <el-tabs>
-        <el-tab-pane><span slot="label">收件箱</span>
+      <el-tabs @tab-click="tabClick" v-model="activeName">
+        <el-tab-pane label="inBox"><span slot="label">收件箱</span>
           <div>
             <div v-if="isInbox" class="inbox">
               <el-table
                 ref="multipleTable"
                 :data="shouData"
                 tooltip-effect="dark"
-                @row-click="rowClick"
                 v-loading="listLoading" 
                 element-loading-text="数据正在加载中..." 
                 element-loading-spinner="el-icon-loading" 
@@ -65,7 +64,7 @@
 
           </div>
         </el-tab-pane>
-        <el-tab-pane><span slot="label">发件箱</span>
+        <el-tab-pane label="outBox"><span slot="label">发件箱</span>
           <div class="outbox">
             <el-table
               ref="multipleTable"
@@ -105,7 +104,6 @@
           <div v-show="!isChange" class="clearfix" style="margin-top: 30px">
             <div class="fll sub" @click="subOutbox">删除</div>
           </div>
-
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -128,6 +126,7 @@
         checked: false,
         shouData:[],
         faData:[],
+        activeName: '',
         selectMultipleInbox:[],
         selectMultipleOutbox:[],
         arrInbox:[],
@@ -157,12 +156,16 @@
       }
     },
     methods:{
+      tabClick(val) {
+        console.log(this.activeName)
+        this.isInbox=true
+        this.isChange=false
+        this.sendMessData.content = "";
+      },
       returnS(){
         this.isInbox=true
         this.isChange=false
-      },
-      rowClick(row, event, column) {
-
+        this.sendMessData.content = "";
       },
       lookShouRow(id){
         this.isInbox = false
@@ -274,6 +277,7 @@
           }
           this.$axios.post('message/saveMessage',data).then(res=>{
             if(res.status === 200){
+              this.activeName = '1'
               this.$message.success('消息发送成功')
               this.sendMessData.content=''
               this.getFMessage()

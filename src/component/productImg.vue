@@ -37,11 +37,11 @@ export default {
   },
   methods: {
     uploadSuccess(file) {
-      if (file.indexOf("http") !== -1) {
-        this.value = file + "?" + new Date().getTime();
+      if (file.data.indexOf('http') !== -1) {
+        this.value = file.data + "?" + new Date().getTime();
         this.$emit("success", file);
       } else {
-        this.$message.warning(file);
+        this.$message.warning(file.msg);
       }
     },
     beforeUpload(file) {

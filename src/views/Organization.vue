@@ -320,9 +320,6 @@ export default {
       this.isJianSuo = true;
       this.searchCon = "";
       this.getCondition();
-    },
-    '$route': function(val) {
-      console.log(val)
     }
   },
   beforeRouteEnter (to, from, next) {

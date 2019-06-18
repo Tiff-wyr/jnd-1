@@ -1,6 +1,7 @@
 <template>
   <div>
     <registerTop></registerTop>
+    
     <div class="wrappy">
       <div class="w900">
         <div class="user-main">
@@ -34,7 +35,7 @@
               </div>
               <div class="person-item clearfix">
                 <el-form-item label="上传照片:" prop="image">
-                  <personImg v-model="formData.image" :phone="phone" @success="uploadSuccess"></personImg>
+                  <upload-img class="fll" @uploadSuccess="uploadSuccess" @uploadFail="uploadFail"></upload-img>
                   <div class="fll text-desc">请上传正面照，支持JPG/JPEG/PNG格式图片，照片不大于2M</div>
                 </el-form-item>
               </div>
@@ -102,12 +103,11 @@
               <div class="person-item clearfix">
                 <el-form-item label="擅长业务:" prop="businessScope">
                   <div class="business-wrap clearfix">
-                    <div
+                    <div v-if="isShowTag"><div
                       class="fll tags-item"
                       v-for="(item,index) in formData.businessScope"
                       :key="index"
-                      v-if="isShowTag"
-                    >{{item.business}}</div>
+                    >{{item.business}}</div></div>
                     <div class="business fll" @click="goodMask">
                       <div class="my-upload-img">+</div>
                     </div>
@@ -253,20 +253,21 @@
 
 <script>
 import registerTop from "../component/registerTop";
-import personImg from "../component/imgUpload";
 import wcheckbox from "../component/w-checkBox";
 import validater from "../util/validater";
 import { randomWord } from "@/util/util";
 import { mapState, mapMutations } from "vuex";
 import { validaterPhone, validaterName } from "@/util/validate";
 import { registerAccount } from './api/register'
+import uploadImg from '@/component/uploadImg'
+import banner from '@/assets/banner01.png'
 const reg = /^\d+(\.(?!.*0$)\d{1,2})?$/;
 const regZ = /^\d+$/;
 export default {
   components: {
     registerTop,
-    personImg,
-    wcheckbox
+    wcheckbox,
+    uploadImg
   },
   computed: {
     ...mapState(["userInfo"])
@@ -315,6 +316,11 @@ export default {
       }
     }
     return {
+      option: {
+        img: banner,
+        size: 1,
+        outputType: 'jpeg'
+      },
       flag1: false,
       flag2: false,
       flag3: false,
@@ -485,7 +491,7 @@ export default {
     getCode() {
       this.$axios.get(`base/getRegisterCode/${this.formData.phone}`).then(res => {
         if (res.status === 200) {
-          console.log('发送成功')
+          this.$message.warning('验证码发送成功，请注意查收');
         } else {
           this.$message.warning(res.msg);
         }
@@ -667,8 +673,12 @@ export default {
         this.tags = res;
       });
     },
-    uploadSuccess(file) {
-      this.formData.image = file;
+    uploadSuccess(val, field) {
+      console.log('上传成功', val, field)
+      this.formData.image = val.jsonData.data
+    },
+    uploadFail(val, field) {
+      console.log('上传失败', val, field)
     }
   },
   created() {

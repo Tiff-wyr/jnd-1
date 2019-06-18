@@ -1,4 +1,3 @@
-import { Message } from 'element-ui'
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
     return null

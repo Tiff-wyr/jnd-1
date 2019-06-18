@@ -60,7 +60,7 @@
       </div>
     </toggleItem>
     <toggleItem :title="'绑定邮箱'" @click="handleEmail" :isShow="updateEmailShow">
-      已绑定邮箱：{{ email }}
+      已绑定邮箱：{{ email ? (email == 'null' ? '' : email) : '' }}
       <div slot="hidden">
         <el-form ref="emailForm" :model="emailForm" :rules="emailFormRules" label-position="right" label-width="120px" style="margin-left: 100px;">
           <el-form-item label="新邮箱" prop="newEmail">
@@ -109,7 +109,7 @@ export default {
         if (validatrerPassword(value)) {
           callback()
         } else {
-          callback(new Error('密码格式为6至16位的数字或字母组合'))
+          callback(new Error('密码格式为字母开头6至18位的字母数字组合'))
         }
       } else {
         callback(new Error('请填写新密码'))
@@ -215,7 +215,7 @@ export default {
           checkNum.test(this.passwordForm.newPassword)
         ) {
           this.level = 2;
-          if (this.passwordForm.newPassword.length > 8) this.level = 3;
+          if (this.passwordForm.newPassword.length > 12) this.level = 3;
         } else if (
           (checkChar.test(this.passwordForm.newPassword) ||
             checkNum.test(this.passwordForm.newPassword)) &&

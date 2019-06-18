@@ -7,7 +7,7 @@
             <div class="main">
               <div class="img-main">
                 <div style="width: 76px;height: 76px;margin: 0 auto">
-                  <personImg v-model="image" @success="updataImg" :phone="phone"></personImg>
+                  <upload-img class="fll" @uploadSuccess="uploadSuccess" @uploadFail="uploadFail" :imgUrl="image"></upload-img>
                 </div>
                 <div class="court-num">{{userInfo ? userInfo.name : ''}}</div>
               </div>
@@ -69,39 +69,41 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import personImg from "../component/personImg";
+import uploadImg from '@/component/uploadImg'
 export default {
   name: "myMessage",
   data() {
     return {
       userIdn: "",
-      image: "",
-      phone: ""
+      image: ""
     };
   },
   components: {
-    personImg
+    uploadImg
   },
   computed: {
     ...mapState(["userInfo"])
   },
   methods: {
     ...mapMutations(["SET_USER_IMAGE"]),
-    updataImg(val) {
+    uploadFail(val, field) {
+      console.log('上传失败', val, field)
+    },
+    uploadSuccess(val, field) {
+      console.log(val, field)
       let data = new FormData();
-      data.append("image", val);
+      data.append("image", val.jsonData.data);
       data.append("borrowerId", this.$store.state.userInfo.id);
       this.$axios.post(`userBorrower/updateLogoById`, data).then(res => {
         if (res.status === 200) {
           this.$message.success("修改头像成功");
-          this.SET_USER_IMAGE(val)
+          this.SET_USER_IMAGE(val.jsonData.data)
         }
       });
     }
   },
   created() {
     if (this.$store.state.userInfo) {
-      this.phone = this.$store.state.userInfo.phone;
       let id = this.$route.params.id;
       this.userIdn = id;
       if (this.userInfo.image) {

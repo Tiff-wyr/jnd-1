@@ -212,7 +212,7 @@
               <div class="agent-table fll">
                 <div class="clearfix">
                   <div class="fll align mr42" v-for="(item,index) in agentData" :key="index">
-                    <a :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', backgroundImage: 'url(' + item.image + ')', backgroundSize: '100% auto', 'background-position-y': '-16px'}" :href="'#/agentDetail/' + item.brokerId" target="_blank"></a>
+                    <a :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', backgroundImage: 'url(' + item.image + ')', backgroundSize: '100% auto', 'background-position': 'center center', 'backgroundRepeat': 'no-repeat'}" :href="'#/agentDetail/' + item.brokerId" target="_blank"></a>
                     <div class="agent-name">{{item.brokerName}}</div>
                     <div class="agent-job">金融顾问</div>
                   </div>

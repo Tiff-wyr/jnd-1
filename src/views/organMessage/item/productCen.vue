@@ -353,7 +353,7 @@ export default {
       })
     },
     uploadSuccess(file) {
-      this.productDetailData.productLogo = file;
+      this.productDetailData.productLogo = file.data;
     },
     editProduct(id) {
       this.dialogVisible = true

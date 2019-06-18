@@ -122,14 +122,14 @@
             <div class="top-form">
               <el-form ref="agentApplyForm" :model="borrowerData" :rules="borrowerDataRules" label-position="right" label-width="96px">
                 <el-form-item label="姓名：" prop="borrowerName">
-                  <el-input :disabled="!!this.$store.state.userInfo" v-model="borrowerData.borrowerName" class="input-item"></el-input>
+                  <el-input :disabled="!!this.$store.state.userInfo" v-model="borrowerData.borrowerName" placeholder="请输入姓名" class="input-item"></el-input>
                   <el-radio-group v-model="borrowerData.sex" :disabled="!!this.$store.state.userInfo" style="margin-left: 10px;">
                     <el-radio :label="1">男</el-radio>
                     <el-radio :label="0">女</el-radio>
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item label="贷款金额：" prop="loanAmount">
-                  <el-input v-model="borrowerData.loanAmount" class="input-item"></el-input>
+                  <el-input v-model="borrowerData.loanAmount" class="input-item" placeholder="请输入贷款金额（万元）"></el-input>
                 </el-form-item>
                 <el-form-item label="所在地：" prop="address">
                   <el-select v-model="borrowerData.address1" style="width: 100px;" clearable @change="getCity">
@@ -176,10 +176,10 @@
                 </el-form-item>
 
                 <el-form-item v-if="!userInfo" label="手机号：" prop="phone">
-                  <el-input v-model="borrowerData.phone" class="input-item"></el-input>
+                  <el-input v-model="borrowerData.phone" class="input-item" placeholder="请输入手机号"></el-input>
                 </el-form-item>
                 <el-form-item v-if="!userInfo" label="验证码：" prop="code">
-                  <el-input v-model="borrowerData.code" style="width: 90px;"></el-input>
+                  <el-input v-model="borrowerData.code" style="width: 90px;" placeholder="验证码"></el-input>
                   <el-button v-if="showing" @click="send" style="width: 110px;">{{ verifyCode }}</el-button>
                   <el-button v-else @click="send" style="width: 110px;">{{ time }}s</el-button>
                 </el-form-item>
@@ -438,9 +438,8 @@ export default {
                 this.resetForm();
               } else {
                 this.$axios.get(`base/getUpdatePhoneCode/${this.borrowerData.phone}`).then(res => {
-                  console.log(res)
                   if (res.status === 200) {
-                    this.$message.success(res.msg)
+                    this.$message.success('验证码发送成功，请注意查收')
                   } else {
                     this.$message.warning(res.msg)
                   }
@@ -865,7 +864,7 @@ export default {
         border: 1px solid #D9D9D9;
         border-radius: 4px;
         text-align: center;
-        margin: 10px;
+        margin: 4px;
       }
     }
     .desc,

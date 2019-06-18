@@ -51,6 +51,10 @@
             <router-link
               to="/help"
               :style="$route.meta.classify === 'help' ? 'color:rgba(168,14,14,1)' : ''"
+            >金融咨询</router-link>
+            <router-link
+              to="/help"
+              :style="$route.meta.classify === 'help' ? 'color:rgba(168,14,14,1)' : ''"
             >贷款帮助</router-link>
           </div>
         </div>

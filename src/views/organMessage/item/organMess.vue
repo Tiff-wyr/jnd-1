@@ -363,8 +363,8 @@ export default {
         });
     },
     uploadSuccess(file) {
-      this.organMessData.agencyLicense = file;
-      this.resultData.agencyLicense = file
+      this.organMessData.agencyLicense = file.data;
+      this.resultData.agencyLicense = file.data
     }
   },
   created() {

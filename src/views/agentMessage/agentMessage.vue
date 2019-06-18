@@ -7,7 +7,7 @@
             <div class="main">
               <div class="img-main">
                 <div style="width: 76px;height: 76px;margin: 0 auto">
-                  <personImg v-model="image" @success="uploadSuccess" :phone="phone"></personImg>
+                  <upload-img class="fll" @uploadSuccess="uploadSuccess" @uploadFail="uploadFail" :imgUrl="image"></upload-img>
                 </div>
                 <div class="clearfix fs" style="width: 120px;text-align: center;margin: 10px auto">
                   <div
@@ -106,13 +106,12 @@
 
 <script>
 import { mapMutations, mapState } from "vuex";
-import personImg from "../../component/personImg";
+import uploadImg from '@/component/uploadImg'
 import { randomWord } from "@/util/util";
 export default {
   name: "agentMessage",
   data() {
     return {
-      phone: "",
       name: "",
       isShowing: true,
       organ: false,
@@ -122,7 +121,7 @@ export default {
     };
   },
   components: {
-    personImg
+    uploadImg
   },
   computed: {
     ...mapState(["userInfo"]),
@@ -144,14 +143,18 @@ export default {
     organM() {
       this.organ = true;
     },
-    uploadSuccess(val) {
+    uploadFail(val) {
+      console.log('上传失败', val)
+    },
+    uploadSuccess(val, field) {
+      console.log('上传成功', val, field)
       let data = new FormData();
       data.append("image", val);
-      data.append("brokerId", this.$store.state.userInfo.id);
-      this.$axios.post("/userBroker/modifyImageByBrokerId", data).then(res => {
+      data.append("borrowerId", this.$store.state.userInfo.id);
+      this.$axios.post("/userBorrower/updateLogoById", data).then(res => {
         if (res.status === 200) {
-          this.SET_USER_IMAGE(val);
-          this.image = val;
+          this.SET_USER_IMAGE(val.jsonData.data)
+          this.image = val.jsonData.data;
           this.$message.success("修改头像成功");
         } else {
           this.$message.warning(res.msg);
@@ -160,7 +163,6 @@ export default {
     }
   },
   created() {
-    this.phone = new Date().getTime() + randomWord(false, 10);
     if (this.$store.state.userInfo !== null) {
       this.name = this.$store.state.userInfo.name;
     }

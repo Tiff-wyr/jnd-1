@@ -33,8 +33,8 @@ export function validaterFloat(val) {
  * @param {string} val 
  */
 export function validatrerPassword(val) {
-  const reg = /^[\da-zA-Z]{6,16}$/
-  return reg.test(val)
+  const reg = /^[a-zA-Z]+\d+[a-zA-Z\d]+$/
+  return reg.test(val) && val.length > 5 && val.length < 19
 }
 
 /**
@@ -56,4 +56,9 @@ export function validaterOragnName(name) {
 export function validEmail(email) {
   const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return reg.test(email)
+}
+
+export function validPassword(val) {
+  const reg = /^[a-zA-Z]\d{5,17}/
+  return reg.test(val)
 }

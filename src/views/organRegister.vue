@@ -185,7 +185,6 @@ import validater from "../util/validater";
 import personImg from "../component/imgUpload";
 import { randomWord } from "@/util/util";
 import { validaterPhone, validaterName } from "@/util/validate";
-
 export default {
   name: "organRegister",
   components: {
@@ -346,7 +345,7 @@ export default {
     getCode() {
       this.$axios.get(`base/getRegisterCode/${this.organMess.phone}`).then(res => {
         if (res.status === 200) {
-          console.log('发送成功')
+          this.$message.warning('验证码发送成功，请注意查收');
         } else {
           this.$message.warning(res.msg);
         }
@@ -431,7 +430,8 @@ export default {
       });
     },
     uploadSuccess(file) {
-      this.organMess.agencyLicense = file;
+      console.log('机构注册', file)
+      this.organMess.agencyLicense = file.data;
       this.$refs.organMess.validate();
     },
     createUniqueString() {
