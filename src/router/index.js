@@ -8,8 +8,10 @@ const components={
   agent:()=>import('@/views/Agent'),
   organization:()=>import('@/views/Organization'),
   help:()=>import('@/views/Help'),
+  consult:()=>import('@/views/consult/consult'),
+  consultDetail:()=>import('@/views/consult/consultDetail'),
   layout:()=>import('@/layout/layout'),
-
+  
   myMessage:()=>import('@/views/myMessage'),
   personMessage:()=>import('@/views/personMessage'),
   myCollect:()=>import('@/views/myCollect'),
@@ -143,6 +145,19 @@ export default new Router({
           meta: {
             classify: 'organ'
           }
+        },
+        {
+          path:'consult',
+          name: 'consult',
+          component:components.consult,
+          meta: {
+            classify: 'consult'
+          }
+        },
+        {
+          path: 'consultDetail',
+          name: 'consultDetail',
+          component: components.consultDetail
         },
         {
           path:'help',

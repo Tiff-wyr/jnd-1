@@ -34,7 +34,7 @@ export default {
   width: 1200px;
   height: 228px;
   background: rgba(255, 255, 255, 1);
-  margin-top: 30px;
+  margin: 30px auto 0;
   .partner {
     font-size: 20px;
     font-family: PingFangSC-Regular;

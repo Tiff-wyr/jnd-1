@@ -1,0 +1,29 @@
+$jnd-bg-white: #ffffff;
+li {
+  list-style: none;
+}
+.bg-white {
+  background: $jnd-bg-white;
+}
+.title {
+  position: relative;
+  padding: 12px 20px;
+  &::after {
+    display: block;
+    content: ' ';
+    width: 4px;
+    height: 24px;
+    background: #A80E0E;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -12px;
+  }
+  &.slide-bar {
+    border-bottom: 1px solid #D9D9D9;
+    padding-left: 36px;
+    &::after {
+      left: 16px;
+    }
+  }
+}

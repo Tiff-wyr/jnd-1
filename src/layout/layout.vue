@@ -49,8 +49,8 @@
               :style="$route.meta.classify === 'organ' ? 'color:rgba(168,14,14,1)' : ''"
             >找机构</router-link>
             <router-link
-              to="/help"
-              :style="$route.meta.classify === 'help' ? 'color:rgba(168,14,14,1)' : ''"
+              to="/consult"
+              :style="$route.meta.classify === 'consult' ? 'color:rgba(168,14,14,1)' : ''"
             >金融咨询</router-link>
             <router-link
               to="/help"
