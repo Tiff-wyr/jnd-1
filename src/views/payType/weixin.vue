@@ -52,7 +52,7 @@
 
 <script>
 import success from "../../assets/success.png";
-import { checkPayStatus, updateBaseStatus } from '@/views/api/pay.wxpay'
+import { checkPayStatus, updateBaseStatus } from '@/api/pay.wxpay'
 import { param2Obj } from '../../util/util'
 export default {
   name: "weixin",

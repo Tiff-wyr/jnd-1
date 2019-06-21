@@ -124,14 +124,14 @@ import tyM1 from '../../../../static/resource/vip/ty-member1.png'
 import tyM2 from '../../../../static/resource/vip/ty-member2.png'
 import tyM3 from '../../../../static/resource/vip/ty-member3.png'
 import { mapState, mapMutations } from "vuex";
-import { getMember } from '@/views/api/pay.alipay'
+import { getMember } from '@/api/pay.alipay'
 import { formatPhone } from '@/util/util'
 import memberBox from '@/component/memberBox'
 import payTypeBox from '@/component/payTypeBox'
 import { checkAliPayRusult, createAliPayOrderSn, getMemberDatas, reviewAliPay } from '@/util/pay.alipay'
 import { getQrCodes, checkWxPayRusult, reviewWxPay } from '@/util/pay.wxpay'
 import activityBox from '@/component/activityBox'
-import { getGetStatus } from '@/views/api/activity'
+import { getGetStatus } from '@/api/activity'
 export default {
   name: "agentMember",
   components: {

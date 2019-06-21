@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import api from "./api/filterData.js";
+import api from "@/api/filterData.js";
 import { mapMutations } from "vuex";
 import { validaterName,  } from "@/util/validate";
 export default {

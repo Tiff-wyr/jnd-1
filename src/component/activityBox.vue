@@ -9,7 +9,7 @@
 </div>
 </template>
 <script>
-import { getGift } from '@/views/api/activity'
+import { getGift } from '@/api/activity'
 const src = '../../../../static/resource/activity/text.png'
 const getBtn = '../../../../static/resource/activity/get.png'
 const useBtn = '../../../../static/resource/activity/use.png'

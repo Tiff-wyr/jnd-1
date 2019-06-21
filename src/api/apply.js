@@ -17,3 +17,25 @@ export function saveNotLoginProductOrder(params) { // 找产品， 未登录状�
     params
   })
 }
+
+export function applyLoanByNoLogin(params) {
+  return request({
+    url: '/orderAll/saveNoLoginOrder',
+    method: 'post',
+    params
+  })
+}
+
+export function validPhoneIsRegister(phone) {
+  return request({
+    url: '/user/selectPhone/' + phone,
+    method: 'get'
+  })
+}
+
+export function sendPhoneCode(phone) {
+  return request({
+    url: `base/getUpdatePhoneCode/${phone}`,
+    method: 'get'
+  })
+}

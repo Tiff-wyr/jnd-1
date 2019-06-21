@@ -104,7 +104,7 @@
                   </div>
                 </div>
                 <div class="name">擅长业务：<br><span v-for="item in agentDetail.businessScopeInfo" :key="item" class="tag">{{ item }}</span></div>
-                <div class="name">业务地区：{{agentDetail.businessAreaValue}}</div>
+                <div class="name">所在地区：{{agentDetail.address}}</div>
                 <div class="name">所属公司：{{agentDetail.company}}</div>
                 <div class="desc-title">个人简介：</div>
                 <div class="desc">{{agentDetail.introduction}}</div>
@@ -225,7 +225,6 @@
 
 <script>
 import layout from "../layout/layout";
-import validateApplyApi from "./api/validateApply";
 import footerSame from "../component/footerSame";
 import { mapState } from "vuex";
 import { validaterPhone, validaterName, validaterLoanAmount } from "@/util/validate";

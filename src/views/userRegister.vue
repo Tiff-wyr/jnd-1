@@ -19,7 +19,7 @@
             <div class="user-form">
               <div class="person-item clearfix">
                 <el-form-item label="姓名:" prop="borrowerName" style="width: 300px;">
-                  <el-input v-model="form.borrowerName" type="text"></el-input>
+                  <el-input v-model="form.borrowerName" type="text" placeholder="请输入姓名"></el-input>
                 </el-form-item>
               </div>
               <div class="person-item clearfix">
@@ -32,7 +32,7 @@
               </div>
               <div class="person-item clearfix">
                 <el-form-item label="贷款金额:" prop="loanAmount" style="width: 300px;">
-                  <el-input type="text" v-model="form.loanAmount" autocomplete="off"></el-input>
+                  <el-input type="text" v-model="form.loanAmount" autocomplete="off" placeholder="请输入贷款金额（万元）"></el-input>
                 </el-form-item>
               </div>
               <div class="person-item clearfix">
@@ -63,12 +63,13 @@
                     type="text"
                     v-model="form.phone"
                     autocomplete="off"
+                    placeholder="请输入手机号"
                   ></el-input>
                 </el-form-item>
               </div>
               <div class="person-item clearfix">
                 <el-form-item label="验证码:" prop="password" style="width: 20  0px; float: left">
-                  <el-input type="text" v-model="form.password" autocomplete="off"></el-input>
+                  <el-input type="text" v-model="form.password" autocomplete="off" placeholder="请输入验证码"></el-input>
                 </el-form-item>
                 <div class="fll verify">
                   <div class="send" v-if="showing" @click="send">{{verifyCode}}</div>
@@ -200,7 +201,7 @@ export default {
     getCode() {
       this.$axios.get(`base/getRegisterCode/${this.form.phone}`).then(res => {
         if (res.status === 200) {
-          console.log('发送成功')
+          this.$message.warning('验证码发送成功，请注意查收');
         } else {
           this.$message.warning(res.msg);
         }

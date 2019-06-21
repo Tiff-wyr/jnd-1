@@ -204,10 +204,10 @@
 <script>
 import success from "../../../assets/success.png";
 import warning from "../../../assets/warning.png";
-import api from "../../api/filterData.js";
-import getListApi from "../../api/index.js";
+import api from "@/api/filterData.js";
+import getListApi from "@/api/index.js";
 import { mapState, mapMutations } from "vuex";
-import { getResourceCenList } from '@/views/api/organ'
+import { getResourceCenList } from '@/api/organ'
 import memberBox from '@/component/memberBox'
 import { checkAliPayRusult, createAliPayOrderSn, getMemberDatas, reviewAliPay } from '@/util/pay.alipay'
 import { getQrCodes, checkWxPayRusult, reviewWxPay } from '@/util/pay.wxpay'

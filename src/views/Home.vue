@@ -297,15 +297,16 @@
 <script>
 import footerSame from "../component/footerSame";
 import bottomTap from "../component/bottomTap";
-import validateApplyApi from "./api/validateApply";
-import publicApi from "./api/public";
+import publicApi from "@/api/public";
+import { publics } from '@/api/validateApply'
 import emptyList from "../assets/empty-list.png";
 import { validaterPhone, validaterLoanAmount, validaterName } from "@/util/validate";
 import banner01 from '@/assets/banner01.png'
 import banner02 from '@/assets/banner02.png'
 import banner03 from '@/assets/banner03.png'
 import banner04 from '@/assets/banner04.png'
-import { getGetStatus } from '@/views/api/activity'
+import { getGetStatus } from '@/api/activity'
+import { applyLoanByNoLogin, validPhoneIsRegister, sendPhoneCode } from '@/api/apply'
 const bannerList = [banner04, banner01, banner03]
 export default {
   name: "Home",
@@ -496,7 +497,7 @@ export default {
             });
           } else {
             if (this.$store.state.userInfo.roleId == 1) {
-              validateApplyApi.public(this.borrowerData.phone).then(res => { // 验证该手机号今天是否在此申请过
+              publics(this.borrowerData.phone).then(res => { // 验证该手机号今天是否在此申请过
                 if (res.data.status == 200) { // 可以申请
                   this.sendPhoneCode(this.borrowerData.phone);
                 } else {
@@ -520,13 +521,13 @@ export default {
       this.$refs.borrowerData.validate(valid => {
         if (valid) {
           if (this.isChecked) {
-            if (!flag) {
+            if (!this.flag) {
               let data = new FormData();
               for (let item in this.borrowerData) {
                 data.append(item, this.borrowerData[item]);
               }
-              this.$axios.post(`orderAll/saveNoLoginOrder`, data).then(res2 => {
-                if (res2.status === 200) {
+              applyLoanByNoLogin(this.borrowerData).then(res => {
+                if (res.data.status === 200) {
                   this.clearTimer();
                   if (this.$store.state.userInfo === null) {
                     this.$message.success("申请并注册成功");
@@ -564,6 +565,7 @@ export default {
     //获取省
     getProvince() {
       this.$axios.get("city/getAllProvincial").then(res => {
+        console.log(res)
         this.provinceData = res;
       });
     },

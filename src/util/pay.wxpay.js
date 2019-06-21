@@ -1,5 +1,5 @@
 import { createA } from './util'
-import { getQrCode, getQrCodeUrl, checkPayStatus, updateBaseStatus } from '@/views/api/pay.wxpay'
+import { getQrCode, getQrCodeUrl, checkPayStatus, updateBaseStatus } from '@/api/pay.wxpay'
 
 export function checkWxPayRusult(orderSn, success, fail) { // 检查支付结果
   checkPayStatus(orderSn).then(res => {

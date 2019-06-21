@@ -185,6 +185,7 @@ import validater from "../util/validater";
 import personImg from "../component/imgUpload";
 import { randomWord } from "@/util/util";
 import { validaterPhone, validaterName } from "@/util/validate";
+import { fetchProvince, fetchCity } from '@/api/register'
 export default {
   name: "organRegister",
   components: {
@@ -345,7 +346,7 @@ export default {
     getCode() {
       this.$axios.get(`base/getRegisterCode/${this.organMess.phone}`).then(res => {
         if (res.status === 200) {
-          this.$message.warning('验证码发送成功，请注意查收');
+          this.$message.success('验证码发送成功，请注意查收');
         } else {
           this.$message.warning(res.msg);
         }
@@ -418,16 +419,18 @@ export default {
     },
     //获取省
     getProvince() {
-      this.$axios.get("city/getShengHot").then(res => {
-        this.provinceData = res;
-      });
+      fetchProvince().then(res => {
+        this.provinceData = res.data
+      })
     },
     //获取 市 区
     getCity(val) {
-      this.organMess.agencyAddress1 = "";
-      this.$axios.get(`city/getCityHot/${val}`).then(res => {
-        this.cityData = res;
-      });
+      this.organMess.address2 = "";
+      if (val) {
+        fetchCity(val).then(res => {
+          this.cityData = res.data
+        })
+      }
     },
     uploadSuccess(file) {
       console.log('机构注册', file)

@@ -96,7 +96,6 @@
                 <div class="name">{{organDetail.agencyName}}</div>
                 <div class="name">实名认证：{{organDetail.nameAuthentication}}</div>
                 <div class="name">营业执照：{{organDetail.licenseAuthentication}}</div>
-                <div class="name">营业执照：{{organDetail.licenseAuthentication}}</div>
                 <div class="clearfix name-same" style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
                   <div
                     class="name fll"

@@ -101,7 +101,7 @@
 
 <script>
 import footerSame from "../component/footerSame";
-import detailApi from './api/detail'
+import detailApi from '@/api/detail'
 import { formatPhone, param2Obj } from '../util/util'
 export default {
   name: "userDetail",

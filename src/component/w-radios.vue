@@ -9,7 +9,7 @@
 
 <script>
     export default {
-      name: "w-rodios",
+      name: "w-radios",
       props: {
         name: String,
         radios: Array

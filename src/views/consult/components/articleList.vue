@@ -3,39 +3,15 @@
     <div class="article-wrap bg-white">
       <h2 class="title">热门文章</h2>
       <ul class="article-list">
-        <li class="article-item" @click="handleDetail">
+        <li class="article-item" v-for="item in data" :key="item.id" @click="handleDetail(item.id)">
           <dl>
             <dt>
               <img src="../../../../static/consult/1.jpg" alt="title">
             </dt>
             <dd>
-              <h3>北京贷款还有哪些靠谱的</h3>
-              <p class="article-main">为什么每个月按时缴纳公积金，还不是因为我为什么每个月按时缴纳公积金，还不是因为我为什么每个月按时缴纳公积金，还不是因为我为什么每个月按时缴纳公积金，还不是因为我</p>
-              <acticle-footer source="北京银行" num="33157"></acticle-footer>
-            </dd>
-          </dl>
-        </li>
-        <li class="article-item" @click="handleDetail">
-          <dl>
-            <dt>
-              <img src="../../../../static/consult/1.jpg" alt="title">
-            </dt>
-            <dd>
-              <h3>北京贷款还有哪些靠谱的</h3>
-              <p class="article-main">为什么每个月按时缴纳公积金，还不是因为我为什么每个月按时缴纳公积金，还不是因为我为什么每个月按时缴纳公积金，还不是因为我为什么每个月按时缴纳公积金，还不是因为我</p>
-              <acticle-footer source="北京银行" num="33157"></acticle-footer>
-            </dd>
-          </dl>
-        </li>
-        <li class="article-item" @click="handleDetail">
-          <dl>
-            <dt>
-              <img src="../../../../static/consult/1.jpg" alt="title">
-            </dt>
-            <dd>
-              <h3>北京贷款还有哪些靠谱的</h3>
-              <p class="article-main">为什么每个月按时缴纳公积金，还不是因为我为什么每个月按时缴纳公积金，还不是因为我为什么每个月按时缴纳公积金，还不是因为我为什么每个月按时缴纳公积金，还不是因为我</p>
-              <acticle-footer source="北京银行" num="33157"></acticle-footer>
+              <h3>{{ item.topic }}</h3>
+              <div class="article-main">{{item.introduction}}</div>
+              <acticle-footer :source="item.source" :num="item.viewNumber" :time="item.releaseTime"></acticle-footer>
             </dd>
           </dl>
         </li>
@@ -58,14 +34,20 @@ export default {
   components: {
     acticleFooter
   },
+  props: {
+    data: {
+      type: Array,
+      required: true
+    }
+  },
   data() {
     return {
       checked: false
     }
   },
   methods: {
-    handleDetail() {
-      this.$router.push('/consultDetail')
+    handleDetail(id) {
+      this.$router.push({ path: '/consultDetail', query: { id } })
     }
   }
 }

@@ -34,7 +34,7 @@
                 </el-form-item>
               </div>
               <div class="person-item clearfix">
-                <el-form-item label="上传照片:" prop="image">
+                <el-form-item label="上传头像:" prop="image">
                   <upload-img class="fll" @uploadSuccess="uploadSuccess" @uploadFail="uploadFail"></upload-img>
                   <div class="fll text-desc">请上传正面照，支持JPG/JPEG/PNG格式图片，照片不大于2M</div>
                 </el-form-item>
@@ -46,7 +46,7 @@
               </div>
               <div class="person-item clearfix">
                 <el-form-item label="所在地:" prop="address">
-                  <el-select v-model="formData.address1" style="width: 100px;" @change="getCity">
+                  <el-select v-model="formData.address1" style="width: 100px;" @change="getCity" clearable>
                     <el-option
                       v-for="item in provinceData"
                       :key="item.pid"
@@ -55,7 +55,7 @@
                       style="width: 100px;"
                     ></el-option>
                   </el-select>
-                  <el-select v-model="formData.address2" style="margin-left: 10px;width: 100px;">
+                  <el-select v-model="formData.address2" style="margin-left: 10px;width: 100px;" clearable>
                     <el-option
                       style="width: 100px;"
                       v-for="item in cityData"
@@ -112,6 +112,11 @@
                       <div class="my-upload-img">+</div>
                     </div>
                   </div>
+                </el-form-item>
+              </div>
+              <div class="person-item clearfix">
+                <el-form-item label="业务介绍:" prop="introduction" style="width: 350px;">
+                  <el-input type="text" v-model="formData.introduction" placeholder="各种银行贷款，提供优质金融服务"></el-input>
                 </el-form-item>
               </div>
               <div class="person-item clearfix">
@@ -258,7 +263,7 @@ import validater from "../util/validater";
 import { randomWord } from "@/util/util";
 import { mapState, mapMutations } from "vuex";
 import { validaterPhone, validaterName } from "@/util/validate";
-import { registerAccount } from './api/register'
+import { registerAccount, fetchProvince, fetchCity } from '@/api/register'
 import uploadImg from '@/component/uploadImg'
 import banner from '@/assets/banner01.png'
 const reg = /^\d+(\.(?!.*0$)\d{1,2})?$/;
@@ -359,7 +364,6 @@ export default {
         phone: "", //手机号
         image: "", //图片
         sex: 1, //性别
-        introduction: "", //个人简介
         job: "", //部门职位
         age: "", //部门职位
         recommended: "", //推荐指数
@@ -370,13 +374,10 @@ export default {
         address1: "", //业务地区
         address2: "", //业务地区
         businessScope: [],
-        //业务范畴
-        businessIntroduction: "", //业务介绍
+        introduction: '',
         password: "",
-        //贷款信息
-        loanInfos: []
+        loanInfos: [] //贷款信息
       },
-
       isMask: false,
       isBusiness: false,
       tags: [],
@@ -417,6 +418,7 @@ export default {
         identify: [
           { validator: validater.idCard, trigger: "change" }
         ],
+        introduction: [{ required: true, trigger: "change", message: "业务分类不能为空" }],
         image: [{ required: true, trigger: "change", message: "头像不能为空" }],
         sex: [{ required: true, trigger: "change", message: "性别不能为空" }]
       },
@@ -491,7 +493,7 @@ export default {
     getCode() {
       this.$axios.get(`base/getRegisterCode/${this.formData.phone}`).then(res => {
         if (res.status === 200) {
-          this.$message.warning('验证码发送成功，请注意查收');
+          this.$message.success('验证码发送成功，请注意查收');
         } else {
           this.$message.warning(res.msg);
         }
@@ -655,16 +657,18 @@ export default {
     },
     //获取省
     getProvince() {
-      this.$axios.get("city/getShengHot").then(res => {
-        this.provinceData = res;
-      });
+      fetchProvince().then(res => {
+        this.provinceData = res.data
+      })
     },
     //获取 市 区
     getCity(val) {
       this.formData.address2 = "";
-      this.$axios.get(`city/getCityHot/${val}`).then(res => {
-        this.cityData = res;
-      });
+      if (val) {
+        fetchCity(val).then(res => {
+          this.cityData = res.data
+        })
+      }
     },
     //获取擅长业务标签
     getGoodBusiness() {

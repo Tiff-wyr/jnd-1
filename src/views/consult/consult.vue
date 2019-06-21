@@ -18,7 +18,7 @@
               </div>
             </div>
           </div>
-          <article-list></article-list>
+          <article-list :data="resultList"></article-list>
         </div>
         <div class="right">
           <apply></apply>
@@ -36,6 +36,7 @@ import bottomTap from "@/component/bottomTap";
 import articleList from "./components/articleList";
 import apply from "./components/apply";
 import question from "./components/question";
+import { fetchList } from '@/api/consult'
 export default {
   components: {
     footerSame,
@@ -46,10 +47,25 @@ export default {
   },
   data() {
     return {
-      checked: true
+      checked: true,
+      listQuery: {
+        currentPage: 1,
+        pageSize: 10
+      },
+      resultList: []
     }
   },
+  created() {
+    this.getList()
+  },
   methods: {
+    getList() {
+      fetchList(this.listQuery).then(res => {
+        console.log(res)
+        console.log(res.data.data.list)
+        this.resultList = res.data.data.list
+      })
+    },
     handleDetail() {}
   }
 }

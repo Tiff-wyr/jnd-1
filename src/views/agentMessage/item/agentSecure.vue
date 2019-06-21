@@ -96,7 +96,7 @@ import jndDialog from '../../../component/jndDialog'
 import toggleItem from '../../../component/toggleItem'
 import { removeToken } from '@/util/auth'
 import { validaterPhone, validatrerPassword, validEmail } from '@/util/validate'
-import publicApi from "../../api/public";
+import publicApi from "@/api/public";
 export default {
   name: "secuCen",
   components: {

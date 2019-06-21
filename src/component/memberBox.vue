@@ -45,7 +45,7 @@
 </div>
 </template>
 <script>
-import { getMemberData } from '@/views/api/pay.alipay'
+import { getMemberData } from '@/api/pay.alipay'
 const payType = [
   { value: 0, label: '支付宝', src: '../../../../static/resource/vip/wx.png' },
   { value: 1, label: '微信', src: '../../../../static/resource/vip/zfb.png' }

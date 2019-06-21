@@ -4,7 +4,7 @@
 </template>
 <script>
 import { param2Obj } from '../../util/util'
-import { aliPay } from '../api/pay.alipay'
+import { aliPay } from '@/api/pay.alipay'
 export default {
   name: 'aliPay',
   data() {

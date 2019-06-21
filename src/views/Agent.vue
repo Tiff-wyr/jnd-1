@@ -6,11 +6,8 @@
           <div class="area fll">
             <div class="area-item clearfix">
               <div class="fll city">所在地区</div>
-              <div
-                :class="cityUp? 'fll radio-wrap clearfix radio-wrap-active' : 'fll radio-wrap clearfix'"
-              >
-                <wradio :radios="cities" name="city" v-model="query.city" class="fll"></wradio>
-              </div>
+              
+                  <city-radios @selectProvince="selectProvince" @selectCity="selectCity" class="fll" style="width: 700px;"></city-radios>
               <div class="up" @click="citySpread">
                 展开
                 <span :class="cityUp? 'arrow rotate' : 'arrow' "></span>
@@ -18,18 +15,18 @@
             </div>
             <div class="clearfix mb15">
               <div class="fll city">贷款类型</div>
-              <wradio :radios="loans" name="loan" v-model="query.loan" class="fll"></wradio>
+              <wradio :radios="loans" name="loan" v-model="query.loanType" class="fll"></wradio>
             </div>
             <div class="clearfix mb15">
               <div class="fll city">业务分类</div>
-              <wradio :radios="business" name="business" v-model="query.business" class="fll"></wradio>
+              <wradio :radios="business" name="business" v-model="query.businessType" class="fll"></wradio>
             </div>
             <div class="clearfix area-item">
               <div class="fll city">擅长业务</div>
               <div
                 :class="goodUp? 'fll radio-wrap clearfix radio-wrap-active' : 'fll radio-wrap clearfix'"
               >
-                <wcheckbox :radios="goods" name="good" v-model="query.good" class="fll"></wcheckbox>
+                <wcheckbox :radios="goods" name="good" v-model="query.selectedBusiness" class="fll"></wcheckbox>
               </div>
               <div class="up" @click="goodSpread">
                 展开
@@ -161,15 +158,18 @@
 import bottomTap from "../component/bottomTap";
 import footerSame from "../component/footerSame";
 import wradio from "../component/w-radios";
+import cityRadios from "@/component/cityRadios";
 import wcheckbox from "../component/w-checkBox";
 import emptyList from "../assets/empty-list.png";
-import detailApi from '@/views/api/detail'
+import detailApi from '@/api/detail'
 import banner01 from '@/assets/banner01.png'
 import banner02 from '@/assets/banner02.png'
 import banner03 from '@/assets/banner03.png'
 const bannerList = [banner01, banner02, banner03]
 import router from "../router/index";
 import { formatPhone } from '@/util/util'
+import { HappyScroll } from "vue-happy-scroll";
+import "vue-happy-scroll/docs/happy-scroll.css";
 export default {
   name: "Agent",
   filters: {
@@ -185,7 +185,9 @@ export default {
   components: {
     footerSame,
     wradio,
+    cityRadios,
     wcheckbox,
+    HappyScroll,
     bottomTap
   },
   data() {
@@ -213,13 +215,13 @@ export default {
       loans: [],
       business: [],
       goods: [], // 擅长业务
-      cities: [], //业务地区
 
       query: {
-        city: "",
-        loan: "",
-        business: "",
-        good: ""
+        address1: '',
+        address2: '',
+        loanType: "",
+        businessType: "",
+        selectedBusiness: ""
       },
       pn: 1,
       page: 10,
@@ -236,29 +238,14 @@ export default {
     };
   },
   watch: {
-    "query.city": function(val) {
-      this.pn = 1;
-      this.page = 10;
-      this.isJianSuo = true;
-      this.getCondition();
+    "query.loanType": function(val) {
+      this.handleGetCondition()
     },
-    "query.loan": function(val) {
-      this.pn = 1;
-      this.page = 10;
-      this.isJianSuo = true;
-      this.getCondition();
+    "query.businessType": function(val) {
+      this.handleGetCondition()
     },
-    "query.business": function(val) {
-      this.pn = 1;
-      this.page = 10;
-      this.isJianSuo = true;
-      this.getCondition();
-    },
-    "query.good": function(val) {
-      this.pn = 1;
-      this.page = 10;
-      this.isJianSuo = true;
-      this.getCondition();
+    "query.selectedBusiness": function(val) {
+      this.handleGetCondition()
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -267,6 +254,22 @@ export default {
     })
   },
   methods: {
+    handleGetCondition() {
+      this.pn = 1;
+      this.page = 10;
+      this.isJianSuo = true;
+      this.getCondition('search');
+    },
+    selectProvince(val) {
+      this.query.address1 = val.pid
+      this.query.address2 = ''
+      this.handleGetCondition('search')
+    },
+    selectCity(val) {
+      this.query.address1 = val.pid
+      this.query.address2 = val.cid
+      this.handleGetCondition('search')
+    },
     search() { // 搜索
       this.listQuery.page = 1
       this.isJianSuo = false;
@@ -274,36 +277,26 @@ export default {
         detailApi.getAngentList(this.listQuery).then(res => {
           this.formData = res.data.data;
           this.Searchcount = res.data.total;
-          window.scrollTo(0, 0);
+          // window.scrollTo(0, 0);
         })
       }
     },
-    send() {
-      this.showing = false;
-      let timer = setInterval(() => {
-        this.time--;
-        if (this.time < 0) {
-          clearInterval(timer);
-          this.showing = true;
-          this.verifyCode = "重新获取";
-          this.time = 60;
-        }
-      }, 1000);
-    },
     //根据条件
-    getCondition() {
+    getCondition(type) {
       this.$axios
         .get(
-          `userBroker/showPageUserBrokerByCondition?businessAreaId=${
-            this.query.city
-          }&loanType=${this.query.loan}&businessType=${
-            this.query.business
-          }&selectedBusiness=${this.query.good}&pn=${this.pn}&page=${this.page}`
+          `userBroker/showPageUserBrokerByCondition`, {
+            ...this.query,
+            pn: this.pn,
+            page: this.page
+          }
         )
         .then(res => {
           this.tableData = res.rows;
           this.count = res.total;
-          window.scrollTo(0, 0);
+          if (type !== 'search') {
+            window.scrollTo(0, 0);
+          }
         });
     },
     // 获取擅长业务
@@ -311,14 +304,6 @@ export default {
       this.$axios.get(`business/getAllBusiness`).then(res => {
         this.goods = res.map(item => {
           return { value: item.businessId, label: item.business };
-        });
-      });
-    },
-    //获取地区
-    getCity() {
-      this.$axios.get("city/getAHotCity").then(res => {
-        this.cities = res.map(item => {
-          return { value: item.hid, label: item.cname };
         });
       });
     },
@@ -334,11 +319,6 @@ export default {
       this.page = val;
       this.getCondition();
     },
-    handleCurrentSearchChange(val) {
-      this.listQuery.page = val;
-      this.search();
-    },
-
     mask() {
       this.isMask = true;
       this.viewing = true;
@@ -363,6 +343,7 @@ export default {
     //  展开或关闭城市
     citySpread() {
       this.cityUp = !this.cityUp;
+      this.goodUp = !this.goodUp;
     },
     goodSpread() {
       this.goodUp = !this.goodUp;
@@ -387,7 +368,6 @@ export default {
   created() {
     this.getCondition();
     this.getGoods();
-    this.getCity();
     this.getLoanType();
     this.getBusinessType();
   }

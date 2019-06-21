@@ -1,6 +1,6 @@
 <template>
   <p class="acticle-footer">
-    <span class="tips time">{{ time }}</span>
+    <span class="tips time">{{ time | parseTimeFilter }}</span>
     <span class="tips source">来源：{{ source }}</span>
     <span class="tips num">浏览量：{{ num }}</span>
   </p>
@@ -9,16 +9,21 @@
 import { parseTime } from '@/util/util'
 export default {
   name: 'acticleFooter',
+  filters: {
+    parseTimeFilter(val) {
+      return parseTime(val)
+    }
+  },
   props: {
     time: {
-      type: String,
+      type: String | Number,
       default: parseTime(new Date(), '{y}-{m}-{d}')
     },
     source: {
       type: String
     },
     num: {
-      type: String || Number
+      type: String | Number
     }
   }
 }

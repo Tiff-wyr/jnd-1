@@ -246,9 +246,9 @@
 <script>
 import { mapState } from "vuex";
 import { validaterPhone, validaterName, validaterLoanAmount } from '@/util/validate'
-import api from '@/views/api/filterData'
-import {saveNotLoginProductOrder} from '@/views/api/apply'
-import publicApi from '@/views/api/public'
+import api from '@/api/filterData'
+import {saveNotLoginProductOrder} from '@/api/apply'
+import publicApi from '@/api/public'
 export default {
   name: "productDetail",
   filters: {

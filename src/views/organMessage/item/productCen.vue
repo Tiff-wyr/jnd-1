@@ -165,7 +165,7 @@
 import productImg from "../../../component/productImg";
 import { randomWord } from '@/util/util'
 import { validaterInter, validaterFloat } from '@/util/validate'
-import { getCountByAgencyId } from '@/views/api/organ'
+import { getCountByAgencyId } from '@/api/organ'
 export default {
   name: "productCen",
   data() {

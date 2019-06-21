@@ -11,6 +11,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './style/iconfont/iconfont.css'
 import scroll from 'vue-seamless-scroll'
+import './util/setTitle'
 
 Vue.config.productionTip = false
 Vue.prototype.$isPay = false

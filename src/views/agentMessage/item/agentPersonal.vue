@@ -63,17 +63,6 @@
             ></el-input>
             <span v-else>{{ formData.introduction }}</span>
           </el-form-item>
-          <el-form-item label="业务地区:" prop="businessArea">
-            <el-select class="input-item" v-if="isEdit" v-model="formData.businessArea">
-              <el-option
-                v-for="item in cities"
-                :key="item.hid"
-                :label="item.cname"
-                :value="item.hid"
-              ></el-option>
-            </el-select>
-            <span v-else>{{ citys }}</span>
-          </el-form-item>
           <el-form-item label="从业年限:" prop="workingYears">
             <el-input
               class="input-item"
@@ -227,7 +216,6 @@ export default {
         email: "",
         address1: "",
         address2: "",
-        businessArea: "", //业务地区
         workingYears: "",
         company: "",
         businessList: []
@@ -254,13 +242,6 @@ export default {
   },
   computed: {
     ...mapState(["userInfo"]),
-    citys() {
-      for (let i = 0; i < this.cities.length; i++) {
-        if (this.cities[i].hid === this.formData.businessArea) {
-          return this.cities[i].cname;
-        }
-      }
-    },
     address() {
       let str = "";
       for (let i = 0; i < this.provinceData.length; i++) {
@@ -412,7 +393,6 @@ export default {
           this.formData.email = res.email
           this.formData.address1 = res.address1
           this.formData.address2 = res.address2
-          this.formData.businessArea = res.businessArea
           this.formData.workingYears = res.workingYears
           this.formData.company = res.company
           this.formData.businessList = res.businessList;

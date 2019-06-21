@@ -177,6 +177,7 @@ export default new Router({
             },
             {
               path:'guide',
+              name: 'guide',
               component:components.guide,
               meta: {
                 classify: 'help'

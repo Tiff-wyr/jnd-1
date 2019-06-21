@@ -204,8 +204,8 @@
 <script>
 import success from "../../../assets/success.png";
 import warning from "../../../assets/warning.png";
-import api from "../../api/filterData.js";
-import getListApi from "../../api/index.js";
+import api from "@/api/filterData.js";
+import getListApi from "@/api/index.js";
 import { mapState, mapMutations } from "vuex";
 import emptyList from '@/assets/empty-list2.png'
 import memberBox from '@/component/memberBox'

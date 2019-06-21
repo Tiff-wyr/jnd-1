@@ -1,5 +1,5 @@
 import { createA } from './util'
-import { getOrderSn, checkPayResult, getMemberData } from '@/views/api/pay.alipay'
+import { getOrderSn, checkPayResult, getMemberData } from '@/api/pay.alipay'
 // var timer = null
 export function checkAliPayRusult(orderSn, success, fail) { // 检查支付结果
   checkPayResult(orderSn).then(res => {
