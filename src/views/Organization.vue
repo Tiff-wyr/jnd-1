@@ -9,25 +9,25 @@
               <div
                 :class="cityUp? 'fll radio-wrap clearfix radio-wrap-active' : 'fll radio-wrap clearfix'"
               >
-                <wradio :radios="cities" name="city" v-model="query.city" class="fll"></wradio>
+                <wradio :radios="cities" v-model="query.city" name="city" class="fll"/>
               </div>
               <div class="up" @click="citySpread">
                 展开
-                <span :class="cityUp? 'arrow rotate' : 'arrow' "></span>
+                <span :class="cityUp? 'arrow rotate' : 'arrow' "/>
               </div>
             </div>
             <div class="clearfix mb15">
               <div class="fll city">类&nbsp;&nbsp;&nbsp;&nbsp;别</div>
-              <wradio :radios="loans" name="loan" v-model="query.loan" class="fll"></wradio>
+              <wradio :radios="loans" v-model="query.loan" name="loan" class="fll"/>
             </div>
-            <div class="clearfix" v-if="isBank">
+            <div v-if="isBank" class="clearfix">
               <div class="fll city">业&nbsp;&nbsp;&nbsp;&nbsp;务</div>
-              <wradio :radios="business" name="business" v-model="query.business" class="fll"></wradio>
+              <wradio :radios="business" v-model="query.business" name="business" class="fll"/>
             </div>
           </div>
           <div class="organ-right fll">
             <div class="clearfix mb40">
-              <input type="text" class="fll con-search" v-model="searchCon" placeholder="请输入内容">
+              <input v-model="searchCon" type="text" class="fll con-search" placeholder="请输入内容">
               <div class="search fll" @click="search">搜索</div>
             </div>
             <div class="top clearfix">
@@ -50,76 +50,76 @@
           <div class="organ-loan">贷款机构</div>
         </div>
         <div v-if="isJianSuo">
-          <div class="empty-list" v-if="formData.length == 0">
+          <div v-if="formData.length == 0" class="empty-list">
             <img :src="emptyList" alt="" class="empty-img">
             <p>暂无数据...</p>
           </div>
-          <div class="organ-item clearfix mb30" v-for="(item,index) in formData" :key="index" @click="lookDetail(item.agency.agencyId)">
+          <div v-for="(item,index) in formData" :key="index" class="organ-item clearfix mb30" @click="lookDetail(item.agency.agencyId)">
             <div class="fll align fs img-box">
               <div class="logo">
                 <img
-                  :src="item.agency.agencyLogo"
                   v-if="item.agency.agencyLogo"
+                  :src="item.agency.agencyLogo"
                   alt=""
                 >
                 <img
-                  src="/static/resource/pic/organ.png"
                   v-else
+                  src="/static/resource/pic/organ.png"
                 >
               </div>
-              
-              <div class="name">{{item.agency.agencyName}}</div>
+
+              <div class="name">{{ item.agency.agencyName }}</div>
             </div>
             <div class="fll organ-info">
-              <div class="clearfix" :class="{ isProduct: !item.interest}">
-                <div class="organ-rate fll ml40 w180" v-if="item.interest">
+              <div :class="{ isProduct: !item.interest}" class="clearfix">
+                <div v-if="item.interest" class="organ-rate fll ml40 w180">
                   利率：
-                  <span class="percent-rate">{{item.interest}}</span>
+                  <span class="percent-rate">{{ item.interest }}</span>
                 </div>
-                <div class="organ-rate fll mt4 w180"  :class="{ml40: !item.interest}">注册地:&nbsp;{{item.agency.address}}</div>
-                <div class="organ-rate fll mt4 w250">机构类型：&nbsp;{{item.agency.agencyProperty}}</div>
+                <div :class="{ml40: !item.interest}" class="organ-rate fll mt4 w180">注册地:&nbsp;{{ item.agency.address }}</div>
+                <div class="organ-rate fll mt4 w250">机构类型：&nbsp;{{ item.agency.agencyProperty }}</div>
                 <div class="organ-rate fll mt4 w250">
                   <a
                     :href="'http://' + item.agency.agencyURL"
                     target="_blank"
-                  >网址：&nbsp; {{item.agency.agencyURL ? item.agency.agencyURL : ''}}</a>
+                  >网址：&nbsp; {{ item.agency.agencyURL ? item.agency.agencyURL : '' }}</a>
                 </div>
               </div>
-              <div class="desc">机构简介：&nbsp;{{item.agency.agencyIntroduction}}</div>
-              <div class="line-desc" v-if="item.interest"></div>
-              <div class="clearfix" v-if="item.product">
+              <div class="desc">机构简介：&nbsp;{{ item.agency.agencyIntroduction }}</div>
+              <div v-if="item.interest" class="line-desc"/>
+              <div v-if="item.product" class="clearfix">
                 <div class="item2 fll">
-                  <div class="item1-num">{{item.product.productName}}</div>
+                  <div class="item1-num">{{ item.product.productName }}</div>
                   <div class="item-same">产品名称</div>
                 </div>
                 <div class="item1 fll align">
                   <div class="item-num">
-                    {{item.product.productInterest}}
+                    {{ item.product.productInterest }}
                     <span class="percent">%</span>
                   </div>
                   <div class="item-same">利息</div>
                 </div>
                 <div class="item1 fll align">
-                  <div class="item-num">{{item.product.producLoanLength}}</div>
+                  <div class="item-num">{{ item.product.producLoanLength }}</div>
                   <div class="item-same">放款时间</div>
                 </div>
                 <div class="item1 fll align">
-                  <div class="item-num">{{item.product.productLife}}</div>
+                  <div class="item-num">{{ item.product.productLife }}</div>
                   <div class="item-same">使用年限</div>
                 </div>
                 <div class="item1 fll align">
                   <div class="item-num">
-                    {{item.product.productStartAmount}}
+                    {{ item.product.productStartAmount }}
                     <span class="percent">万起</span>
                   </div>
                   <div class="item-same">起贷金额</div>
                 </div>
                 <div class="item1 fll">
-                  <div class="item6-num">{{item.product.productRepaymentMethod}}</div>
+                  <div class="item6-num">{{ item.product.productRepaymentMethod }}</div>
                   <div class="item-same">归还方式</div>
                 </div>
                 <div class="item1 fll">
-                  <div class="item6-num">{{item.product.productPublisher}}</div>
+                  <div class="item6-num">{{ item.product.productPublisher }}</div>
                   <div class="item-same">发行机构</div>
                 </div>
                 <div class="flr organ-btn align">立即查看</div>
@@ -128,85 +128,85 @@
           </div>
           <div class="page">
             <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              background=""
               :current-page="page"
               :page-size="size"
               :pager-count="5"
-              layout="prev, pager, next"
               :total="count"
-            ></el-pagination>
+              background=""
+              layout="prev, pager, next"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+            />
           </div>
         </div>
         <!-- 搜索显示 -->
         <div v-else>
-          <div class="empty-list" v-if="tableData.length == 0">
+          <div v-if="tableData.length == 0" class="empty-list">
             <img :src="emptyList" alt="" class="empty-img">
             <p>暂无数据...</p>
           </div>
-          <div class="organ-item clearfix mb30" v-for="(item,index) in tableData" :key="index" @click="lookDetail(item.agency.agencyId)">
+          <div v-for="(item,index) in tableData" :key="index" class="organ-item clearfix mb30" @click="lookDetail(item.agency.agencyId)">
             <div class="fll align fs img-box">
               <div class="logo">
                 <img
-                  :src="item.agencyLogo"
                   v-if="item.agencyLogo"
+                  :src="item.agencyLogo"
                   alt=""
                 >
                 <img
-                  src="/static/resource/pic/organ.png"
                   v-else
+                  src="/static/resource/pic/organ.png"
                   alt=""
                 >
               </div>
-              <div class="name" v-html="item.agencyName"></div>
+              <div class="name" v-html="item.agencyName"/>
             </div>
             <div class="fll organ-info">
-              <div class="clearfix" :class="{ isProduct: !item.interest}">
+              <div :class="{ isProduct: !item.interest}" class="clearfix">
                 <div class="organ-rate fll ml40 w180">
                   利率：
-                  <span class="percent-rate">{{item.productInterest}}</span>
+                  <span class="percent-rate">{{ item.productInterest }}</span>
                 </div>
                 <div class="organ-rate fll mt4 w180">
                   注册地:&nbsp;
-                  <span v-html="item.address"></span>
+                  <span v-html="item.address"/>
                 </div>
                 <div class="organ-rate fll mt4 w250">
                   机构类型：&nbsp;
-                  <span v-html="item.agencyProperty"></span>
+                  <span v-html="item.agencyProperty"/>
                 </div>
                 <div class="organ-rate fll mt4 w180">
                   网址：&nbsp;
                   <a :href="'http://' + item.agencyURL" target="_blank">
-                    <span v-html="item.agencyURL"></span>
+                    <span v-html="item.agencyURL"/>
                   </a>
                 </div>
               </div>
-              <div class="desc" v-html="'机构简介：' + item.agencyIntroduction"></div>
-              <div class="line-desc"></div>
+              <div class="desc" v-html="'机构简介：' + item.agencyIntroduction"/>
+              <div class="line-desc"/>
               <div class="clearfix">
                 <div class="item2 fll">
-                  <div class="item1-num">{{item.productName}}</div>
+                  <div class="item1-num">{{ item.productName }}</div>
                   <div class="item-same">产品名称</div>
                 </div>
                 <div class="item1 fll align">
                   <div class="item-num">
-                    {{item.interest}}
+                    {{ item.interest }}
                     <span class="percent">%</span>
                   </div>
                   <div class="item-same">利息</div>
                 </div>
                 <div class="item1 fll align">
-                  <div class="item-num">{{item.producLoanLength}}天</div>
+                  <div class="item-num">{{ item.producLoanLength }}天</div>
                   <div class="item-same">放款时间</div>
                 </div>
                 <div class="item1 fll align">
-                  <div class="item-num">{{item.productLife}}年</div>
+                  <div class="item-num">{{ item.productLife }}年</div>
                   <div class="item-same">使用年限</div>
                 </div>
                 <div class="item1 fll align">
                   <div class="item-num">
-                    {{item.productStartAmount}}
+                    {{ item.productStartAmount }}
                     <span class="percent">万起</span>
                   </div>
                   <div class="item-same">起贷金额</div>
@@ -214,11 +214,11 @@
                 <div class="item1 fll">
                   <div
                     class="item6-num"
-                  >{{item.productRepaymentMethod}}</div>
+                  >{{ item.productRepaymentMethod }}</div>
                   <div class="item-same">归还方式</div>
                 </div>
                 <div class="item1 fll">
-                  <div class="item6-num">{{item.productPublisher}}</div>
+                  <div class="item6-num">{{ item.productPublisher }}</div>
                   <div class="item-same">发行机构</div>
                 </div>
                 <div class="flr organ-btn align">立即查看</div>
@@ -227,35 +227,36 @@
           </div>
           <div class="page">
             <el-pagination
-              @size-change="handleSizeSearchChange"
-              @current-change="handleCurrentSearchChange"
-              background=""
               :current-page="Searchpn"
               :page-size="Searchpage"
               :pager-count="5"
-              layout="prev, pager, next"
               :total="Searchcount"
-            ></el-pagination>
+              background=""
+              layout="prev, pager, next"
+              @size-change="handleSizeSearchChange"
+              @current-change="handleCurrentSearchChange"
+            />
           </div>
         </div>
-        <footerSame></footerSame>
+        <footerSame/>
       </div>
     </div>
-    <bottomTap></bottomTap>
+    <bottomTap/>
   </div>
 </template>
 
 <script>
-import footerSame from "../component/footerSame";
-import wradio from "../component/w-radios";
-import bottomTap from "../component/bottomTap";
-import emptyList from "../assets/empty-list.png";
+import footerSame from '../component/footerSame'
+import wradio from '../component/w-radios'
+import bottomTap from '../component/bottomTap'
+import emptyList from '../assets/empty-list.png'
+import { backTop } from '@/util/util'
 import banner01 from '@/assets/banner01.png'
 import banner02 from '@/assets/banner02.png'
 import banner03 from '@/assets/banner03.png'
 const bannerList = [banner01, banner02, banner03]
 export default {
-  name: "Organization",
+  name: 'Organization',
   components: {
     footerSame,
     wradio,
@@ -266,7 +267,7 @@ export default {
       bannerList,
       emptyList,
       isJianSuo: true,
-      searchCon: "",
+      searchCon: '',
       isBank: true,
       formData: [],
       cityUp: false, // 城市是否展开
@@ -281,55 +282,62 @@ export default {
       business: [],
       tableData: [],
       query: {
-        city: "",
-        loan: "",
-        business: ""
+        city: '',
+        loan: '',
+        business: ''
       },
       countData: {
-        agencyCount: "",
-        brokerCount: "",
-        borrowerCount: ""
+        agencyCount: '',
+        brokerCount: '',
+        borrowerCount: ''
       }
-    };
-  },
-  watch: {
-    "query.city": function(val) {
-      this.page = 1;
-      this.size = 10;
-      this.isJianSuo = true;
-      this.searchCon = "";
-      this.getCondition();
-    },
-    "query.loan": function(val) {
-      this.page = 1;
-      this.size = 10;
-      this.isJianSuo = true;
-      this.searchCon = "";
-      if (val === "1") {
-        this.isBank = false;
-        this.query.business = "";
-        this.getCondition();
-      } else {
-        this.isBank = true;
-        this.getCondition();
-      }
-    },
-    "query.business": function(val) {
-      this.page = 1;
-      this.size = 10;
-      this.isJianSuo = true;
-      this.searchCon = "";
-      this.getCondition();
     }
   },
-  beforeRouteEnter (to, from, next) {
+  watch: {
+    'query.city': function(val) {
+      this.page = 1
+      this.size = 10
+      this.isJianSuo = true
+      this.searchCon = ''
+      this.getCondition()
+    },
+    'query.loan': function(val) {
+      this.page = 1
+      this.size = 10
+      this.isJianSuo = true
+      this.searchCon = ''
+      if (val === '1') {
+        this.isBank = false
+        this.query.business = ''
+        this.getCondition()
+      } else {
+        this.isBank = true
+        this.getCondition()
+      }
+    },
+    'query.business': function(val) {
+      this.page = 1
+      this.size = 10
+      this.isJianSuo = true
+      this.searchCon = ''
+      this.getCondition()
+    }
+  },
+  beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.getData()
     })
   },
+  created() {
+    this.getData()
+    this.getCity()
+    this.getCount()
+    this.getType()
+    this.getBusiness()
+  },
   methods: {
     search() {
-      this.isJianSuo = false;
+      this.isJianSuo = false
       if (this.searchCon) {
         this.$axios
           .get(
@@ -338,20 +346,20 @@ export default {
             }&size=${this.Searchpage}`
           )
           .then(res => {
-            if (res.data !== "") {
-              this.tableData = res.data;
+            if (res.data !== '') {
+              this.tableData = res.data
             } else {
-              this.tableData = [];
+              this.tableData = []
             }
-            this.Searchcount = res.total;
-            window.scrollTo(0, 0);
-          });
+            this.Searchcount = res.total
+            backTop()
+          })
       } else {
-        this.$message.warning("请输入查询内容");
+        this.$message.warning('请输入查询内容')
       }
     },
     lookDetail(id) {
-      this.$router.push(`/organDetail/${id}`);
+      this.$router.push(`/organDetail/${id}`)
     },
     getData() {
       this.$axios
@@ -361,11 +369,11 @@ export default {
           }`
         )
         .then(res => {
-          this.formData = res.data.list;
-          this.count = res.data.totalCount;
-        });
+          this.formData = res.data.list
+          this.count = res.data.totalCount
+        })
     },
-    //根据条件
+    // 根据条件
     getCondition() {
       this.$axios
         .get(
@@ -376,73 +384,66 @@ export default {
           }&currentPage=${this.page}&pageSize=${this.size}`
         )
         .then(res => {
-          if (res.data !== "") {
-            this.formData = res.data.list;
+          if (res.data !== '') {
+            this.formData = res.data.list
           } else {
-            this.formData = [];
+            this.formData = []
           }
-          this.count = res.data.totalCount;
-          window.scrollTo(0, 0);
-        });
+          this.count = res.data.totalCount
+          backTop()
+        })
     },
     handleSizeSearchChange(val) {
-      this.Searchpage = val;
-      this.search();
+      this.Searchpage = val
+      this.search()
     },
     handleCurrentSearchChange(val) {
-      this.Searchpn = val;
-      this.search();
+      this.Searchpn = val
+      this.search()
     },
     handleCurrentChange(val) {
-      this.page = val;
-      this.getCondition();
+      this.page = val
+      this.getCondition()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getCondition();
+      this.size = val
+      this.getCondition()
     },
-    //获取地区
+    // 获取地区
     getCity() {
-      this.$axios.get("city/getAHotCity").then(res => {
+      this.$axios.get('city/getAHotCity').then(res => {
         this.cities = res.map(item => {
-          return { value: item.hid, label: item.cname };
-        });
-      });
+          return { value: item.hid, label: item.cname }
+        })
+      })
     },
     //  展开或关闭城市
     citySpread() {
-      this.cityUp = !this.cityUp;
+      this.cityUp = !this.cityUp
     },
     getCount() {
-      this.$axios.get("get/getCount").then(res => {
-        this.countData = res;
-      });
+      this.$axios.get('get/getCount').then(res => {
+        this.countData = res
+      })
     },
-    //类别
+    // 类别
     getType() {
-      this.$axios.get("get/getAgencyCategory").then(res => {
+      this.$axios.get('get/getAgencyCategory').then(res => {
         this.loans = res.map(item => {
-          return { value: item.id, label: item.categoryName };
-        });
-      });
+          return { value: item.id, label: item.categoryName }
+        })
+      })
     },
-    //业务
+    // 业务
     getBusiness() {
-      this.$axios.get("get/getAgencyProperty").then(res => {
+      this.$axios.get('get/getAgencyProperty').then(res => {
         this.business = res.map(item => {
-          return { value: item.id, label: item.propertuName };
-        });
-      });
+          return { value: item.id, label: item.propertuName }
+        })
+      })
     }
-  },
-  created() {
-    this.getData();
-    this.getCity();
-    this.getCount();
-    this.getType();
-    this.getBusiness();
   }
-};
+}
 </script>
 <style scoped lang="scss">
 .isProduct {

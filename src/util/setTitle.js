@@ -1,11 +1,10 @@
-import router from "../router";
+import router from '../router'
 import content from './seoContent'
-console.log(content)
-let head = document.getElementsByTagName('head');
-let meta1 = document.createElement('meta');
-let meta2 = document.createElement('meta');
+const head = document.getElementsByTagName('head')
+const meta1 = document.createElement('meta')
+const meta2 = document.createElement('meta')
 
-meta1.name = 'keywords';
+meta1.name = 'keywords'
 meta2.name = 'description'
 function getContent(key, route) {
   document.title = content[key].title

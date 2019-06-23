@@ -3,21 +3,21 @@
     <div class="img">
       <el-carousel trigger="click">
         <el-carousel-item v-for="(item, index) in bannerList" :key="item" @click.native="handleBanner(index)">
-          <div :style="{ width: 100 + '%', height: 100 + '%', background: 'url(' + item + ') top center no-repeat', backgroundSize: '100% 100%' }"></div>
+          <div :style="{ width: 100 + '%', height: 100 + '%', background: 'url(' + item + ') top center no-repeat', backgroundSize: '100% 100%' }"/>
         </el-carousel-item>
       </el-carousel>
       <div class="apply">
         <div class="title">贷款申请</div>
-        <el-form :model="borrowerData" ref="borrowerData" :rules="borrowerDataRules" style="margin-left: 40px;">
+        <el-form ref="borrowerData" :model="borrowerData" :rules="borrowerDataRules" style="margin-left: 40px;">
           <el-form-item prop="borrowerName">
-            <el-input placeholder="请输入姓名" v-model="borrowerData.borrowerName" :disabled="isUpdate" class="name-input"></el-input>
+            <el-input v-model="borrowerData.borrowerName" :disabled="isUpdate" placeholder="请输入姓名" class="name-input"/>
             <el-radio-group v-model="borrowerData.sex" :disabled="isUpdate" style="margin-left: 10px;">
               <el-radio :label="1">男</el-radio>
               <el-radio :label="0">女</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item class="input-item" prop="loanAmount">
-            <el-input placeholder="贷款金额（万元）" v-model="borrowerData.loanAmount" style="width: 256px"></el-input>
+            <el-input v-model="borrowerData.loanAmount" placeholder="贷款金额（万元）" style="width: 256px"/>
           </el-form-item>
 
           <el-form-item prop="address">
@@ -25,8 +25,8 @@
               v-model="borrowerData.address1"
               style="width: 120px;float: left"
               placeholder="地区"
-              @change="getCity"
               clearable
+              @change="getCity"
             >
               <el-option
                 v-for="item in provinceData"
@@ -34,7 +34,7 @@
                 :label="item.provincial"
                 :value="item.pid"
                 style="width: 140px;"
-              ></el-option>
+              />
             </el-select>
             <el-select
               v-model="borrowerData.address2"
@@ -43,42 +43,42 @@
               clearable
             >
               <el-option
-                style="width: 140px;"
                 v-for="item in cityData"
                 :key="item.cid"
                 :label="item.city"
                 :value="item.cid"
-              ></el-option>
+                style="width: 140px;"
+              />
             </el-select>
           </el-form-item>
           <el-form-item class="input-item" prop="phone">
-            <el-input type="text" v-model="borrowerData.phone" placeholder="手机号" :disabled="isUpdate" style="width: 256px"></el-input>
+            <el-input v-model="borrowerData.phone" :disabled="isUpdate" type="text" placeholder="手机号" style="width: 256px"/>
           </el-form-item>
           <el-form-item prop="code">
             <el-input
-              type="text"
               v-model="borrowerData.code"
+              type="text"
               placeholder="验证码"
               class="name-input"
-            ></el-input>
-            <el-button class="name-input send" v-if="showing" @click="send">{{verifyCode}}</el-button>
-            <el-button class="name-input send" v-else>{{time}}s</el-button>
+            />
+            <el-button v-if="showing" class="name-input send" @click="send">{{ verifyCode }}</el-button>
+            <el-button v-else class="name-input send">{{ time }}s</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button @click="apply" style="width: 212px; margin-left: 30px;">立即申请</el-button>
+            <el-button style="width: 212px; margin-left: 30px;" @click="apply">立即申请</el-button>
           </el-form-item>
         </el-form>
         <div class="agreement">
-          <el-checkbox v-model="isChecked"></el-checkbox>
-         <el-dropdown trigger="click">
-          <span class="el-dropdown-link">
-            阅读并同意9能贷用户相关协议<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-plus"><a href="#/agreement?userProtect" target="_blank">《9能贷用户隐私保护政策》</a></el-dropdown-item>
-            <el-dropdown-item icon="el-icon-circle-plus"><a href="#/agreement?userRegister" target="_blank">《9能贷用户注册协议》</a></el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+          <el-checkbox v-model="isChecked"/>
+          <el-dropdown trigger="click">
+            <span class="el-dropdown-link">
+              阅读并同意9能贷用户相关协议<i class="el-icon-arrow-down el-icon--right"/>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item icon="el-icon-plus"><a href="#/agreement?userProtect" target="_blank">《9能贷用户隐私保护政策》</a></el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-plus"><a href="#/agreement?userRegister" target="_blank">《9能贷用户注册协议》</a></el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
       </div>
     </div>
@@ -132,17 +132,17 @@
         </div>
         <div class="special mt48 mb24">特别推荐</div>
         <div class="clearfix special-wrap">
-          <div class="fll com mr20" v-for="(item,index) in specialData" :key="index">
-            <div class="word1">{{item.productType}}</div>
+          <div v-for="(item,index) in specialData" :key="index" class="fll com mr20">
+            <div class="word1">{{ item.productType }}</div>
             <div>
-              <div class="word2">{{item.productPublisher}}</div>
+              <div class="word2">{{ item.productPublisher }}</div>
             </div>
             <div class="word3">
-              {{item.productInterest}}%
+              {{ item.productInterest }}%
               <!-- <span class="symbol">%</span> -->
             </div>
             <div class="word4">利息</div>
-            <div class="word5">{{item.productStartAmount}}-{{item.productEndAmount}}万</div>
+            <div class="word5">{{ item.productStartAmount }}-{{ item.productEndAmount }}万</div>
             <div class="btn" @click="specialLook(item.productId)">立即查看</div>
           </div>
         </div>
@@ -163,7 +163,7 @@
                 </div>
               </div>
               <div class="product-table fll">
-                <ul class="product-item" v-for="(item,index) in productData" :key="index">
+                <ul v-for="(item,index) in productData" :key="index" class="product-item">
                   <li>
                     <span>{{ item.productName }}</span>
                     <br>
@@ -211,9 +211,9 @@
               </div>
               <div class="agent-table fll">
                 <div class="clearfix">
-                  <div class="fll align mr42" v-for="(item,index) in agentData" :key="index">
-                    <a :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', backgroundImage: 'url(' + item.image + ')', backgroundSize: '100% auto', 'background-position': 'center center', 'backgroundRepeat': 'no-repeat'}" :href="'#/agentDetail/' + item.brokerId" target="_blank"></a>
-                    <div class="agent-name">{{item.brokerName}}</div>
+                  <div v-for="(item,index) in agentData" :key="index" class="fll align mr42">
+                    <a :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', backgroundImage: 'url(' + item.image + ')', backgroundSize: '100% auto', 'background-position': 'center center', 'backgroundRepeat': 'no-repeat'}" :href="'#/agentDetail/' + item.brokerId" target="_blank"/>
+                    <div class="agent-name">{{ item.brokerName }}</div>
                     <div class="agent-job">金融顾问</div>
                   </div>
                 </div>
@@ -235,15 +235,15 @@
               </div>
               <div class="organize-table fll">
                 <div class="clearfix">
-                  <div class="empty-list" v-if="organData.length === 0">
+                  <div v-if="organData.length === 0" class="empty-list">
                     <img :src="emptyList" alt="">
                     <p>暂无数据...</p>
                   </div>
-                  <div class="fll organW" v-for="(item,index) in organData" :key="index">
-                    <a :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', background: 'url(' + item.agencyLogo + ') center center no-repeat', backgroundSize: '100% auto'}" :href="'#/organDetail/' + item.agencyId" target="_blank" v-if="item.agencyLogo"></a>
-                    <a :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', background: 'url(/static/resource/pic/organ.png) center center no-repeat', backgroundSize: '100% auto'}" :href="'#/organDetail/' + item.agencyId" target="_blank" v-else></a>
-                    <div class="organ-text1">{{item.agencyName}}</div>
-                    <div class="organ-text2">{{item.agencyIntroduction}}</div>
+                  <div v-for="(item,index) in organData" :key="index" class="fll organW">
+                    <a v-if="item.agencyLogo" :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', background: 'url(' + item.agencyLogo + ') center center no-repeat', backgroundSize: '100% auto'}" :href="'#/organDetail/' + item.agencyId" target="_blank"/>
+                    <a v-else :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', background: 'url(/static/resource/pic/organ.png) center center no-repeat', backgroundSize: '100% auto'}" :href="'#/organDetail/' + item.agencyId" target="_blank"/>
+                    <div class="organ-text1">{{ item.agencyName }}</div>
+                    <div class="organ-text2">{{ item.agencyIntroduction }}</div>
                   </div>
                 </div>
               </div>
@@ -276,40 +276,39 @@
             <div class="message clearfix">
               <img src="../../static/resource/laba.png" alt="" class="fll">
               <div class="fll mess-main">
-                <vue-seamless-scroll :data="loanData" class="seamless-warp" :class-option="defaultOption">
+                <vue-seamless-scroll :data="loanData" :class-option="defaultOption" class="seamless-warp">
                   <div
-                    class="mess-text"
-                    :key="index"
                     v-for="(item,index) in loanData"
-                  >{{item.borrowerName}}:{{item.phone}}&nbsp;&nbsp;申请了贷款</div>
+                    :key="index"
+                    class="mess-text"
+                  >{{ item.borrowerName }}:{{ item.phone }}&nbsp;&nbsp;申请了贷款</div>
                 </vue-seamless-scroll>
               </div>
             </div>
           </div>
         </div>
-        <footerSame></footerSame>
+        <footerSame/>
       </div>
     </div>
-    <bottomTap></bottomTap>
+    <bottomTap/>
   </div>
 </template>
 
 <script>
-import footerSame from "../component/footerSame";
-import bottomTap from "../component/bottomTap";
-import publicApi from "@/api/public";
+import footerSame from '../component/footerSame'
+import bottomTap from '../component/bottomTap'
+import publicApi from '@/api/public'
 import { publics } from '@/api/validateApply'
-import emptyList from "../assets/empty-list.png";
-import { validaterPhone, validaterLoanAmount, validaterName } from "@/util/validate";
+import emptyList from '../assets/empty-list.png'
+import { validaterPhone, validaterLoanAmount, validaterName } from '@/util/validate'
 import banner01 from '@/assets/banner01.png'
-import banner02 from '@/assets/banner02.png'
 import banner03 from '@/assets/banner03.png'
 import banner04 from '@/assets/banner04.png'
 import { getGetStatus } from '@/api/activity'
-import { applyLoanByNoLogin, validPhoneIsRegister, sendPhoneCode } from '@/api/apply'
+import { applyLoanByNoLogin } from '@/api/apply'
 const bannerList = [banner04, banner01, banner03]
 export default {
-  name: "Home",
+  name: 'Home',
   components: {
     footerSame,
     bottomTap
@@ -318,43 +317,43 @@ export default {
     const validateLoanAmount = (rule, value, callback) => {
       if (value) {
         if (validaterLoanAmount(value)) {
-          callback();
+          callback()
         } else {
-          callback(new Error("×"));
+          callback(new Error('×'))
         }
       } else {
-        callback(new Error("×"));
+        callback(new Error('×'))
       }
-    };
+    }
     const validateAddress = (rule, value, callback) => {
       if (this.borrowerData.address1 && this.borrowerData.address2) {
-        callback();
+        callback()
       } else {
-        callback(new Error("×"));
+        callback(new Error('×'))
       }
-    };
+    }
     const validatePhone = (rule, value, callback) => {
       if (value) {
         if (validaterPhone(value)) {
-          callback();
+          callback()
         } else {
-          callback(new Error("×"));
+          callback(new Error('×'))
         }
       } else {
-        callback(new Error("×"));
+        callback(new Error('×'))
       }
-    };
+    }
     const validateName = (rule, value, callback) => {
       if (value) {
         if (validaterName(value)) {
-          callback();
+          callback()
         } else {
-          callback(new Error("×"));
+          callback(new Error('×'))
         }
       } else {
-          callback(new Error("×"));
+        callback(new Error('×'))
       }
-    };
+    }
     return {
       defaultOption: {
         step: 0.4,
@@ -366,33 +365,33 @@ export default {
       emptyList,
       showing: true,
       time: 60,
-      verifyCode: "发送验证码",
+      verifyCode: '发送验证码',
       borrowerData: {
-        borrowerName: "",
+        borrowerName: '',
         sex: 1,
-        loanAmount: "",
-        address1: "",
-        address2: "",
-        phone: "",
-        code: ""
+        loanAmount: '',
+        address1: '',
+        address2: '',
+        phone: '',
+        code: ''
       },
       flag: false,
       borrowerDataRules: {
-        code: [{ required: true, message: '×', trigger: "blur" }],
+        code: [{ required: true, message: '×', trigger: 'blur' }],
         borrowerName: [
-          { required: true, trigger: "blur", validator: validateName }
+          { required: true, trigger: 'blur', validator: validateName }
         ],
         loanAmount: [
-          { required: true, trigger: "blur", validator: validateLoanAmount }
+          { required: true, trigger: 'blur', validator: validateLoanAmount }
         ],
         address: [
-          { required: true, trigger: "blur", validator: validateAddress }
+          { required: true, trigger: 'blur', validator: validateAddress }
         ],
-        phone: [{ required: true, trigger: "blur", validator: validatePhone }]
+        phone: [{ required: true, trigger: 'blur', validator: validatePhone }]
       },
-      //省
+      // 省
       provinceData: [],
-      //市 区
+      // 市 区
       cityData: [],
       specialData: [],
       productData: [],
@@ -401,7 +400,7 @@ export default {
       loanData: [],
       timer: null,
       isUpdate: false
-    };
+    }
   },
   computed: {
     getUser() {
@@ -431,31 +430,31 @@ export default {
         sessionStorage.setItem('time', time)
         this.showing = false
         if (time < 0) {
-          this.clearTimer();
+          this.clearTimer()
         }
-      }, 1000);
+      }, 1000)
     }
-    this.resetForm();
+    this.resetForm()
     if (this.$store.state.userInfo && this.$store.state.userInfo.roleId === 1) {
-      this.isUpdate = true;
-      this.borrowerData.phone = this.$store.state.userInfo.phone;
-      this.borrowerData.borrowerName = this.$store.state.userInfo.name;
+      this.isUpdate = true
+      this.borrowerData.phone = this.$store.state.userInfo.phone
+      this.borrowerData.borrowerName = this.$store.state.userInfo.name
     } else {
-      this.isUpdate = false;
+      this.isUpdate = false
     }
-    this.getSpecial();
-    this.getProduct();
-    this.getAgentData();
-    this.getOrganData();
-    this.getLoanData();
-    this.getProvince();
+    this.getSpecial()
+    this.getProduct()
+    this.getAgentData()
+    this.getOrganData()
+    this.getLoanData()
+    this.getProvince()
   },
   methods: {
     clearTimer() {
       if (this.timer !== null || this.time < 0) {
-        clearInterval(this.timer);
-        this.showing = true;
-        this.verifyCode = "重新获取";
+        clearInterval(this.timer)
+        this.showing = true
+        this.verifyCode = '重新获取'
         sessionStorage.setItem('time', 0)
       }
     },
@@ -465,13 +464,13 @@ export default {
         if (res.data.status === 200) {
           this.$message.success('验证码发送成功')
         } else {
-          this.$message.warning(res.data.msg);
-          this.clearTimer();
+          this.$message.warning(res.data.msg)
+          this.clearTimer()
         }
-      });
+      })
     },
     send() {
-      //发送验证码按钮
+      // 发送验证码按钮
       if (this.borrowerData.phone) {
         if (validaterPhone(this.borrowerData.phone)) {
           sessionStorage.setItem('time', 60)
@@ -482,76 +481,76 @@ export default {
             sessionStorage.setItem('time', time)
             this.showing = false
             if (time < 0) {
-              this.clearTimer();
+              this.clearTimer()
             }
-          }, 1000);
+          }, 1000)
           if (this.$store.state.userInfo == null) { // 未登录状态
             publicApi.validateRegister(this.borrowerData.phone)
-            .then(res2 => { // 验证该手机号是否已经注册
-              if (res2.data.status === 500) {
-                this.$message.warning("该手机号已被注册，请登录后在进行申请");
-                this.clearTimer()
-              } else {
-                this.sendPhoneCode(this.borrowerData.phone);
-              }
-            });
+              .then(res2 => { // 验证该手机号是否已经注册
+                if (res2.data.status === 500) {
+                  this.$message.warning('该手机号已被注册，请登录后在进行申请')
+                  this.clearTimer()
+                } else {
+                  this.sendPhoneCode(this.borrowerData.phone)
+                }
+              })
           } else {
             if (this.$store.state.userInfo.roleId == 1) {
               publics(this.borrowerData.phone).then(res => { // 验证该手机号今天是否在此申请过
                 if (res.data.status == 200) { // 可以申请
-                  this.sendPhoneCode(this.borrowerData.phone);
+                  this.sendPhoneCode(this.borrowerData.phone)
                 } else {
-                  this.$message.warning(res.data.msg);
+                  this.$message.warning(res.data.msg)
                 }
-              });
+              })
             } else {
-              this.$message.warning("贷款人方可申请");
+              this.$message.warning('贷款人方可申请')
               this.clearTimer()
             }
           }
         } else {
-          this.$message.warning("手机号格式不正确");
+          this.$message.warning('手机号格式不正确')
         }
       } else {
-        this.$message.warning("手机号不能为空");
+        this.$message.warning('手机号不能为空')
       }
     },
-    
+
     apply() {
       this.$refs.borrowerData.validate(valid => {
         if (valid) {
           if (this.isChecked) {
             if (!this.flag) {
-              let data = new FormData();
-              for (let item in this.borrowerData) {
-                data.append(item, this.borrowerData[item]);
+              const data = new FormData()
+              for (const item in this.borrowerData) {
+                data.append(item, this.borrowerData[item])
               }
               applyLoanByNoLogin(this.borrowerData).then(res => {
                 if (res.data.status === 200) {
-                  this.clearTimer();
+                  this.clearTimer()
                   if (this.$store.state.userInfo === null) {
-                    this.$message.success("申请并注册成功");
+                    this.$message.success('申请并注册成功')
                     this.$router.push({
-                      path: "/applyVictory",
+                      path: '/applyVictory',
                       query: {
                         number: this.borrowerData.phone
                       }
-                    });
+                    })
                     this.$refs.borrowerData.resetFields()
                   } else {
-                    this.$message.success("申请成功");
+                    this.$message.success('申请成功')
                     this.$refs.borrowerData.resetFields()
                     this.resetForm()
                   }
                 } else {
-                  this.$message.warning(res2.msg);
+                  this.$message.warning(res.msg)
                 }
               })
               this.flag = true
               if (this.flag) {
                 setTimeout(() => {
                   this.flag = false
-                }, 5000);
+                }, 5000)
               }
             } else {
               this.$message.warning('请不要重复点击')
@@ -560,68 +559,68 @@ export default {
             this.$message.warning('请阅读并同意9能贷用户相关协议')
           }
         }
-      });
+      })
     },
-    //获取省
+    // 获取省
     getProvince() {
-      this.$axios.get("city/getAllProvincial").then(res => {
+      this.$axios.get('city/getAllProvincial').then(res => {
         console.log(res)
-        this.provinceData = res;
-      });
+        this.provinceData = res
+      })
     },
-    //获取 市 区
+    // 获取 市 区
     getCity(val) {
       this.borrowerData.address2 = ''
       this.$axios.get(`city/getAllCity/${val}`).then(res => {
-        this.cityData = res;
-      });
+        this.cityData = res
+      })
     },
-    //特别推荐详情页
+    // 特别推荐详情页
     specialLook(id) {
-      this.$router.push(`/productDetail/${id}`);
+      this.$router.push(`/productDetail/${id}`)
     },
     proDetail(id) {
-      this.$router.push(`/productDetail/${id}`);
+      this.$router.push(`/productDetail/${id}`)
     },
     orDetail(id) {
-      this.$router.push(`/organDetail/${id}`);
+      this.$router.push(`/organDetail/${id}`)
     },
     agDetail(id) {
-      this.$router.push(`/agentDetail/${id}`);
+      this.$router.push(`/agentDetail/${id}`)
     },
 
-    //特别推荐
+    // 特别推荐
     getSpecial() {
-      this.$axios.get("product/getHotPro/1/4").then(res => {
-        this.specialData = res;
-      });
+      this.$axios.get('product/getHotPro/1/4').then(res => {
+        this.specialData = res
+      })
     },
-    //产品推荐
+    // 产品推荐
     getProduct() {
-      this.$axios.get("product/getLimitPro/1/3").then(res => {
-        this.productData = res.list;
-      });
+      this.$axios.get('product/getLimitPro/1/3').then(res => {
+        this.productData = res.list
+      })
     },
-    //经纪人推荐
+    // 经纪人推荐
     getAgentData() {
-      this.$axios.get("userBroker/showPageUserBroker").then(res => {
-        this.agentData = res.rows;
-      });
+      this.$axios.get('userBroker/showPageUserBroker').then(res => {
+        this.agentData = res.rows
+      })
     },
-    //机构推荐
+    // 机构推荐
     getOrganData() {
       this.$axios.get(`userAgency/indexAgency`).then(res => {
-        this.organData = res;
-      });
+        this.organData = res
+      })
     },
     getLoanData() {
-      this.$axios.get("userBorrower/indexBorrower").then(res => {
+      this.$axios.get('userBorrower/indexBorrower').then(res => {
         this.loanData = res.map(item => {
-            const phone = item.phone.substr(0, 3) + "*****" + item.phone.substr(8, 10)
-            item.phone = phone
+          const phone = item.phone.substr(0, 3) + '*****' + item.phone.substr(8, 10)
+          item.phone = phone
           return item
-        });
-      });
+        })
+      })
     },
     handleBanner(val) {
       if (val === 0) {
@@ -640,7 +639,6 @@ export default {
         } else {
           this.$message.warning('登录后方可领取')
         }
-        
       } else if (val === 1) {
         this.$router.push('/agent')
       } else {
@@ -649,21 +647,21 @@ export default {
     },
     resetForm() {
       this.borrowerData = {
-        borrowerName: "",
+        borrowerName: '',
         sex: 1,
-        loanAmount: "",
-        address1: "",
-        address2: "",
-        phone: "",
-        code: ""
-      };
+        loanAmount: '',
+        address1: '',
+        address2: '',
+        phone: '',
+        code: ''
+      }
       if (this.$store.state.userInfo) {
         this.borrowerData.borrowerName = this.$store.state.userInfo.name
         this.borrowerData.phone = this.$store.state.userInfo.phone
       }
     }
   }
-};
+}
 </script>
 <style lang="scss">
 

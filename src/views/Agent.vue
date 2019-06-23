@@ -6,37 +6,37 @@
           <div class="area fll">
             <div class="area-item clearfix">
               <div class="fll city">所在地区</div>
-              
-                  <city-radios @selectProvince="selectProvince" @selectCity="selectCity" class="fll" style="width: 700px;"></city-radios>
+
+              <city-radios class="fll" style="width: 700px;" @selectProvince="selectProvince" @selectCity="selectCity"/>
               <div class="up" @click="citySpread">
                 展开
-                <span :class="cityUp? 'arrow rotate' : 'arrow' "></span>
+                <span :class="cityUp? 'arrow rotate' : 'arrow' "/>
               </div>
             </div>
             <div class="clearfix mb15">
               <div class="fll city">贷款类型</div>
-              <wradio :radios="loans" name="loan" v-model="query.loanType" class="fll"></wradio>
+              <wradio :radios="loans" v-model="query.loanType" name="loan" class="fll"/>
             </div>
             <div class="clearfix mb15">
               <div class="fll city">业务分类</div>
-              <wradio :radios="business" name="business" v-model="query.businessType" class="fll"></wradio>
+              <wradio :radios="business" v-model="query.businessType" name="business" class="fll"/>
             </div>
             <div class="clearfix area-item">
               <div class="fll city">擅长业务</div>
               <div
                 :class="goodUp? 'fll radio-wrap clearfix radio-wrap-active' : 'fll radio-wrap clearfix'"
               >
-                <wcheckbox :radios="goods" name="good" v-model="query.selectedBusiness" class="fll"></wcheckbox>
+                <wcheckbox :radios="goods" v-model="query.selectedBusiness" name="good" class="fll"/>
               </div>
               <div class="up" @click="goodSpread">
                 展开
-                <span :class="goodUp? 'arrow rotate' : 'arrow' "></span>
+                <span :class="goodUp? 'arrow rotate' : 'arrow' "/>
               </div>
             </div>
           </div>
           <div class="fll organ-right">
             <div class="clearfix mb40">
-              <input type="text" class="fll con-search" v-model="listQuery.q" placeholder="请输入内容">
+              <input v-model="listQuery.q" type="text" class="fll con-search" placeholder="请输入内容">
               <div class="search fll" @click="search">搜索</div>
             </div>
             <div class="top clearfix">
@@ -59,119 +59,119 @@
           <div class="organ-loan">贷款顾问</div>
         </div>
         <div v-if="isJianSuo">
-          <div class="empty-list" v-if="tableData.length == 0">
+          <div v-if="tableData.length == 0" class="empty-list">
             <img :src="emptyList" alt="" class="empty-img">
             <p>暂无数据...</p>
           </div>
-          <div class="adviser clearfix" v-for="(item, index) in tableData" :key="index">
+          <div v-for="(item, index) in tableData" :key="index" class="adviser clearfix">
             <div class="pic fll">
               <img
-                :src="item.image"
                 v-if="item.image"
+                :src="item.image"
                 alt=""
               >
               <img
-                src="/static/resource/pic/agent.png"
                 v-else
+                src="/static/resource/pic/agent.png"
                 alt=""
               >
             </div>
             <div class="fll ml36">
-              <div class="adviser-name">{{item.brokerName}}</div>
+              <div class="adviser-name">{{ item.brokerName }}</div>
               <div class="clearfix">
                 <div class="fll adviser-same">业务范畴:&nbsp;</div>
-                <div class="fll adviser-same ww320">{{item.businessScopeInfo}}</div>
+                <div class="fll adviser-same ww320">{{ item.businessScopeInfo }}</div>
               </div>
               <div class="clearfix mt10">
                 <div class="fll adviser-same">业务介绍:&nbsp;</div>
-                <div class="fll adviser-same w320">{{item.introduction}}</div>
+                <div class="fll adviser-same w320">{{ item.introduction }}</div>
               </div>
             </div>
-            <div class="fll num">{{item.phone | phoneFilter}}</div>
+            <div class="fll num">{{ item.phone | phoneFilter }}</div>
             <div class="fll adviser-btn" @click="detail(item.brokerId)">立即查看</div>
           </div>
           <div class="page">
             <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              background=""
               :current-page="pn"
               :page-size="page"
               :pager-count="5"
-              layout="prev, pager, next"
               :total="count"
-            ></el-pagination>
+              background=""
+              layout="prev, pager, next"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+            />
           </div>
         </div>
         <div v-else>
-          <div class="empty-list" v-if="formData.length == 0">
+          <div v-if="formData.length == 0" class="empty-list">
             <img :src="emptyList" alt="" class="empty-img">
             <p>暂无数据...</p>
           </div>
-          <div class="adviser clearfix" v-for="(item, index) in formData" :key="index">
+          <div v-for="(item, index) in formData" :key="index" class="adviser clearfix">
             <div class="pic fll">
               <img
-                :src="item.image"
                 v-if="item.image"
+                :src="item.image"
                 alt="头像"
                 title="头像"
               >
               <img
-                src="/static/resource/pic/agent.png"
                 v-else
+                src="/static/resource/pic/agent.png"
                 alt="头像"
               >
             </div>
             <div class="fll ml36">
-              <div class="adviser-name">{{item.brokerName}}</div>
+              <div class="adviser-name">{{ item.brokerName }}</div>
               <div class="clearfix">
                 <div class="fll adviser-same">业务范畴:&nbsp;</div>
-                <div class="fll adviser-same ww320" v-html="item.businessScopeInfo"></div>
+                <div class="fll adviser-same ww320" v-html="item.businessScopeInfo"/>
               </div>
               <div class="clearfix mt10">
                 <div class="fll adviser-same">业务介绍:&nbsp;</div>
-                <div class="fll adviser-same w320">{{item.introduction}}</div>
+                <div class="fll adviser-same w320">{{ item.introduction }}</div>
               </div>
             </div>
-            <div class="fll num">{{item.phone | phoneFilter}}</div>
+            <div class="fll num">{{ item.phone | phoneFilter }}</div>
             <div class="fll adviser-btn" @click="detail(item.brokerId)">立即查看</div>
           </div>
           <div class="page">
             <el-pagination
-              @current-change="handleCurrentChange"
               :current-page="listQuery.page"
               :page-size="listQuery.pageSize"
-              layout="prev, pager, next"
               :total="Searchcount"
-            ></el-pagination>
+              layout="prev, pager, next"
+              @current-change="handleCurrentChange"
+            />
           </div>
         </div>
-        <footerSame></footerSame>
+        <footerSame/>
       </div>
     </div>
-    <router-view></router-view>
-    <bottomTap></bottomTap>
+    <router-view/>
+    <bottomTap/>
   </div>
 </template>
 
 <script>
-import bottomTap from "../component/bottomTap";
-import footerSame from "../component/footerSame";
-import wradio from "../component/w-radios";
-import cityRadios from "@/component/cityRadios";
-import wcheckbox from "../component/w-checkBox";
-import emptyList from "../assets/empty-list.png";
+import bottomTap from '../component/bottomTap'
+import footerSame from '../component/footerSame'
+import wradio from '../component/w-radios'
+import cityRadios from '@/component/cityRadios'
+import wcheckbox from '../component/w-checkBox'
+import emptyList from '../assets/empty-list.png'
 import detailApi from '@/api/detail'
+import { backTop } from '@/util/util'
 import banner01 from '@/assets/banner01.png'
 import banner02 from '@/assets/banner02.png'
 import banner03 from '@/assets/banner03.png'
 const bannerList = [banner01, banner02, banner03]
-import router from "../router/index";
 import { formatPhone } from '@/util/util'
-import { HappyScroll } from "vue-happy-scroll";
-import "vue-happy-scroll/docs/happy-scroll.css";
+import { HappyScroll } from 'vue-happy-scroll'
+import 'vue-happy-scroll/docs/happy-scroll.css'
 export default {
-  name: "Agent",
+  name: 'Agent',
   filters: {
     phoneFilter(phone) {
       if (!phone) return
@@ -201,14 +201,14 @@ export default {
       showing: true,
       cityUp: false, // 城市是否展开
       goodUp: false,
-      verifyCode: "获取验证码",
-      time: "60",
-      labelPosition: "right",
+      verifyCode: '获取验证码',
+      time: '60',
+      labelPosition: 'right',
       formLabelAlign: {
-        name: "",
-        money: "",
-        number: "",
-        card: ""
+        name: '',
+        money: '',
+        number: '',
+        card: ''
       },
       tableData: [],
       formData: [],
@@ -219,9 +219,9 @@ export default {
       query: {
         address1: '',
         address2: '',
-        loanType: "",
-        businessType: "",
-        selectedBusiness: ""
+        loanType: '',
+        businessType: '',
+        selectedBusiness: ''
       },
       pn: 1,
       page: 10,
@@ -235,32 +235,39 @@ export default {
         roleId: 2,
         q: ''
       }
-    };
+    }
   },
   watch: {
-    "query.loanType": function(val) {
+    'query.loanType': function(val) {
       this.handleGetCondition()
     },
-    "query.businessType": function(val) {
+    'query.businessType': function(val) {
       this.handleGetCondition()
     },
-    "query.selectedBusiness": function(val) {
+    'query.selectedBusiness': function(val) {
       this.handleGetCondition()
     }
   },
-  beforeRouteEnter (to, from, next) {
+  beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.getCondition()
     })
   },
+  created() {
+    this.getCondition()
+    this.getGoods()
+    this.getLoanType()
+    this.getBusinessType()
+  },
   methods: {
     handleGetCondition() {
-      this.pn = 1;
-      this.page = 10;
-      this.isJianSuo = true;
-      this.getCondition('search');
+      this.pn = 1
+      this.page = 10
+      this.isJianSuo = true
+      this.getCondition('search')
     },
     selectProvince(val) {
+      console.log(val)
       this.query.address1 = val.pid
       this.query.address2 = ''
       this.handleGetCondition('search')
@@ -272,16 +279,15 @@ export default {
     },
     search() { // 搜索
       this.listQuery.page = 1
-      this.isJianSuo = false;
+      this.isJianSuo = false
       if (this.listQuery.q) {
         detailApi.getAngentList(this.listQuery).then(res => {
-          this.formData = res.data.data;
-          this.Searchcount = res.data.total;
-          // window.scrollTo(0, 0);
+          this.formData = res.data.data
+          this.Searchcount = res.data.total
         })
       }
     },
-    //根据条件
+    // 根据条件
     getCondition(type) {
       this.$axios
         .get(
@@ -292,86 +298,80 @@ export default {
           }
         )
         .then(res => {
-          this.tableData = res.rows;
-          this.count = res.total;
+          this.tableData = res.rows
+          this.count = res.total
           if (type !== 'search') {
-            window.scrollTo(0, 0);
+            backTop()
           }
-        });
+        })
     },
     // 获取擅长业务
     getGoods() {
       this.$axios.get(`business/getAllBusiness`).then(res => {
         this.goods = res.map(item => {
-          return { value: item.businessId, label: item.business };
-        });
-      });
+          return { value: item.businessId, label: item.business }
+        })
+      })
     },
-    //经纪人详情
+    // 经纪人详情
     detail(id) {
-      this.$router.push(`agentDetail/${id}`);
+      this.$router.push(`agentDetail/${id}`)
     },
     handleCurrentChange(val) {
-      this.pn = val;
-      this.getCondition();
+      this.pn = val
+      this.getCondition()
     },
     handleSizeChange(val) {
-      this.page = val;
-      this.getCondition();
+      this.page = val
+      this.getCondition()
     },
     mask() {
-      this.isMask = true;
-      this.viewing = true;
+      this.isMask = true
+      this.viewing = true
     },
     applyLoan() {
       setTimeout(() => {
-        this.isShowing = false;
-      }, 500);
+        this.isShowing = false
+      }, 500)
     },
     returnF() {
       setTimeout(() => {
-        this.$router.push("/home");
-      }, 500);
+        this.$router.push('/home')
+      }, 500)
     },
     closeW() {
       setTimeout(() => {
-        this.isMask = false;
-        this.viewing = false;
-        this.isShowing = true;
-      }, 500);
+        this.isMask = false
+        this.viewing = false
+        this.isShowing = true
+      }, 500)
     },
     //  展开或关闭城市
     citySpread() {
-      this.cityUp = !this.cityUp;
-      this.goodUp = !this.goodUp;
+      this.cityUp = !this.cityUp
+      this.goodUp = !this.goodUp
     },
     goodSpread() {
-      this.goodUp = !this.goodUp;
+      this.goodUp = !this.goodUp
     },
-    //贷款类型
+    // 贷款类型
     getLoanType() {
-      this.$axios.get("get/getLoanType").then(res => {
+      this.$axios.get('get/getLoanType').then(res => {
         this.loans = res.map(item => {
-          return { value: item.id, label: item.typeName };
-        });
-      });
+          return { value: item.id, label: item.typeName }
+        })
+      })
     },
-    //业务分类
+    // 业务分类
     getBusinessType() {
-      this.$axios.get("get/getType").then(res => {
+      this.$axios.get('get/getType').then(res => {
         this.business = res.map(item => {
-          return { value: item.id, label: item.busName };
-        });
-      });
+          return { value: item.id, label: item.busName }
+        })
+      })
     }
-  },
-  created() {
-    this.getCondition();
-    this.getGoods();
-    this.getLoanType();
-    this.getBusinessType();
   }
-};
+}
 </script>
 <style scoped lang="scss">
 .mb40 {

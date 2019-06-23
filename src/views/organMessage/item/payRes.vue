@@ -3,8 +3,8 @@
     <div class="resource mb24">
       <div class="title">付费资源</div>
       <div
-        class="table"
         v-loading="listLoading"
+        class="table"
         element-loading-text="数据正在加载中..."
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.5)"
@@ -17,16 +17,16 @@
             <div class="header-same fll">手机号</div>
             <div class="header-same fll">操作</div>
           </div>
-          <div class="empty-list-show" v-show="!tableData">
+          <div v-show="!tableData" class="empty-list-show">
             <img :src="emptyList" alt="">
             <p>暂无数据...</p>
           </div>
-          <div class="loans-pro-item clearfix" v-for="(item, index) in tableData" :key="index">
-            <div class="fll" @click="enterDe(item.borrowerId)" style="cursor: pointer">
-              <div class="fll pro-item-same">{{item.borrowerName == null ? '-' : item.borrowerName}}</div>
-              <div class="fll pro-item-same">{{item.address == null ? '-' : item.address}}</div>
-              <div class="fll pro-item-same">{{item.loanAmount == null ? 0 : item.loanAmount}} 万元</div>
-              <div class="fll pro-item-same">{{item.phone == null ? '-' : item.phone}}</div>
+          <div v-for="(item, index) in tableData" :key="index" class="loans-pro-item clearfix">
+            <div class="fll" style="cursor: pointer" @click="enterDe(item.borrowerId)">
+              <div class="fll pro-item-same">{{ item.borrowerName == null ? '-' : item.borrowerName }}</div>
+              <div class="fll pro-item-same">{{ item.address == null ? '-' : item.address }}</div>
+              <div class="fll pro-item-same">{{ item.loanAmount == null ? 0 : item.loanAmount }} 万元</div>
+              <div class="fll pro-item-same">{{ item.phone == null ? '-' : item.phone }}</div>
             </div>
             <div class="fll pro-item-same">
               <div class="operate" @click="deleteBorrower(item.borrowerId)">删除</div>
@@ -38,22 +38,23 @@
     <div style="text-align: right">
       <div class="page">
         <el-pagination
+          :page-size="size"
+          :total="count"
+          background=""
+          layout="prev, pager, next"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          background=""
-          :page-size="size"
-          layout="prev, pager, next"
-          :total="count"
-        ></el-pagination>
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import emptyList from "../../../assets/empty-list2.png";
+import emptyList from '../../../assets/empty-list2.png'
+import { backTop } from '@/util/util'
 export default {
-  name: "payRes",
+  name: 'PayRes',
   data() {
     return {
       emptyList,
@@ -69,32 +70,32 @@ export default {
       ageList: null,
       jobList: null,
       incomeList: null
-    };
+    }
   },
   created() {
-    this.getData();
+    this.getData()
   },
   methods: {
     handleFilter() {
-      this.getData();
+      this.getData()
     },
     enterDe(id) {
-      this.$router.push(`/userDetail?type=1&borId=${id}`);
+      this.$router.push(`/userDetail?type=1&borId=${id}`)
     },
     handleSelectionChange(val) {},
     handleCurrentChange(val) {
-      this.page = val;
-      this.getData();
+      this.page = val
+      this.getData()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getData();
+      this.size = val
+      this.getData()
     },
     getData() {
-      this.listLoading = true;
+      this.listLoading = true
       const data = {
         ...this.listQuery
-      };
+      }
       this.$axios
         .get(
           `agencyResource/getBorByAgency/${this.$store.state.userInfo.id}/${
@@ -103,12 +104,12 @@ export default {
         )
         .then(res => {
           if (res.status === 200) {
-            this.listLoading = false;
-            this.tableData = res.data.list;
-            this.count = res.data.totalCount;
-            window.scrollTo(0, 0);
+            this.listLoading = false
+            this.tableData = res.data.list
+            this.count = res.data.totalCount
+            backTop()
           }
-        });
+        })
     },
 
     deleteBorrower(id) {
@@ -120,14 +121,14 @@ export default {
         )
         .then(res => {
           if (res.status === 200) {
-            this.$message.success(res.msg);
-            this.getData();
-            this.listLoading = false;
+            this.$message.success(res.msg)
+            this.getData()
+            this.listLoading = false
           }
-        });
+        })
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

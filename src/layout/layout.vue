@@ -4,17 +4,17 @@
       <div class="w1200">
         <div class="clearfix flr header-left">
           <div class="fll">
-            <div class="text1" @click="login" v-if="userInfo === null">登录</div>
+            <div v-if="userInfo === null" class="text1" @click="login">登录</div>
             <div
-              class="text1"
               v-else
+              class="text1"
               @click="personDetail(userInfo.roleId,userInfo.id)"
-            >欢迎{{userInfo === null? '' : userInfo.name}}&nbsp;&nbsp;个人中心</div>
+            >欢迎{{ userInfo === null? '' : userInfo.name }}&nbsp;&nbsp;个人中心</div>
           </div>
           <div class="text2 fll">&nbsp;|&nbsp;</div>
           <div class="fll">
-            <div class="text3" @click="register" v-if="userInfo === null">注册</div>
-            <div class="text1" v-else @click="logout">退出</div>
+            <div v-if="userInfo === null" class="text3" @click="register">注册</div>
+            <div v-else class="text1" @click="logout">退出</div>
           </div>
         </div>
       </div>
@@ -29,55 +29,55 @@
                 style="margin-top: 8px;float: left"
               >
             </a>
-            
+
           </div>
           <div class="flr">
             <router-link
-              to="/home"
               :style="$route.meta.classify === 'home' ? 'color:rgba(168,14,14,1)' : ''"
+              to="/home"
             >首页</router-link>
             <router-link
-              to="/loans"
               :style="$route.meta.classify === 'loans' ? 'color:rgba(168,14,14,1)' : ''"
+              to="/loans"
             >找贷款</router-link>
             <router-link
-              to="/agent"
               :style="$route.meta.classify === 'agent'? 'color:rgba(168,14,14,1)' : ''"
+              to="/agent"
             >找经纪人</router-link>
             <router-link
-              to="/organization"
               :style="$route.meta.classify === 'organ' ? 'color:rgba(168,14,14,1)' : ''"
+              to="/organization"
             >找机构</router-link>
             <router-link
-              to="/consult"
               :style="$route.meta.classify === 'consult' ? 'color:rgba(168,14,14,1)' : ''"
+              to="/consult"
             >金融咨询</router-link>
             <router-link
-              to="/help"
               :style="$route.meta.classify === 'help' ? 'color:rgba(168,14,14,1)' : ''"
+              to="/help"
             >贷款帮助</router-link>
           </div>
         </div>
       </div>
     </div>
-    <div class="mask" v-show="isMask" @click="closeMask"></div>
-    <div class="contain" v-show="isContain">
+    <div v-show="isMask" class="mask" @click="closeMask"/>
+    <div v-show="isContain" class="contain">
       <div class="subNum" @click="subNum">X</div>
       <el-tabs>
         <el-tab-pane>
           <span slot="label">短信登录</span>
-          <el-form label-position="right" :model="loginNum" label-width="80px" :rules="rules">
+          <el-form :model="loginNum" :rules="rules" label-position="right" label-width="80px">
             <div class="form-con">
               <el-form-item prop="phone" style="width: 360px;margin-left: -80px;">
-                <el-input type="text" v-model="loginNum.phone" placeholder="输入手机号"></el-input>
+                <el-input v-model="loginNum.phone" type="text" placeholder="输入手机号"/>
               </el-form-item>
               <div class="clearfix">
                 <el-form-item style="width: 250px;margin-left: -80px;float: left;">
-                  <el-input type="password" v-model="loginNum.code" placeholder="输入短信验证码"></el-input>
+                  <el-input v-model="loginNum.code" type="password" placeholder="输入短信验证码"/>
                 </el-form-item>
                 <div class="fll verify">
-                  <div class="send" v-if="showing" @click="send">{{verifyCode}}</div>
-                  <div v-else class="time send">{{time}}s</div>
+                  <div v-if="showing" class="send" @click="send">{{ verifyCode }}</div>
+                  <div v-else class="time send">{{ time }}s</div>
                 </div>
               </div>
               <div class="btn" @click="handleLogin">登&nbsp;&nbsp;录</div>
@@ -90,13 +90,13 @@
         </el-tab-pane>
         <el-tab-pane>
           <span slot="label">账号登录</span>
-          <el-form label-position="right" :model="passwordLogin" label-width="80px" :rules="rule">
+          <el-form :model="passwordLogin" :rules="rule" label-position="right" label-width="80px">
             <div class="form-con">
               <el-form-item prop="phone" style="width: 360px;margin-left: -80px;">
-                <el-input type="text" v-model="passwordLogin.phone" placeholder="输入手机号"></el-input>
+                <el-input v-model="passwordLogin.phone" type="text" placeholder="输入手机号"/>
               </el-form-item>
               <el-form-item style="width: 360px;margin-left: -80px;">
-                <el-input type="password" v-model="passwordLogin.password" @keyup.enter.native="loginTrue" placeholder="输入密码"></el-input>
+                <el-input v-model="passwordLogin.password" type="password" placeholder="输入密码" @keyup.enter.native="loginTrue"/>
               </el-form-item>
               <div class="clearfix mt12">
                 <el-checkbox v-model="checked">自动登录</el-checkbox>
@@ -112,146 +112,151 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <router-view></router-view>
+    <router-view/>
+    <backToTop/>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
-import router from "../router/index";
-import validater from "../util/validater";
-import {setToken, removeToken} from "@/util/auth";
+import { mapState, mapMutations } from 'vuex'
+import router from '../router/index'
+import validater from '../util/validater'
+import { setToken, removeToken } from '@/util/auth'
+import backToTop from '@/component/backToTop'
 export default {
-  name: "layout",
+  name: 'Layout',
+  components: {
+    backToTop
+  },
   data() {
     return {
       checked: false, // 是否使用自动登录
       time: 60,
-      timer: "",
-      verifyCode: "发送验证码",
+      timer: '',
+      verifyCode: '发送验证码',
       showing: true,
       isMask: false,
       isContain: false,
       formLabelAlign: {
-        number: "",
-        verifyCode: ""
+        number: '',
+        verifyCode: ''
       },
-      //验证码登录
+      // 验证码登录
       loginNum: {
-        code: "",
-        phone: ""
+        code: '',
+        phone: ''
       },
-      //密码登录
+      // 密码登录
       passwordLogin: {
-        phone: "",
-        password: ""
+        phone: '',
+        password: ''
       },
       rules: {
-        phone: [{ validator: validater.phoneNumber, trigger: "change" }]
+        phone: [{ validator: validater.phoneNumber, trigger: 'change' }]
       },
       rule: {
-        phone: [{ validator: validater.phoneNumber, trigger: "change" }]
+        phone: [{ validator: validater.phoneNumber, trigger: 'change' }]
       },
-      loginFrame: ""
-    };
+      loginFrame: ''
+    }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(['userInfo'])
   },
   methods: {
-    ...mapMutations(["SET_USER"]),
+    ...mapMutations(['SET_USER']),
     subNum() {
-      this.isMask = false;
-      this.isContain = false;
-      this.showing = true;
-      this.verifyCode = "发送验证码";
-      this.loginNum.phone = "";
-      this.loginNum.code = "";
-      this.passwordLogin.password = "";
-      this.passwordLogin.phone = "";
+      this.isMask = false
+      this.isContain = false
+      this.showing = true
+      this.verifyCode = '发送验证码'
+      this.loginNum.phone = ''
+      this.loginNum.code = ''
+      this.passwordLogin.password = ''
+      this.passwordLogin.phone = ''
     },
     closeMask() {
-      this.isMask = false;
-      this.isContain = false;
-      this.showing = true;
-      this.verifyCode = "发送验证码";
-      this.loginNum.phone = "";
-      this.loginNum.code = "";
-      this.passwordLogin.password = "";
-      this.passwordLogin.phone = "";
-      this.time = 60;
+      this.isMask = false
+      this.isContain = false
+      this.showing = true
+      this.verifyCode = '发送验证码'
+      this.loginNum.phone = ''
+      this.loginNum.code = ''
+      this.passwordLogin.password = ''
+      this.passwordLogin.phone = ''
+      this.time = 60
     },
     liJi() {
-      this.$router.push("/userRegister");
+      this.$router.push('/userRegister')
     },
     goRegister() {
-      this.$router.push("/userRegister");
+      this.$router.push('/userRegister')
     },
     logout() {
-      this.SET_USER(null);
+      this.SET_USER(null)
       this.loginNum = {
-        code: "",
-        phone: ""
-      };
+        code: '',
+        phone: ''
+      }
       this.passwordLogin = {
-        phone: "",
-        password: ""
-      };
-      this.showing = true;
-      this.time = 60;
-      this.$router.push("/home");
-      let phone = localStorage.getItem("phone");
-      let password = localStorage.getItem("password");
+        phone: '',
+        password: ''
+      }
+      this.showing = true
+      this.time = 60
+      this.$router.push('/home')
+      const phone = localStorage.getItem('phone')
+      const password = localStorage.getItem('password')
       removeToken()
       if (phone && password) {
-        localStorage.removeItem("phone");
-        localStorage.removeItem("password");
+        localStorage.removeItem('phone')
+        localStorage.removeItem('password')
       } else {
-        return;
+        return
       }
     },
-    //获取验证码
+    // 获取验证码
     send() {
       if (this.loginNum.phone) {
-        this.time = 60;
-        this.showing = false;
+        this.time = 60
+        this.showing = false
         this.timer = setInterval(() => {
-          this.time--;
+          this.time--
           if (this.time < 0) {
-            clearInterval(this.timer);
-            this.showing = true;
-            this.verifyCode = "重新获取";
-            this.time = 60;
+            clearInterval(this.timer)
+            this.showing = true
+            this.verifyCode = '重新获取'
+            this.time = 60
           }
-        }, 1000);
-        let phone = this.loginNum.phone.trim();
+        }, 1000)
+        const phone = this.loginNum.phone.trim()
         this.$axios.get(`user/selectPhone/${phone}`).then(res => {
           if (res.status === 500) {
-            this.$message.warning(res.msg);
-            this.loginNum.phone = "";
-            clearInterval(this.timer);
-            this.showing = true;
-            this.verifyCode = "重新获取";
-            this.time = 60;
+            this.$message.warning(res.msg)
+            this.loginNum.phone = ''
+            clearInterval(this.timer)
+            this.showing = true
+            this.verifyCode = '重新获取'
+            this.time = 60
           } else {
             this.$axios
               .get(`base/getLoginCode/${this.loginNum.phone}`)
               .then(res => {
                 if (res.status !== 200) {
-                  clearInterval(this.timer);
-                  this.showing = true;
-                  this.verifyCode = "重新获取";
-                  this.time = 60;
-                  this.$message.warning(res.msg);
+                  clearInterval(this.timer)
+                  this.showing = true
+                  this.verifyCode = '重新获取'
+                  this.time = 60
+                  this.$message.warning(res.msg)
                 }
-              });
+              })
           }
-        });
+        })
       } else {
-        this.$message.warning("手机号不能为空");
+        this.$message.warning('手机号不能为空')
       }
     },
-    //短信登录
+    // 短信登录
     handleLogin() {
       if (this.loginNum.phone) {
         if (this.loginNum.code) {
@@ -264,51 +269,51 @@ export default {
             .then(res => {
               if (res.status === 200) {
                 setTimeout(() => {
-                  this.$message.success(res.msg);
-                  this.SET_USER(res.data);
-                  this.isMask = false;
-                  this.isContain = false;
+                  this.$message.success(res.msg)
+                  this.SET_USER(res.data)
+                  this.isMask = false
+                  this.isContain = false
                   setToken(new Date())
-                }, 500);
+                }, 500)
               } else if (res.status === 500) {
-                this.$message.warning(res.msg);
+                this.$message.warning(res.msg)
               }
-            });
+            })
         } else {
-          this.$message.warning("验证码不能为空");
+          this.$message.warning('验证码不能为空')
         }
       } else {
-        this.$message.warning("手机号不能为空");
+        this.$message.warning('手机号不能为空')
       }
     },
-    //密码登录
+    // 密码登录
     loginTrue() {
       if (this.checked) {
-        localStorage.setItem("phone", this.passwordLogin.phone);
-        localStorage.setItem("password", this.passwordLogin.password);
+        localStorage.setItem('phone', this.passwordLogin.phone)
+        localStorage.setItem('password', this.passwordLogin.password)
       }
-      this.handlePasswordLogin();
+      this.handlePasswordLogin()
     },
 
-    //检查， 账号登录 手机是否存在
+    // 检查， 账号登录 手机是否存在
     checkPhone() {
-      let phone = this.passwordLogin.phone.trim();
+      const phone = this.passwordLogin.phone.trim()
       this.$axios.get(`user/selectPhone/${phone}`).then(res => {
         if (res.status === 500) {
-          this.$message.warning(res.msg);
-          this.passwordLogin.phone = "";
+          this.$message.warning(res.msg)
+          this.passwordLogin.phone = ''
         }
-      });
+      })
     },
     handlePasswordLogin() {
       if (this.passwordLogin.phone) {
         if (this.passwordLogin.password) {
-          let phone = this.passwordLogin.phone.trim();
+          const phone = this.passwordLogin.phone.trim()
           this.$axios.get(`user/selectPhone/${phone}`).then(res => {
             if (res.status === 500) {
-              this.$message.warning(res.msg);
-              this.passwordLogin.phone = "";
-              this.passwordLogin.password = "";
+              this.$message.warning(res.msg)
+              this.passwordLogin.phone = ''
+              this.passwordLogin.password = ''
             } else {
               this.$axios
                 .get(
@@ -319,86 +324,86 @@ export default {
                 .then(res => {
                   if (res.status === 200) {
                     setToken(new Date())
-                    this.SET_USER(res.data);
-                    this.$message.success(res.msg);
-                    this.isMask = false;
-                    this.isContain = false;
+                    this.SET_USER(res.data)
+                    this.$message.success(res.msg)
+                    this.isMask = false
+                    this.isContain = false
                   } else if (res.status === 500) {
-                    this.$message.warning(res.msg);
+                    this.$message.warning(res.msg)
                   }
-                });
+                })
             }
-          });
+          })
         } else {
-          this.$message.warning("密码不能为空");
+          this.$message.warning('密码不能为空')
         }
       } else {
-        this.$message.warning("手机号不能为空");
+        this.$message.warning('手机号不能为空')
       }
     },
-    //找回密码
+    // 找回密码
     findPassword() {
-      this.$router.push("/findPassword");
+      this.$router.push('/findPassword')
     },
-    //检测是否 自动登录
+    // 检测是否 自动登录
     autoLogin() {
-      let phone = localStorage.getItem("phone");
-      let password = localStorage.getItem("password");
+      const phone = localStorage.getItem('phone')
+      const password = localStorage.getItem('password')
       if (phone && password) {
-        this.checked = true;
-        this.passwordLogin.phone = phone;
-        this.passwordLogin.password = password;
-        this.handlePasswordLogin();
+        this.checked = true
+        this.passwordLogin.phone = phone
+        this.passwordLogin.password = password
+        this.handlePasswordLogin()
       }
     },
-    //点击登录，弹框
+    // 点击登录，弹框
     login() {
-      this.isMask = true;
-      this.isContain = true;
+      this.isMask = true
+      this.isContain = true
       this.resetForm()
     },
     enter() {
-      router.push("/help");
+      router.push('/help')
     },
     register() {
-      router.push("/userRegister");
+      router.push('/userRegister')
     },
-    //用户登录后可进入自己的个人页面
+    // 用户登录后可进入自己的个人页面
     personDetail(role, id) {
       if (role === 2 || role === 8) {
-        this.$router.push(`/agentMessage/${id}`);
+        this.$router.push(`/agentMessage/${id}`)
       }
       if (role === 1) {
-        this.$router.push(`/myMessage/${id}`);
+        this.$router.push(`/myMessage/${id}`)
       }
       if (role === 3) {
-        this.$router.push(`/organMessage/${id}`);
+        this.$router.push(`/organMessage/${id}`)
       }
     },
     resetForm() {
       this.passwordLogin = {
-        phone: "",
-        password: ""
+        phone: '',
+        password: ''
       }
     }
   },
   watch: {
     '$route': function(val) {
       if (val.path === '/home' && val.query.login === 1) {
-        this.isMask = true;
-        this.isContain = true;
+        this.isMask = true
+        this.isContain = true
       }
     }
   },
   created() {
-    this.loginFrame = this.$route.query.login;
+    this.loginFrame = this.$route.query.login
     if (this.loginFrame) {
-      this.isMask = true;
-      this.isContain = true;
+      this.isMask = true
+      this.isContain = true
     }
-    this.autoLogin();
+    this.autoLogin()
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

@@ -2,23 +2,23 @@
   <div>
     <div class="collect mb24">
       <div class="title">消息中心</div>
-      <el-tabs @tab-click="tabClick" v-model="activeName">
+      <el-tabs v-model="activeName" @tab-click="tabClick">
         <el-tab-pane>
           <span slot="label">收件箱</span>
           <div>
             <div v-if="isInbox" class="inbox">
               <el-table
+                v-loading="listLoading"
                 ref="multipleTable"
                 :data="shouData"
                 tooltip-effect="dark"
-                v-loading="listLoading"
                 element-loading-text="数据正在加载中..."
                 element-loading-spinner="el-icon-loading"
                 element-loading-background="rgba(0, 0, 0, 0.5)"
                 style="width: 100%; color: #9b9b9b;"
                 @selection-change="handleSelectionChange"
               >
-                <el-table-column type="selection" align="center" width="55"></el-table-column>
+                <el-table-column type="selection" align="center" width="55"/>
                 <el-table-column label="发件人" align="center" width="150">
                   <template slot-scope="scope">
                     <div @click="lookShouRow(scope.row.id)">{{ scope.row.fromName }}</div>
@@ -29,12 +29,12 @@
                     <div
                       style="overflow: hidden; white-space: nowrap;text-overflow: ellipsis"
                       @click="lookShouRow(scope.row.id)"
-                    >{{scope.row.content}}</div>
+                    >{{ scope.row.content }}</div>
                   </template>
                 </el-table-column>
                 <el-table-column label="发送时间" width="200">
                   <template slot-scope="scope">
-                    <div @click="lookShouRow(scope.row.id)">{{scope.row.startTime}}</div>
+                    <div @click="lookShouRow(scope.row.id)">{{ scope.row.startTime }}</div>
                   </template>
                 </el-table-column>
                 <!-- <el-table-column label="操作" width="150">
@@ -51,23 +51,23 @@
             <div v-if="!isInbox" class="inbox-detail">
               <div class="chat-top-wrap clearfix">
                 <div class="fll return-inbox" @click="returnS">&nbsp;&lt; &nbsp;返回收件箱</div>
-                <div class="fll inbox-title">与 {{detailData.fromName}}的对话</div>
+                <div class="fll inbox-title">与 {{ detailData.fromName }}的对话</div>
               </div>
               <div class="chat-box">
                 <div class="box-left clearfix" style="margin-top: 20px">
                   <div class="fll">
-                    <div class="message-box-left">{{detailData.content}}</div>
-                    <div class="box-time">{{detailData.startTime}}</div>
+                    <div class="message-box-left">{{ detailData.content }}</div>
+                    <div class="box-time">{{ detailData.startTime }}</div>
                   </div>
                 </div>
               </div>
               <div class="chat-send-box">
                 <input
+                  v-model="sendMessData.content"
                   class="chat-message"
                   placeholder="请输入内容"
                   type="text"
-                  v-model="sendMessData.content"
-                   @keyup.enter="sendMess"
+                  @keyup.enter="sendMess"
                 >
                 <button class="send" @click="sendMess">发送</button>
               </div>
@@ -78,36 +78,36 @@
           <span slot="label">发件箱</span>
           <div class="outbox">
             <el-table
+              v-loading="listLoading"
               ref="multipleTable"
               :data="faData"
               tooltip-effect="dark"
-              v-loading="listLoading"
               element-loading-text="数据正在加载中..."
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(0, 0, 0, 0.5)"
               style="width: 100%; color: #9b9b9b;"
               @selection-change="handleSelectionChangeOutbox"
             >
-              <el-table-column type="selection" align="center" width="55"></el-table-column>
+              <el-table-column type="selection" align="center" width="55"/>
               <el-table-column label="收件人" align="center" width="200">
                 <template slot-scope="scope">
                   <span
                     style="overflow: hidden; white-space: nowrap;text-overflow: ellipsis"
-                  >{{scope.row.toName}}</span>
+                  >{{ scope.row.toName }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="内容" align="center">
                 <template slot-scope="scope">
                   <span
                     style="overflow: hidden; white-space: nowrap;text-overflow: ellipsis"
-                  >{{scope.row.content}}</span>
+                  >{{ scope.row.content }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="发送时间" width="200">
                 <template slot-scope="scope">
                   <span
                     style="overflow: hidden; white-space: nowrap;text-overflow: ellipsis"
-                  >{{scope.row.startTime}}</span>
+                  >{{ scope.row.startTime }}</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -122,9 +122,9 @@
 </template>
 
 <script>
-import { time } from "../../../util/util";
+import { time, backTop } from '../../../util/util'
 export default {
-  name: "agentMessageCenter",
+  name: 'AgentMessageCenter',
   data() {
     return {
       listLoading: true,
@@ -142,91 +142,103 @@ export default {
       selectMultipleOutbox: [],
       arrInbox: [],
       arrOutbox: [],
-      inbox: "",
-      outbox: "",
-      shouPhone: "",
-      userId: "",
+      inbox: '',
+      outbox: '',
+      shouPhone: '',
+      userId: '',
       sendMessData: {
         from: this.$store.state.userInfo.phone,
-        to: "",
-        content: "",
-        startTime: "",
+        to: '',
+        content: '',
+        startTime: '',
         type: 2,
         isRead: 0
       },
       detailData: {
-        content: "",
-        from: "",
+        content: '',
+        from: '',
         id: 81,
         isRead: 1,
-        startTime: "",
-        to: "",
+        startTime: '',
+        to: '',
         type: 2,
-        fromName: ""
+        fromName: ''
       },
       activeName: ''
-    };
+    }
+  },
+  created() {
+    this.getSMessage()
+    this.getFMessage()
+    // userId 借款人 的id
+    this.userId = this.$route.query.id
+
+    if (this.userId) {
+      this.isInbox = false
+      this.isChange = true
+      this.getUserData()
+    }
   },
   methods: {
     tabClick() {
-      this.isInbox = true;
-      this.isChange = false;
-      this.sendMessData.content = "";
+      this.isInbox = true
+      this.isChange = false
+      this.sendMessData.content = ''
     },
     returnS() {
-      this.isInbox = true;
-      this.isChange = false;
-      this.sendMessData.content = "";
+      this.isInbox = true
+      this.isChange = false
+      this.sendMessData.content = ''
     },
     lookShouRow(id) {
-      this.isInbox = false;
-      this.isChange = true;
-      let shouId = id;
-      this.getDetailMess(shouId);
+      this.isInbox = false
+      this.isChange = true
+      const shouId = id
+      this.getDetailMess(shouId)
     },
     getDetailMess(id) {
       this.$axios.get(`message/getMessageById/${id}`).then(res => {
-        this.detailData = res;
-        this.shouPhone = res.from;
-      });
+        this.detailData = res
+        this.shouPhone = res.from
+      })
     },
     handleSelectionChange(val) {
-      this.selectMultipleInbox = val;
+      this.selectMultipleInbox = val
     },
     handleSelectionChangeOutbox(val) {
-      this.selectMultipleOutbox = val;
+      this.selectMultipleOutbox = val
     },
     handleCurrentChange(val) {
-      this.page = val;
+      this.page = val
     },
     handleSizeChange(val) {
-      this.size = val;
+      this.size = val
     },
-    //收件箱
+    // 收件箱
     getSMessage() {
-      this.listLoading = true;
+      this.listLoading = true
       this.$axios
         .get(
           `/message/getPageReceiveMessage/${this.$store.state.userInfo.phone}`
         )
         .then(res => {
-          this.shouData = res.rows;
-          this.listLoading = false;
-          window.scrollTo(0, 0);
-        });
+          this.shouData = res.rows
+          this.listLoading = false
+          backTop()
+        })
     },
-    //发件箱
+    // 发件箱
     getFMessage() {
-      this.listLoading = true;
+      this.listLoading = true
       this.$axios
         .get(`/message/getPageSendMessage/${this.$store.state.userInfo.phone}`)
         .then(res => {
-          this.faData = res.rows;
-          this.listLoading = false;
-          window.scrollTo(0, 0);
-        });
+          this.faData = res.rows
+          this.listLoading = false
+          backTop()
+        })
     },
-    //单独删除
+    // 单独删除
     deleteShouRow(id) {
       this.$axios
         .get(
@@ -236,11 +248,11 @@ export default {
         )
         .then(res => {
           if (res.status == 200) {
-            this.$message.success("删除成功");
-            this.getSMessage();
-            this.listLoading = false;
+            this.$message.success('删除成功')
+            this.getSMessage()
+            this.listLoading = false
           }
-        });
+        })
     },
     deleteFaRow(id) {
       this.$axios
@@ -249,18 +261,18 @@ export default {
         )
         .then(res => {
           if (res.status == 200) {
-            this.$message.success("删除成功");
-            this.getFMessage();
-            this.listLoading = false;
+            this.$message.success('删除成功')
+            this.getFMessage()
+            this.listLoading = false
           }
-        });
+        })
     },
     subInbox() {
       if (this.selectMultipleInbox.length > 0) {
         this.selectMultipleInbox.forEach(item => {
-          this.arrInbox.push(item.id);
-          this.inbox = this.arrInbox.join(",");
-        });
+          this.arrInbox.push(item.id)
+          this.inbox = this.arrInbox.join(',')
+        })
         this.$axios
           .get(
             `/message/removeReceiveMessageBatch/${this.inbox}/${
@@ -269,20 +281,20 @@ export default {
           )
           .then(res => {
             if (res.status === 200) {
-              this.$message.success("删除成功");
-              this.getSMessage();
+              this.$message.success('删除成功')
+              this.getSMessage()
             }
-          });
+          })
       } else {
-        this.$message.warning("请选择您要删除的项");
+        this.$message.warning('请选择您要删除的项')
       }
     },
     subOutbox() {
       if (this.selectMultipleOutbox.length > 0) {
         this.selectMultipleOutbox.forEach(item => {
-          this.arrOutbox.push(item.id);
-          this.outbox = this.arrOutbox.join(",");
-        });
+          this.arrOutbox.push(item.id)
+          this.outbox = this.arrOutbox.join(',')
+        })
         this.$axios
           .get(
             `message/removeSendMessageBatch/${this.outbox}/${
@@ -291,64 +303,52 @@ export default {
           )
           .then(res => {
             if (res.status === 200) {
-              this.$message.success("删除成功");
-              this.getFMessage();
+              this.$message.success('删除成功')
+              this.getFMessage()
             }
-          });
+          })
       } else {
-        this.$message.warning("请选择您要删除的项");
+        this.$message.warning('请选择您要删除的项')
       }
     },
-    //得到收件箱每一条借款人
-    //发送信息
+    // 得到收件箱每一条借款人
+    // 发送信息
     sendMess() {
       if (this.sendMessData.content) {
-        //点击列表发送信息
-        let data = new FormData();
-        this.sendMessData.startTime = time();
-        for (let item in this.sendMessData) {
-          if (item === "to") {
-            data.append(item, this.shouPhone);
+        // 点击列表发送信息
+        const data = new FormData()
+        this.sendMessData.startTime = time()
+        for (const item in this.sendMessData) {
+          if (item === 'to') {
+            data.append(item, this.shouPhone)
           } else {
-            data.append(item, this.sendMessData[item]);
+            data.append(item, this.sendMessData[item])
           }
         }
-        this.$axios.post("message/saveMessage", data).then(res => {
+        this.$axios.post('message/saveMessage', data).then(res => {
           if (res.status === 200) {
-            this.$message.success(res.msg);
+            this.$message.success(res.msg)
             this.activeName = '1'
-            this.sendMessData.content = "";
-            this.getFMessage();
+            this.sendMessData.content = ''
+            this.getFMessage()
           }
-        });
+        })
       } else {
-        this.$message.warning("内容不能为空");
+        this.$message.warning('内容不能为空')
       }
     },
-    //从外面过来的，发信息，先获取 这个借款人的信息 名字 头像
+    // 从外面过来的，发信息，先获取 这个借款人的信息 名字 头像
     getUserData() {
       this.$axios
         .get(`userBorrower/selectUserBorrowerById/${this.userId}`)
         .then(res => {
-          console.log("xinxi", res);
-          this.detailData.fromName = res.borrowerName;
-          this.shouPhone = res.phone;
-        });
-    }
-  },
-  created() {
-    this.getSMessage();
-    this.getFMessage();
-    //userId 借款人 的id
-    this.userId = this.$route.query.id;
-
-    if (this.userId) {
-      this.isInbox = false;
-      this.isChange = true;
-      this.getUserData();
+          console.log('xinxi', res)
+          this.detailData.fromName = res.borrowerName
+          this.shouPhone = res.phone
+        })
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

@@ -5,33 +5,43 @@
         <div class="left">
           <div class="title-wrap">
             <h2 class="title">{{ resultData.topic }}</h2>
-            <acticle-footer :time="resultData.releaseTime" :source="resultData.source" :num="resultData.viewNumber"></acticle-footer>
+            <acticle-footer :time="resultData.releaseTime" :source="resultData.source" :num="resultData.viewNumber"/>
           </div>
-          <div class="consult-content" v-html="resultData.content"></div>
+          <div class="consult-content" v-html="resultData.content"/>
           <div class="consult-footer">
-            <div class="prev common">上一篇</div>
-            <div class="next common">下一篇</div>
+            <div class="prev common" @click="handleUpDown(upDownData.upId)">上一篇: {{ upDownData.upTopic | titleFitler }}</div>
+            <div class="next common" @click="handleUpDown(upDownData.downId)">下一篇: {{ upDownData.downTopic | titleFitler }}</div>
           </div>
         </div>
         <div class="right">
-          <apply></apply>
-          <question></question>
+          <apply/>
+          <question/>
         </div>
       </div>
-      <footerSame></footerSame>
+      <footerSame/>
     </div>
-    <bottomTap></bottomTap>
+    <bottomTap/>
   </div>
 </template>
 <script>
-import footerSame from "@/component/footerSame";
-import bottomTap from "@/component/bottomTap";
-import apply from "./components/apply";
-import question from "./components/question";
+import footerSame from '@/component/footerSame'
+import bottomTap from '@/component/bottomTap'
+import apply from './components/apply'
+import question from './components/question'
 import acticleFooter from './components/acticleFooter'
-import { fetchDetail, addNum } from '@/api/consult'
+import { fetchDetail, addNum, upDownArticle } from '@/api/consult'
+import { backTop } from '@/util/util'
 export default {
-  name: 'consultDetail',
+  name: 'ConsultDetail',
+  filters: {
+    titleFitler(val) {
+      if (val) {
+        return val
+      } else {
+        return '暂无'
+      }
+    }
+  },
   components: {
     footerSame,
     bottomTap,
@@ -41,20 +51,36 @@ export default {
   },
   data() {
     return {
-      resultData: {}
+      resultData: {},
+      upDownData: {},
+      interval: null
     }
   },
   created() {
     const id = location.href.split('?')[1].split('=')[1]
     this.getData(id)
     this.readArticle(id)
+    this.getUpDown(id)
   },
   methods: {
     getData(id) {
       fetchDetail(id).then(res => {
-        console.log(res)
         this.resultData = res.data.data
       })
+    },
+    getUpDown(id) {
+      upDownArticle(id).then(res => {
+        this.upDownData = res.data.data
+      })
+    },
+    handleUpDown(id) {
+      if (id) {
+        this.getData(id)
+        this.getUpDown(id)
+        this.readArticle(id)
+        backTop()
+        location.hash = '#/consultDetail?id=' + id
+      }
     },
     readArticle(id) {
       addNum(id)
@@ -77,7 +103,7 @@ export default {
     .left {
       position: relative;
       width: 870px;
-      background: #fff; 
+      background: #fff;
       color: #515151;
       font-size: 14px;
       .title-wrap {

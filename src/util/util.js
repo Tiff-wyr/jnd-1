@@ -53,7 +53,6 @@ export function formatTime(time, option) {
   }
 }
 
-
 export function setSessoion(phone) {
   sessionStorage.setItem('phone', phone)
 }
@@ -62,16 +61,15 @@ export function removeSession() {
 }
 
 export function time() {
-  let time = new Date()
-  let year = time.getFullYear() //年
-  let month = time.getMonth() + 1 //月
-  let ri = time.getDate() //日
-  let hour = time.getHours() //时
-  let min = time.getMinutes() //分
-  let sec = time.getSeconds() //秒
+  const time = new Date()
+  const year = time.getFullYear() // 年
+  const month = time.getMonth() + 1 // 月
+  const ri = time.getDate() // 日
+  const hour = time.getHours() // 时
+  const min = time.getMinutes() // 分
+  const sec = time.getSeconds() // 秒
 
-  return year + "-" + month + '-' + ri + hour + ":" + min + ":" + sec
-
+  return year + '-' + month + '-' + ri + hour + ':' + min + ':' + sec
 }
 export function param2Obj(url) {
   const search = url.split('?')[1]
@@ -89,37 +87,56 @@ export function param2Obj(url) {
   )
 }
 export function formatPhone(phone) {
-  return phone.substr(0, 3) + '****' + phone.substr(7, 11);
+  return phone.substr(0, 3) + '****' + phone.substr(7, 11)
 }
 /**
  * randomWord 产生任意长度随机字母数字组合
  * @param {*} randomFlag 是否任意长度 min-任意长度最小位[固定位数] max-任意长度最大位
- * @param {*} min 
- * @param {*} max 
+ * @param {*} min
+ * @param {*} max
  */
 export function randomWord(randomFlag, min, max) {
-  var str = "",
-    pos = "",
+  var str = '',
+    pos = '',
     range = min,
-    arr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    arr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
   // 随机产生
   if (randomFlag) {
-    range = Math.round(Math.random() * (max - min)) + min;
+    range = Math.round(Math.random() * (max - min)) + min
   }
   for (var i = 0; i < range; i++) {
-    pos = Math.round(Math.random() * (arr.length - 1));
-    str += arr[pos];
+    pos = Math.round(Math.random() * (arr.length - 1))
+    str += arr[pos]
   }
-  return str;
+  return str
 }
 export function timeToTimeStamp(time) {
   return new Date(time).getTime()
 }
 
 export function createA(url) {
-  let a = document.createElement("a");
-  a.href = url;
-  a.target = "_blank";
-  a.click();
+  const a = document.createElement('a')
+  a.href = url
+  a.target = '_blank'
+  a.click()
+}
+
+export function backTop() {
+  const start = window.pageYOffset
+  let i = 0
+  const interval = setInterval(() => {
+    const next = Math.floor(easeInOutQuad(10 * i, start, -start, 500))
+    if (next <= 0) {
+      window.scrollTo(0, 0)
+      clearInterval(interval)
+    } else {
+      window.scrollTo(0, next)
+    }
+    i++
+  }, 16.7)
+  function easeInOutQuad(t, b, c, d) {
+    if ((t /= d / 2) < 1) return c / 2 * t * t + b
+    return -c / 2 * (--t * (t - 2) - 1) + b
+  }
 }

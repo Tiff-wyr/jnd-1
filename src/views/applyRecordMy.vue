@@ -3,8 +3,8 @@
     <div class="apply">
       <div class="title">申请记录</div>
       <div
-        class="wrap"
         v-loading="listLoading"
+        class="wrap"
         element-loading-text="数据正在加载中..."
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.5)"
@@ -17,16 +17,16 @@
           <div class="fll text">申请时间</div>
           <div class="fll text">操作</div>
         </div>
-        
-        <div class="empty-list-show" v-show="!tableData.length">
+
+        <div v-show="!tableData.length" class="empty-list-show">
           <img :src="emptyList" alt="">
           <p>暂无数据...</p>
         </div>
-        <div class="table clearfix" v-for="(item,index) in tableData" :key="index">
-          <div class="fll table-text">{{item.name}}</div>
-          <div class="fll table-text">{{item.amount}}</div>
-          <div class="fll table-text">{{item.phone}}</div>
-          <div class="fll table-text">{{item.time}}</div>
+        <div v-for="(item,index) in tableData" :key="index" class="table clearfix">
+          <div class="fll table-text">{{ item.name }}</div>
+          <div class="fll table-text">{{ item.amount }}</div>
+          <div class="fll table-text">{{ item.phone }}</div>
+          <div class="fll table-text">{{ item.time }}</div>
           <template v-if="item.orderState === 0 ? true : false">
             <div class="fll btn" @click="loanFail(item, 2)">
               <el-button size="mini" type="danger">贷款失败</el-button>
@@ -35,7 +35,7 @@
               <el-button size="mini" type="success">贷款成功</el-button>
             </div>
           </template>
-          <div class="fll table-text" v-if="item.orderState !== undefined && item.orderState !== 0">
+          <div v-if="item.orderState !== undefined && item.orderState !== 0" class="fll table-text">
             <el-tag
               :type="item.orderState | statusFilter"
               style="margin: 0 auto;"
@@ -46,43 +46,44 @@
     </div>
     <div class="page">
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        background=""
         :page-size="size"
         :pager-count="5"
-        layout="prev, pager, next"
         :total="count"
-      ></el-pagination>
+        background=""
+        layout="prev, pager, next"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import emptyList from '@/assets/empty-list2.png'
+import { backTop } from '@/util/util'
 export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        1: "success",
-        2: "danger"
-      };
-      return statusMap[status];
+        1: 'success',
+        2: 'danger'
+      }
+      return statusMap[status]
     },
     statesTextFilter(status) {
       const statusMap = {
-        1: "成功",
-        2: "失败"
-      };
-      return statusMap[status];
+        1: '成功',
+        2: '失败'
+      }
+      return statusMap[status]
     }
   },
   data() {
     return {
       emptyList,
       listLoading: true,
-      phoneId: "",
-      loanId: "",
+      phoneId: '',
+      loanId: '',
       isVictory: false,
       isMask: false,
       page: 1,
@@ -91,79 +92,82 @@ export default {
       tableData: [],
       loanData: [],
       xiuData: {
-        orderId: "",
-        phone: "",
-        loanType: "",
-        loanAmount: "",
-        interest: ""
+        orderId: '',
+        phone: '',
+        loanType: '',
+        loanAmount: '',
+        interest: ''
       }
-    };
+    }
+  },
+  created() {
+    this.getData()
   },
   methods: {
     handleCurrentChange(val) {
-      this.page = val;
-      this.getData();
+      this.page = val
+      this.getData()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getData();
+      this.size = val
+      this.getData()
     },
     loanFail(item, state) {
       // The loan failure
-      this.$confirm("是否确认贷款失败？（此操作一旦完成不可回退）", "警告", {
-        confirmButtonText: "确认",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('是否确认贷款失败？（此操作一旦完成不可回退）', '警告', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           const url = `/orderAll/updateState?orderId=${item.orderId}&roleId=${
             item.roleId
-          }&ageBroId=${item.ageBroId}&state=${state}`;
+          }&ageBroId=${item.ageBroId}&state=${state}`
           this.$axios.get(url).then(res => {
             if (res.status === 200) {
-              this.$message.success("修改成功");
+              this.$message.success('修改成功')
             } else {
-              this.$message.fail(res.msg);
+              this.$message.fail(res.msg)
             }
             this.getData()
-          });
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消操作"
-          });
-        });
+            type: 'info',
+            message: '已取消操作'
+          })
+        })
     },
     loanVictory(item, state) {
       // The loan success
-      this.$confirm("是否确认贷款成功？（此操作一旦完成不可回退）", "警告", {
-        confirmButtonText: "确认",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('是否确认贷款成功？（此操作一旦完成不可回退）', '警告', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           const url = `/orderAll/updateState?orderId=${item.orderId}&roleId=${
             item.roleId
-          }&ageBroId=${item.ageBroId}&state=${state}`;
+          }&ageBroId=${item.ageBroId}&state=${state}`
           this.$axios.get(url).then(res => {
             if (res.status === 200) {
-              this.$message.success("修改成功");
+              this.$message.success('修改成功')
             } else {
-              this.$message.fail(res.msg);
+              this.$message.fail(res.msg)
             }
             this.getData()
-          });
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消操作"
-          });
-        });
+            type: 'info',
+            message: '已取消操作'
+          })
+        })
     },
     getData() {
-      this.listLoading = true;
+      this.listLoading = true
       this.$axios
         .get(
           `orderAll/getOrderByBorrowerId/${this.$store.state.userInfo.id}/${
@@ -172,18 +176,15 @@ export default {
         )
         .then(res => {
           if (res.status === 200) {
-            this.listLoading = false;
-            this.tableData = res.data.list;
-            this.count = res.data.totalCount;
-            window.scrollTo(0 , 0);
+            this.listLoading = false
+            this.tableData = res.data.list
+            this.count = res.data.totalCount
+            backTop()
           }
-        });
+        })
     }
-  },
-  created() {
-    this.getData();
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

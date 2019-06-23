@@ -1,8 +1,8 @@
 <template>
   <div>
     <div
-      class="apply"
       v-loading="listLoading"
+      class="apply"
       element-loading-text="数据正在加载中..."
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.5)"
@@ -14,40 +14,41 @@
         <div class="fll text">手机号</div>
         <div class="fll text">申请时间</div>
       </div>
-      <div class="empty-list-show" v-show="!tableData.length">
+      <div v-show="!tableData.length" class="empty-list-show">
         <img :src="emptyList" alt="">
         <p>暂无数据...</p>
       </div>
       <div
-        class="table clearfix"
         v-for="(item,index) in tableData"
         :key="index"
+        class="table clearfix"
         @click="enterUser(item)"
       >
-        <div class="fll table-text">{{item.borrowerName == null ? '--' : item.borrowerName}}</div>
-        <div class="fll table-text">{{item.loanAmount == null ? '--' : item.loanAmount}}</div>
-        <div class="fll table-text">{{item.phone == null ? '--' : item.phone}}</div>
-        <div class="fll table-text">{{item.createTime == null ? '--' : item.createTime}}</div>
+        <div class="fll table-text">{{ item.borrowerName == null ? '--' : item.borrowerName }}</div>
+        <div class="fll table-text">{{ item.loanAmount == null ? '--' : item.loanAmount }}</div>
+        <div class="fll table-text">{{ item.phone == null ? '--' : item.phone }}</div>
+        <div class="fll table-text">{{ item.createTime == null ? '--' : item.createTime }}</div>
       </div>
     </div>
     <div class="page" style="float: right;margin-top: 30px">
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        background=""
         :page-size="size"
         :pager-count="5"
-        layout="prev, pager, next"
         :total="count"
-      ></el-pagination>
+        background=""
+        layout="prev, pager, next"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import emptyList from "../../../assets/empty-list2.png";
+import emptyList from '../../../assets/empty-list2.png'
+import { backTop } from '@/util/util'
 export default {
-  name: "applyRecord",
+  name: 'ApplyRecord',
   data() {
     return {
       emptyList,
@@ -56,22 +57,25 @@ export default {
       page: 1,
       size: 9,
       count: 1
-    };
+    }
+  },
+  created() {
+    this.getData()
   },
   methods: {
     enterUser(item) {
-      this.$router.push(`/userDetail?type=2&orderId=${item.orderId}&borId=${item.borrowerId}`);
+      this.$router.push(`/userDetail?type=2&orderId=${item.orderId}&borId=${item.borrowerId}`)
     },
     handleCurrentChange(val) {
-      this.page = val;
-      this.getData();
+      this.page = val
+      this.getData()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getData();
+      this.size = val
+      this.getData()
     },
     getData() {
-      this.listLoading = true;
+      this.listLoading = true
       this.$axios
         .get(
           `orderAll/getOrderByAgency/${this.$store.state.userInfo.id}/${
@@ -79,17 +83,14 @@ export default {
           }/${this.size}`
         )
         .then(res => {
-          this.listLoading = false;
-          this.tableData = res.data.list;
-          this.count = res.data.totalCount;
-          window.scrollTo(0, 0);
-        });
+          this.listLoading = false
+          this.tableData = res.data.list
+          this.count = res.data.totalCount
+          backTop()
+        })
     }
-  },
-  created() {
-    this.getData();
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

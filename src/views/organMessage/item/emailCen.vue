@@ -4,26 +4,26 @@
       <div class="title">邮件中心</div>
       <div v-if="isInbox" class="inbox">
         <el-table
+          v-loading="listLoading"
           ref="multipleTable"
           :data="tableData"
           tooltip-effect="dark"
-          v-loading="listLoading"
           element-loading-text="数据正在加载中..."
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(0, 0, 0, 0.5)"
           style="width: 100%;color: #515151"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column type="selection" align="center" width="55"></el-table-column>
-          <el-table-column label="发件人" prop="fromName" align="center" width="150"></el-table-column>
+          <el-table-column type="selection" align="center" width="55"/>
+          <el-table-column label="发件人" prop="fromName" align="center" width="150"/>
           <el-table-column width="380" label="内容">
             <template slot-scope="scope">
               <span
                 style="overflow: hidden; white-space: nowrap;text-overflow: ellipsis"
-              >{{scope.row.content}}</span>
+              >{{ scope.row.content }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="startTime" label="发送时间" width="200" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="startTime" label="发送时间" width="200" show-overflow-tooltip/>
           <el-table-column label="操作" width="150">
             <template slot-scope="scope">
               <el-button size="mini" type="danger" @click="deleteRow(scope.row)">删除</el-button>
@@ -42,8 +42,8 @@
         <div class="chat-box">
           <div class="box-left clearfix" style="margin-top: 20px">
             <div class="fll">
-              <div class="message-box-left">{{detailData.content}}</div>
-              <div class="box-time">{{detailData.startTime}}</div>
+              <div class="message-box-left">{{ detailData.content }}</div>
+              <div class="box-time">{{ detailData.startTime }}</div>
             </div>
           </div>
         </div>
@@ -53,8 +53,9 @@
 </template>
 
 <script>
+import { backTop } from '@/util/util'
 export default {
-  name: "agentEmail",
+  name: 'AgentEmail',
   data() {
     return {
       listLoading: true,
@@ -66,59 +67,62 @@ export default {
       checked: false,
       selectMultiple: [],
       arr: [],
-      str: "",
+      str: '',
       detailData: {
-        content: "我要申请贷款",
-        from: "18000000081",
+        content: '我要申请贷款',
+        from: '18000000081',
         id: 81,
         isRead: 1,
-        startTime: "2019-02-16 14:30:19.0",
-        to: "18000000001",
+        startTime: '2019-02-16 14:30:19.0',
+        to: '18000000001',
         type: 2,
-        fromName: ""
+        fromName: ''
       }
-    };
+    }
+  },
+  created() {
+    this.getData()
   },
   methods: {
     returnS() {
-      this.isInbox = true;
-      this.isChange = false;
+      this.isInbox = true
+      this.isChange = false
     },
     rowClick(row, event, column) {},
     lookRow(id) {
-      this.isInbox = false;
-      this.isChange = true;
-      let shouId = id;
-      this.getDetailMess(shouId);
+      this.isInbox = false
+      this.isChange = true
+      const shouId = id
+      this.getDetailMess(shouId)
     },
 
     getDetailMess(id) {
       this.$axios.get(`message/getMessageById/${id}`).then(res => {
-        console.log(res);
-        this.detailData = res;
-      });
+        console.log(res)
+        this.detailData = res
+      })
     },
     handleSelectionChange(val) {
-      this.selectMultiple = val;
-      console.log(this.selectMultiple);
+      this.selectMultiple = val
+      console.log(this.selectMultiple)
     },
 
     getData() {
-      this.listLoading = true;
+      this.listLoading = true
       this.$axios
         .get(`message/getPageSysMessage/${this.$store.state.userInfo.phone}`)
         .then(res => {
-          this.tableData = res.rows;
-          this.listLoading = false;
-          window.scrollTo(0, 0);
-        });
+          this.tableData = res.rows
+          this.listLoading = false
+          backTop()
+        })
     },
-    //全选删除
+    // 全选删除
     subInbox() {
       this.selectMultiple.forEach(item => {
-        this.arr.push(item.id);
-        this.str = this.arr.join(",");
-      });
+        this.arr.push(item.id)
+        this.str = this.arr.join(',')
+      })
       this.$axios
         .get(
           `/message/removeSysMessageBatch/${this.str}/${
@@ -127,13 +131,13 @@ export default {
         )
         .then(res => {
           if (res.status === 200) {
-            this.$message.success("删除成功");
-            this.getData();
-            this.listLoading = false;
+            this.$message.success('删除成功')
+            this.getData()
+            this.listLoading = false
           }
-        });
+        })
     },
-    //单独删除
+    // 单独删除
     deleteRow(row) {
       this.$axios
         .get(
@@ -143,17 +147,14 @@ export default {
         )
         .then(res => {
           if (res.status === 200) {
-            this.$message.success("删除成功");
-            this.getData();
-            this.listLoading = false;
+            this.$message.success('删除成功')
+            this.getData()
+            this.listLoading = false
           }
-        });
+        })
     }
-  },
-  created() {
-    this.getData();
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

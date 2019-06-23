@@ -3,8 +3,8 @@
     <div class="resource mb24">
       <div class="title">付费资源</div>
       <div
-        class="table"
         v-loading="listLoading"
+        class="table"
         element-loading-text="数据正在加载中..."
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.5)"
@@ -17,16 +17,16 @@
             <div class="header-same fll">手机号</div>
             <div class="header-same fll">操作</div>
           </div>
-          <div class="empty-list-show" v-show="!tableData.length">
+          <div v-show="!tableData.length" class="empty-list-show">
             <img :src="emptyList" alt="">
             <p>暂无数据...</p>
           </div>
-          <div class="loans-pro-item clearfix" v-for="(item,index) in tableData" :key="index">
-            <div class="fll" @click="enterDe(item.borrowerId)" style="cursor: pointer">
-              <div class="fll pro-item-same">{{item.borrowerName}}</div>
-              <div class="fll pro-item-same">{{item.address}}</div>
-              <div class="fll pro-item-same">{{item.loanAmount}}万</div>
-              <div class="fll pro-item-same">{{item.phone}}</div>
+          <div v-for="(item,index) in tableData" :key="index" class="loans-pro-item clearfix">
+            <div class="fll" style="cursor: pointer" @click="enterDe(item.borrowerId)">
+              <div class="fll pro-item-same">{{ item.borrowerName }}</div>
+              <div class="fll pro-item-same">{{ item.address }}</div>
+              <div class="fll pro-item-same">{{ item.loanAmount }}万</div>
+              <div class="fll pro-item-same">{{ item.phone }}</div>
             </div>
             <div class="fll pro-item-same">
               <div class="operate" @click="deletePay(item.borrowerId)">删除</div>
@@ -38,14 +38,14 @@
     <div style="text-align: right">
       <div class="page">
         <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          background=""
           :page-size="size"
           :pager-count="5"
-          layout="prev, pager, next"
           :total="count"
-        ></el-pagination>
+          background=""
+          layout="prev, pager, next"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
       </div>
     </div>
   </div>
@@ -53,8 +53,9 @@
 
 <script>
 import emptyList from '../../../assets/empty-list2.png'
+import { backTop } from '@/util/util'
 export default {
-  name: "agentPay",
+  name: 'AgentPay',
   data() {
     return {
       emptyList,
@@ -63,23 +64,26 @@ export default {
       page: 1,
       size: 10,
       count: 1
-    };
+    }
+  },
+  created() {
+    this.getPay()
   },
   methods: {
     enterDe(id) {
-      this.$router.push(`/userDetail?type=1&borId=${id}`);
+      this.$router.push(`/userDetail?type=1&borId=${id}`)
     },
     handleSelectionChange(val) {},
     handleCurrentChange(val) {
-      this.page = val;
-      this.getPay();
+      this.page = val
+      this.getPay()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getPay();
+      this.size = val
+      this.getPay()
     },
     getPay() {
-      this.listLoading = true;
+      this.listLoading = true
       this.$axios
         .get(
           `brokerResource/getPageBorrowerByBrokerIdPaid/${
@@ -87,13 +91,13 @@ export default {
           }/${this.page}/${this.size}`
         )
         .then(res => {
-          this.listLoading = false;
-          this.tableData = res.rows;
-          this.count = res.total;
-          window.scrollTo(0, 0);
-        });
+          this.listLoading = false
+          this.tableData = res.rows
+          this.count = res.total
+          backTop()
+        })
     },
-    //删除
+    // 删除
     deletePay(id) {
       this.$axios
         .get(
@@ -102,19 +106,16 @@ export default {
           }/${id}`
         )
         .then(res => {
-          console.log(res);
+          console.log(res)
           if (res.status === 200) {
-            this.$message.success("删除成功");
-            this.getPay();
-            this.listLoading = false;
+            this.$message.success('删除成功')
+            this.getPay()
+            this.listLoading = false
           }
-        });
+        })
     }
-  },
-  created() {
-    this.getPay();
   }
-};
+}
 </script>
 <style scoped lang="scss">
 .resource {

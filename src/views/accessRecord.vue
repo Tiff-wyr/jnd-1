@@ -5,71 +5,71 @@
       <el-tab-pane>
         <span slot="label">浏览记录</span>
         <div
-          style="height: 500px;background-color: #fff"
           v-loading="listLoading"
+          style="height: 500px;background-color: #fff"
           element-loading-text="数据正在加载中..."
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(0, 0, 0, 0.5)"
         >
           <div
-            class="record-item clearfix"
             v-for="(item,index) in recordData"
             :key="index"
+            class="record-item clearfix"
             @click="enterDetail(item.roleId,item.id)"
           >
-            <div class="year fll">{{item.startTime}}</div>
-            <div class="year fll">{{item.roleName}}：{{item.name}}</div>
+            <div class="year fll">{{ item.startTime }}</div>
+            <div class="year fll">{{ item.roleName }}：{{ item.name }}</div>
           </div>
-          <div class="empty-list-show" v-show="!recordData.length">
+          <div v-show="!recordData.length" class="empty-list-show">
             <img :src="emptyList" alt="">
             <p>暂无数据...</p>
           </div>
         </div>
         <div class="page">
           <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            background=""
             :page-size="size"
             :current-page="page"
+            background=""
             layout="prev, pager, next"
             :total="count"
-          ></el-pagination>
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
         </div>
       </el-tab-pane>
       <el-tab-pane>
         <span slot="label">访问记录</span>
         <div
-          style="height: 500px;background-color: #fff"
           v-loading="listLoading"
+          style="height: 500px;background-color: #fff"
           element-loading-text="数据正在加载中..."
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(0, 0, 0, 0.5)"
         >
-          <div class="empty-list-show" v-show="!recordBData.length">
+          <div v-show="!recordBData.length" class="empty-list-show">
             <img :src="emptyList" alt="">
             <p>暂无数据...</p>
           </div>
           <div
-            class="record-item"
             v-for="(item,index) in recordBData"
             :key="index"
+            class="record-item"
             @click="enter(item.roleId,item.id)"
           >
-            <div class="year fll">{{item.startTime}}</div>
-            <div class="year fll">{{item.roleName}}：{{item.name}}</div>
+            <div class="year fll">{{ item.startTime }}</div>
+            <div class="year fll">{{ item.roleName }}：{{ item.name }}</div>
           </div>
         </div>
         <div class="page">
           <el-pagination
-            @size-change="handleSizeBChange"
-            @current-change="handleCurrentBChange"
-            background=""
             :page-size="Size"
             :current-page="Page"
+            background=""
             layout="prev, pager, next"
             :total="Count"
-          ></el-pagination>
+            @size-change="handleSizeBChange"
+            @current-change="handleCurrentBChange"
+          />
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -77,9 +77,10 @@
 </template>
 
 <script>
-import emptyList from "@/assets/empty-list2.png";
+import emptyList from '@/assets/empty-list2.png'
+import { backTop } from '@/util/util'
 export default {
-  name: "accessRecord",
+  name: 'AccessRecord',
   data() {
     return {
       emptyList,
@@ -92,51 +93,57 @@ export default {
       Size: 7,
       count: 1,
       Count: 1
-    };
+    }
+  },
+  created() {
+    // 贷款人浏览记录
+    this.getRecord()
+    //  贷款人被浏览记录
+    this.getBRecord()
   },
   methods: {
     enterDetail(role, id) {
       if (role === 2) {
-        //经纪人
-        this.$router.push(`/agentDetail/${id}`);
+        // 经纪人
+        this.$router.push(`/agentDetail/${id}`)
       } else if (role === 3) {
-        //机构
-        this.$router.push(`/organDetail/${id}`);
+        // 机构
+        this.$router.push(`/organDetail/${id}`)
       } else {
-        //产品
-        this.$router.push(`/productDetail/${id}`);
+        // 产品
+        this.$router.push(`/productDetail/${id}`)
       }
     },
     enter(role, id) {
       if (role === 2) {
-        //经纪人
-        this.$router.push(`/agentDetail/${id}`);
+        // 经纪人
+        this.$router.push(`/agentDetail/${id}`)
       } else if (role === 3) {
-        //机构
-        this.$router.push(`/organDetail/${id}`);
+        // 机构
+        this.$router.push(`/organDetail/${id}`)
       } else {
-        //产品
-        this.$router.push(`/productDetail/${id}`);
+        // 产品
+        this.$router.push(`/productDetail/${id}`)
       }
     },
     handleCurrentChange(val) {
-      this.page = val;
-      this.getRecord();
+      this.page = val
+      this.getRecord()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getRecord();
+      this.size = val
+      this.getRecord()
     },
     handleCurrentBChange(val) {
-      this.Page = val;
-      this.getBRecord();
+      this.Page = val
+      this.getBRecord()
     },
     handleSizeBChange(val) {
-      this.Size = val;
-      this.getBRecord();
+      this.Size = val
+      this.getBRecord()
     },
     getRecord() {
-      this.listLoading = true;
+      this.listLoading = true
       this.$axios
         .get(
           `borrowerRecord/getBorrowerBrowseRecord/${
@@ -144,14 +151,14 @@ export default {
           }/${this.page}/${this.size}`
         )
         .then(res => {
-          this.listLoading = false;
-          this.count = res.total;
-          this.recordData = res.rows;
-          window.scrollTo(0, 0);
-        });
+          this.listLoading = false
+          this.count = res.total
+          this.recordData = res.rows
+          backTop()
+        })
     },
     getBRecord() {
-      this.listLoading = true;
+      this.listLoading = true
       this.$axios
         .get(
           `borrowerRecord/getBorrowerBrowsedRecord/${
@@ -159,19 +166,13 @@ export default {
           }/${this.Page}/${this.Size}`
         )
         .then(res => {
-          this.listLoading = false;
-          this.Count = res.total;
-          this.recordBData = res.rows;
-        });
+          this.listLoading = false
+          this.Count = res.total
+          this.recordBData = res.rows
+        })
     }
-  },
-  created() {
-    //贷款人浏览记录
-    this.getRecord();
-    //  贷款人被浏览记录
-    this.getBRecord();
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

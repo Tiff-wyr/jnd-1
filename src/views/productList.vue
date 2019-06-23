@@ -9,31 +9,31 @@
               <div
                 :class="cityUp? 'fll radio-wrap clearfix radio-wrap-active' : 'fll radio-wrap clearfix'"
               >
-                <wradio :radios="cities" name="city" v-model="query.city" class="fll"></wradio>
+                <wradio :radios="cities" v-model="query.city" name="city" class="fll"/>
               </div>
               <div class="up" @click="citySpread">展开
-                <span :class="cityUp? 'arrow rotate' : 'arrow' "></span>
+                <span :class="cityUp? 'arrow rotate' : 'arrow' "/>
               </div>
             </div>
             <div class="clearfix mb15">
               <div class="fll city">贷款类型</div>
-              <wradio :radios="loans" name="loan" v-model="query.loan" class="fll"></wradio>
+              <wradio :radios="loans" v-model="query.loan" name="loan" class="fll"/>
             </div>
             <div class="clearfix mb15">
               <div class="fll city">业务分类</div>
-              <wradio :radios="business" name="business" v-model="query.business" class="fll"></wradio>
+              <wradio :radios="business" v-model="query.business" name="business" class="fll"/>
             </div>
             <div class="clearfix mb15">
               <div class="fll city">贷款额度</div>
-              <wradio :radios="loanLimits" name="loanLimit" v-model="query.loanLimit" class="fll"></wradio>
+              <wradio :radios="loanLimits" v-model="query.loanLimit" name="loanLimit" class="fll"/>
             </div>
             <div class="clearfix mb15">
               <div class="fll city">贷款利率(月)</div>
-              <wradio :radios="loanRates" name="loanRate" v-model="query.loanRate" class="fll"></wradio>
+              <wradio :radios="loanRates" v-model="query.loanRate" name="loanRate" class="fll"/>
             </div>
             <div class="clearfix mb15">
               <div class="fll city">贷款期限</div>
-              <wradio :radios="loanLifes" name="loanLife" v-model="query.loanLife" class="fll"></wradio>
+              <wradio :radios="loanLifes" v-model="query.loanLife" name="loanLife" class="fll"/>
             </div>
             <div class="clearfix area-item">
               <div class="fll city">贷款条件</div>
@@ -42,20 +42,20 @@
               >
                 <wcheckBox
                   :radios="loanConditions"
-                  name="loanCondition"
                   v-model="query.loanCondition"
+                  name="loanCondition"
                   class="fll"
                   style="width: 700px"
-                ></wcheckBox>
+                />
               </div>
               <div class="up" @click="loanSpread">展开
-                <span :class="loanUp? 'arrow rotate' : 'arrow' "></span>
+                <span :class="loanUp? 'arrow rotate' : 'arrow' "/>
               </div>
             </div>
           </div>
           <div class="fll organ-right">
             <div class="clearfix mb40">
-              <input type="text" class="fll con-search" v-model="searchCon" placeholder="请输入内容">
+              <input v-model="searchCon" type="text" class="fll con-search" placeholder="请输入内容">
               <div class="search fll" @click="search">搜索</div>
             </div>
             <div class="top clearfix">
@@ -86,20 +86,20 @@
               <div class="header-same fll">发行机构</div>
               <div class="header-same fll">操作</div>
             </div>
-            
-            <div class="empty-list" v-if="tableData.length == 0">
+
+            <div v-if="tableData.length == 0" class="empty-list">
               <img :src="emptyList" alt="" class="empty-img">
               <p>暂无数据...</p>
             </div>
-            <div class="loans-pro-item clearfix" v-for="(item,index) in tableData" :key="index">
-              <div class="name fll pro-item-same">{{item.productName}}</div>
+            <div v-for="(item,index) in tableData" :key="index" class="loans-pro-item clearfix">
+              <div class="name fll pro-item-same">{{ item.productName }}</div>
               <div
                 class="rate fll pro-item-same"
-              >{{item.productStartAmount}}-{{item.productEndAmount}}万</div>
-              <div class="deadline fll pro-item-same">{{item.productLife}}</div>
-              <div class="limit fll pro-item-same">{{item.productInterest}}%</div>
-              <div class="time fll pro-item-same">{{item.producLoanLength}}</div>
-              <div class="bank fll pro-item-same">{{item.productPublisher}}</div>
+              >{{ item.productStartAmount }}-{{ item.productEndAmount }}万</div>
+              <div class="deadline fll pro-item-same">{{ item.productLife }}</div>
+              <div class="limit fll pro-item-same">{{ item.productInterest }}%</div>
+              <div class="time fll pro-item-same">{{ item.producLoanLength }}</div>
+              <div class="bank fll pro-item-same">{{ item.productPublisher }}</div>
               <div class="operate fll pro-item-same">
                 <div class="look" @click="lookDetail(item.productId)">查看</div>
               </div>
@@ -107,15 +107,15 @@
           </div>
           <div class="page">
             <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              background=""
               :current-page="page"
               :page-size="size"
               :pager-count="5"
-              layout="prev, pager, next"
               :total="count"
-            ></el-pagination>
+              background=""
+              layout="prev, pager, next"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+            />
           </div>
         </div>
         <div v-else>
@@ -129,29 +129,29 @@
               <div class="header-same fll">发行机构</div>
               <div class="header-same fll">操作</div>
             </div>
-            
-            <div class="empty-list" v-if="formData.length == 0">
+
+            <div v-if="formData.length == 0" class="empty-list">
               <img :src="emptyList" alt="" class="empty-img">
               <p>暂无数据...</p>
             </div>
-            
-            <div class="loans-pro-item clearfix" v-for="(item,index) in formData" :key="index">
-              <div class="name fll pro-item-same" v-html="item.productName">{{item.productName}}</div>
+
+            <div v-for="(item,index) in formData" :key="index" class="loans-pro-item clearfix">
+              <div class="name fll pro-item-same" v-html="item.productName">{{ item.productName }}</div>
               <div class="rate fll pro-item-same">
-                <span>{{item.productStartAmount}}</span>~
-                <span>{{item.productEndAmount}}</span>万
+                <span>{{ item.productStartAmount }}</span>~
+                <span>{{ item.productEndAmount }}</span>万
               </div>
               <div
                 class="time fll pro-item-same"
-              >{{item.producLoanLength}}年</div>
+              >{{ item.producLoanLength }}年</div>
               <div
                 class="limit fll pro-item-same"
-              >{{item.productInterest}}%</div>
-              <div class="deadline fll pro-item-same">{{item.productLife}}天</div>
+              >{{ item.productInterest }}%</div>
+              <div class="deadline fll pro-item-same">{{ item.productLife }}天</div>
               <div
                 class="bank fll pro-item-same"
                 v-html="item.productPublisher"
-              >{{item.productPublisher}}</div>
+              >{{ item.productPublisher }}</div>
               <div class="operate fll pro-item-same">
                 <div class="look" @click="lookDetail(item.productId)">查看</div>
               </div>
@@ -159,30 +159,31 @@
           </div>
           <div class="page">
             <el-pagination
-              @size-change="handleSizeSearchChange"
-              @current-change="handleCurrentSearchChange"
-              background=""
               :current-page="Searchpn"
               :page-size="Searchpage"
               :pager-count="5"
-              layout="prev, pager, next"
               :total="Searchcount"
-            ></el-pagination>
+              background=""
+              layout="prev, pager, next"
+              @size-change="handleSizeSearchChange"
+              @current-change="handleCurrentSearchChange"
+            />
           </div>
         </div>
-        <footerSame></footerSame>
+        <footerSame/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import footerSame from "../component/footerSame";
-import wradio from "../component/w-radios";
-import wcheckBox from "../component/w-checkBox";
-import emptyList from "../assets/empty-list.png";
+import footerSame from '../component/footerSame'
+import wradio from '../component/w-radios'
+import wcheckBox from '../component/w-checkBox'
+import emptyList from '../assets/empty-list.png'
+import { backTop } from '@/util/util'
 export default {
-  name: "productList",
+  name: 'ProductList',
   components: {
     footerSame,
     wradio,
@@ -193,74 +194,84 @@ export default {
       emptyList,
       formData: [],
       isJianSuo: true,
-      searchCon: "",
+      searchCon: '',
       cityUp: false, // 城市是否展开
-      loanUp: false, //贷款
+      loanUp: false, // 贷款
       tableData: [],
       cities: [],
-      loans: [], //贷款类型
-      business: [], //业务分类
-      loanLimits: [{}], //贷款额度
-      loanRates: [{}], //贷款利
-      loanLifes: [], //贷款期限
-      loanConditions: [], //贷款条件
+      loans: [], // 贷款类型
+      business: [], // 业务分类
+      loanLimits: [{}], // 贷款额度
+      loanRates: [{}], // 贷款利
+      loanLifes: [], // 贷款期限
+      loanConditions: [], // 贷款条件
       query: {
-        city: "",
-        loan: "",
-        business: "",
-        loanLimit: "",
-        loanRate: "",
-        loanLife: "",
-        loanCondition: ""
+        city: '',
+        loan: '',
+        business: '',
+        loanLimit: '',
+        loanRate: '',
+        loanLife: '',
+        loanCondition: ''
       },
       page: 1,
       size: 5,
-      count: 100,
+      count: 0,
       Searchpn: 1,
       Searchpage: 5,
       Searchcount: 1
-    };
+    }
   },
   watch: {
-    "query.city": function(val) {
-      (this.page = 1), (this.size = 5), (this.isJianSuo = true);
-      this.searchCon = "";
-      this.getDataCondition();
+    'query.city': function(val) {
+      (this.page = 1), (this.size = 5), (this.isJianSuo = true)
+      this.searchCon = ''
+      this.getDataCondition()
     },
-    "query.loan": function(val) {
-      (this.page = 1), (this.size = 5), (this.isJianSuo = true);
-      this.searchCon = "";
-      this.getDataCondition();
+    'query.loan': function(val) {
+      (this.page = 1), (this.size = 5), (this.isJianSuo = true)
+      this.searchCon = ''
+      this.getDataCondition()
     },
-    "query.business": function(val) {
-      (this.page = 1), (this.size = 5), (this.isJianSuo = true);
-      this.searchCon = "";
-      this.getDataCondition();
+    'query.business': function(val) {
+      (this.page = 1), (this.size = 5), (this.isJianSuo = true)
+      this.searchCon = ''
+      this.getDataCondition()
     },
-    "query.loanLimit": function(val) {
-      (this.page = 1), (this.size = 5), (this.isJianSuo = true);
-      this.searchCon = "";
-      this.getDataCondition();
+    'query.loanLimit': function(val) {
+      (this.page = 1), (this.size = 5), (this.isJianSuo = true)
+      this.searchCon = ''
+      this.getDataCondition()
     },
-    "query.loanRate": function(val) {
-      (this.page = 1), (this.size = 5), (this.isJianSuo = true);
-      this.searchCon = "";
-      this.getDataCondition();
+    'query.loanRate': function(val) {
+      (this.page = 1), (this.size = 5), (this.isJianSuo = true)
+      this.searchCon = ''
+      this.getDataCondition()
     },
-    "query.loanLife": function(val) {
-      (this.page = 1), (this.size = 5), (this.isJianSuo = true);
-      this.searchCon = "";
-      this.getDataCondition();
+    'query.loanLife': function(val) {
+      (this.page = 1), (this.size = 5), (this.isJianSuo = true)
+      this.searchCon = ''
+      this.getDataCondition()
     },
-    "query.loanCondition": function(val) {
-      (this.page = 1), (this.size = 5), (this.isJianSuo = true);
-      this.searchCon = "";
-      this.getDataCondition();
+    'query.loanCondition': function(val) {
+      (this.page = 1), (this.size = 5), (this.isJianSuo = true)
+      this.searchCon = ''
+      this.getDataCondition()
     }
+  },
+  created() {
+    this.getData()
+    this.getCity()
+    this.getLoanType()
+    this.getBusinessType()
+    this.getLoanLimit()
+    this.getLoanLife()
+    this.getLoanCondition()
+    this.getProRate()
   },
   methods: {
     search() {
-      this.isJianSuo = false;
+      this.isJianSuo = false
       if (this.searchCon) {
         this.$axios
           .get(
@@ -269,40 +280,40 @@ export default {
             }&size=${this.Searchpage}`
           )
           .then(res => {
-            console.log("产品", res);
-            this.formData = res.data;
-            this.Searchcount = res.total;
-          });
+            console.log('产品', res)
+            this.formData = res.data
+            this.Searchcount = res.total
+          })
       } else {
-        this.$message.warning("请输入查询内容");
+        this.$message.warning('请输入查询内容')
       }
     },
     handleSizeSearchChange(val) {
-      this.Searchpage = val;
-      this.search();
+      this.Searchpage = val
+      this.search()
     },
     handleCurrentSearchChange(val) {
-      this.Searchpn = val;
-      this.search();
+      this.Searchpn = val
+      this.search()
     },
     handleCurrentChange(val) {
-      this.page = val;
-      this.getDataCondition();
+      this.page = val
+      this.getDataCondition()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getDataCondition();
+      this.size = val
+      this.getDataCondition()
     },
     getData() {
       this.$axios
         .get(`/product/getLimitProduct/${this.page}/${this.size}`)
         .then(res => {
-          this.tableData = res.list;
-          this.count = res.totalCount;
-          window.scrollTo(0, 0);
-        });
+          this.tableData = res.list
+          this.count = res.totalCount
+          backTop()
+        })
     },
-    //根据条件
+    // 根据条件
     getDataCondition() {
       this.$axios
         .get(
@@ -317,90 +328,79 @@ export default {
           }&currentPage=${this.page}&pageSize=${this.size}`
         )
         .then(res => {
-          this.tableData = res.list;
-          console.log(this.tableData);
-          this.count = res.totalCount;
-        });
+          this.tableData = res.list
+          this.count = res.totalCount
+        })
     },
-    //获取地区
+    // 获取地区
     getCity() {
-      this.$axios.get("city/getAHotCity").then(res => {
+      this.$axios.get('city/getAHotCity').then(res => {
         this.cities = res.map(item => {
-          return { value: item.hid, label: item.cname };
-        });
-      });
+          return { value: item.hid, label: item.cname }
+        })
+      })
     },
     //  展开或关闭城市
     citySpread() {
-      this.cityUp = !this.cityUp;
+      this.cityUp = !this.cityUp
     },
     loanSpread() {
-      this.loanUp = !this.loanUp;
+      this.loanUp = !this.loanUp
     },
-    //查看进入详情页
+    // 查看进入详情页
     lookDetail(id) {
-      this.$router.push(`productDetail/${id}`);
+      this.$router.push(`productDetail/${id}`)
     },
-    //贷款类型
+    // 贷款类型
     getLoanType() {
-      this.$axios.get("get/getLoanType").then(res => {
+      this.$axios.get('get/getLoanType').then(res => {
         this.loans = res.map(item => {
-          return { value: item.id, label: item.typeName };
-        });
-      });
+          return { value: item.id, label: item.typeName }
+        })
+      })
     },
-    //业务分类
+    // 业务分类
     getBusinessType() {
-      this.$axios.get("get/getType").then(res => {
+      this.$axios.get('get/getType').then(res => {
         this.business = res.map(item => {
-          return { value: item.id, label: item.busName };
-        });
-      });
+          return { value: item.id, label: item.busName }
+        })
+      })
     },
-    //贷款额度
+    // 贷款额度
     getLoanLimit() {
-      this.$axios.get("get/getAmount").then(res => {
+      this.$axios.get('get/getAmount').then(res => {
         this.loanLimits = res.map(item => {
-          return { value: item.id, label: item.amountName };
-        });
-      });
+          return { value: item.id, label: item.amountName }
+        })
+      })
     },
-    //利率
+    // 利率
     getProRate() {
-      this.$axios.get("get/getInterest").then(res => {
+      this.$axios.get('get/getInterest').then(res => {
         this.loanRates = res.map(item => {
-          return { value: item.id, label: item.interestName };
-        });
-      });
+          return { value: item.id, label: item.interestName }
+        })
+      })
     },
-    //贷款期限
+    // 贷款期限
     getLoanLife() {
-      this.$axios.get("get/getServiceLife").then(res => {
+      this.$axios.get('get/getServiceLife').then(res => {
         this.loanLifes = res.map(item => {
-          return { value: item.id, label: item.lifeName };
-        });
-      });
+          return { value: item.id, label: item.lifeName }
+        })
+      })
     },
-    //贷款条件
+    // 贷款条件
     getLoanCondition() {
-      this.$axios.get("get/getLoanRequirements").then(res => {
+      this.$axios.get('get/getLoanRequirements').then(res => {
         this.loanConditions = res.map(item => {
-          return { value: item.lrId, label: item.lrName };
-        });
-      });
+          return { value: item.lrId, label: item.lrName }
+        })
+      })
     }
-  },
-  created() {
-    this.getData();
-    this.getCity();
-    this.getLoanType();
-    this.getBusinessType();
-    this.getLoanLimit();
-    this.getLoanLife();
-    this.getLoanCondition();
-    this.getProRate();
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

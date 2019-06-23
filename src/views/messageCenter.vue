@@ -2,39 +2,38 @@
   <div>
     <div class="collect mb24">
       <div class="title">消息中心</div>
-      <el-tabs @tab-click="tabClick" v-model="activeName">
+      <el-tabs v-model="activeName" @tab-click="tabClick">
         <el-tab-pane label="inBox"><span slot="label">收件箱</span>
           <div>
             <div v-if="isInbox" class="inbox">
               <el-table
+                v-loading="listLoading"
                 ref="multipleTable"
                 :data="shouData"
                 tooltip-effect="dark"
-                v-loading="listLoading" 
-                element-loading-text="数据正在加载中..." 
-                element-loading-spinner="el-icon-loading" 
+                element-loading-text="数据正在加载中..."
+                element-loading-spinner="el-icon-loading"
                 element-loading-background="rgba(0, 0, 0, 0.5)"
                 style="width: 100%; color: #9b9b9b;"
                 @selection-change="handleSelectionChange">
                 <el-table-column
                   type="selection"
                   align="center"
-                  width="55">
-                </el-table-column>
+                  width="55"/>
                 <el-table-column label="发件人" align="center" width="150">
                   <template slot-scope="scope" show-overflow-tooltip>
-                    <div @click="lookShouRow(scope.row.id)">{{scope.row.fromName}}</div>
+                    <div @click="lookShouRow(scope.row.id)">{{ scope.row.fromName }}</div>
                   </template>
                 </el-table-column>
 
                 <el-table-column label="内容" align="center">
                   <template slot-scope="scope" show-overflow-tooltip>
-                    <div @click="lookShouRow(scope.row.id)">{{scope.row.content}}</div>
+                    <div @click="lookShouRow(scope.row.id)">{{ scope.row.content }}</div>
                   </template>
                 </el-table-column>
                 <el-table-column label="发送时间" align="center">
                   <template slot-scope="scope" show-overflow-tooltip>
-                    <div @click="lookShouRow(scope.row.id)">{{scope.row.startTime}}</div>
+                    <div @click="lookShouRow(scope.row.id)">{{ scope.row.startTime }}</div>
                   </template>
                 </el-table-column>
               </el-table>
@@ -45,19 +44,19 @@
             <div v-if="!isInbox" class="inbox-detail">
               <div class="chat-top-wrap clearfix">
                 <div class="fll return-inbox" @click="returnS">&nbsp;&lt; &nbsp;返回收件箱</div>
-                <div class="fll inbox-title"> 与 {{detailData.fromName}}的对话</div>
+                <div class="fll inbox-title"> 与 {{ detailData.fromName }}的对话</div>
               </div>
               <div class="chat-box">
                 <div class="box-left clearfix" style="margin-top: 20px">
                   <div class="fll">
-                    <div class="message-box-left">{{detailData.content}}</div>
-                    <div class="box-time">{{detailData.startTime}}</div>
+                    <div class="message-box-left">{{ detailData.content }}</div>
+                    <div class="box-time">{{ detailData.startTime }}</div>
                   </div>
                 </div>
 
               </div>
               <div class="chat-send-box">
-                <input class="chat-message" placeholder="请输入内容" type="text" v-model="sendMessData.content" @keyup.enter="sendMess">
+                <input v-model="sendMessData.content" class="chat-message" placeholder="请输入内容" type="text" @keyup.enter="sendMess">
                 <button class="send" @click="sendMess">发送</button>
               </div>
             </div>
@@ -67,36 +66,35 @@
         <el-tab-pane label="outBox"><span slot="label">发件箱</span>
           <div class="outbox">
             <el-table
+              v-loading="listLoading"
               ref="multipleTable"
               :data="faData"
               tooltip-effect="dark"
-              v-loading="listLoading" 
-              element-loading-text="数据正在加载中..." 
-              element-loading-spinner="el-icon-loading" 
+              element-loading-text="数据正在加载中..."
+              element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(0, 0, 0, 0.5)"
               style="width: 100%; color: #9b9b9b;"
               @selection-change="handleSelectionChangeOutbox">
               <el-table-column
                 type="selection"
                 align="center"
-                width="55">
-              </el-table-column>
-              
+                width="55"/>
+
               <el-table-column label="收件人" align="center" width="150">
                 <template slot-scope="scope" show-overflow-tooltip>
-                  <div>{{scope.row.toName}}</div>
+                  <div>{{ scope.row.toName }}</div>
                 </template>
               </el-table-column>
-              
+
               <el-table-column label="内容" align="center">
                 <template slot-scope="scope" show-overflow-tooltip>
-                  <div>{{scope.row.content}}</div>
+                  <div>{{ scope.row.content }}</div>
                 </template>
               </el-table-column>
-              
+
               <el-table-column label="发送时间" align="center">
                 <template slot-scope="scope" show-overflow-tooltip>
-                  <div>{{scope.row.startTime}}</div>
+                  <div>{{ scope.row.startTime }}</div>
                 </template>
               </el-table-column>
             </el-table>
@@ -112,210 +110,208 @@
 </template>
 
 <script>
-  import {time} from '../util/util'
-  export default {
-    name: "agentMessageCenter",
-    data(){
-      return {
-        listLoading: true,
-        isInbox: true,    // 切换收件箱的聊天与列表
-        isChange: false,  // 列表与聊天框是否切换
-        checkAll: false,
-        isIndeterminate: true,
-        role:'',
-        checked: false,
-        shouData:[],
-        faData:[],
-        activeName: '',
-        selectMultipleInbox:[],
-        selectMultipleOutbox:[],
-        arrInbox:[],
-        arrOutbox:[],
-        inbox:'',
-        outbox:'',
-        agentOrganId:'',
-        sendMessData:{
-          from:this.$store.state.userInfo.phone,
-          to:'',
-          content:'',
-          startTime:'',
-          type:2,
-          isRead:0
-        },
-        detailData:{
-          content: '',
-          from: '',
-          id: '',
-          isRead: 1,
-          startTime: '',
-          to: '',
-          type: 2,
-          fromName:'',
-        },
-        shouPhone:'',
+import { time, backTop } from '../util/util'
+export default {
+  name: 'AgentMessageCenter',
+  data() {
+    return {
+      listLoading: true,
+      isInbox: true, // 切换收件箱的聊天与列表
+      isChange: false, // 列表与聊天框是否切换
+      checkAll: false,
+      isIndeterminate: true,
+      role: '',
+      checked: false,
+      shouData: [],
+      faData: [],
+      activeName: '',
+      selectMultipleInbox: [],
+      selectMultipleOutbox: [],
+      arrInbox: [],
+      arrOutbox: [],
+      inbox: '',
+      outbox: '',
+      agentOrganId: '',
+      sendMessData: {
+        from: this.$store.state.userInfo.phone,
+        to: '',
+        content: '',
+        startTime: '',
+        type: 2,
+        isRead: 0
+      },
+      detailData: {
+        content: '',
+        from: '',
+        id: '',
+        isRead: 1,
+        startTime: '',
+        to: '',
+        type: 2,
+        fromName: ''
+      },
+      shouPhone: ''
+    }
+  },
+  created() {
+    this.getSMessage()
+    this.getFMessage()
+    // agentOrganId 经纪人 机构 的id
+    this.agentOrganId = this.$route.query.id
+    this.role = this.$route.query.roleId
+    if (this.agentOrganId && this.role) {
+      this.isInbox = false
+      this.isChange = true
+      if (this.role === 2) {
+        // 经纪人
+        this.$axios.get(`userBroker/getUserBrokerById/${this.agentOrganId}`).then(res => {
+          this.detailData.fromName = res.brokerName
+          this.shouPhone = res.phone
+        })
+      } else {
+        // 机构
+        this.$axios.get(`userAgency/selectUserAgencyById/${this.agentOrganId}`).then(res => {
+          console.log('aaa', res)
+          this.detailData.fromName = res.agencyName
+          this.shouPhone = res.phone
+        })
       }
+    }
+  },
+  methods: {
+    tabClick(val) {
+      console.log(this.activeName)
+      this.isInbox = true
+      this.isChange = false
+      this.sendMessData.content = ''
     },
-    methods:{
-      tabClick(val) {
-        console.log(this.activeName)
-        this.isInbox=true
-        this.isChange=false
-        this.sendMessData.content = "";
-      },
-      returnS(){
-        this.isInbox=true
-        this.isChange=false
-        this.sendMessData.content = "";
-      },
-      lookShouRow(id){
-        this.isInbox = false
-        this.isChange = true
-        let shouId=id
-        this.getDetailMess(shouId)
-      },
-      getDetailMess(id){
-        this.$axios.get(`message/getMessageById/${id}`).then(res=>{
-          this.detailData=res
-          this.shouPhone=res.from
-        })
-      },
-      handleSelectionChange(val) {
-        this.selectMultipleInbox=val
-      },
-      handleSelectionChangeOutbox(val){
-        this.selectMultipleOutbox=val
-      },
-      handleCurrentChange (val) {
-        this.page = val
-      },
-      handleSizeChange (val) {
-        this.size = val
-      },
-      //收件箱
-      getSMessage(){
-        this.listLoading = true
-        this.$axios.get(`/message/getPageReceiveMessage/${this.$store.state.userInfo.phone}`).then(res=>{
-          this.shouData=res.rows
+    returnS() {
+      this.isInbox = true
+      this.isChange = false
+      this.sendMessData.content = ''
+    },
+    lookShouRow(id) {
+      this.isInbox = false
+      this.isChange = true
+      const shouId = id
+      this.getDetailMess(shouId)
+    },
+    getDetailMess(id) {
+      this.$axios.get(`message/getMessageById/${id}`).then(res => {
+        this.detailData = res
+        this.shouPhone = res.from
+      })
+    },
+    handleSelectionChange(val) {
+      this.selectMultipleInbox = val
+    },
+    handleSelectionChangeOutbox(val) {
+      this.selectMultipleOutbox = val
+    },
+    handleCurrentChange(val) {
+      this.page = val
+    },
+    handleSizeChange(val) {
+      this.size = val
+    },
+    // 收件箱
+    getSMessage() {
+      this.listLoading = true
+      this.$axios.get(`/message/getPageReceiveMessage/${this.$store.state.userInfo.phone}`).then(res => {
+        this.shouData = res.rows
+        this.listLoading = false
+        backTop()
+      })
+    },
+    // 发件箱
+    getFMessage() {
+      this.listLoading = true
+      this.$axios.get(`/message/getPageSendMessage/${this.$store.state.userInfo.phone}`).then(res => {
+        this.faData = res.rows
+        this.listLoading = false
+        backTop()
+      })
+    },
+    // 单独删除
+    deleteShouRow(id) {
+      this.$axios.get(`message/removeReceiveMessage/${id}/${this.$store.state.userInfo.phone}`).then(res => {
+        if (res.status == 200) {
+          this.$message.success('删除成功')
+          this.getSMessage()
           this.listLoading = false
-          window.scrollTo(0 , 0);
-        })
-      },
-      //发件箱
-      getFMessage(){
-        this.listLoading = true
-        this.$axios.get(`/message/getPageSendMessage/${this.$store.state.userInfo.phone}`).then(res=>{
-          this.faData=res.rows
+        }
+      })
+    },
+    deleteFaRow(id) {
+      this.$axios.get(`message/removeSendMessage/${id}/${this.$store.state.userInfo.phone}`).then(res => {
+        if (res.status == 200) {
+          this.$message.success('删除成功')
+          this.getFMessage()
           this.listLoading = false
-          window.scrollTo(0 , 0);
+        }
+      })
+    },
+    subInbox() {
+      if (this.selectMultipleInbox.length > 0) {
+        this.selectMultipleInbox.forEach(item => {
+          this.arrInbox.push(item.id)
+          this.inbox = this.arrInbox.join(',')
         })
-      },
-      //单独删除
-      deleteShouRow(id){
-        this.$axios.get(`message/removeReceiveMessage/${id}/${this.$store.state.userInfo.phone}`).then(res=>{
-          if(res.status == 200){
-            this.$message.success("删除成功")
+        this.$axios.get(`/message/removeReceiveMessageBatch/${this.inbox}/${this.$store.state.userInfo.phone}`).then(res => {
+          if (res.status === 200) {
+            this.$message.success('删除成功')
             this.getSMessage()
             this.listLoading = false
           }
         })
-      },
-      deleteFaRow(id){
-        this.$axios.get(`message/removeSendMessage/${id}/${this.$store.state.userInfo.phone}`).then(res=>{
-          if(res.status == 200){
-            this.$message.success("删除成功")
-            this.getFMessage()
-            this.listLoading = false
-          }
-        })
-      },
-      subInbox(){
-        if(this.selectMultipleInbox.length > 0){
-          this.selectMultipleInbox.forEach(item=>{
-            this.arrInbox.push(item.id)
-            this.inbox=this.arrInbox.join(',')
-          })
-          this.$axios.get(`/message/removeReceiveMessageBatch/${this.inbox}/${this.$store.state.userInfo.phone}`).then(res=>{
-            if(res.status === 200){
-              this.$message.success("删除成功")
-              this.getSMessage()
-              this.listLoading = false
-            }
-          })
-        }else{
-          this.$message.warning("请选择您要删除的项")
-        }
-      },
-      subOutbox(){
-        if(this.selectMultipleOutbox.length > 0){
-        this.selectMultipleOutbox.forEach(item=>{
-          this.arrOutbox.push(item.id)
-          this.outbox=this.arrOutbox.join(',')
-        })
-        this.$axios.get(`message/removeSendMessageBatch/${this.outbox}/${this.$store.state.userInfo.phone}`).then(res=>{
-          if(res.status === 200){
-            this.$message.success("删除成功")
-            this.getFMessage()
-            this.listLoading = false
-          }
-        })
-        }else{
-          this.$message.warning("请选择您要删除的项")
-        }
-      },
-      //发送信息
-      sendMess(){
-        if(this.sendMessData.content){
-          //点击列表发送信息
-          let data =new FormData()
-          this.sendMessData.startTime=time()
-          for (let item in this.sendMessData){
-            if(item === 'to'){
-              data.append(item,this.shouPhone)
-            }else{
-              data.append(item, this.sendMessData[item])
-            }
-          }
-          this.$axios.post('message/saveMessage',data).then(res=>{
-            if(res.status === 200){
-              this.activeName = '1'
-              this.$message.success('消息发送成功')
-              this.sendMessData.content=''
-              this.getFMessage()
-            }
-          })
-        }else{
-          this.$message.warning("内容不能为空")
-        }
+      } else {
+        this.$message.warning('请选择您要删除的项')
       }
     },
-    created(){
-      this.getSMessage()
-      this.getFMessage()
-      //agentOrganId 经纪人 机构 的id
-      this.agentOrganId = this.$route.query.id
-      this.role=this.$route.query.roleId
-      if(this.agentOrganId && this.role){
-        this.isInbox=false
-        this.isChange = true
-        if(this.role === 2){
-          //经纪人
-          this.$axios.get(`userBroker/getUserBrokerById/${this.agentOrganId}`).then(res=>{
-            this.detailData.fromName=res.brokerName
-            this.shouPhone=res.phone
-          })
-        }else{
-          //机构
-          this.$axios.get(`userAgency/selectUserAgencyById/${this.agentOrganId}`).then(res=>{
-            console.log('aaa',res);
-            this.detailData.fromName=res.agencyName
-            this.shouPhone=res.phone
-          })
-        }
+    subOutbox() {
+      if (this.selectMultipleOutbox.length > 0) {
+        this.selectMultipleOutbox.forEach(item => {
+          this.arrOutbox.push(item.id)
+          this.outbox = this.arrOutbox.join(',')
+        })
+        this.$axios.get(`message/removeSendMessageBatch/${this.outbox}/${this.$store.state.userInfo.phone}`).then(res => {
+          if (res.status === 200) {
+            this.$message.success('删除成功')
+            this.getFMessage()
+            this.listLoading = false
+          }
+        })
+      } else {
+        this.$message.warning('请选择您要删除的项')
       }
-
-
+    },
+    // 发送信息
+    sendMess() {
+      if (this.sendMessData.content) {
+        // 点击列表发送信息
+        const data = new FormData()
+        this.sendMessData.startTime = time()
+        for (const item in this.sendMessData) {
+          if (item === 'to') {
+            data.append(item, this.shouPhone)
+          } else {
+            data.append(item, this.sendMessData[item])
+          }
+        }
+        this.$axios.post('message/saveMessage', data).then(res => {
+          if (res.status === 200) {
+            this.activeName = '1'
+            this.$message.success('消息发送成功')
+            this.sendMessData.content = ''
+            this.getFMessage()
+          }
+        })
+      } else {
+        this.$message.warning('内容不能为空')
+      }
     }
   }
+}
 </script>
 
 <style scoped lang="scss">

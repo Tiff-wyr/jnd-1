@@ -4,26 +4,26 @@
       <div class="w1200">
         <div class="clearfix">
           <div class="loan-left fll">
-            <div class="left1 clearfix" v-for="(item,index) in proData" :key="index">
-              <img alt="" class="fll" :src="item.productOccupation">
+            <div v-for="(item,index) in proData" :key="index" class="left1 clearfix">
+              <img :src="item.productOccupation" alt="" class="fll">
               <div class="fll left-one">
-                <div class="salary mt4">{{item.productProperty}}</div>
-                <div class="credit mt18">{{item.productCharacteristic}}</div>
+                <div class="salary mt4">{{ item.productProperty }}</div>
+                <div class="credit mt18">{{ item.productCharacteristic }}</div>
               </div>
               <div class="fll left-two">
                 <div class="same mt14">抵押物:
-                  <span class="toge">&nbsp;{{item.productCondition}}</span>
+                  <span class="toge">&nbsp;{{ item.productCondition }}</span>
                 </div>
                 <div class="same mt18">利率范围:
-                  <span class="toge">&nbsp;{{item.productInterest}}%</span>
+                  <span class="toge">&nbsp;{{ item.productInterest }}%</span>
                 </div>
               </div>
               <div class="fll left-three">
                 <div class="same mt14">到账时间：
-                  <span class="toge">&nbsp;{{item.producLoanLength}}</span>
+                  <span class="toge">&nbsp;{{ item.producLoanLength }}</span>
                 </div>
                 <div class="same mt18">贷款金额:
-                  <span class="toge">&nbsp;&nbsp;最高{{item.productEndAmount}}万</span>
+                  <span class="toge">&nbsp;&nbsp;最高{{ item.productEndAmount }}万</span>
                 </div>
               </div>
               <div class="btn fll left-four" @click="enterDetail">立即查看</div>
@@ -33,22 +33,22 @@
             <div class="top">
               <div class="agent-rank">经纪人排行榜</div>
               <div
-                class="rank-item clearfix fs"
                 v-for="(item,index) in agentNumData"
                 :key="index"
+                class="rank-item clearfix fs"
                 @click="enterAgent(item.brokerId)"
               >
                 <div class="fll" style="width: 50px;text-align: center;margin-top: 13px;">
                   <img :src="item.icon" alt="">
                 </div>
-                <img :src="item.image" v-if="item.image" alt="" class="fll agent-img">
-                <img src="/static/resource/pic/agent.png" v-else alt="" class="fll agent-img">
+                <img v-if="item.image" :src="item.image" alt="" class="fll agent-img">
+                <img v-else src="/static/resource/pic/agent.png" alt="" class="fll agent-img">
                 <div class="fll ml5">
                   <div class="clearfix mt8 w120">
-                    <div class="name fll">{{item.brokerName}}</div>
+                    <div class="name fll">{{ item.brokerName }}</div>
                     <!-- <div class="num flr">{{item.count}}笔</div> -->
                   </div>
-                  <div class="desc">{{item.company}}</div>
+                  <div class="desc">{{ item.company }}</div>
                 </div>
               </div>
             </div>
@@ -71,48 +71,49 @@
             <div class="header-same fll">放款时间</div>
             <div class="header-same fll">操作</div>
           </div>
-          <div class="empty-list" v-if="tableData.length == 0">
+          <div v-if="tableData.length == 0" class="empty-list">
             <img :src="emptyList" alt="" class="empty-img">
             <p>暂无数据...</p>
           </div>
-          <div class="loans-pro-item clearfix" v-for="(item,index) in tableData" :key="index">
-            <div class="name fll">{{item.productName}}</div>
-            <div class="rate fll">{{item.productInterest}}%</div>
-            <div class="deadline fll">{{item.productLife}}</div>
-            <div class="limit fll">{{item.productStartAmount}}~{{item.productEndAmount}}万</div>
-            <div class="time fll">{{item.producLoanLength}}</div>
+          <div v-for="(item,index) in tableData" :key="index" class="loans-pro-item clearfix">
+            <div class="name fll">{{ item.productName }}</div>
+            <div class="rate fll">{{ item.productInterest }}%</div>
+            <div class="deadline fll">{{ item.productLife }}</div>
+            <div class="limit fll">{{ item.productStartAmount }}~{{ item.productEndAmount }}万</div>
+            <div class="time fll">{{ item.producLoanLength }}</div>
             <div class="operate fll" @click="lookDetail(item.productId)">查看</div>
           </div>
         </div>
         <div class="page">
           <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            background=""
             :page-size="size"
             :pager-count="5"
-            layout="prev, pager, next"
             :total="count"
-          ></el-pagination>
+            background=""
+            layout="prev, pager, next"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
         </div>
-        <footerSame></footerSame>
+        <footerSame/>
       </div>
     </div>
-    <bottomTap></bottomTap>
+    <bottomTap/>
   </div>
 </template>
 
 <script>
-import router from "../router/index";
-import footerSame from "../component/footerSame";
-import bottomTap from "../component/bottomTap";
-import emptyList from "../assets/empty-list.png";
+import router from '../router/index'
+import footerSame from '../component/footerSame'
+import bottomTap from '../component/bottomTap'
+import emptyList from '../assets/empty-list.png'
+import { backTop } from '@/util/util'
 import banner01 from '@/assets/banner01.png'
 import banner02 from '@/assets/banner02.png'
 import banner03 from '@/assets/banner03.png'
 const bannerList = [banner01, banner02, banner03]
 export default {
-  name: "Loans",
+  name: 'Loans',
   components: {
     footerSame,
     bottomTap
@@ -128,62 +129,62 @@ export default {
       count: 1,
       agentNumData: [],
       proData: []
-    };
+    }
   },
-  beforeRouteEnter (to, from, next) {
+  beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.getData()
     })
   },
+  created() {
+    this.getData()
+    // 经纪人排行榜
+    this.getAgentNum()
+    // 产品
+    this.getPro()
+  },
   methods: {
     enterAgent(id) {
-      this.$router.push(`/agentDetail/${id}`);
+      this.$router.push(`/agentDetail/${id}`)
     },
     enterDetail(id) {
-      this.$router.push(`/productList`);
+      this.$router.push(`/productList`)
     },
     lookDetail(id) {
-      this.$router.push(`productDetail/${id}`);
+      this.$router.push(`productDetail/${id}`)
     },
     enter() {
-      router.push("/productList");
+      router.push('/productList')
     },
     getData() {
       this.$axios
         .get(`product/getLimitProduct/${this.page}/${this.size}`)
         .then(res => {
-          this.tableData = res.list;
-          this.count = res.totalCount;
-          window.scrollTo(0, 0);
-        });
+          this.tableData = res.list
+          this.count = res.totalCount
+          backTop()
+        })
     },
     getPro() {
       this.$axios.get(`product/proList`).then(res => {
-        this.proData = res;
-      });
+        this.proData = res
+      })
     },
     handleCurrentChange(val) {
-      this.page = val;
-      this.getData();
+      this.page = val
+      this.getData()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getData();
+      this.size = val
+      this.getData()
     },
     getAgentNum() {
-      this.$axios.get("userBroker/getUserBrokerByOrderCountDesc").then(res => {
-        this.agentNumData = res;
-      });
+      this.$axios.get('userBroker/getUserBrokerByOrderCountDesc').then(res => {
+        this.agentNumData = res
+      })
     }
-  },
-  created() {
-    this.getData();
-    //经纪人排行榜
-    this.getAgentNum();
-    //产品
-    this.getPro();
   }
-};
+}
 </script>
 <style scoped lang="scss">
 .w120 {

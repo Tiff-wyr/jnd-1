@@ -3,17 +3,17 @@
     <div class="resource mb24">
       <div class="filter-container">
         <el-cascader
-          clearable
-          class="filter-item filter-item-select"
           :options="cityList"
-          @active-item-change="handleItemChange"
-          @change="handleCity"
           :props="props"
           :change-on-select="true"
-        ></el-cascader>
-        <el-select
+          clearable
           class="filter-item filter-item-select"
+          @active-item-change="handleItemChange"
+          @change="handleCity"
+        />
+        <el-select
           v-model="listQuery.fLoanAmount"
+          class="filter-item filter-item-select"
           clearable
           placeholder="请选择贷款金额"
         >
@@ -22,20 +22,20 @@
             :key="item.id"
             :value="item.id"
             :label="item.amountName"
-          ></el-option>
+          />
         </el-select>
         <el-select
-          class="filter-item filter-item-select"
           v-model="listQuery.fBusinessType"
+          class="filter-item filter-item-select"
           clearable
           placeholder="请选择贷款类型"
         >
-          <el-option v-for="item in typeList" :key="item.id" :value="item.id" :label="item.busName"></el-option>
+          <el-option v-for="item in typeList" :key="item.id" :value="item.id" :label="item.busName"/>
         </el-select>
-        
+
         <el-select
-          class="filter-item filter-item-select"
           v-model="listQuery.fIsPawn"
+          class="filter-item filter-item-select"
           clearable
           placeholder="请选择是否有抵押物"
         >
@@ -44,21 +44,21 @@
             :key="item.id"
             :value="item.id"
             :label="item.isPawn"
-          ></el-option>
+          />
         </el-select>
         <el-select
           v-show="listQuery.fIsPawn === 0"
-          class="filter-item filter-item-select"
           v-model="listQuery.fAge"
+          class="filter-item filter-item-select"
           clearable
           placeholder="请选择年龄范围"
         >
-          <el-option v-for="item in ageList" :key="item.id" :value="item.id" :label="item.ageArea"></el-option>
+          <el-option v-for="item in ageList" :key="item.id" :value="item.id" :label="item.ageArea"/>
         </el-select>
         <el-select
           v-show="listQuery.fIsPawn === 0"
-          class="filter-item filter-item-select"
           v-model="listQuery.fJob"
+          class="filter-item filter-item-select"
           clearable
           placeholder="请选择从事行业"
         >
@@ -67,12 +67,12 @@
             :key="item.jobId"
             :value="item.jobId"
             :label="item.jobName"
-          ></el-option>
+          />
         </el-select>
         <el-select
           v-show="listQuery.fIsPawn === 0"
-          class="filter-item filter-item-select"
           v-model="listQuery.fIncome"
+          class="filter-item filter-item-select"
           clearable
           placeholder="请选择收入范围"
         >
@@ -81,30 +81,30 @@
             :key="item.id"
             :value="item.id"
             :label="item.incomeName"
-          ></el-option>
+          />
         </el-select>
         <el-select
-          class="filter-item filter-item-select"
-          v-model="fPawnKey"
-          clearable
           v-show="listQuery.fIsPawn === 1"
-          @change="choosePawn"
+          v-model="fPawnKey"
+          class="filter-item filter-item-select"
+          clearable
           placeholder="请选择抵押物"
           multiple
+          @change="choosePawn"
         >
           <el-option
             v-for="item in pawnList"
             :key="item.pawnId"
             :value="item.pawnId"
             :label="item.pawn"
-          ></el-option>
+          />
         </el-select>
         <el-button type="primary" @click="handleFilter">查 询</el-button>
       </div>
       <div class="title">资源中心</div>
       <div
-        class="table"
         v-loading="listLoading"
+        class="table"
         element-loading-text="数据正在加载中..."
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.5)"
@@ -117,18 +117,18 @@
             <div class="header-same fll">手机号</div>
             <div class="header-same fll">操作</div>
           </div>
-          <div class="loans-pro-item clearfix" v-for="(item,index) in tableData" :key="index">
-            <div class="fll pro-item-same">{{item.borrowerName}}</div>
-            <div class="fll pro-item-same">{{item.address}}</div>
-            <div class="fll pro-item-same">{{item.loanAmountValue}}万</div>
-            <div class="fll pro-item-same">{{item.phone}}</div>
+          <div v-for="(item,index) in tableData" :key="index" class="loans-pro-item clearfix">
+            <div class="fll pro-item-same">{{ item.borrowerName }}</div>
+            <div class="fll pro-item-same">{{ item.address }}</div>
+            <div class="fll pro-item-same">{{ item.loanAmountValue }}万</div>
+            <div class="fll pro-item-same">{{ item.phone }}</div>
             <div class="fll pro-item-same">
               <div class="operate" @click="joinResource(item.borrowerId)">立即查看</div>
             </div>
           </div>
         </div>
-        
-        <div class="empty-list-show" v-show="!tableData.length">
+
+        <div v-show="!tableData.length" class="empty-list-show">
           <img :src="emptyList" alt="">
           <p>暂无数据...</p>
         </div>
@@ -141,18 +141,18 @@
           layout="total, prev, pager, next"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-        ></el-pagination>
+        />
       </div>
     </div>
-    <memberBox :visible="isMask" @close="isMask = false" @goPay="handlePay" :phone="phone" :data="memberData" @change="payInfo"></memberBox>
-  
+    <memberBox :visible="isMask" :phone="phone" :data="memberData" @close="isMask = false" @goPay="handlePay" @change="payInfo"/>
+
     <div class="agent-member-dialog">
       <el-dialog
         :visible.sync="dialogVisible"
-        width="500px"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         :show-close="false"
+        width="500px"
       >
         <div class="container">
           <div class="tips">
@@ -178,10 +178,10 @@
     <div class="dialog-customer">
       <el-dialog
         :visible.sync="dialogSuccessVisible"
-        width="500px"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         :show-close="false"
+        width="500px"
       >
         <div class="container">
           <div class="tips">
@@ -202,17 +202,18 @@
 </template>
 
 <script>
-import success from "../../../assets/success.png";
-import warning from "../../../assets/warning.png";
-import api from "@/api/filterData.js";
-import getListApi from "@/api/index.js";
-import { mapState, mapMutations } from "vuex";
+import success from '../../../assets/success.png'
+import warning from '../../../assets/warning.png'
+import api from '@/api/filterData.js'
+import getListApi from '@/api/index.js'
+import { backTop } from '@/util/util'
+import { mapState, mapMutations } from 'vuex'
 import emptyList from '@/assets/empty-list2.png'
 import memberBox from '@/component/memberBox'
 import { checkAliPayRusult, createAliPayOrderSn, getMemberDatas, reviewAliPay } from '@/util/pay.alipay'
 import { getQrCodes, checkWxPayRusult, reviewWxPay } from '@/util/pay.wxpay'
 export default {
-  name: "agentResource",
+  name: 'AgentResource',
   components: {
     memberBox
   },
@@ -224,25 +225,25 @@ export default {
       dialogVisible: false,
       dialogSuccessVisible: false,
       props: {
-        value: "id",
-        label: "label",
-        children: "citys"
+        value: 'id',
+        label: 'label',
+        children: 'citys'
       },
       listQuery: {
         page: 1,
         pageSize: 10,
-        brokerId: "", // 经纪人ID
-        fAddress: "",
-        fLoanAmount: "",
-        fBusinessType: "",
-        fIsPawn: "",
-        fAge: "",
-        fJob: "",
-        fIncome: "",
-        fIsPawn: "", // 有无抵押
-        fPawnKey: "" // 抵押物
+        brokerId: '', // 经纪人ID
+        fAddress: '',
+        fLoanAmount: '',
+        fBusinessType: '',
+        fIsPawn: '',
+        fAge: '',
+        fJob: '',
+        fIncome: '',
+        fIsPawn: '', // 有无抵押
+        fPawnKey: '' // 抵押物
       },
-      fPawnKey: "",
+      fPawnKey: '',
       listLoading: true,
       checked: true,
       isMask: false,
@@ -250,10 +251,10 @@ export default {
       page: 1,
       size: 10,
       count: 1,
-      payType: "",
-      weiLu: "",
-      order: "",
-      money: "",
+      payType: '',
+      weiLu: '',
+      order: '',
+      money: '',
       cityList: [],
       moneyList: null,
       typeList: null,
@@ -276,162 +277,162 @@ export default {
         month: '',
         businessType: 0
       }
-    };
+    }
   },
   created() {
-    this.getData();
-    this.getFilterData();
+    this.getData()
+    this.getFilterData()
     if (this.$store.state.userInfo) {
       this.isVip = this.$store.state.userInfo.vip > 0
       this.phone = this.$store.state.userInfo.phone
     }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(['userInfo'])
   },
   methods: {
-    ...mapMutations(["SET_USER_VIP"]),
-    //资源中心列表
+    ...mapMutations(['SET_USER_VIP']),
+    // 资源中心列表
     getData() {
-      this.listLoading = true;
-      let data = {
+      this.listLoading = true
+      const data = {
         brokerId: this.$store.state.userInfo.id
-      };
+      }
       for (var item in this.listQuery) {
         if (this.listQuery[item]) {
-          data[item] = this.listQuery[item];
+          data[item] = this.listQuery[item]
         }
       }
       getListApi.getPageBorrowerByBrokerIdUnPaid(data).then(res => {
         // 未付费资源
-        this.listLoading = false;
-        this.tableData = res.data.rows;
-        this.count = res.data.total;
-        window.scrollTo(0, 0);
-      });
+        this.listLoading = false
+        this.tableData = res.data.rows
+        this.count = res.data.total
+        backTop()
+      })
     },
     handleCity(val) {
       if (val.length === 1) {
-        this.listQuery.fAddress = val.toString();
+        this.listQuery.fAddress = val.toString()
         api.getCity(val[0]).then(res => {
-          const data = res.data;
-          let arr = [];
+          const data = res.data
+          const arr = []
           for (let i = 0; i < data.length; i++) {
-            let obj = {};
-            obj["id"] = data[i]["cid"];
-            obj["label"] = data[i]["city"];
-            arr.push(obj);
+            const obj = {}
+            obj['id'] = data[i]['cid']
+            obj['label'] = data[i]['city']
+            arr.push(obj)
           }
           for (let i = 0; i < this.cityList.length; i++) {
             if (this.cityList[i].id === val[0]) {
-              this.cityList[i].citys = arr;
+              this.cityList[i].citys = arr
             }
           }
-        });
+        })
       } else if (val.length === 2) {
-        this.listQuery.fAddress = val.toString();
+        this.listQuery.fAddress = val.toString()
       } else {
-        this.listQuery.fAddress = "";
+        this.listQuery.fAddress = ''
       }
     },
     handleItemChange(val) {
       api.getCity(val[0]).then(res => {
-        const data = res.data;
-        let arr = [];
+        const data = res.data
+        const arr = []
         for (let i = 0; i < data.length; i++) {
-          let obj = {};
-          obj["id"] = data[i]["cid"];
-          obj["label"] = data[i]["city"];
-          arr.push(obj);
+          const obj = {}
+          obj['id'] = data[i]['cid']
+          obj['label'] = data[i]['city']
+          arr.push(obj)
         }
         for (let i = 0; i < this.cityList.length; i++) {
           if (this.cityList[i].id === val[0]) {
-            this.cityList[i].citys = arr;
+            this.cityList[i].citys = arr
           }
         }
-      });
+      })
     },
     getFilterData() {
       api.getProvice().then(response => {
-        const data = response.data;
+        const data = response.data
         for (let i = 0; i < data.length; i++) {
-          let obj = {};
-          obj["id"] = data[i]["pid"];
-          obj["label"] = data[i]["provincial"];
-          obj["citys"] = [];
-          this.cityList.push(obj);
+          const obj = {}
+          obj['id'] = data[i]['pid']
+          obj['label'] = data[i]['provincial']
+          obj['citys'] = []
+          this.cityList.push(obj)
         }
-      });
+      })
       api.getMoney().then(response => {
-        this.moneyList = response.data;
-      });
+        this.moneyList = response.data
+      })
       api.getType().then(response => {
-        this.typeList = response.data;
-      });
+        this.typeList = response.data
+      })
       api.getAllAgeArea().then(response => {
-        this.ageList = response.data;
-      });
+        this.ageList = response.data
+      })
       api.getJob().then(response => {
-        this.jobList = response.data;
-      });
+        this.jobList = response.data
+      })
       api.getIncome().then(response => {
-        this.incomeList = response.data;
-      });
+        this.incomeList = response.data
+      })
       api.getAllIsPawn().then(response => {
-        this.isPawnList = response.data;
-      });
+        this.isPawnList = response.data
+      })
       api.getAllPawn().then(response => {
-        this.pawnList = response.data;
-      });
+        this.pawnList = response.data
+      })
     },
     handleFilter() {
-      this.listQuery.page = 1;
-      this.getData();
+      this.listQuery.page = 1
+      this.getData()
     },
     handleCurrentChange(val) {
-      this.listQuery.page = val;
-      this.getData();
+      this.listQuery.page = val
+      this.getData()
     },
     handleSizeChange(val) {
-      this.listQuery.pageSize = val;
-      this.getData();
+      this.listQuery.pageSize = val
+      this.getData()
     },
     choosePawn(val) {
-      this.listQuery.fPawnKey = val.join(",");
+      this.listQuery.fPawnKey = val.join(',')
     },
     getMemberDatas() {
       this.memberData = []
       getMemberDatas(0, this.phone, (res) => {
-        for (let key in res.data) {
+        for (const key in res.data) {
           this.memberData.push(res.data[key])
         }
       })
     },
-    //加入资源
+    // 加入资源
     joinResource(id) {
-      let data = new FormData();
-      data.append("borrowerId", id);
-      data.append("brokerId", this.$store.state.userInfo.id);
+      const data = new FormData()
+      data.append('borrowerId', id)
+      data.append('brokerId', this.$store.state.userInfo.id)
       this.$axios.post(`brokerResource/saveBrokerResource`, data).then(res => {
         if (res.status === 200) {
-          this.$message.success("成功加入付费资源");
-          this.getData();
-          this.listLoading = false;
-          this.$router.push(`/userDetail?type=1&borId=${id}`);
+          this.$message.success('成功加入付费资源')
+          this.getData()
+          this.listLoading = false
+          this.$router.push(`/userDetail?type=1&borId=${id}`)
         } else if (res.status === 205) {
           if (this.isVip) {
             this.$alert('您今日查看手机号次数已经用完，请明日再进行查看，或者前往会员中心升级权益。', '提示', {
               confirmButtonText: '确定',
               type: 'warning'
-            });
+            })
           } else {
-            this.isMask = true;
+            this.isMask = true
             this.getMemberDatas()
           }
         } else {
-          this.$message.warning(res.msg);
+          this.$message.warning(res.msg)
         }
-      });
+      })
     },
     payInfo(val) {
       if (val) {
@@ -459,10 +460,10 @@ export default {
             this.wxPay(this.params)
           }
         } else {
-          this.$message.warning("请选择要开通的会员和支付方式");
+          this.$message.warning('请选择要开通的会员和支付方式')
         }
       } else {
-        this.$message.warning("需同意《服务条款》");
+        this.$message.warning('需同意《服务条款》')
       }
     },
     aliPay(params) {
@@ -478,16 +479,16 @@ export default {
       })
     },
     handleSuccessDialog(msg) {
-      this.$message.success(msg);
-      this.dialogVisible = false;
-      this.dialogSuccessVisible = false;
+      this.$message.success(msg)
+      this.dialogVisible = false
+      this.dialogSuccessVisible = false
       this.isMask = false
       this.SET_USER_VIP(this.vipType)
     },
     handleFailDialog(msg) {
-      this.$message.warning(msg);
-      this.dialogVisible = false;
-      this.dialogSuccessVisible = true;
+      this.$message.warning(msg)
+      this.dialogVisible = false
+      this.dialogSuccessVisible = true
     },
     checkAliPay(msg) {
       checkAliPayRusult(this.orderSn, res => {
@@ -516,23 +517,23 @@ export default {
       } else {
         reviewWxPay(this.orderSn, this.params)
       }
-      this.dialogSuccessVisible = false;
-      this.dialogVisible = true;
+      this.dialogSuccessVisible = false
+      this.dialogVisible = true
     },
     handlePayFail() {
       this.handlePayComplete()
-      this.dialogSuccessVisible = false;
-      this.dialogVisible = false;
+      this.dialogSuccessVisible = false
+      this.dialogVisible = false
       this.isMask = false
       this.payTypeMask = false
     },
     handleConfirmPay() {
-      this.dialogSuccessVisible = false;
-      this.dialogVisible = false;
+      this.dialogSuccessVisible = false
+      this.dialogVisible = false
       this.isMask = false
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

@@ -2,44 +2,45 @@
   <div>
     <div class="title">访问记录</div>
     <div
-      class="wrap"
       v-loading="listLoading"
+      class="wrap"
       element-loading-text="数据正在加载中..."
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.5)"
     >
-      <div class="empty-list-show" v-show="!tableData">
+      <div v-show="!tableData" class="empty-list-show">
         <img :src="emptyList" alt="">
         <p>暂无数据...</p>
       </div>
       <div
-        class="record-item clearfix"
         v-for="(item,index) in tableData"
         :key="index"
+        class="record-item clearfix"
         @click="detail(item)"
       >
-        <div class="year fll">{{item.time}}</div>
-        <div class="year fll">{{item.borrower ? item.borrower.borrowerName : ''}}</div>
+        <div class="year fll">{{ item.time }}</div>
+        <div class="year fll">{{ item.borrower ? item.borrower.borrowerName : '' }}</div>
       </div>
     </div>
     <div class="page">
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        background=""
         :page-size="size"
         :pager-count="5"
-        layout="prev, pager, next"
         :total="count"
-      ></el-pagination>
+        background=""
+        layout="prev, pager, next"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import emptyList from '../../../assets/empty-list2.png'
+import { backTop } from '@/util/util'
 export default {
-  name: "accessRec",
+  name: 'AccessRec',
   data() {
     return {
       emptyList,
@@ -48,22 +49,25 @@ export default {
       page: 1,
       size: 10,
       count: 1
-    };
+    }
+  },
+  created() {
+    this.getData()
   },
   methods: {
     detail(item) {
-      this.$router.push(`/userDetail?type=3&roleId=${this.$store.state.userInfo.roleId}&brokerOrAgencyId=${this.$store.state.userInfo.id}&borId=${item.borrower.borrowerId}`);
+      this.$router.push(`/userDetail?type=3&roleId=${this.$store.state.userInfo.roleId}&brokerOrAgencyId=${this.$store.state.userInfo.id}&borId=${item.borrower.borrowerId}`)
     },
     handleCurrentChange(val) {
-      this.page = val;
-      this.getData();
+      this.page = val
+      this.getData()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getData();
+      this.size = val
+      this.getData()
     },
     getData() {
-      this.listLoading = true;
+      this.listLoading = true
       this.$axios
         .get(
           `borLook/agencyLookBor/${this.$store.state.userInfo.id}/${
@@ -71,17 +75,14 @@ export default {
           }/${this.size}`
         )
         .then(res => {
-          this.listLoading = false;
-          this.count = res.totalCount;
-          this.tableData = res.list;
-          window.scrollTo(0 , 0);
-        });
+          this.listLoading = false
+          this.count = res.totalCount
+          this.tableData = res.list
+          backTop()
+        })
     }
-  },
-  created() {
-    this.getData();
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
@@ -123,5 +124,4 @@ export default {
   margin-top: 25px;
 }
 </style>
-
 

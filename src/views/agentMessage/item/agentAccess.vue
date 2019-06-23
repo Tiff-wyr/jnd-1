@@ -2,40 +2,41 @@
   <div>
     <div class="title">访问记录</div>
     <div
-      class="wrap"
       v-loading="listLoading"
+      class="wrap"
       element-loading-text="数据正在加载中..."
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.5)"
     >
-      <div class="empty-list-show" v-show="!tableData.length">
+      <div v-show="!tableData.length" class="empty-list-show">
         <img :src="emptyList" alt="">
         <p>暂无数据...</p>
       </div>
       <!-- .borrower.borrowerId -->
-      <div class="record-item" v-for="(item,index) in tableData" :key="index" @click="pushUserDetail(item)"> 
-        <div class="year fll">{{item.startTime}}</div>
-        <div class="year fll">{{item.borrower.borrowerName}}</div>
+      <div v-for="(item,index) in tableData" :key="index" class="record-item" @click="pushUserDetail(item)">
+        <div class="year fll">{{ item.startTime }}</div>
+        <div class="year fll">{{ item.borrower.borrowerName }}</div>
       </div>
     </div>
     <div class="page">
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        background=""
         :page-size="size"
         :pager-count="5"
-        layout="prev, pager, next"
         :total="count"
-      ></el-pagination>
+        background=""
+        layout="prev, pager, next"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import emptyList from "../../../assets/empty-list2.png";
+import emptyList from '../../../assets/empty-list2.png'
+import { backTop } from '@/util/util'
 export default {
-  name: "agentAccess",
+  name: 'AgentAccess',
   data() {
     return {
       emptyList,
@@ -44,19 +45,22 @@ export default {
       page: 1,
       size: 10,
       count: 1
-    };
+    }
+  },
+  created() {
+    this.getData()
   },
   methods: {
     handleCurrentChange(val) {
-      this.page = val;
-      this.getData();
+      this.page = val
+      this.getData()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getData();
+      this.size = val
+      this.getData()
     },
     getData() {
-      this.listLoading = true;
+      this.listLoading = true
       this.$axios
         .get(
           `brokerBrowsedRecord/showPageRecordByBrokerId/${
@@ -64,20 +68,17 @@ export default {
           }?pn=${this.page}&page=${this.size}`
         )
         .then(res => {
-          this.tableData = res.rows;
-          this.count = res.total;
-          this.listLoading = false;
-          window.scrollTo(0, 0);
-        });
+          this.tableData = res.rows
+          this.count = res.total
+          this.listLoading = false
+          backTop()
+        })
     },
     pushUserDetail(item) {
-      this.$router.push(`/userDetail?type=3&roleId=${this.$store.state.userInfo.roleId}&brokerOrAgencyId=${this.$store.state.userInfo.id}&borId=${item.borrower.borrowerId}`);
+      this.$router.push(`/userDetail?type=3&roleId=${this.$store.state.userInfo.roleId}&brokerOrAgencyId=${this.$store.state.userInfo.id}&borId=${item.borrower.borrowerId}`)
     }
-  },
-  created() {
-    this.getData();
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
@@ -118,5 +119,4 @@ export default {
   margin-top: 25px;
 }
 </style>
-
 

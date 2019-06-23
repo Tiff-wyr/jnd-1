@@ -3,15 +3,15 @@
     <div class="article-wrap bg-white">
       <h2 class="title">热门文章</h2>
       <ul class="article-list">
-        <li class="article-item" v-for="item in data" :key="item.id" @click="handleDetail(item.id)">
+        <li v-for="item in data" :key="item.id" class="article-item" @click="handleDetail(item.id)">
           <dl>
             <dt>
               <img src="../../../../static/consult/1.jpg" alt="title">
             </dt>
             <dd>
               <h3>{{ item.topic }}</h3>
-              <div class="article-main">{{item.introduction}}</div>
-              <acticle-footer :source="item.source" :num="item.viewNumber" :time="item.releaseTime"></acticle-footer>
+              <div class="article-main">{{ item.introduction }}</div>
+              <acticle-footer :source="item.source" :num="item.viewNumber" :time="item.releaseTime"/>
             </dd>
           </dl>
         </li>
@@ -19,18 +19,17 @@
     </div>
     <div class="pagination-container">
       <el-pagination
+        :total="data.length"
         class="pagination"
         background
-        layout="prev, pager, next"
-        :total="1000">
-      </el-pagination>
+        layout="prev, pager, next, total"/>
     </div>
   </div>
 </template>
 <script>
 import acticleFooter from './acticleFooter'
 export default {
-  name: 'articleList',
+  name: 'ArticleList',
   components: {
     acticleFooter
   },
@@ -47,7 +46,7 @@ export default {
   },
   methods: {
     handleDetail(id) {
-      this.$router.push({ path: '/consultDetail', query: { id } })
+      this.$router.push({ path: '/consultDetail', query: { id }})
     }
   }
 }
@@ -87,6 +86,7 @@ export default {
 .article-wrap {
   color: #515151;
   margin-top: 30px;
+  min-height: 300px;
 }
 .pagination-container {
   margin-top: 30px;

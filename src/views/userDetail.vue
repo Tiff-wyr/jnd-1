@@ -8,82 +8,82 @@
               <div class="clearfix">
                 <div class="fll">
                   <img
-                    alt=""
-                    :src="tableData.borrowerLogo"
                     v-if="tableData.borrowerLogo"
+                    :src="tableData.borrowerLogo"
+                    alt=""
                     style="width: 120px;height: 120px;border-radius: 50%"
                   >
                   <img
-                    src="/static/resource/user.png"
                     v-else
+                    src="/static/resource/user.png"
                     alt=""
                     style="width: 120px;height: 120px;border-radius: 50%"
                   >
                 </div>
                 <div class="fll">
-                  <div class="name">{{tableData.borrowerName}}</div>
+                  <div class="name">{{ tableData.borrowerName }}</div>
                   <div class="clearfix">
                     <img src="../assets/message.png" class="fll" style="width: 20px;height: 20px;vertical-align: middle; margin-right: 10px;" alt="">
                     <div class="fll send" @click="sendMess">发送消息</div>
                   </div>
                 </div>
-                <div class="fll phone">{{tableData.phone}}</div>
+                <div class="fll phone">{{ tableData.phone }}</div>
               </div>
             </div>
             <div class="message">
               <div class="clearfix mt26">
-                <div class="fll yellow-line"></div>
+                <div class="fll yellow-line"/>
                 <div class="fll ml10 feature">基本信息</div>
               </div>
-              <div class="line2"></div>
+              <div class="line2"/>
               <div class="clearfix">
                 <div class="fll">
                   <div class="clearfix mb30">
                     <div class="fll text-age">所在地区：</div>
-                    <div class="fll w120">{{tableData.address}}</div>
+                    <div class="fll w120">{{ tableData.address }}</div>
                   </div>
-                  <div class="clearfix mb30" v-if="!tableData.isPawn">
+                  <div v-if="!tableData.isPawn" class="clearfix mb30">
                     <div class="fll text-age">年龄：</div>
-                    <div class="fll w120">{{tableData.age}}</div>
+                    <div class="fll w120">{{ tableData.age }}</div>
                   </div>
                 </div>
                 <div class="fll ml30">
-                  <div class="clearfix mb30" v-if="tableData.isPawn">
+                  <div v-if="tableData.isPawn" class="clearfix mb30">
                     <div class="fll text-age">抵押物：</div>
-                    <div class="fll w120">{{tableData.pawn}}</div>
+                    <div class="fll w120">{{ tableData.pawn }}</div>
                   </div>
-                  <div class="clearfix mb30" v-if="!tableData.isPawn">
+                  <div v-if="!tableData.isPawn" class="clearfix mb30">
                     <div class="fll text-age">职业：</div>
-                    <div class="fll w120">{{tableData.job}}</div>
+                    <div class="fll w120">{{ tableData.job }}</div>
                   </div>
-                  <div class="clearfix" v-if="!tableData.isPawn">
+                  <div v-if="!tableData.isPawn" class="clearfix">
                     <div class="fll text-age">月收入：</div>
-                    <div class="fll w120">{{tableData.income}}</div>
+                    <div class="fll w120">{{ tableData.income }}</div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="loanMess">
               <div class="clearfix mt26">
-                <div class="fll yellow-line"></div>
+                <div class="fll yellow-line"/>
                 <div class="fll ml10 feature">贷款信息</div>
               </div>
-              <div class="line2"></div>
+              <div class="line2"/>
               <div class="clearfix">
                 <div class="fll">
                   <div class="clearfix mb30">
                     <div class="fll text-age">贷款金额：</div>
-                    <div class="fll w120">{{tableData.loanAmount}}</div>
+                    <div class="fll w120">{{ tableData.loanAmount }}</div>
                   </div>
                   <div class="clearfix">
                     <div class="fll text-age">发布时间：</div>
-                    <div class="fll w120">{{tableData.time}}</div>
+                    <div class="fll w120">{{ tableData.time }}</div>
                   </div>
                 </div>
                 <div class="fll ml30">
                   <div class="clearfix mb30">
                     <div class="fll text-age">贷款类型：</div>
-                    <div class="fll w120">{{tableData.businessType}}</div>
+                    <div class="fll w120">{{ tableData.businessType }}</div>
                   </div>
                 </div>
               </div>
@@ -93,66 +93,66 @@
             <img src="../../static/resource/user-img.png" alt="">
           </div>
         </div>
-        <footerSame></footerSame>
+        <footerSame/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import footerSame from "../component/footerSame";
+import footerSame from '../component/footerSame'
 import detailApi from '@/api/detail'
 import { formatPhone, param2Obj } from '../util/util'
 export default {
-  name: "userDetail",
+  name: 'UserDetail',
   components: {
     footerSame
   },
   data() {
     return {
-      userId: "",
+      userId: '',
       tableData: {}
-    };
+    }
   },
   created() {
-    let params = param2Obj(location.href)
-    this.userId = params.borId;
+    const params = param2Obj(location.href)
+    this.userId = params.borId
     if (params.type == 2) {
       delete params.borId
     }
-    this.getData(params);
-    //保存经纪人浏览贷款人记录
-    this.getAgentRecord();
-    //保存机构浏览贷款人记录
-    this.getOrganRecord();
+    this.getData(params)
+    // 保存经纪人浏览贷款人记录
+    this.getAgentRecord()
+    // 保存机构浏览贷款人记录
+    this.getOrganRecord()
   },
   methods: {
     getData(params) {
       console.log(params)
       detailApi.getUserDetail(params).then(res => {
-        this.tableData = res.data.data;
+        this.tableData = res.data.data
       })
     },
-    //发送信息
+    // 发送信息
     sendMess() {
       if (this.$store.state.userInfo) {
         if (this.$store.state.userInfo.roleId === 2) {
-          //经纪人
+          // 经纪人
           this.$router.push({
             path: `/agentMessage/${
               this.$store.state.userInfo.id
             }/agentMessageCenter`,
             query: { id: this.userId }
-          });
+          })
         } else if (this.$store.state.userInfo.roleId === 3) {
-          //机构
+          // 机构
           this.$router.push({
             path: `/organMessage/${this.$store.state.userInfo.id}/messCen`,
             query: { id: this.userId }
-          });
+          })
         }
       } else {
-        this.$message.warning("请先登录");
+        this.$message.warning('请先登录')
       }
     },
     getAgentRecord() {
@@ -164,37 +164,37 @@ export default {
                 this.userId
               }`
             )
-            .then(res => {});
+            .then(res => {})
         }
       }
     },
     getOrganRecord() {
       if (this.$store.state.userInfo) {
         if (this.$store.state.userInfo.roleId === 3) {
-          let data = new FormData();
-          data.append("agencyId", this.$store.state.userInfo.id);
-          data.append("borId", this.userId);
-          this.$axios.post(`agencyLook/addAgencyLookBor`, data).then(res => {});
+          const data = new FormData()
+          data.append('agencyId', this.$store.state.userInfo.id)
+          data.append('borId', this.userId)
+          this.$axios.post(`agencyLook/addAgencyLookBor`, data).then(res => {})
         }
       }
     },
     enterMem() {
       if (this.$store.state.userInfo) {
         if (this.$store.state.userInfo.roleId === 3) {
-          //机构
+          // 机构
           this.$router.push(
             `/organMessage/${this.$store.state.userInfo.id}/memberCen`
-          );
+          )
         } else {
-          //经纪人
+          // 经纪人
           this.$router.push(
             `/agentMessage/${this.$store.state.userInfo.id}/agentMember`
-          );
+          )
         }
       }
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

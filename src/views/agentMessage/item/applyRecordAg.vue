@@ -2,8 +2,9 @@
   <div class="apply-container">
     <main class="main">
       <div class="title">申请记录</div>
-      <div class="table-wrap"
+      <div
         v-loading="listLoading"
+        class="table-wrap"
         element-loading-text="数据正在加载中..."
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.5)"
@@ -14,39 +15,40 @@
           <div class="fll text">手机号</div>
           <div class="fll text">申请时间</div>
         </div>
-        <div class="empty-list-show" v-show="!tableData.length">
+        <div v-show="!tableData.length" class="empty-list-show">
           <img :src="emptyList" alt="">
           <p>暂无数据...</p>
         </div>
       </div>
       <div
-        class="table clearfix"
         v-for="(item,index) in tableData"
-        @click="enterDetail(item)"
         :key="index"
+        class="table clearfix"
+        @click="enterDetail(item)"
       >
-        <div class="fll table-text">{{item.borrowerName}}</div>
-        <div class="fll table-text">{{item.loanAmount}}万元</div>
-        <div class="fll table-text">{{item.phone == null ? '--' : item.phone}}</div>
-        <div class="fll table-text">{{item.startTime}}</div>
+        <div class="fll table-text">{{ item.borrowerName }}</div>
+        <div class="fll table-text">{{ item.loanAmount }}万元</div>
+        <div class="fll table-text">{{ item.phone == null ? '--' : item.phone }}</div>
+        <div class="fll table-text">{{ item.startTime }}</div>
       </div>
     </main>
     <div class="page" style="margin-top: 30px;float: right">
       <el-pagination
-        background
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
         :page-size="size"
         :current-page="page"
-        layout="total, prev, pager, next"
         :total="count"
-      ></el-pagination>
+        background
+        layout="total, prev, pager, next"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import emptyList from "../../../assets/empty-list2.png";
+import emptyList from '../../../assets/empty-list2.png'
+import { backTop } from '@/util/util'
 export default {
   data() {
     return {
@@ -56,22 +58,25 @@ export default {
       page: 1,
       size: 8,
       count: 0
-    };
+    }
+  },
+  created() {
+    this.getData()
   },
   methods: {
     enterDetail(item) {
-      this.$router.push(`/userDetail?type=2&orderId=${item.orderId}&borId=${item.borrowerId}`);
+      this.$router.push(`/userDetail?type=2&orderId=${item.orderId}&borId=${item.borrowerId}`)
     },
     handleCurrentChange(val) {
-      this.page = val;
-      this.getData();
+      this.page = val
+      this.getData()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getData();
+      this.size = val
+      this.getData()
     },
     getData() {
-      this.listLoading = true;
+      this.listLoading = true
       this.$axios
         .get(
           `orderAll/getPageOrderByBrokerId/${this.$store.state.userInfo.id}/${
@@ -79,17 +84,14 @@ export default {
           }/${this.size}`
         )
         .then(res => {
-          this.listLoading = false;
-          this.tableData = res.rows;
-          this.count = res.total;
-          window.scrollTo(0, 0);
-        });
+          this.listLoading = false
+          this.tableData = res.rows
+          this.count = res.total
+          backTop()
+        })
     }
-  },
-  created() {
-    this.getData();
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

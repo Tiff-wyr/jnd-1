@@ -7,16 +7,16 @@ import router from './router'
 import './style/init.css'
 import axios from './util/axios'
 import store from './store/index'
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 import './style/iconfont/iconfont.css'
 import scroll from 'vue-seamless-scroll'
 import './util/setTitle'
 
 Vue.config.productionTip = false
 Vue.prototype.$isPay = false
-Vue.prototype.$axios=axios
-Vue.use(ElementUI);
+Vue.prototype.$axios = axios
+Vue.use(ElementUI)
 Vue.use(scroll)
 import './icons' // icon
 

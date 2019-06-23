@@ -1,15 +1,15 @@
 <template>
   <div class="clearfix">
-    <label class="radio_wrap fll" v-for="(item, index) in provinceData" :key="item.pid"  @mouseout="outStyle">
+    <label v-for="(item, index) in provinceData" :key="item.pid" class="radio_wrap fll" @mouseout="outStyle">
       <input
-        class="isShow"
         :ref="'city' + item.pid"
         :value="item.pid"
         :name="item.provincial"
+        class="isShow"
       >
-      <div class="radio_label" :class="{'active': index === activeIndex}" @click="handleProvince(index, item.pid)">{{item.provincial}}</div>
-      <div class="toggle" v-if="index === nowIndex" @mouseout="outStyle" @mouseover="mouseoverStyle(index)">
-        <happy-scroll color="#D8D8D8" :min-length-h="20">
+      <div :class="{'active': index === activeIndex}" class="radio_label" @click="handleProvince(index, item)">{{ item.provincial }}</div>
+      <div v-if="index === nowIndex" class="toggle" @mouseout="outStyle" @mouseover="mouseoverStyle(index)">
+        <happy-scroll :min-length-h="20" color="#D8D8D8">
           <ul style="padding-bottom: 20px;">
             <li
               v-for="label in cityData"
@@ -24,78 +24,77 @@
 </template>
 
 <script>
-import { HappyScroll } from "vue-happy-scroll";
-import "vue-happy-scroll/docs/happy-scroll.css";
-import { fetchProvince, fetchCity } from "@/api/register";
+import { HappyScroll } from 'vue-happy-scroll'
+import 'vue-happy-scroll/docs/happy-scroll.css'
+import { fetchProvince, fetchCity } from '@/api/register'
 export default {
-  name: "cityRadios",
+  name: 'CityRadios',
   components: {
     HappyScroll
   },
   props: {
-    name: String,
-    radios: Array,
     i: {
       type: String | undefined,
-      default: ""
+      default: ''
     }
   },
   data() {
     return {
       provinceData: [],
       cityData: [],
-      nowIndex: "",
+      nowIndex: '',
       activeIndex: '',
-      pid: ""
-    };
+      pid: ''
+    }
   },
   created() {
-    this.getProvince();
+    this.getProvince()
   },
   methods: {
     handleClickOut(event) {
-      this.nowIndex = "";
+      this.nowIndex = ''
     },
     outStyle() {
       this.nowIndex = ''
     },
     mouseoverStyle(index) {
-      this.nowIndex = index;
+      this.nowIndex = index
     },
-    handleProvince(index, value) {
+    handleProvince(index, item) {
       this.activeIndex = index
-      this.$emit("selectProvince", {
-        pid: this.pid
-      });
-      this.nowIndex = index;
-      this.pid = value;
-      this.cid = "";
-      this.getCity(value);
+      console.log(item)
+      this.$emit('selectProvince', {
+        pid: item.pid
+      })
+      this.nowIndex = index
+      this.pid = item.pid
+      this.cid = ''
+      this.getCity(item.pid)
     },
     handleCity(val) {
-      this.nowIndex = "";
-      this.cid = val;
-      this.$emit("selectCity", {
+      this.nowIndex = ''
+      this.cid = val
+      this.$emit('selectCity', {
         pid: this.pid,
         cid: this.cid
-      });
+      })
     },
-    //获取省
+    // 获取省
     getProvince() {
       fetchProvince().then(res => {
-        this.provinceData = res.data;
-      });
+        this.provinceData = res.data
+      })
     },
-    //获取 市 区
+    // 获取 市 区
     getCity(val) {
       if (val) {
         fetchCity(val).then(res => {
-          this.cityData = res.data;
-        });
+          this.cityData = res.data
+        })
       }
     }
   }
-};
+}
 </script>
 <style>
 .happy-scroll-container .happy-scroll-content {

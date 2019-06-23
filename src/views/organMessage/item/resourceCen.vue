@@ -3,16 +3,16 @@
     <div class="resource mb24">
       <div class="filter-container">
         <el-cascader
+          :options="cityList"
+          :props="props"
           class="filter-item filter-item-select"
           change-on-select
-          :options="cityList"
-          @change="handleCity"
-          :props="props"
           clearable
-        ></el-cascader>
+          @change="handleCity"
+        />
         <el-select
-          class="filter-item filter-item-select"
           v-model="listQuery.fLoanAmount"
+          class="filter-item filter-item-select"
           clearable
           placeholder="请选择贷款金额"
         >
@@ -21,19 +21,19 @@
             :key="item.id"
             :value="item.id"
             :label="item.amountName"
-          ></el-option>
+          />
         </el-select>
         <el-select
-          class="filter-item filter-item-select"
           v-model="listQuery.fBusinessType"
+          class="filter-item filter-item-select"
           clearable
           placeholder="请选择贷款类型"
         >
-          <el-option v-for="item in typeList" :key="item.id" :value="item.id" :label="item.busName"></el-option>
+          <el-option v-for="item in typeList" :key="item.id" :value="item.id" :label="item.busName"/>
         </el-select>
         <el-select
-          class="filter-item filter-item-select"
           v-model="listQuery.fIsPawn"
+          class="filter-item filter-item-select"
           clearable
           placeholder="请选择是否有抵押物"
         >
@@ -42,21 +42,21 @@
             :key="item.id"
             :value="item.id"
             :label="item.isPawn"
-          ></el-option>
+          />
         </el-select>
         <el-select
           v-show="listQuery.fIsPawn === 0"
-          class="filter-item filter-item-select"
           v-model="listQuery.fAge"
+          class="filter-item filter-item-select"
           clearable
           placeholder="请选择年龄范围"
         >
-          <el-option v-for="item in ageList" :key="item.id" :value="item.id" :label="item.ageArea"></el-option>
+          <el-option v-for="item in ageList" :key="item.id" :value="item.id" :label="item.ageArea"/>
         </el-select>
         <el-select
           v-show="listQuery.fIsPawn === 0"
-          class="filter-item filter-item-select"
           v-model="listQuery.fJob"
+          class="filter-item filter-item-select"
           clearable
           placeholder="请选择从事行业"
         >
@@ -65,12 +65,12 @@
             :key="item.jobId"
             :value="item.jobId"
             :label="item.jobName"
-          ></el-option>
+          />
         </el-select>
         <el-select
           v-show="listQuery.fIsPawn === 0"
-          class="filter-item filter-item-select"
           v-model="listQuery.fIncome"
+          class="filter-item filter-item-select"
           clearable
           placeholder="请选择收入范围"
         >
@@ -79,16 +79,16 @@
             :key="item.id"
             :value="item.id"
             :label="item.incomeName"
-          ></el-option>
+          />
         </el-select>
         <el-select
           v-show="listQuery.fIsPawn == 1"
-          class="filter-item filter-item-select"
           v-model="Collateral"
+          class="filter-item filter-item-select"
           clearable
           multiple
-          @change="handleCollateral"
           placeholder="请选择抵押物"
+          @change="handleCollateral"
         >
           <el-option
             v-for="item in pawnList"
@@ -96,63 +96,62 @@
             :value="item.pawnId"
             :label="item.pawn"
             multiple
-          ></el-option>
+          />
         </el-select>
         <el-button type="primary" @click="handleFilter">查 询</el-button>
       </div>
       <div class="title">资源中心</div>
       <div class="table-wrap">
 
-      
-      <el-table :data="tableData" v-loading="listLoading" element-loading-text="数据正在加载中..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)">
-        <el-table-column label="贷款人" align="center" width="120px">
-          <template slot-scope="scope">
-            {{ scope.row.borrowerName }}
-          </template>
-        </el-table-column>
-        <el-table-column label="注册地区" align="center">
-          <template slot-scope="scope">
-            {{ scope.row.address }}
-          </template>
-        </el-table-column>
-        <el-table-column label="贷款金额" align="center">
-          <template slot-scope="scope">
-            {{ scope.row.loanAmountValue | moneyFilter }}
-          </template>
-        </el-table-column>
-        <el-table-column label="手机号" align="center">
-          <template slot-scope="scope">
-            {{ scope.row.phone }}
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center" width="100px">
-          <template slot-scope="scope">
-            <div class="operate" @click="joinResource(scope.row.borrowerId)">立即查看</div>
-          </template>
-        </el-table-column>
-      </el-table>
+        <el-table v-loading="listLoading" :data="tableData" element-loading-text="数据正在加载中..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)">
+          <el-table-column label="贷款人" align="center" width="120px">
+            <template slot-scope="scope">
+              {{ scope.row.borrowerName }}
+            </template>
+          </el-table-column>
+          <el-table-column label="注册地区" align="center">
+            <template slot-scope="scope">
+              {{ scope.row.address }}
+            </template>
+          </el-table-column>
+          <el-table-column label="贷款金额" align="center">
+            <template slot-scope="scope">
+              {{ scope.row.loanAmountValue | moneyFilter }}
+            </template>
+          </el-table-column>
+          <el-table-column label="手机号" align="center">
+            <template slot-scope="scope">
+              {{ scope.row.phone }}
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" width="100px">
+            <template slot-scope="scope">
+              <div class="operate" @click="joinResource(scope.row.borrowerId)">立即查看</div>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
     </div>
-    <memberBox :visible="isMask" @close="isMask = false" @goPay="handlePay" :phone="phone" :data="memberData" @change="payInfo"></memberBox>
+    <memberBox :visible="isMask" :phone="phone" :data="memberData" @close="isMask = false" @goPay="handlePay" @change="payInfo"/>
     <div style="text-align: right">
       <div class="page">
-      <el-pagination
-        background
-        :current-page="listQuery.page"
-        :page-size="listQuery.pageSize"
-        :total="count"
-        layout="total, prev, pager, next"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"/>
+        <el-pagination
+          :current-page="listQuery.page"
+          :page-size="listQuery.pageSize"
+          :total="count"
+          background
+          layout="total, prev, pager, next"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"/>
       </div>
     </div>
     <div class="agent-member-dialog">
       <el-dialog
         :visible.sync="dialogVisible"
-        width="500px"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         :show-close="false"
+        width="500px"
       >
         <div class="container">
           <div class="tips">
@@ -178,10 +177,10 @@
     <div class="dialog-customer">
       <el-dialog
         :visible.sync="dialogSuccessVisible"
-        width="500px"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         :show-close="false"
+        width="500px"
       >
         <div class="container">
           <div class="tips">
@@ -202,17 +201,17 @@
 </template>
 
 <script>
-import success from "../../../assets/success.png";
-import warning from "../../../assets/warning.png";
-import api from "@/api/filterData.js";
-import getListApi from "@/api/index.js";
-import { mapState, mapMutations } from "vuex";
+import success from '../../../assets/success.png'
+import warning from '../../../assets/warning.png'
+import api from '@/api/filterData.js'
+import { mapState, mapMutations } from 'vuex'
+import { backTop } from '@/util/util'
 import { getResourceCenList } from '@/api/organ'
 import memberBox from '@/component/memberBox'
 import { checkAliPayRusult, createAliPayOrderSn, getMemberDatas, reviewAliPay } from '@/util/pay.alipay'
 import { getQrCodes, checkWxPayRusult, reviewWxPay } from '@/util/pay.wxpay'
 export default {
-  name: "resourceCen",
+  name: 'ResourceCen',
   filters: {
     moneyFilter(val) {
       return val + '万'
@@ -228,11 +227,11 @@ export default {
       dialogVisible: false,
       dialogSuccessVisible: false,
       props: {
-        value: "id",
-        label: "label",
-        children: "citys"
+        value: 'id',
+        label: 'label',
+        children: 'citys'
       },
-      Collateral: "",
+      Collateral: '',
       listQuery: {
         agencyId: '',
         page: 1,
@@ -252,11 +251,10 @@ export default {
       isContain: false,
       tableData: [],
       count: 0,
-      vipType: "",
-      payType: "",
-      weiLu: "",
-      order: "",
-      money: "",
+      payType: '',
+      weiLu: '',
+      order: '',
+      money: '',
       cityList: [],
       moneyList: null,
       typeList: null,
@@ -278,11 +276,11 @@ export default {
         month: '',
         businessType: 0
       }
-    };
+    }
   },
   created() {
-    this.getData();
-    this.getFilterData();
+    this.getData()
+    this.getFilterData()
     this.getAllIsPawn()
     if (this.$store.state.userInfo) {
       this.isVip = this.$store.state.userInfo.vip > 0
@@ -291,130 +289,130 @@ export default {
     }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(['userInfo'])
   },
   methods: {
-    ...mapMutations(["SET_USER_VIP"]),
+    ...mapMutations(['SET_USER_VIP']),
     getData() {
-      this.listLoading = true;
+      this.listLoading = true
       getResourceCenList(this.listQuery).then(res => {
-        this.tableData = res.data.rows;
-        this.count = res.data.total;
-        this.listLoading = false;
-        window.scrollTo(0, 0);
+        this.tableData = res.data.rows
+        this.count = res.data.total
+        this.listLoading = false
+        backTop()
       })
     },
     getMemberDatas() {
       this.memberData = []
       getMemberDatas(0, this.phone, (res) => {
-        for (let key in res.data) {
+        for (const key in res.data) {
           this.memberData.push(res.data[key])
         }
       })
     },
     getAllIsPawn() {
       api.getAllIsPawn().then(response => {
-        this.loanTypeList = response.data;
-      });
+        this.loanTypeList = response.data
+      })
     },
     getFilterData() {
       api.getProvice().then(response => {
-        const data = response.data;
+        const data = response.data
         for (let i = 0; i < data.length; i++) {
-          let obj = {};
-          obj["id"] = data[i]["pid"];
-          obj["label"] = data[i]["provincial"];
-          obj["citys"] = [];
-          this.cityList.push(obj);
+          const obj = {}
+          obj['id'] = data[i]['pid']
+          obj['label'] = data[i]['provincial']
+          obj['citys'] = []
+          this.cityList.push(obj)
         }
-      });
+      })
       api.getMoney().then(response => {
-        this.moneyList = response.data;
-      });
+        this.moneyList = response.data
+      })
       api.getType().then(response => {
-        this.typeList = response.data;
-      });
+        this.typeList = response.data
+      })
       api.getAllAgeArea().then(response => {
-        this.ageList = response.data;
-      });
+        this.ageList = response.data
+      })
       api.getJob().then(response => {
-        this.jobList = response.data;
-      });
+        this.jobList = response.data
+      })
       api.getIncome().then(response => {
-        this.incomeList = response.data;
-      });
+        this.incomeList = response.data
+      })
       api.getAllPawn().then(response => {
-        this.pawnList = response.data;
-      });
+        this.pawnList = response.data
+      })
     },
     handleCity(val) {
       if (val.length == 1) {
-        this.listQuery.fAddress = val[0];
+        this.listQuery.fAddress = val[0]
         api.getCity(val[0]).then(res => {
-          const data = res.data;
-          let arr = [];
+          const data = res.data
+          const arr = []
           for (let i = 0; i < data.length; i++) {
-            let obj = {};
-            obj["id"] = data[i]["cid"];
-            obj["label"] = data[i]["city"];
-            arr.push(obj);
+            const obj = {}
+            obj['id'] = data[i]['cid']
+            obj['label'] = data[i]['city']
+            arr.push(obj)
           }
           for (let i = 0; i < this.cityList.length; i++) {
             if (this.cityList[i].id === val[0]) {
-              this.cityList[i].citys = arr;
+              this.cityList[i].citys = arr
             }
           }
-        });
+        })
       } else if (val.length == 2) {
         console.log(val, val.join(','))
         this.listQuery.fAddress = val.join(',')
       } else {
-        this.listQuery.fAddress = "";
+        this.listQuery.fAddress = ''
       }
     },
     handleFilter() {
-      this.page = 1;
+      this.page = 1
       this.getData()
     },
     handleCollateral(val) {
       // 选择抵押物
-      this.listQuery.Collateral = val.join(",");
+      this.listQuery.Collateral = val.join(',')
     },
     handleCurrentChange(val) {
-      this.listQuery.page = val;
-      this.getData();
+      this.listQuery.page = val
+      this.getData()
     },
     handleSizeChange(val) {
-      this.listQuery.pageSize = val;
-      this.getData();
+      this.listQuery.pageSize = val
+      this.getData()
     },
-    //加入资源
+    // 加入资源
     joinResource(id) {
-      let data = new FormData();
-      data.append("borId", id);
-      data.append("agencyId", this.$store.state.userInfo.id);
+      const data = new FormData()
+      data.append('borId', id)
+      data.append('agencyId', this.$store.state.userInfo.id)
       this.$axios.post(`agencyResource/addAgencyResource`, data).then(res => {
         if (res.status === 200) {
-          this.$message.success("成功加入付费资源");
-          this.$router.push(`/userDetail?type=1&borId=${id}`);
-          this.getData();
-          this.listLoading = false;
+          this.$message.success('成功加入付费资源')
+          this.$router.push(`/userDetail?type=1&borId=${id}`)
+          this.getData()
+          this.listLoading = false
         } else if (res.status === 205) {
           if (this.isVip) {
             this.$alert('您今日查看手机号次数已经用完，请明日再进行查看，或者前往会员中心升级权益。', '提示', {
               confirmButtonText: '确定',
               type: 'warning'
-            });
+            })
           } else {
-            this.isMask = true;
+            this.isMask = true
             this.getMemberDatas()
           }
         } else {
-          this.$message.warning(res.msg);
+          this.$message.warning(res.msg)
         }
-      });
+      })
     },
-    
+
     payInfo(val) {
       if (val) {
         this.vipType = val.vid
@@ -441,10 +439,10 @@ export default {
             this.wxPay(this.params)
           }
         } else {
-          this.$message.warning("请选择要开通的会员和支付方式");
+          this.$message.warning('请选择要开通的会员和支付方式')
         }
       } else {
-        this.$message.warning("需同意《服务条款》");
+        this.$message.warning('需同意《服务条款》')
       }
     },
     aliPay(params) {
@@ -460,16 +458,16 @@ export default {
       })
     },
     handleSuccessDialog(msg) {
-      this.$message.success(msg);
-      this.dialogVisible = false;
-      this.dialogSuccessVisible = false;
+      this.$message.success(msg)
+      this.dialogVisible = false
+      this.dialogSuccessVisible = false
       this.isMask = false
       this.SET_USER_VIP(this.vipType)
     },
     handleFailDialog(msg) {
-      this.$message.warning(msg);
-      this.dialogVisible = false;
-      this.dialogSuccessVisible = true;
+      this.$message.warning(msg)
+      this.dialogVisible = false
+      this.dialogSuccessVisible = true
     },
     checkAliPay(msg) {
       checkAliPayRusult(this.orderSn, res => {
@@ -498,23 +496,23 @@ export default {
       } else {
         reviewWxPay(this.orderSn, this.params)
       }
-      this.dialogSuccessVisible = false;
-      this.dialogVisible = true;
+      this.dialogSuccessVisible = false
+      this.dialogVisible = true
     },
     handlePayFail() {
       this.handlePayComplete()
-      this.dialogSuccessVisible = false;
-      this.dialogVisible = false;
+      this.dialogSuccessVisible = false
+      this.dialogVisible = false
       this.isMask = false
       this.payTypeMask = false
     },
     handleConfirmPay() {
-      this.dialogSuccessVisible = false;
-      this.dialogVisible = false;
+      this.dialogSuccessVisible = false
+      this.dialogVisible = false
       this.isMask = false
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

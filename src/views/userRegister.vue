@@ -1,6 +1,6 @@
 <template>
   <div>
-    <registerTop></registerTop>
+    <registerTop/>
     <div class="wrappy">
       <div class="w900">
         <div class="user-main">
@@ -10,16 +10,16 @@
             <div class="login" @click="loginPush">立即登陆</div>
           </div>
           <el-form
-            label-position="right"
-            :model="form"
-            label-width="100px"
-            :rules="rules"
             ref="form"
+            :model="form"
+            :rules="rules"
+            label-position="right"
+            label-width="100px"
           >
             <div class="user-form">
               <div class="person-item clearfix">
                 <el-form-item label="姓名:" prop="borrowerName" style="width: 300px;">
-                  <el-input v-model="form.borrowerName" type="text" placeholder="请输入姓名"></el-input>
+                  <el-input v-model="form.borrowerName" type="text" placeholder="请输入姓名"/>
                 </el-form-item>
               </div>
               <div class="person-item clearfix">
@@ -32,7 +32,7 @@
               </div>
               <div class="person-item clearfix">
                 <el-form-item label="贷款金额:" prop="loanAmount" style="width: 300px;">
-                  <el-input type="text" v-model="form.loanAmount" autocomplete="off" placeholder="请输入贷款金额（万元）"></el-input>
+                  <el-input v-model="form.loanAmount" type="text" autocomplete="off" placeholder="请输入贷款金额（万元）"/>
                 </el-form-item>
               </div>
               <div class="person-item clearfix">
@@ -44,36 +44,36 @@
                       :label="item.provincial"
                       :value="item.pid"
                       style="width: 140px;"
-                    ></el-option>
+                    />
                   </el-select>
                   <el-select v-model="form.borrower2" style="margin-left: 10px;width: 140px;">
                     <el-option
-                      style="width: 140px;"
                       v-for="item in cityData"
                       :key="item.cid"
                       :label="item.city"
                       :value="item.cid"
-                    ></el-option>
+                      style="width: 140px;"
+                    />
                   </el-select>
                 </el-form-item>
               </div>
               <div class="person-item clearfix">
                 <el-form-item label="手机号:" prop="phone" style="width: 300px;">
                   <el-input
-                    type="text"
                     v-model="form.phone"
+                    type="text"
                     autocomplete="off"
                     placeholder="请输入手机号"
-                  ></el-input>
+                  />
                 </el-form-item>
               </div>
               <div class="person-item clearfix">
                 <el-form-item label="验证码:" prop="password" style="width: 20  0px; float: left">
-                  <el-input type="text" v-model="form.password" autocomplete="off" placeholder="请输入验证码"></el-input>
+                  <el-input v-model="form.password" type="text" autocomplete="off" placeholder="请输入验证码"/>
                 </el-form-item>
                 <div class="fll verify">
-                  <div class="send" v-if="showing" @click="send">{{verifyCode}}</div>
-                  <div v-else class="time send">{{time}}s</div>
+                  <div v-if="showing" class="send" @click="send">{{ verifyCode }}</div>
+                  <div v-else class="time send">{{ time }}s</div>
                 </div>
               </div>
               <div class="person-item clearfix">
@@ -86,7 +86,7 @@
                     >已有账号？立即登陆</div>
                   </div>
                   <div class="agreement">
-                    <el-checkbox v-model="isChecked"></el-checkbox>阅读并同意
+                    <el-checkbox v-model="isChecked"/>阅读并同意
                     <a href="#/agreement?userProtect" target="_blank">《9能贷用户隐私保护政策》</a>
                     <a href="#/agreement?userRegister" target="_blank">《9能贷用户注册协议》</a>
                   </div>
@@ -101,125 +101,125 @@
 </template>
 
 <script>
-import registerTop from "../component/registerTop";
-import { mapState, mapMutations } from "vuex";
-import validater from "../util/validater";
-import { validaterName } from "@/util/validate";
+import registerTop from '../component/registerTop'
+import { mapState, mapMutations } from 'vuex'
+import validater from '../util/validater'
+import { validaterName } from '@/util/validate'
 export default {
-  name: "userRegister",
+  name: 'UserRegister',
   components: {
     registerTop
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(['userInfo'])
   },
   data() {
     const validateName = (rule, value, callback) => {
       if (value) {
         if (validaterName(value)) {
-          callback();
+          callback()
         } else {
-          callback(new Error("姓名格式错误"));
+          callback(new Error('姓名格式错误'))
         }
       } else {
-        callback(new Error("姓名不能为空"));
+        callback(new Error('姓名不能为空'))
       }
-    };
+    }
     const validateAddress = (rule, value, callback) => {
       if (this.form.borrowerAddress && this.form.borrower2) {
-        callback();
+        callback()
       } else {
-        callback(new Error("请选择地址"));
+        callback(new Error('请选择地址'))
       }
-    };
+    }
     return {
       isChecked: true,
       showing: true,
       time: 60,
-      verifyCode: "发送验证码",
+      verifyCode: '发送验证码',
       form: {
-        phone: "",
-        borrowerName: "",
+        phone: '',
+        borrowerName: '',
         borrowerSex: 1,
-        borrowerAddress: "",
-        borrower2: "",
-        password: "",
-        loanAmount: "",
+        borrowerAddress: '',
+        borrower2: '',
+        password: '',
+        loanAmount: '',
         flag: false
       },
-      //省
+      // 省
       provinceData: [],
-      //市 区
+      // 市 区
       cityData: [],
 
       rules: {
         phone: [
-          { validator: validater.phoneNumber, trigger: "change" },
-          { required: true, trigger: "change", message: "手机号不能为空" }
+          { validator: validater.phoneNumber, trigger: 'change' },
+          { required: true, trigger: 'change', message: '手机号不能为空' }
         ],
         loanAmount: [
-          { required: true, trigger: "change", message: "贷款金额不能为空" },
-          { validator: validater.loanAmountValidator, trigger: "change" }
+          { required: true, trigger: 'change', message: '贷款金额不能为空' },
+          { validator: validater.loanAmountValidator, trigger: 'change' }
         ],
         password: [
-          { required: true, trigger: "change", message: "验证码不能为空" }
+          { required: true, trigger: 'change', message: '验证码不能为空' }
         ],
         borrowerName: [
-          { required: true, trigger: "change", validator: validateName }
+          { required: true, trigger: 'change', validator: validateName }
         ],
-        borrowerSex: [{ required: true, trigger: "change", message: "必填" }],
+        borrowerSex: [{ required: true, trigger: 'change', message: '必填' }],
         borrowerAddress: [
-          { required: true, trigger: "change", validator: validateAddress }
+          { required: true, trigger: 'change', validator: validateAddress }
         ],
-        borrower2: [{ required: true, trigger: "change", message: "必填" }]
+        borrower2: [{ required: true, trigger: 'change', message: '必填' }]
       }
-    };
+    }
   },
   methods: {
-    ...mapMutations(["SET_USER"]),
+    ...mapMutations(['SET_USER']),
     loginPush() {
-      this.$router.push({ path: "/home", query: { login: 1 } });
+      this.$router.push({ path: '/home', query: { login: 1 }})
     },
     clearTimer(timer) {
-      clearInterval(timer);
-      this.showing = true;
-      this.verifyCode = "重新获取";
-      this.time = 60;
+      clearInterval(timer)
+      this.showing = true
+      this.verifyCode = '重新获取'
+      this.time = 60
     },
     //  检测手机号是否被注册
     checkPhone(timer) {
       this.$axios.get(`user/selectPhone/${this.form.phone}`).then(res => {
         if (res.status === 200) {
-          this.$message.warning("手机号已注册");
+          this.$message.warning('手机号已注册')
           this.clearTimer(timer)
         } else if (res.status === 500) {
           // 手机号未被注册
           this.getCode()
         }
-      });
+      })
     },
     getCode() {
       this.$axios.get(`base/getRegisterCode/${this.form.phone}`).then(res => {
         if (res.status === 200) {
-          this.$message.warning('验证码发送成功，请注意查收');
+          this.$message.warning('验证码发送成功，请注意查收')
         } else {
-          this.$message.warning(res.msg);
+          this.$message.warning(res.msg)
         }
-      });
+      })
     },
     //  获取验证码
     send() {
       if (this.form.phone) {
-        this.showing = false;
-        let timer = setInterval(() => {
-          this.time--;
+        this.showing = false
+        const timer = setInterval(() => {
+          this.time--
           if (this.time < 0) {
             this.clearTimer(timer)
           }
-        }, 1000);
+        }, 1000)
         this.checkPhone(timer)
       } else {
-        this.$message.warning("请输入手机号");
+        this.$message.warning('请输入手机号')
       }
     },
     // 注册
@@ -228,57 +228,57 @@ export default {
         if (valid) {
           if (this.isChecked) {
             if (!this.flag) {
-              let data = new FormData();
-              for (let item in this.form) {
-                data.append(item, this.form[item]);
+              const data = new FormData()
+              for (const item in this.form) {
+                data.append(item, this.form[item])
               }
-              this.$axios.post("userBorrower/registerBorrower", data).then(res => {
+              this.$axios.post('userBorrower/registerBorrower', data).then(res => {
                 if (res.status === 200) {
                   setTimeout(() => {
                     this.$router.push({
-                      path: "/registerJump",
+                      path: '/registerJump',
                       query: { number: this.form.phone }
-                    });
-                  }, 1000);
+                    })
+                  }, 1000)
                 } else {
-                  this.$message.warning(res.msg);
+                  this.$message.warning(res.msg)
                 }
-              });
+              })
               this.flag = true
               if (this.flag) {
                 setTimeout(() => {
                   this.flag = false
-                }, 5000);
+                }, 5000)
               }
             } else {
               this.$message.warning('请不要重复点击')
             }
           } else {
-            this.$message.warning("注册前请阅读并同意相关协议");
+            this.$message.warning('注册前请阅读并同意相关协议')
           }
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
-    //获取省
+    // 获取省
     getProvince() {
-      this.$axios.get("city/getAllProvincial").then(res => {
-        this.provinceData = res;
-      });
+      this.$axios.get('city/getAllProvincial').then(res => {
+        this.provinceData = res
+      })
     },
-    //获取 市 区
+    // 获取 市 区
     getCity(val) {
-      this.form.borrower2 = "";
+      this.form.borrower2 = ''
       this.$axios.get(`city/getAllCity/${val}`).then(res => {
-        this.cityData = res;
-      });
+        this.cityData = res
+      })
     }
   },
   created() {
-    this.getProvince();
+    this.getProvince()
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

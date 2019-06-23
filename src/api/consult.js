@@ -20,3 +20,10 @@ export function addNum(id) {
     method: 'get'
   })
 }
+
+export function upDownArticle(id) {
+  return request({
+    url: '/information/upDownInformation/' + id,
+    method: 'get'
+  })
+}

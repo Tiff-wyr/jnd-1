@@ -18,24 +18,24 @@
               </div>
             </div>
           </div>
-          <article-list :data="resultList"></article-list>
+          <article-list :data="resultList"/>
         </div>
         <div class="right">
-          <apply></apply>
-          <question></question>
+          <apply/>
+          <question/>
         </div>
       </div>
-      <footerSame></footerSame>
+      <footerSame/>
     </div>
-    <bottomTap></bottomTap>
+    <bottomTap/>
   </div>
 </template>
 <script>
-import footerSame from "@/component/footerSame";
-import bottomTap from "@/component/bottomTap";
-import articleList from "./components/articleList";
-import apply from "./components/apply";
-import question from "./components/question";
+import footerSame from '@/component/footerSame'
+import bottomTap from '@/component/bottomTap'
+import articleList from './components/articleList'
+import apply from './components/apply'
+import question from './components/question'
 import { fetchList } from '@/api/consult'
 export default {
   components: {
@@ -61,8 +61,6 @@ export default {
   methods: {
     getList() {
       fetchList(this.listQuery).then(res => {
-        console.log(res)
-        console.log(res.data.data.list)
         this.resultList = res.data.data.list
       })
     },
@@ -129,7 +127,7 @@ export default {
           }
         }
       }
-      
+
     }
     .right {
       width: 300px;
