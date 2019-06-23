@@ -244,19 +244,6 @@ export default {
 .mt68 {
   margin-top: 68px;
 }
-
-.empty-list {
-  background: #fff;
-  padding: 30px 0 50px;
-  text-align: center;
-  .empty-img {
-    width: 200px;
-  }
-  p {
-    margin-top: 50px;
-    color: #999;
-  }
-}
 .loan-left {
   width: 902px;
   height: 580px;

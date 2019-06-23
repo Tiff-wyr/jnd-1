@@ -1193,20 +1193,4 @@ $gray: #333;
     }
   }
 }
-// /deep/ .el-input__inner {
-//   height: 30px;
-//   line-height: 30px;
-// }
-// /deep/ .el-select__caret {
-//   line-height: 30px;
-// }
-.empty-list {
-  padding-top: 50px;
-  text-align: center;
-  color: #ccc;
-  img {
-    width: 200px;
-    margin-bottom: 20px;
-  }
-}
 </style>

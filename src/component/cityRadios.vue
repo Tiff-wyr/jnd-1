@@ -1,25 +1,27 @@
 <template>
-  <div class="clearfix">
-    <label v-for="(item, index) in provinceData" :key="item.pid" class="radio_wrap fll" @mouseout="outStyle">
-      <input
-        :ref="'city' + item.pid"
-        :value="item.pid"
-        :name="item.provincial"
-        class="isShow"
-      >
-      <div :class="{'active': index === activeIndex}" class="radio_label" @click="handleProvince(index, item)">{{ item.provincial }}</div>
-      <div v-if="index === nowIndex" class="toggle" @mouseout="outStyle" @mouseover="mouseoverStyle(index)">
-        <happy-scroll :min-length-h="20" color="#D8D8D8">
-          <ul style="padding-bottom: 20px;">
-            <li
-              v-for="label in cityData"
-              :key="label.cid"
-              @click="handleCity(label.cid)"
-            >{{ label.city }}</li>
-          </ul>
-        </happy-scroll>
-      </div>
-    </label>
+  <div class="clearfix a">
+    <div class="overflow-no-hidden">
+      <label v-for="(item, index) in provinceData" v-if="index < conditions" :key="item.pid" class="radio_wrap fll" @mouseout="outStyle">
+        <input
+          :ref="'city' + item.pid"
+          :value="item.pid"
+          :name="item.provincial"
+          class="isShow"
+        >
+        <div :class="{'active': index === activeIndex}" class="radio_label" @click="handleProvince(index, item)">{{ item.provincial }}</div>
+        <div v-if="index === nowIndex" class="toggle" @mouseout="outStyle" @mouseover="mouseoverStyle(index)">
+          <happy-scroll :min-length-h="20" color="#D8D8D8">
+            <ul style="padding-bottom: 20px;">
+              <li
+                v-for="label in cityData"
+                :key="label.cid"
+                @click="handleCity(label.cid)"
+              >{{ label.city }}</li>
+            </ul>
+          </happy-scroll>
+        </div>
+      </label>
+    </div>
   </div>
 </template>
 
@@ -36,6 +38,10 @@ export default {
     i: {
       type: String | undefined,
       default: ''
+    },
+    conditions: {
+      type: Number,
+      default: 6
     }
   },
   data() {
@@ -55,6 +61,7 @@ export default {
       this.nowIndex = ''
     },
     outStyle() {
+      this.cityData = []
       this.nowIndex = ''
     },
     mouseoverStyle(index) {
@@ -62,7 +69,6 @@ export default {
     },
     handleProvince(index, item) {
       this.activeIndex = index
-      console.log(item)
       this.$emit('selectProvince', {
         pid: item.pid
       })

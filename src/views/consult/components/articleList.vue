@@ -2,6 +2,10 @@
   <div>
     <div class="article-wrap bg-white">
       <h2 class="title">热门文章</h2>
+      <div v-if="!data.length" class="empty-list">
+        <img :src="emptyList" alt="" class="empty-img">
+        <p>暂无数据...</p>
+      </div>
       <ul class="article-list">
         <li v-for="item in data" :key="item.id" class="article-item" @click="handleDetail(item.id)">
           <dl>
@@ -28,6 +32,7 @@
 </template>
 <script>
 import acticleFooter from './acticleFooter'
+import emptyList from '@/assets/empty-list.png'
 export default {
   name: 'ArticleList',
   components: {
@@ -41,6 +46,7 @@ export default {
   },
   data() {
     return {
+      emptyList,
       checked: false
     }
   },

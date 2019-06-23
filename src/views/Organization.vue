@@ -495,18 +495,6 @@ export default {
 .page {
   text-align: right;
 }
-.empty-list {
-  background: #fff;
-  padding: 30px 0 50px;
-  text-align: center;
-  .empty-img {
-    width: 200px;
-  }
-  p {
-    margin-top: 50px;
-    color: #999;
-  }
-}
 .organ-loan {
   width: 168px;
   height: 28px;

@@ -7,7 +7,7 @@
             <div class="area-item clearfix">
               <div class="fll city">所在地区</div>
 
-              <city-radios class="fll" style="width: 700px;" @selectProvince="selectProvince" @selectCity="selectCity"/>
+              <city-radios :conditions="conditionsNum" class="fll" style="width: 700px;" @selectProvince="selectProvince" @selectCity="selectCity"/>
               <div class="up" @click="citySpread">
                 展开
                 <span :class="cityUp? 'arrow rotate' : 'arrow' "/>
@@ -234,7 +234,8 @@ export default {
         pageSize: 10,
         roleId: 2,
         q: ''
-      }
+      },
+      conditionsNum: 6
     }
   },
   watch: {
@@ -349,7 +350,11 @@ export default {
     //  展开或关闭城市
     citySpread() {
       this.cityUp = !this.cityUp
-      this.goodUp = !this.goodUp
+      if (this.cityUp) {
+        this.conditionsNum = 35
+      } else {
+        this.conditionsNum = 6
+      }
     },
     goodSpread() {
       this.goodUp = !this.goodUp
@@ -480,18 +485,6 @@ export default {
   img {
     width: 100%;
     height:448px;
-  }
-}
-.empty-list {
-  background: #fff;
-  padding: 30px 0 50px;
-  text-align: center;
-  .empty-img {
-    width: 200px;
-  }
-  p {
-    margin-top: 50px;
-    color: #999;
   }
 }
 .area {

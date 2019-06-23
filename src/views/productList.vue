@@ -495,19 +495,6 @@ export default {
 .mb20 {
   margin-bottom: 20px;
 }
-
-.empty-list {
-  background: #fff;
-  padding: 30px 0 50px;
-  text-align: center;
-  .empty-img {
-    width: 200px;
-  }
-  p {
-    margin-top: 50px;
-    color: #999;
-  }
-}
 .image {
   img {
     width: 100%;
