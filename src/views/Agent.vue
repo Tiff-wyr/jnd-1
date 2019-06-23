@@ -359,7 +359,7 @@ export default {
     goodSpread() {
       this.goodUp = !this.goodUp
     },
-    // 贷款类型
+    // 贷款类型1
     getLoanType() {
       this.$axios.get('get/getLoanType').then(res => {
         this.loans = res.map(item => {
