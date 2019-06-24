@@ -1,6 +1,6 @@
 <template>
   <div class="guid">
-    <el-collapse accordion v-model="select">
+    <el-collapse v-model="select" accordion>
       <el-collapse-item title="我能贷多少？" name="1">
         <div>
           用户所能贷款的额度跟自身资质（资产和征信）、所选的渠道及所选的产品有关。不同的渠道对借贷者的资质判断不同，
@@ -29,27 +29,27 @@
         </div>
       </el-collapse-item>
     </el-collapse>
-    <div class="position_div"></div>
+    <div class="position_div"/>
   </div>
 </template>
 
 <script>
 export default {
-  name: "matter",
+  name: 'Matter',
 
   data() {
     return {
       tableData: [],
-      select: ""
-    };
+      select: ''
+    }
   },
   created() {
-    if (location.href.split("?")[1]) {
-      const id = location.href.split("?")[1].split("=")[1];
-      this.select = id;
+    if (location.href.split('?')[1]) {
+      const id = location.href.split('?')[1].split('=')[1]
+      this.select = id
     }
   }
-};
+}
 </script>
 
 <style scoped>

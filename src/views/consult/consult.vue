@@ -61,10 +61,11 @@ export default {
   methods: {
     getList() {
       fetchList(this.listQuery).then(res => {
-        this.resultList = res.data.data.list
+        if (res.data.status === 200) {
+          this.resultList = res.data.data.list
+        }
       })
-    },
-    handleDetail() {}
+    }
   }
 }
 </script>

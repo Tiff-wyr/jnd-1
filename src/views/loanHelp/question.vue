@@ -1,6 +1,6 @@
 <template>
   <div class="guid">
-    <el-collapse accordion v-model="select">
+    <el-collapse v-model="select" accordion>
       <el-collapse-item title="哪些情况不能办理贷款？" name="1">
         <div>一般来讲，出现以下情况可能无法办理贷款：</div>
         <div>1）年龄未满18周岁，或在65周岁以上。</div>
@@ -42,25 +42,26 @@
         </div>
       </el-collapse-item>
     </el-collapse>
-    <div class="position_div"></div>
+    <div class="position_div"/>
   </div>
 </template>
 
 <script>
 export default {
-  name: "question",
+  name: 'Question',
   data() {
     return {
-      tableData: []
-    };
+      tableData: [],
+      select: ''
+    }
   },
   created() {
-    if (location.href.split("?")[1]) {
-      const id = location.href.split("?")[1].split("=")[1];
-      this.select = id;
+    if (location.href.split('?')[1]) {
+      const id = location.href.split('?')[1].split('=')[1]
+      this.select = id
     }
   }
-};
+}
 </script>
 
 <style scoped>

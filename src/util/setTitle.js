@@ -6,20 +6,18 @@ const meta2 = document.createElement('meta')
 
 meta1.name = 'keywords'
 meta2.name = 'description'
-function getContent(key, route) {
+function getContent(key) {
   document.title = content[key].title
   meta1.content = content[key].keyWords
   meta2.content = content[key].description
   head[0].appendChild(meta1)
   head[0].appendChild(meta2)
-  route.meta.setSeo = true
+  console.log(head)
 }
 
 router.beforeEach((to, from, next) => {
-  if (to.name === 'home') {
-    getContent('home', to)
-  } else if (to.name === 'consult') {
-    getContent('consult', to)
+  if (to.meta.setSeo) {
+    getContent(to.meta.seoKey)
   }
   next()
 })

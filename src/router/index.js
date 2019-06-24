@@ -119,7 +119,9 @@ export default new Router({
           name: 'home',
           component: components.home,
           meta: {
-            classify: 'home'
+            classify: 'home',
+            setSeo: true,
+            seoKey: 'home'
           }
         },
         {
@@ -127,7 +129,9 @@ export default new Router({
           name: 'loans',
           component: components.loans,
           meta: {
-            classify: 'loans'
+            classify: 'loans',
+            setSeo: true,
+            seoKey: 'loans'
           }
         },
         {
@@ -135,7 +139,9 @@ export default new Router({
           name: 'agent',
           component: components.agent,
           meta: {
-            classify: 'agent'
+            classify: 'agent',
+            setSeo: true,
+            seoKey: 'agent'
           }
         },
         {
@@ -143,7 +149,9 @@ export default new Router({
           name: 'organization',
           component: components.organization,
           meta: {
-            classify: 'organ'
+            classify: 'organ',
+            setSeo: true,
+            seoKey: 'organization'
           }
         },
         {
@@ -151,7 +159,9 @@ export default new Router({
           name: 'consult',
           component: components.consult,
           meta: {
-            classify: 'consult'
+            classify: 'consult',
+            setSeo: true,
+            seoKey: 'consult'
           }
         },
         {
@@ -164,15 +174,20 @@ export default new Router({
           name: 'help',
           component: components.help,
           meta: {
-            classify: 'help'
+            classify: 'help',
+            setSeo: true,
+            seoKey: 'help'
           },
           redirect: '/help/guide',
           children: [
             {
               path: 'question',
+              name: 'question',
               component: components.question,
               meta: {
-                classify: 'help'
+                classify: 'help',
+                setSeo: true,
+                seoKey: 'help'
               }
             },
             {
@@ -180,15 +195,19 @@ export default new Router({
               name: 'guide',
               component: components.guide,
               meta: {
-                classify: 'help'
+                classify: 'help',
+                setSeo: true,
+                seoKey: 'help'
               }
             },
-
             {
               path: 'matter',
+              name: 'matter',
               component: components.matter,
               meta: {
-                classify: 'help'
+                classify: 'help',
+                setSeo: true,
+                seoKey: 'help'
               }
             }
           ]

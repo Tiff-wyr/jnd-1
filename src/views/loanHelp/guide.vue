@@ -1,6 +1,6 @@
 <template>
   <div class="guid">
-    <el-collapse accordion v-model="select">
+    <el-collapse v-model="select" accordion>
       <el-collapse-item title="怎么办贷款？" name="1">
         <div>
           办理贷款首先需要选择渠道，渠道分为银行、贷款机构（担保公司、小额贷款公司、典当行、信托公司、
@@ -43,25 +43,25 @@
         </div>
       </el-collapse-item>
     </el-collapse>
-    <div class="position_div"></div>
+    <div class="position_div"/>
   </div>
 </template>
 
 <script>
 export default {
-  name: "guide",
+  name: 'Guide',
   data() {
     return {
       select: ''
-    };
+    }
   },
   created() {
-    if (location.href.split("?")[1]) {
-      const id = location.href.split("?")[1].split("=")[1];
-      this.select = id;
+    if (location.href.split('?')[1]) {
+      const id = location.href.split('?')[1].split('=')[1]
+      this.select = id
     }
   }
-};
+}
 </script>
 
 <style scoped>

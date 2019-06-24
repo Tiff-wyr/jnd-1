@@ -4,7 +4,11 @@
     <div class="loan-main">
       <el-form ref="applyForm" :model="applyForm" :rules="applyRules">
         <el-form-item prop="borrowerName">
-          <el-input v-model="applyForm.borrowerName" class="w160" placeholder="请输入您的姓名"/>
+          <el-input v-model="applyForm.borrowerName" :disabled="isUpdate" class="w130" placeholder="请输入您的姓名"/>
+          <el-radio-group v-model="applyForm.sex" :disabled="isUpdate" style="margin-left: 10px;">
+            <el-radio :label="1">男</el-radio>
+            <el-radio :label="0">女</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item prop="loanAmount">
           <el-input v-model="applyForm.loanAmount" placeholder="请输入贷款金额（万元）"/>
@@ -19,7 +23,7 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="phone">
-          <el-input v-model="applyForm.phone" placeholder="请输入手机号"/>
+          <el-input v-model="applyForm.phone" :disabled="isUpdate" placeholder="请输入手机号"/>
         </el-form-item>
         <el-form-item prop="code">
           <el-input v-model="applyForm.code" class="w160" placeholder="请输入验证码"/>
@@ -118,11 +122,37 @@ export default {
       time: 60,
       sendStatus: 'init',
       isSend: false,
-      timer: null
+      timer: null,
+      isUpdate: false
+    }
+  },
+  computed: {
+    userInfo() {
+      if (this.$store.state.userInfo) {
+        return this.$store.state.userInfo
+      }
+    }
+  },
+  watch: {
+    userInfo(val) {
+      if (val) {
+        console.log(val)
+        this.isUpdate = true
+        this.applyForm.phone = val.phone
+        this.applyForm.borrowerName = val.name
+        this.applyForm.sex = val.sex
+      }
     }
   },
   created() {
     this.getProvince()
+    if (this.$store.state.userInfo) {
+      this.isUpdate = true
+      const data = this.$store.state.userInfo
+      this.applyForm.phone = data.phone
+      this.applyForm.borrowerName = data.name
+      this.applyForm.sex = data.sex
+    }
   },
   methods: {
     // 获取省
@@ -252,6 +282,9 @@ export default {
 @import './common.scss';
 .apply-wrap {
   margin-bottom: 30px;
+  .el-radio+.el-radio {
+    margin-left: 20px;
+  }
 }
 .loan-main {
   padding: 16px 16px 1px;

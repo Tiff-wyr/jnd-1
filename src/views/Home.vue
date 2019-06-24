@@ -564,7 +564,6 @@ export default {
     // 获取省
     getProvince() {
       this.$axios.get('city/getAllProvincial').then(res => {
-        console.log(res)
         this.provinceData = res
       })
     },

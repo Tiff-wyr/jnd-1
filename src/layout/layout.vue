@@ -51,7 +51,7 @@
             <router-link
               :style="$route.meta.classify === 'consult' ? 'color:rgba(168,14,14,1)' : ''"
               to="/consult"
-            >金融咨询</router-link>
+            >金融资讯</router-link>
             <router-link
               :style="$route.meta.classify === 'help' ? 'color:rgba(168,14,14,1)' : ''"
               to="/help"
