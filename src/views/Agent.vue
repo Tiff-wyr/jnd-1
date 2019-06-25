@@ -36,7 +36,7 @@
           </div>
           <div class="fll organ-right">
             <div class="clearfix mb40">
-              <input v-model="listQuery.q" type="text" class="fll con-search" placeholder="请输入内容">
+              <input v-model="listQuery.q" type="text" class="fll con-search" placeholder="请输入内容" @keyup.enter="search">
               <div class="search fll" @click="search">搜索</div>
             </div>
             <div class="top clearfix">
@@ -268,7 +268,6 @@ export default {
       this.getCondition('search')
     },
     selectProvince(val) {
-      console.log(val)
       this.query.address1 = val.pid
       this.query.address2 = ''
       this.handleGetCondition('search')
@@ -283,7 +282,7 @@ export default {
       this.isJianSuo = false
       if (this.listQuery.q) {
         detailApi.getAngentList(this.listQuery).then(res => {
-          this.formData = res.data.data
+          this.formData = res.data.rows
           this.Searchcount = res.data.total
         })
       }
@@ -576,7 +575,7 @@ export default {
   position: relative;
   width: 1200px;
   height: 180px;
-  background: rgba(255, 255, 255, 1);
+  background: #fff;
   padding: 26px 40px;
   box-sizing: border-box;
   .pic {
@@ -601,23 +600,20 @@ export default {
     margin-bottom: 10px;
   }
   .adviser-same {
-    height: 14px;
     font-size: 14px;
     font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(127, 127, 127, 1);
-    line-height: 14px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .ww320 {
     width: 270px;
-    height: 14px;
-    line-height: 14px;
     overflow: hidden;
   }
   .w320 {
-    line-height: 18px;
     width: 270px;
-    height: 36px;
     overflow: hidden;
   }
   .num {

@@ -7,7 +7,7 @@
             <div class="main">
               <div class="img-main">
                 <div style="width: 76px;height: 76px;margin: 0 auto">
-                  <upload-img class="fll" @uploadSuccess="uploadSuccess" @uploadFail="uploadFail" :imgUrl="image"></upload-img>
+                  <upload-img :img-url="image" class="fll" @uploadSuccess="uploadSuccess" @uploadFail="uploadFail"/>
                 </div>
                 <div class="clearfix fs" style="width: 120px;text-align: center;margin: 10px auto">
                   <div
@@ -29,44 +29,44 @@
               <div
                 :class="this.$route.path === `/agentMessage/${userIdn}/agentResource` ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-ziyuanzhongxin-copy-copy icon"></div>
+                <div class="iconfont icon-ziyuanzhongxin-copy-copy icon"/>
                 <router-link :to="{path:`/agentMessage/${userIdn}/agentResource`}">资源中心</router-link>
               </div>
               <div
                 :class="this.$route.path === `/agentMessage/${userIdn}/agentMember` ? 'my-item clearfix fs active' : 'my-item clearfix fs' "
               >
-                <div class="iconfont icon-huiyuanzhongxin-copy icon"></div>
+                <div class="iconfont icon-huiyuanzhongxin-copy icon"/>
                 <router-link :to="{path:`/agentMessage/${userIdn}/agentMember`}">会员中心</router-link>
               </div>
               <div
                 :class="this.$route.path === `/agentMessage/${userIdn}/agentPersonal` ? 'my-item clearfix fs active' : 'my-item clearfix fs' "
                 @click="organM"
               >
-                <div class="iconfont icon-jingjirengerenzhongxin-copy icon"></div>
+                <div class="iconfont icon-jingjirengerenzhongxin-copy icon"/>
                 <router-link :to="{path:`/agentMessage/${userIdn}/agentPersonal`}">个人信息</router-link>
               </div>
               <div
                 :class="this.$route.path === `/agentMessage/${userIdn}/agentPay` ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-fufeiziyuan-copy-copy icon"></div>
+                <div class="iconfont icon-fufeiziyuan-copy-copy icon"/>
                 <router-link :to="{path:`/agentMessage/${userIdn}/agentPay`}">付费资源</router-link>
               </div>
               <div
                 :class="this.$route.path === `/agentMessage/${userIdn}/applyRecordAg` ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-shenqingjilu-copy icon"></div>
+                <div class="iconfont icon-shenqingjilu-copy icon"/>
                 <router-link :to="{path:`/agentMessage/${userIdn}/applyRecordAg`}">申请记录</router-link>
               </div>
               <div
                 :class="this.$route.path === `/agentMessage/${userIdn}/agentProduct` ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-Group icon"></div>
+                <div class="iconfont icon-Group icon"/>
                 <router-link :to="{path:`/agentMessage/${userIdn}/agentProduct`}">产品中心</router-link>
               </div>
               <div
                 :class="this.$route.path === `/agentMessage/${userIdn}/agentAccess` ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-fangwenjilu-copy-copy icon" style="margin-left: -4px"></div>
+                <div class="iconfont icon-fangwenjilu-copy-copy icon" style="margin-left: -4px"/>
                 <router-link
                   :to="{path:`/agentMessage/${userIdn}/agentAccess`}"
                   style="margin-left: 2px"
@@ -75,13 +75,13 @@
               <div
                 :class="this.$route.path === `/agentMessage/${userIdn}/agentMessageCenter` ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-xiaoxizhongxin icon"></div>
+                <div class="iconfont icon-xiaoxizhongxin icon"/>
                 <router-link :to="{path:`/agentMessage/${userIdn}/agentMessageCenter`}">消息中心</router-link>
               </div>
               <div
                 :class="this.$route.path === `/agentMessage/${userIdn}/agentEmail` ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-youjianzhongxin-copy-copy icon" style="margin-left: -4px"></div>
+                <div class="iconfont icon-youjianzhongxin-copy-copy icon" style="margin-left: -4px"/>
                 <router-link
                   :to="{path:`/agentMessage/${userIdn}/agentEmail`}"
                   style="margin-left: 6px"
@@ -90,13 +90,13 @@
               <div
                 :class="this.$route.path === `/agentMessage/${userIdn}/agentSecure` ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-anquanzhongxin-copy-copy icon"></div>
+                <div class="iconfont icon-anquanzhongxin-copy-copy icon"/>
                 <router-link :to="{path:`/agentMessage/${userIdn}/agentSecure`}">安全中心</router-link>
               </div>
             </div>
           </div>
           <div class="fll ml30">
-            <router-view></router-view>
+            <router-view/>
           </div>
         </div>
       </div>
@@ -105,74 +105,74 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapState } from 'vuex'
 import uploadImg from '@/component/uploadImg'
-import { randomWord } from "@/util/util";
+import { randomWord } from '@/util/util'
 export default {
-  name: "agentMessage",
-  data() {
-    return {
-      name: "",
-      isShowing: true,
-      organ: false,
-      type: "1",
-      userIdn: "",
-      image: ""
-    };
-  },
+  name: 'AgentMessage',
   components: {
     uploadImg
   },
+  data() {
+    return {
+      name: '',
+      isShowing: true,
+      organ: false,
+      type: '1',
+      userIdn: '',
+      image: ''
+    }
+  },
   computed: {
-    ...mapState(["userInfo"]),
+    ...mapState(['userInfo']),
     userIdentity() {
-      return this.$store.state.userInfo.vip;
+      return this.$store.state.userInfo.vip
     },
     userInfos() {
-      return this.userInfo;
+      return this.userInfo
     }
   },
   watch: {
     userInfos(val) {
-      console.log(val);
-      this.name = val.name;
+      console.log(val)
+      this.name = val.name
     }
   },
   methods: {
-    ...mapMutations(["SET_USER_IMAGE"]),
+    ...mapMutations(['SET_USER_IMAGE']),
     organM() {
-      this.organ = true;
+      this.organ = true
     },
     uploadFail(val) {
       console.log('上传失败', val)
     },
     uploadSuccess(val, field) {
       console.log('上传成功', val, field)
-      let data = new FormData();
-      data.append("image", val);
-      data.append("borrowerId", this.$store.state.userInfo.id);
-      this.$axios.post("/userBorrower/updateLogoById", data).then(res => {
+      const data = new FormData()
+      data.append('image', val.jsonData.data)
+      data.append('borrowerId', this.$store.state.userInfo.id)
+      this.$axios.post('/userBorrower/updateLogoById', data).then(res => {
         if (res.status === 200) {
           this.SET_USER_IMAGE(val.jsonData.data)
-          this.image = val.jsonData.data;
-          this.$message.success("修改头像成功");
+          this.image = val.jsonData.data
+          this.$message.success('修改头像成功')
         } else {
-          this.$message.warning(res.msg);
+          this.$message.warning(res.msg)
         }
-      });
+      })
     }
   },
   created() {
     if (this.$store.state.userInfo !== null) {
-      this.name = this.$store.state.userInfo.name;
+      this.name = this.$store.state.userInfo.name
     }
-    let id = this.$route.params.id;
-    this.userIdn = id;
+    const id = this.$route.params.id
+    this.userIdn = id
     if (this.userInfo && this.userInfo.image) {
-      this.image = this.userInfo.image;
+      this.image = this.userInfo.image
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

@@ -7,11 +7,13 @@
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --host 0.0.0.0 --config build/webpack.dev.conf.js",
     "start": "npm run dev",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "test": "node build/build.js" 
   },
   "dependencies": {
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
+    "cross-env": "^5.2.0",
     "element-ui": "^2.4.11",
     "js-cookie": "^2.2.0",
     "node-sass": "^4.10.0",

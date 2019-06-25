@@ -12,7 +12,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './style/iconfont/iconfont.css'
 import scroll from 'vue-seamless-scroll'
 import './util/setTitle'
-
+console.log(process.env)
 Vue.config.productionTip = false
 Vue.prototype.$isPay = false
 Vue.prototype.$axios = axios

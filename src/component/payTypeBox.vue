@@ -1,29 +1,29 @@
 <template>
-<div class="jnd-member-box" v-if="visible" @click.self="closeDialog">
-  <div class="member-wrap" :style="{top: top}">
-    <div class="title-wrap">
-      <img src="../../static/resource/vip/vip.png" alt="">
-      <span class="title">就能贷VIP会员</span>
-      <input type="checkbox" v-model="checked" class="check-box">
-      <span class="tips">同意<a href="#/agreement?memberService" target="_blank" style="color: #4a90e2;">《服务条款》</a></span>
-      <i class="close" @click="closeDialog">×</i>
-    </div>
-    <div class="member-body">
-      <div class="content">
-        <div>
-          <p>支付选择</p>
-          <ul class="pay-type-list">
-            <li class="pay-type-item" :class="{'checked': index + 1 === payTypeIndex}" v-for="(item, index) in payType" :key="item.value" @click="handlePayType(index)">
-              <img :src="item.src" alt="">
-              <i></i>
-            </li>
-          </ul>
-        </div>
+  <div v-if="visible" class="jnd-member-box" @click.self="closeDialog">
+    <div :style="{top: top}" class="member-wrap">
+      <div class="title-wrap">
+        <img src="../../static/resource/vip/vip.png" alt="">
+        <span class="title">就能贷VIP会员</span>
+        <input v-model="checked" type="checkbox" class="check-box">
+        <span class="tips">同意<a href="#/agreement?memberService" target="_blank" style="color: #4a90e2;">《服务条款》</a></span>
+        <i class="close" @click="closeDialog">×</i>
       </div>
-      <button class="go-pay" @click="handlePay">去支付</button>
+      <div class="member-body">
+        <div class="content">
+          <div>
+            <p>支付选择</p>
+            <ul class="pay-type-list">
+              <li v-for="(item, index) in payType" :class="{'checked': index + 1 === payTypeIndex}" :key="item.value" class="pay-type-item" @click="handlePayType(index)">
+                <img :src="item.src" alt="">
+                <i/>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <button class="go-pay" @click="handlePay">去支付</button>
+      </div>
     </div>
   </div>
-</div>
 </template>
 <script>
 const payType = [
@@ -31,7 +31,7 @@ const payType = [
   { value: 1, label: '微信', src: '../../../../static/resource/vip/zfb.png' }
 ]
 export default {
-  name: 'payTypeBox',
+  name: 'PayTypeBox',
   props: {
     visible: {
       type: Boolean,
@@ -53,12 +53,15 @@ export default {
   watch: {
     visible: function(val, oldVal) {
       if (val) {
-        this.stop();
+        this.stop()
       } else {
-        this.move();
+        this.move()
         this.payTypeIndex = ''
       }
     }
+  },
+  destroyed() {
+    this.move()
   },
   methods: {
     closeDialog() {
@@ -77,23 +80,20 @@ export default {
     },
     stop() {
       var mo = function(e) {
-        e.preventDefault();
-      };
-      document.body.style.overflow = "hidden";
-      document.addEventListener("touchmove", mo, false); //禁止页面滑动
+        e.preventDefault()
+      }
+      document.body.style.overflow = 'hidden'
+      document.addEventListener('touchmove', mo, false) // 禁止页面滑动
     },
     move() {
       var mo = function(e) {
-        e.preventDefault();
-      };
-      document.body.style.overflow = ""; //出现滚动条
-      document.removeEventListener("touchmove", mo, false);
+        e.preventDefault()
+      }
+      document.body.style.overflow = '' // 出现滚动条
+      document.removeEventListener('touchmove', mo, false)
     }
-  },
-  destroyed() {
-    this.move()
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 li {

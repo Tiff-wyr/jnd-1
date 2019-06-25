@@ -64,7 +64,6 @@ export default {
       this.isMoving = true
       this.interval = setInterval(() => {
         const next = Math.floor(this.easeInOutQuad(10 * i, start, -start, 500))
-        console.log(this.backPosition)
         if (next <= this.backPosition) {
           window.scrollTo(0, this.backPosition)
           clearInterval(this.interval)

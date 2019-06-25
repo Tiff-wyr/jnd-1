@@ -10,8 +10,7 @@ const chalk = require('chalk')
 const webpack = require('webpack')
 const config = require('../config')
 const webpackConfig = require('./webpack.prod.conf')
-
-const spinner = ora('building for production...')
+var spinner = ora('building for '+ process.env.NODE_ENV + ' environment...' )
 spinner.start()
 
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {

@@ -4,15 +4,15 @@
       <div class="w1200">
         <div class="person clearfix mb30">
           <img
-            :src="agentDetail.image"
             v-if="agentDetail.image"
+            :src="agentDetail.image"
             alt=""
             class="fll"
             style="width: 120px;height: 120px"
           >
           <img
-            src="/static/resource/pic/agent.png"
             v-else
+            src="/static/resource/pic/agent.png"
             alt=""
             class="fll"
             style="width: 120px;height: 120px"
@@ -21,31 +21,31 @@
             <div class="clearfix">
               <div class="fll" style="margin-left: 14px">
                 <div class="clearfix">
-                  <div class="name fll">{{agentDetail.brokerName}}</div>
+                  <div class="name fll">{{ agentDetail.brokerName }}</div>
                   <!-- <img src="../../static/resource/agent/vip.png" alt=""> -->
                 </div>
-                
-                <div class="desc">{{agentDetail.introduction}}</div>
+
+                <div class="desc">{{ agentDetail.introduction }}</div>
               </div>
               <div class="agent-detail clearfix fll">
                 <div class="fll">
                   <div class="clearfix">
                     <div class="fll align">
-                      <div class="num">{{agentDetail.workingYears}}</div>
+                      <div class="num">{{ agentDetail.workingYears }}</div>
                       <div class="clearfix mt16">
                         <img src="../../static/resource/agent/1.png" alt="" class="fll">
                         <div class="num-text fll">从业年限</div>
                       </div>
                     </div>
                     <div class="fll align ml20">
-                      <div class="num">{{agentDetail.serveClientTotal}}</div>
+                      <div class="num">{{ agentDetail.serveClientTotal }}</div>
                       <div class="clearfix mt16">
                         <img src="../../static/resource/agent/2.png" alt="" class="fll">
                         <div class="num-text fll">服务客户</div>
                       </div>
                     </div>
                     <div class="fll align ml20">
-                      <div class="num">{{agentDetail.batchLoanTotal}}</div>
+                      <div class="num">{{ agentDetail.batchLoanTotal }}</div>
                       <div class="clearfix mt16">
                         <img src="../../static/resource/agent/3.png" alt="" class="fll">
                         <div class="num-text fll">批贷总额</div>
@@ -62,7 +62,7 @@
                   >
                   <div class="fll">
                     <div class="text1">电话咨询贷款，最快捷，最方便！</div>
-                    <div class="text2">{{agentDetail.phone | phoneFilter}}</div>
+                    <div class="text2">{{ agentDetail.phone | phoneFilter }}</div>
                   </div>
                 </div>
               </div>
@@ -78,11 +78,11 @@
                 <div class="restore fll" @click="sendMess">发送消息</div>
               </div>
               <div class="clearfix flr" style="margin-top: 16px;">
-                <img src="../../static/resource/agent/star.png" class="fll" v-if="isCollect" alt="" style="width: 20px; heihgt: 20px; vertical-align: center; margin-right: 10px;" />
-                <img src="../../static/resource/agent/star1.png" class="fll" v-else alt="" style="width: 20px; heihgt: 20px; vertical-align: center; margin-right: 10px;" />
+                <img v-if="isCollect" src="../../static/resource/agent/star.png" class="fll" alt="" style="width: 20px; heihgt: 20px; vertical-align: center; margin-right: 10px;" >
+                <img v-else src="../../static/resource/agent/star1.png" class="fll" alt="" style="width: 20px; heihgt: 20px; vertical-align: center; margin-right: 10px;" >
                 <div class="fll">
-                  <div class="restore" @click="restore" v-if="isCollect">加入收藏</div>
-                  <div class="restore" @click="cancelRestore" v-else>取消收藏</div>
+                  <div v-if="isCollect" class="restore" @click="restore">加入收藏</div>
+                  <div v-else class="restore" @click="cancelRestore">取消收藏</div>
                 </div>
               </div>
             </div>
@@ -93,28 +93,28 @@
             <div class="top">
               <div class="title">9能贷网诚信认证</div>
               <div class="content-agent">
-                <div class="name">姓名：{{agentDetail.brokerName}}</div>
+                <div class="name">姓名：{{ agentDetail.brokerName }}</div>
                 <div class="clearfix name-same">
                   <div
                     class="name fll"
                     style="height: 18px;line-height: 18px;border-bottom-color:transparent"
                   >推荐指数：</div>
                   <div class="fll">
-                    <el-rate v-model="agentDetail.recommended" disabled text-color="#ff9900" style="margin-top: 8px;"></el-rate>
+                    <el-rate v-model="agentDetail.recommended" disabled text-color="#ff9900" style="margin-top: 8px;"/>
                   </div>
                 </div>
                 <div class="name">擅长业务：<br><span v-for="item in agentDetail.businessScopeInfo" :key="item" class="tag">{{ item }}</span></div>
-                <div class="name">所在地区：{{agentDetail.address}}</div>
-                <div class="name">所属公司：{{agentDetail.company}}</div>
+                <div class="name">所在地区：{{ agentDetail.address }}</div>
+                <div class="name">所属公司：{{ agentDetail.company }}</div>
                 <div class="desc-title">个人简介：</div>
-                <div class="desc">{{agentDetail.introduction}}</div>
+                <div class="desc">{{ agentDetail.introduction }}</div>
               </div>
             </div>
-            <div class="bottom" v-if="loanData.length > 0">
+            <div v-if="loanData.length > 0" class="bottom">
               <div class="title">成功案例</div>
-              <div class="content-item-victory" :key="index" v-for="(item,index) in loanData">
-                <span class="name">{{item.borrowerName}}</span>
-                <span class="money">贷款金额：{{item.loanAmountValue}}万</span>
+              <div :key="index" v-for="(item,index) in loanData" class="content-item-victory">
+                <span class="name">{{ item.borrowerName }}</span>
+                <span class="money">贷款金额：{{ item.loanAmountValue }}万</span>
               </div>
             </div>
           </div>
@@ -122,22 +122,24 @@
             <div class="top-form">
               <el-form ref="agentApplyForm" :model="borrowerData" :rules="borrowerDataRules" label-position="right" label-width="96px">
                 <el-form-item label="姓名：" prop="borrowerName">
-                  <el-input :disabled="!!this.$store.state.userInfo" v-model="borrowerData.borrowerName" placeholder="请输入姓名" class="input-item"></el-input>
+                  <el-input :disabled="!!this.$store.state.userInfo" v-model="borrowerData.borrowerName" placeholder="请输入姓名" class="input-item"/>
                   <el-radio-group v-model="borrowerData.sex" :disabled="!!this.$store.state.userInfo" style="margin-left: 10px;">
                     <el-radio :label="1">男</el-radio>
                     <el-radio :label="0">女</el-radio>
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item label="贷款金额：" prop="loanAmount">
-                  <el-input v-model="borrowerData.loanAmount" class="input-item" placeholder="请输入贷款金额（万元）"></el-input>
+                  <el-input v-model="borrowerData.loanAmount" class="input-item" placeholder="请输入贷款金额（万元）"/>
                 </el-form-item>
                 <el-form-item label="所在地：" prop="address">
                   <el-select v-model="borrowerData.address1" style="width: 100px;" clearable @change="getCity">
                     <el-option
-                      v-for="item in provinceData" :key="item.pid" :label="item.provincial" :value="item.pid"></el-option>
+                      v-for="item in provinceData"
+                      :key="item.pid" 
+:label="item.provincial" :value="item.pid"/>
                   </el-select>
                   <el-select v-model="borrowerData.address2" clearable style="margin-left: 10px;width: 100px;">
-                    <el-option v-for="item in cityData" :key="item.cid" :label="item.city" :value="item.cid"></el-option>
+                    <el-option v-for="item in cityData" :key="item.cid" :label="item.city" :value="item.cid"/>
                   </el-select>
                 </el-form-item>
                 <el-form-item label="业务类型：" prop="businessType">
@@ -155,36 +157,36 @@
                 <el-form-item v-if="borrowerData.isPawn !== 0" label="抵押物：" prop="pawnKey">
                   <el-checkbox-group v-model="borrowerData.pawnKey">
                     <el-checkbox
+                      v-for="(item,index) in pawnData"
                       :label="item.pawnId"
                       :key="index"
-                      v-for="(item,index) in pawnData"
-                    >{{item.pawn}}</el-checkbox>
+                    >{{ item.pawn }}</el-checkbox>
                   </el-checkbox-group>
                 </el-form-item>
                 <el-form-item v-else label="无抵押：" prop="noPawn">
                   <el-select v-model="borrowerData.age" style="width: 100px;" placeholder="年龄">
-                    <el-option v-for="item in ageData" :key="item.id" :label="item.ageArea" :value="item.id"></el-option>
+                    <el-option v-for="item in ageData" :key="item.id" :label="item.ageArea" :value="item.id"/>
                   </el-select>
 
                   <el-select v-model="borrowerData.borrowerJob" style="margin-left: 5px;width: 100px;" placeholder="职业">
-                    <el-option v-for="item in jobData" :key="item.jobId" :label="item.jobName" :value="item.jobId" style="width: 100px;"></el-option>
+                    <el-option v-for="item in jobData" :key="item.jobId" :label="item.jobName" :value="item.jobId" style="width: 100px;"/>
                   </el-select>
 
                   <el-select v-model="borrowerData.borrowerMonthlyIncome" style="margin-left: 5px;width: 100px;" placeholder="月收入">
-                    <el-option v-for="item in monthMoneyData" :key="item.id" :label="item.incomeName" :value="item.id"></el-option>
+                    <el-option v-for="item in monthMoneyData" :key="item.id" :label="item.incomeName" :value="item.id"/>
                   </el-select>
                 </el-form-item>
 
                 <el-form-item v-if="!userInfo" label="手机号：" prop="phone">
-                  <el-input v-model="borrowerData.phone" class="input-item" placeholder="请输入手机号"></el-input>
+                  <el-input v-model="borrowerData.phone" class="input-item" placeholder="请输入手机号"/>
                 </el-form-item>
                 <el-form-item v-if="!userInfo" label="验证码：" prop="code">
-                  <el-input v-model="borrowerData.code" style="width: 90px;" placeholder="验证码"></el-input>
-                  <el-button v-if="showing" @click="send" style="width: 110px;">{{ verifyCode }}</el-button>
-                  <el-button v-else @click="send" style="width: 110px;">{{ time }}s</el-button>
+                  <el-input v-model="borrowerData.code" style="width: 90px;" placeholder="验证码"/>
+                  <el-button v-if="showing" style="width: 110px;" @click="send">{{ verifyCode }}</el-button>
+                  <el-button v-else style="width: 110px;" @click="send">{{ time }}s</el-button>
                 </el-form-item>
                 <el-form-item prop="agree">
-                  <el-checkbox style="display: inline-block" v-model="agree">阅读并同意</el-checkbox><a href="#/agreement?userRegister" target="_blank" style="color: #4a90e2;">《9能贷用户注册协议》</a><a href="#/agreement?userProtect" target="_blank" style="color: #4a90e2;">《用户隐私保护政策》</a>
+                  <el-checkbox v-model="agree" style="display: inline-block">阅读并同意</el-checkbox><a href="#/agreement?userRegister" target="_blank" style="color: #4a90e2;">《9能贷用户注册协议》</a><a href="#/agreement?userProtect" target="_blank" style="color: #4a90e2;">《用户隐私保护政策》</a>
                 </el-form-item>
                 <el-form-item>
                   <el-button class="apply" @click="freeApply">免费申请</el-button>
@@ -192,45 +194,45 @@
               </el-form>
             </div>
             <div class="bottom-form">
-              <div class="clearfix main-form" :key="index" v-for="(item,index) in productTableData">
+              <div :key="index" v-for="(item,index) in productTableData" class="clearfix main-form">
                 <div class="fll w180">
-                  <div class="item1-num">{{item.loanName}}</div>
+                  <div class="item1-num">{{ item.loanName }}</div>
                   <div class="item-same">无需抵车即可贷款</div>
                 </div>
                 <div class="item1 fll align w180">
-                  <div class="item-num">{{item.rate}}</div>
+                  <div class="item-num">{{ item.rate }}</div>
                   <div class="item-same">利息</div>
                 </div>
                 <div class="item1 fll align w180">
-                  <div class="item-num">最快{{item.loanTime}}天内到账</div>
+                  <div class="item-num">最快{{ item.loanTime }}天内到账</div>
                   <div class="item-same">放款时间</div>
                 </div>
                 <div class="item1 fll align w180">
-                  <div class="item-num">贷款期限最长达{{item.loanTerm}}年</div>
+                  <div class="item-num">贷款期限最长达{{ item.loanTerm }}年</div>
                   <div class="item-same">使用年限</div>
                 </div>
                 <div class="item1 fll w180" style="text-align: right">
-                  <div class="item-num">最高可贷{{item.loanAmount}}万</div>
+                  <div class="item-num">最高可贷{{ item.loanAmount }}万</div>
                   <div class="item-same">最高额度</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <footerSame></footerSame>
+        <footerSame/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import layout from "../layout/layout";
-import footerSame from "../component/footerSame";
-import { mapState } from "vuex";
-import { validaterPhone, validaterName, validaterLoanAmount } from "@/util/validate";
+import layout from '../layout/layout'
+import footerSame from '../component/footerSame'
+import { mapState } from 'vuex'
+import { validaterPhone, validaterName, validaterLoanAmount } from '@/util/validate'
 import { formatPhone } from '@/util/util'
 export default {
-  name: "agentDetail",
+  name: 'AgentDetail',
   components: {
     layout,
     footerSame
@@ -248,26 +250,26 @@ export default {
   data() {
     const validatePhone = (rule, value, callback) => {
       if (!value) {
-        callback(new Error("手机号不能为空"));
+        callback(new Error('手机号不能为空'))
       } else {
         if (validaterPhone(value)) {
-          callback();
+          callback()
         } else {
-          callback(new Error("手机号格式不正确"));
+          callback(new Error('手机号格式不正确'))
         }
       }
-    };
+    }
     const validateName = (rule, value, callback) => {
       if (value) {
         if (validaterName(value)) {
-          callback();
+          callback()
         } else {
-          callback(new Error("姓名格式错误"));
+          callback(new Error('姓名格式错误'))
         }
       } else {
-        callback(new Error("姓名不能为空"));
+        callback(new Error('姓名不能为空'))
       }
-    };
+    }
     const validateAddress = (rule, value, callback) => {
       if (this.borrowerData.address1 && this.borrowerData.address2) {
         callback()
@@ -278,14 +280,14 @@ export default {
     const validateLoanAmount = (rule, value, callback) => {
       if (value) {
         if (validaterLoanAmount(value)) {
-          callback();
+          callback()
         } else {
-          callback(new Error("贷款金额格式错误"));
+          callback(new Error('贷款金额格式错误'))
         }
       } else {
-        callback(new Error("贷款金额不能为空"));
+        callback(new Error('贷款金额不能为空'))
       }
-    };
+    }
     const validatePawnKey = (rule, value, callback) => {
       if (this.borrowerData.isPawn) {
         if (this.borrowerData.pawnKey.length === 0) {
@@ -297,7 +299,7 @@ export default {
         callback()
       }
     }
-    const validateNoPawn  = (rule, value, callback) => {
+    const validateNoPawn = (rule, value, callback) => {
       console.log(this.borrowerData.age)
       if (!this.borrowerData.isPawn) {
         if (this.borrowerData.age !== '' && this.borrowerData.borrowerJob !== '' && this.borrowerData.borrowerMonthlyIncome !== '') {
@@ -326,51 +328,51 @@ export default {
       isCollect: true,
       showing: true,
       time: 60,
-      verifyCode: "发送验证码",
+      verifyCode: '发送验证码',
       checkList: [],
       loanData: [],
       productTableData: [],
       agentDetail: {},
       pawnData: [],
       borrowerData: {
-        brokerId: "",
-        borrowerName: "",
+        brokerId: '',
+        borrowerName: '',
         sex: 1,
-        loanAmount: "",
-        address1: "",
-        address2: "",
+        loanAmount: '',
+        address1: '',
+        address2: '',
         businessType: 1,
         isPawn: 0,
-        phone: "",
-        code: "",
+        phone: '',
+        code: '',
         pawnKey: [],
-        age: "",
-        borrowerJob: "",
-        borrowerMonthlyIncome: ""
+        age: '',
+        borrowerJob: '',
+        borrowerMonthlyIncome: ''
       },
       borrowerDataRules: {
-        borrowerName: [{ required: true, trigger: "change", validator: validateName }],
-        sex: [{ required: true, trigger: "change", message: '请选择性别' }],
-        loanAmount: [{ required: true, trigger: "change", validator: validateLoanAmount }],
-        address: [{ required: true, trigger: "change", validator: validateAddress }],
-        businessType: [{ required: true, trigger: "change", message: '请选择所在地' }],
-        isPawn: [{ required: true, trigger: "change", message: '请选择有无抵押' }],
-        pawnKey: [{ required: true, trigger: "change", validator: validatePawnKey }],
-        noPawn: [{ required: true, trigger: "change", validator: validateNoPawn }],
-        phone: [{ required: true, trigger: "change", validator: validatePhone }],
-        code: [{ required: true, trigger: "change", message: '验证码不能为空' }],
-        agree: [{ required: true, trigger: "change", validator: validateAgree }]
+        borrowerName: [{ required: true, trigger: 'change', validator: validateName }],
+        sex: [{ required: true, trigger: 'change', message: '请选择性别' }],
+        loanAmount: [{ required: true, trigger: 'change', validator: validateLoanAmount }],
+        address: [{ required: true, trigger: 'change', validator: validateAddress }],
+        businessType: [{ required: true, trigger: 'change', message: '请选择所在地' }],
+        isPawn: [{ required: true, trigger: 'change', message: '请选择有无抵押' }],
+        pawnKey: [{ required: true, trigger: 'change', validator: validatePawnKey }],
+        noPawn: [{ required: true, trigger: 'change', validator: validateNoPawn }],
+        phone: [{ required: true, trigger: 'change', validator: validatePhone }],
+        code: [{ required: true, trigger: 'change', message: '验证码不能为空' }],
+        agree: [{ required: true, trigger: 'change', validator: validateAgree }]
       },
-      //省
+      // 省
       provinceData: [],
-      //市 区
+      // 市 区
       cityData: [],
-      agentId: "",
+      agentId: '',
       timer: null
-    };
+    }
   },
   computed: {
-    ...mapState(["userInfo"]),
+    ...mapState(['userInfo'])
   },
   watch: {
     userInfo(val) {
@@ -378,63 +380,86 @@ export default {
       this.borrowerData.phone = val.phone
     }
   },
+  created() {
+    if (this.$store.state.userInfo) {
+      this.borrowerData.borrowerName = this.$store.state.userInfo.name
+      this.borrowerData.sex = this.$store.state.userInfo.sex
+    }
+    const id = this.$route.params.id
+    this.agentId = id
+    this.getAgentData(id)
+    this.getVictory(id)
+    this.getProductData(id)
+    this.getPawn()
+    this.getProvince()
+    this.skimRecord()
+
+    //收藏判断
+    this.collectPan()
+    //年龄
+    this.getAge()
+    //职业
+    this.getJob()
+    //月收入
+    this.getMonthMoney()
+  },
   methods: {
     getAge() {
       this.$axios.get(`age/getAllAgeArea`).then(res => {
-        this.ageData = res;
-      });
+        this.ageData = res
+      })
     },
     getMonthMoney() {
-      this.$axios.get("get/getIncome").then(res => {
-        this.monthMoneyData = res;
-      });
+      this.$axios.get('get/getIncome').then(res => {
+        this.monthMoneyData = res
+      })
     },
     getJob() {
-      this.$axios.get("get/getJob").then(res => {
+      this.$axios.get('get/getJob').then(res => {
         res.forEach(item => {
           if (item.jobId === 0) {
-            item.jobName = "其他";
+            item.jobName = '其他';
           }
-        });
-        this.jobData = res;
-      });
+        })
+        this.jobData = res
+      })
     },
-    //发送消息
+    // 发送消息
     sendMess() {
       if (this.$store.state.userInfo) {
         if (this.$store.state.userInfo.roleId === 1) {
           this.$router.push({
             path: `/myMessage/${this.$store.state.userInfo.id}/messageCenter`,
             query: { id: this.agentId, roleId: 2 }
-          });
+          })
         } else {
-          this.$message.warning("借款人方可发送信息");
+          this.$message.warning('借款人方可发送信息')
         }
       } else {
-        this.$message.warning("请先登录");
+        this.$message.warning('请先登录')
       }
     },
-    //发送验证码
+    // 发送验证码
     send() {
-      let value = this.borrowerData.phone;
+      const value = this.borrowerData.phone
       if (this.borrowerData.phone) {
         if (!validaterPhone(this.borrowerData.phone)) {
-          this.$message.warning("手机号码不符合规范");
+          this.$message.warning('手机号码不符合规范')
         } else {
-          this.showing = false;
+          this.showing = false
           this.timer = setInterval(() => {
-            this.time--;
+            this.time--
             if (this.time < 0) {
-              this.clearTimer();
+              this.clearTimer()
             }
-          }, 1000);
+          }, 1000)
           this.$axios
             .get(`user/selectPhone/${this.borrowerData.phone}`)
             .then(res => {
               if (res.status === 200) {
-                this.$message.success("您已注册该平台，请登录");
-                this.clearTimer();
-                this.resetForm();
+                this.$message.success('您已注册该平台，请登录')
+                this.clearTimer()
+                this.resetForm()
               } else {
                 this.$axios.get(`base/getUpdatePhoneCode/${this.borrowerData.phone}`).then(res => {
                   if (res.status === 200) {
@@ -442,78 +467,78 @@ export default {
                   } else {
                     this.$message.warning(res.msg)
                   }
-                });
+                })
               }
-            });
+            })
         }
       } else {
-        this.$message.warning("手机号不能为空");
+        this.$message.warning('手机号不能为空')
       }
     },
     clearTimer() {
-      clearInterval(this.timer);
-      this.showing = true;
-      this.verifyCode = "重新获取";
-      this.time = 60;
+      clearInterval(this.timer)
+      this.showing = true
+      this.verifyCode = '重新获取';
+      this.time = 60
     },
-    //免费申请
+    // 免费申请
     freeApply() {
       this.$refs.agentApplyForm.validate(valid => {
         if (valid) {
-          let data = new FormData();
-          for (let item in this.borrowerData) {
-            if (item === "brokerId") {
-              data.append("brokerId", this.agentId);
+          const data = new FormData()
+          for (const item in this.borrowerData) {
+            if (item === 'brokerId') {
+              data.append('brokerId', this.agentId)
             } else {
-              data.append(item, this.borrowerData[item]);
+              data.append(item, this.borrowerData[item])
             }
           }
 
           if (this.$store.state.userInfo) {
             if (this.$store.state.userInfo.roleId === 1) {
-              data.delete("phone");
-              data.delete("code");
-              data.append("borrowerId", this.$store.state.userInfo.id);
-              this.$axios.post("orderAll/saveLoginOrder", data).then(res => {
+              data.delete('phone')
+              data.delete('code')
+              data.append('borrowerId', this.$store.state.userInfo.id)
+              this.$axios.post('orderAll/saveLoginOrder', data).then(res => {
                 if (res.status === 200) {
-                  this.$message.success(res.msg);
+                  this.$message.success(res.msg)
                 } else {
-                  this.$message.warning(res.msg);
+                  this.$message.warning(res.msg)
                 }
                 if (this.timer !== null) {
-                  this.clearTimer();
+                  this.clearTimer()
                 }
-              });
-              this.resetForm();
+              })
+              this.resetForm()
             } else {
-              this.$message.warning("借款人方可申请");
+              this.$message.warning('借款人方可申请')
             }
           } else {
             if (!this.flag) {
-              this.$axios.post("orderAll/saveNoLoginOrder", data).then(res => {
+              this.$axios.post('orderAll/saveNoLoginOrder', data).then(res => {
                 if (res.status === 200) {
-                  this.$message.success(res.msg);
+                  this.$message.success(res.msg)
                   this.$router.push({
-                    path: "/applyVictory",
+                    path: '/applyVictory',
                     query: {
                       number: this.borrowerData.phone
                     }
-                  });
+                  })
                 } else {
-                  this.$message.warning(res.msg);
+                  this.$message.warning(res.msg)
                 }
                 setTimeout(() => {
-                  this.resetForm();
-                }, 100);
+                  this.resetForm()
+                }, 100)
                 
                 if (this.timer !== null) {
-                  this.clearTimer();
+                  this.clearTimer()
                 }
-              });
+              })
               this.flag = true
               setTimeout(() => {
                 this.flag = false
-              }, 5000);
+              }, 5000)
             } else {
               this.$message.warning('请不要重复点击')
             }
@@ -521,32 +546,32 @@ export default {
         }
       })
     },
-    //经纪人详情
+    // 经纪人详情
     getAgentData(id) {
       this.$axios.get(`userBroker/getUserBrokerById/${id}`).then(res => {
         res.businessScopeInfo = res.businessScopeInfo.split(',')
-        this.agentDetail = Object.assign({}, res);
-      });
+        this.agentDetail = Object.assign({}, res)
+      })
     },
-    //经纪人成功案例
+    // 经纪人成功案例
     getVictory(id) {
       this.$axios.get(`orderAll/getTopSixOrderByBrokerId/${id}`).then(res => {
         res.map(item => {
-          let firstName = item.borrowerName.substr(0, 1);
+          const firstName = item.borrowerName.substr(0, 1)
           let allName =
-            item.sex === "0" ? `${firstName}女士` : `${firstName}先生`;
-          return { ...item, allName };
-        });
-        this.loanData = res;
-      });
+            item.sex === '0' ? `${firstName}女士` : `${firstName}先生`
+          return { ...item, allName }
+        })
+        this.loanData = res
+      })
     },
-    //经纪人贷款产品
+    // 经纪人贷款产品
     getProductData(id) {
       this.$axios.get(`loanInfo/getAllLoanInfoByBrokerId/${id}`).then(res => {
-        this.productTableData = res;
-      });
+        this.productTableData = res
+      })
     },
-    //收藏经纪
+    // 收藏经纪
     restore() {
       if (this.$store.state.userInfo) {
         if (this.$store.state.userInfo.roleId === 1) {
@@ -557,17 +582,17 @@ export default {
               }&brokerId=${this.agentId}`
             )
             .then(res => {
-              this.isCollect = false;
-              this.$message.success("收藏成功");
-            });
+              this.isCollect = false
+              this.$message.success('收藏成功')
+            })
         } else {
-          this.$message.warning("借款人方可收藏");
+          this.$message.warning('借款人方可收藏')
         }
       } else {
-        this.$message.warning("请先登录");
+        this.$message.warning('请先登录')
       }
     },
-    //取消经纪
+    // 取消经纪
     cancelRestore() {
       this.$axios
         .get(
@@ -576,32 +601,32 @@ export default {
           }/${this.agentId}`
         )
         .then(res => {
-          this.isCollect = true;
-          this.$message.success("取消收藏");
-        });
+          this.isCollect = true
+          this.$message.success('取消收藏')
+        })
     },
-    //获得所有抵押物信息
+    // 获得所有抵押物信息
     getPawn() {
-      this.$axios.get("/pawn/getAllPawn").then(res => {
+      this.$axios.get('/pawn/getAllPawn').then(res => {
         this.pawnData = res.filter(item => {
-          return item.pawnId !== 1;
-        });
-      });
+          return item.pawnId !== 1
+        })
+      })
     },
-    //获取省
+    // 获取省
     getProvince() {
-      this.$axios.get("city/getAllProvincial").then(res => {
-        this.provinceData = res;
-      });
+      this.$axios.get('city/getAllProvincial').then(res => {
+        this.provinceData = res
+      })
     },
-    //获取 市 区
+    // 获取 市 区
     getCity(val) {
       this.borrowerData.address2 = ''
       this.$axios.get(`city/getAllCity/${val}`).then(res => {
-        this.cityData = res;
-      });
+        this.cityData = res
+      })
     },
-    //保存经纪人被贷款人浏览记录
+    // 保存经纪人被贷款人浏览记录
     skimRecord() {
       if (this.$store.state.userInfo) {
         if (this.$store.state.userInfo.roleId === 1) {
@@ -611,9 +636,9 @@ export default {
                 this.$store.state.userInfo.id
               }`
             )
-            .then(res => {});
+            .then(res => {})
         } else {
-          return;
+          return
         }
       }
     },
@@ -627,56 +652,33 @@ export default {
           )
           .then(res => {
             if (res === 0) {
-              this.isCollect = true;
+              this.isCollect = true
             } else {
-              this.isCollect = false;
+              this.isCollect = false
             }
-          });
+          })
       }
     },
     resetForm() {
       this.borrowerData = {
-        brokerId: "",
+        brokerId: '',
         borrowerName: this.$store.state.userInfo.name,
         sex: 1,
-        loanAmount: "",
-        address1: "",
-        address2: "",
+        loanAmount: '',
+        address1: '',
+        address2: '',
         businessType: 1,
         isPawn: 0,
-        phone: "",
-        code: "",
+        phone: '',
+        code: '',
         pawnKey: [],
-        age: "",
-        borrowerJob: "",
-        borrowerMonthlyIncome: ""
-      };
+        age: '',
+        borrowerJob: '',
+        borrowerMonthlyIncome: ''
+      }
     }
-  },
-  created() {
-    if (this.$store.state.userInfo) {
-      this.borrowerData.borrowerName = this.$store.state.userInfo.name
-      this.borrowerData.sex = this.$store.state.userInfo.sex
-    }
-    let id = this.$route.params.id;
-    this.agentId = id;
-    this.getAgentData(id);
-    this.getVictory(id);
-    this.getProductData(id);
-    this.getPawn();
-    this.getProvince();
-    this.skimRecord();
-
-    //收藏判断
-    this.collectPan();
-    //年龄
-    this.getAge();
-    //职业
-    this.getJob();
-    //月收入
-    this.getMonthMoney();
   }
-};
+}
 </script>
 <style lang="scss">
 .top-form {
@@ -690,7 +692,7 @@ export default {
   // .el-form-item {
   //   margin-bottom: 16px;
   // }
-  
+
   .el-checkbox__input.is-checked + .el-checkbox__label {
     color: rgba(81, 81, 81, 1);
   }

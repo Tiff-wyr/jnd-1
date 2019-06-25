@@ -61,13 +61,13 @@ export default {
       this.nowIndex = ''
     },
     outStyle() {
-      this.cityData = []
       this.nowIndex = ''
     },
     mouseoverStyle(index) {
       this.nowIndex = index
     },
     handleProvince(index, item) {
+      this.cityData = []
       this.activeIndex = index
       this.$emit('selectProvince', {
         pid: item.pid

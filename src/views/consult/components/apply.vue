@@ -192,7 +192,6 @@ export default {
     },
     sendCode() {
       sendPhoneCode(this.applyForm.phone).then(res => {
-        console.log(res)
         if (res.data.status === 200) {
           this.$message.success('验证码发送成功，请注意查收')
         } else {
@@ -238,7 +237,7 @@ export default {
     applyByNoLogin(callback) {
       applyLoanByNoLogin(this.applyForm).then(res => {
         if (res.data.status === 200) {
-          this.$message.warning('申请成功')
+          this.$message.success('申请成功')
           if (callback) {
             callback()
           }

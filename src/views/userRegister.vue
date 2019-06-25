@@ -201,7 +201,7 @@ export default {
     getCode() {
       this.$axios.get(`base/getRegisterCode/${this.form.phone}`).then(res => {
         if (res.status === 200) {
-          this.$message.warning('验证码发送成功，请注意查收')
+          this.$message.success('验证码发送成功，请注意查收')
         } else {
           this.$message.warning(res.msg)
         }

@@ -149,6 +149,7 @@
 <script>
 import { mapState, mapMutations } from "vuex";
 import { validaterName, validaterInt } from "@/util/validate";
+import { fetchProvince, fetchCity } from '@/api/register'
 export default {
   filters: {
     sexFilter(val) {
@@ -236,8 +237,7 @@ export default {
       businessNameList: [], // 已选的tag的name
       businessList: [], // 暂存 选中的tag
       isMask: false,
-      isBusiness: false,
-      cities: []
+      isBusiness: false
     };
   },
   computed: {
@@ -312,9 +312,9 @@ export default {
     },
     //获取省
     getProvince() {
-      this.$axios.get("city/getShengHot").then(res => {
-        this.provinceData = res;
-      });
+      fetchProvince().then(res => {
+        this.provinceData = res.data
+      })
     },
     handleCity(val) {
       this.formData.address2 = "";
@@ -322,16 +322,9 @@ export default {
     },
     //获取 市 区
     getCity(val) {
-      this.$axios.get(`city/getCityHot/${val}`).then(res => {
-        console.log(res)
-        this.cityData = res;
-      });
-    },
-    //获取业务地区
-    getBusinessCity() {
-      this.$axios.get("city/getAHotCity").then(res => {
-        this.cities = res;
-      });
+      fetchCity(val).then(res => {
+        this.cityData = res.data
+      })
     },
     goodMask() {
       this.businessList = [...this.formData.businessList];
@@ -404,7 +397,6 @@ export default {
     this.getProvince();
     this.getGoodBusiness();
     this.getPersonal();
-    this.getBusinessCity();
   }
 };
 </script>

@@ -1,48 +1,48 @@
 <template>
-<div class="jnd-member-box" v-if="visible" @click.self="closeDialog">
-  <div class="member-wrap" :style="{top: top}">
-    <div class="title-wrap">
-      <img src="../../static/resource/vip/vip.png" alt="">
-      <span class="title">就能贷VIP会员</span>
-      <input type="checkbox" v-model="checked" class="check-box">
-      <span class="tips">同意<a href="#/agreement?memberService" target="_blank" style="color: #4a90e2;">《服务条款》</a></span>
-      <i class="close" @click="closeDialog">×</i>
-    </div>
-    <div class="member-body">
-      <div class="tab-bar">
-        <ul>
-          <li :class="{'checked': index === nowIndex}" v-for="(item, index) in data" :key="index" @click="toggleTabBar(index, item)"><span v-for="(i, ind) in item" :key="ind" v-if="ind === 0">{{ i.vid | vipTypeFilter }}</span></li>
-        </ul>
+  <div v-if="visible" class="jnd-member-box" @click.self="closeDialog">
+    <div :style="{top: top}" class="member-wrap">
+      <div class="title-wrap">
+        <img src="../../static/resource/vip/vip.png" alt="">
+        <span class="title">就能贷VIP会员</span>
+        <input v-model="checked" type="checkbox" class="check-box">
+        <span class="tips">同意<a href="#/agreement?memberService" target="_blank" style="color: #4a90e2;">《服务条款》</a></span>
+        <i class="close" @click="closeDialog">×</i>
       </div>
-      <div class="content" v-for="(item, index) in data" :key="index" v-show="index === nowIndex">
-        <div>
-          <p>套餐选择</p>
+      <div class="member-body">
+        <div class="tab-bar">
           <ul>
-            <li class="item" :class="{'checked': ind + 1 === nowInd}" v-for="(i, ind) in item" :key="ind + 'list'" @click="toggleMail(ind, i)">
-              <div class="price" :class="{'discount': i.discount !== 1}">
-                {{ i.payAmount | priceFilter }}
-                <br>
-                <s style="font-size: 12px" v-if="i.discount !== 1">{{ i.totalAmount | priceFilter }}</s>
-              </div>
-              <div class="time" :class="{'discount-time': i.discount !== 1}">{{ i.month | timeFilter }}</div>
-              <i></i>
-            </li>
+            <li v-for="(item, index) in data" :class="{'checked': index === nowIndex}" :key="index" @click="toggleTabBar(index, item)"><span v-for="(i, ind) in item" v-if="ind === 0" :key="ind">{{ i.vid | vipTypeFilter }}</span></li>
           </ul>
         </div>
-        <div>
-          <p>支付选择</p>
-          <ul class="pay-type-list">
-            <li class="pay-type-item" :class="{'checked': index + 1 === payTypeIndex}" v-for="(item, index) in payType" :key="item.value" @click="handlePayType(index)">
-              <img :src="item.src" alt="">
-              <i></i>
-            </li>
-          </ul>
+        <div v-for="(item, index) in data" v-show="index === nowIndex" :key="index" class="content">
+          <div>
+            <p>套餐选择</p>
+            <ul>
+              <li v-for="(i, ind) in item" :class="{'checked': ind + 1 === nowInd}" :key="ind + 'list'" class="item" @click="toggleMail(ind, i)">
+                <div :class="{'discount': i.discount !== 1}" class="price">
+                  {{ i.payAmount | priceFilter }}
+                  <br>
+                  <s v-if="i.discount !== 1" style="font-size: 12px">{{ i.totalAmount | priceFilter }}</s>
+                </div>
+                <div :class="{'discount-time': i.discount !== 1}" class="time">{{ i.month | timeFilter }}</div>
+                <i/>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p>支付选择</p>
+            <ul class="pay-type-list">
+              <li v-for="(item, index) in payType" :class="{'checked': index + 1 === payTypeIndex}" :key="item.value" class="pay-type-item" @click="handlePayType(index)">
+                <img :src="item.src" alt="">
+                <i/>
+              </li>
+            </ul>
+          </div>
         </div>
+        <button class="go-pay" @click="handlePay">去支付</button>
       </div>
-      <button class="go-pay" @click="handlePay">去支付</button>
     </div>
   </div>
-</div>
 </template>
 <script>
 import { getMemberData } from '@/api/pay.alipay'
@@ -51,7 +51,7 @@ const payType = [
   { value: 1, label: '微信', src: '../../../../static/resource/vip/zfb.png' }
 ]
 export default {
-  name: 'memberBox',
+  name: 'MemberBox',
   filters: {
     priceFilter(val) {
       return val + '元'
@@ -106,15 +106,18 @@ export default {
   watch: {
     visible: function(val, oldVal) {
       if (val) {
-        this.stop();
+        this.stop()
       } else {
-        this.move();
-        this.nowIndex = 0;
+        this.move()
+        this.nowIndex = 0
         this.nowInd = ''
         this.payTypeIndex = ''
         this.level = ''
       }
     }
+  },
+  destroyed() {
+    this.move()
   },
   methods: {
     closeDialog() {
@@ -147,23 +150,20 @@ export default {
     },
     stop() {
       var mo = function(e) {
-        e.preventDefault();
-      };
-      document.body.style.overflow = "hidden";
-      document.addEventListener("touchmove", mo, false); //禁止页面滑动
+        e.preventDefault()
+      }
+      document.body.style.overflow = 'hidden'
+      document.addEventListener('touchmove', mo, false) // 禁止页面滑动
     },
     move() {
       var mo = function(e) {
-        e.preventDefault();
-      };
-      document.body.style.overflow = ""; //出现滚动条
-      document.removeEventListener("touchmove", mo, false);
+        e.preventDefault()
+      }
+      document.body.style.overflow = '' // 出现滚动条
+      document.removeEventListener('touchmove', mo, false)
     }
-  },
-  destroyed() {
-    this.move()
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 li {
@@ -256,7 +256,7 @@ li {
         margin: 30px 0;
         .item {
           width:130px;
-          height:127px; 
+          height:127px;
           text-align: center;
           border: 1px solid #D9D9D9;
           background: #fff;
