@@ -107,7 +107,6 @@
 <script>
 import { mapMutations, mapState } from 'vuex'
 import uploadImg from '@/component/uploadImg'
-import { randomWord } from '@/util/util'
 export default {
   name: 'AgentMessage',
   components: {
@@ -138,6 +137,16 @@ export default {
       this.name = val.name
     }
   },
+  created() {
+    if (this.$store.state.userInfo !== null) {
+      this.name = this.$store.state.userInfo.name
+    }
+    const id = this.$route.params.id
+    this.userIdn = id
+    if (this.userInfo && this.userInfo.image) {
+      this.image = this.userInfo.image
+    }
+  },
   methods: {
     ...mapMutations(['SET_USER_IMAGE']),
     organM() {
@@ -150,8 +159,9 @@ export default {
       console.log('上传成功', val, field)
       const data = new FormData()
       data.append('image', val.jsonData.data)
-      data.append('borrowerId', this.$store.state.userInfo.id)
-      this.$axios.post('/userBorrower/updateLogoById', data).then(res => {
+      data.append('brokerId', this.$store.state.userInfo.id)
+
+      this.$axios.post('/userBroker/modifyImageByBrokerId', data).then(res => {
         if (res.status === 200) {
           this.SET_USER_IMAGE(val.jsonData.data)
           this.image = val.jsonData.data
@@ -160,16 +170,6 @@ export default {
           this.$message.warning(res.msg)
         }
       })
-    }
-  },
-  created() {
-    if (this.$store.state.userInfo !== null) {
-      this.name = this.$store.state.userInfo.name
-    }
-    const id = this.$route.params.id
-    this.userIdn = id
-    if (this.userInfo && this.userInfo.image) {
-      this.image = this.userInfo.image
     }
   }
 }

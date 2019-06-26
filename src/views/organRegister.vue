@@ -192,9 +192,6 @@ export default {
     personImg,
     registerTop
   },
-  computed: {
-    ...mapState(['userInfo'])
-  },
   data() {
     const validatePhone = (rule, value, callback) => {
       if (!value) {
@@ -328,6 +325,9 @@ export default {
         ]
       }
     }
+  },
+  computed: {
+    ...mapState(['userInfo'])
   },
   created() {
     this.phone = new Date().getTime() + randomWord(false, 10)

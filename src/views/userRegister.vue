@@ -110,9 +110,6 @@ export default {
   components: {
     registerTop
   },
-  computed: {
-    ...mapState(['userInfo'])
-  },
   data() {
     const validateName = (rule, value, callback) => {
       if (value) {
@@ -174,6 +171,12 @@ export default {
         borrower2: [{ required: true, trigger: 'change', message: '必填' }]
       }
     }
+  },
+  computed: {
+    ...mapState(['userInfo'])
+  },
+  created() {
+    this.getProvince()
   },
   methods: {
     ...mapMutations(['SET_USER']),
@@ -274,9 +277,6 @@ export default {
         this.cityData = res
       })
     }
-  },
-  created() {
-    this.getProvince()
   }
 }
 </script>

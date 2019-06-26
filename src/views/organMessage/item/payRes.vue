@@ -93,9 +93,6 @@ export default {
     },
     getData() {
       this.listLoading = true
-      const data = {
-        ...this.listQuery
-      }
       this.$axios
         .get(
           `agencyResource/getBorByAgency/${this.$store.state.userInfo.id}/${

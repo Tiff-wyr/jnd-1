@@ -1,173 +1,175 @@
 <template>
-<div class="pro-center-wrap">
-  <div class="pro-center">
-    <div class="title">产品中心</div>
-    <div class="clearfix">
-      <div class="product clearfix fll" @click="addItem">
-        <div class="clearfix my-up">
-          <div class="add-num fll">+</div>
-          <div class="add-pro fll">添加产品</div>
+  <div class="pro-center-wrap">
+    <div class="pro-center">
+      <div class="title">产品中心</div>
+      <div class="clearfix">
+        <div class="product clearfix fll" @click="addItem">
+          <div class="clearfix my-up">
+            <div class="add-num fll">+</div>
+            <div class="add-pro fll">添加产品</div>
+          </div>
         </div>
-      </div>
-      <div
-        class="product-item fll"
-        v-for="(item,index) in tableData"
-        :key="index"
-        style="margin-right: 25px;margin-bottom: 20px"
-      >
-        <div class="clearfix mt15">
-          <div class="name fll">产品名称：</div>
-          <span>{{ item.productName }}</span>
-        </div>
-        <div class="clearfix mt15">
-          <div class="name fll">产品额度：</div>
-          <span>{{ item.moneyLimit }}</span>
-        </div>
-        <div class="clearfix mt15">
-          <div class="name fll">产品利息：</div>
-          <span>{{ item.rate }}</span>
-        </div>
-        <div class="clearfix mt15">
-          <div class="name fll">归还方式：</div>
-          <span>{{ item.productRepaymentMethod }}</span>
-        </div>
-        <div class="clearfix mt15">
-          <div class="name fll">使用年限：</div>
-          <span>{{ item.productLife }}</span>
-        </div>
-        <div class="clearfix mt15">
-          <div class="name fll">贷款类型：</div>
-          <span>{{ item.productLoanType }}</span>
-        </div>
-        <div class="clearfix">
-          <div class="edit fll" @click="editProduct(item.productId)">编辑</div>
-          <div class="save fll" @click="delectProduct(item.productId)">删除</div>
+        <div
+          v-for="(item,index) in tableData"
+          :key="index"
+          class="product-item fll"
+          style="margin-right: 25px;margin-bottom: 20px"
+        >
+          <div class="clearfix mt15">
+            <div class="name fll">产品名称：</div>
+            <span>{{ item.productName }}</span>
+          </div>
+          <div class="clearfix mt15">
+            <div class="name fll">产品额度：</div>
+            <span>{{ item.moneyLimit }}</span>
+          </div>
+          <div class="clearfix mt15">
+            <div class="name fll">产品利息：</div>
+            <span>{{ item.rate }}</span>
+          </div>
+          <div class="clearfix mt15">
+            <div class="name fll">归还方式：</div>
+            <span>{{ item.productRepaymentMethod }}</span>
+          </div>
+          <div class="clearfix mt15">
+            <div class="name fll">使用年限：</div>
+            <span>{{ item.productLife }}</span>
+          </div>
+          <div class="clearfix mt15">
+            <div class="name fll">贷款类型：</div>
+            <span>{{ item.productLoanType }}</span>
+          </div>
+          <div class="clearfix">
+            <div class="edit fll" @click="editProduct(item.productId)">编辑</div>
+            <div class="save fll" @click="delectProduct(item.productId)">删除</div>
+          </div>
         </div>
       </div>
     </div>
+    <div class="page" style="float: right;margin-top: 30px">
+      <el-pagination
+        :page-size="size"
+        :pager-count="5"
+        :total="count"
+        background=""
+        layout="prev, pager, next"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
+    <!--蒙版-->
+    <el-dialog :visible.sync="dialogVisible" :center="true" :show-close="false" title="产品详情" width="600px" top="5vh">
+      <el-form ref="productDetailData" :model="productDetailData" :rules="productDetailDataRules" label-position="right" label-width="70px">
+        <el-form-item label="产品头像" prop="productLogo" class="cover-full">
+          <productImg v-model="productDetailData.productLogo" :phone="phone" :value="productDetailData.productLogo" @success="uploadSuccess"/>
+          <div class="wenzi"> 支持JPG/JPEG/PNG格式图片，照片不大于2M</div>
+        </el-form-item>
+        <el-form-item label="产品名称" prop="productName">
+          <el-input v-model="productDetailData.productName"/>
+        </el-form-item>
+        <el-form-item label="额度" prop="amount">
+          <el-input v-model="productDetailData.productStartAmount" class="w60"/> ~
+          <el-input v-model="productDetailData.productEndAmount" class="w60"/> 万
+        </el-form-item>
+        <el-form-item label="归还方式" prop="productRepaymentMethod">
+          <el-select v-model="productDetailData.productRepaymentMethod" clearable placeholder="请选择归还方式">
+            <el-option
+              v-for="item in returnData"
+              :key="item.prId"
+              :label="item.prName"
+              :value="item.prId"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="利息" prop="productInterest">
+          <el-input v-model="productDetailData.productInterest" class="w60"/> %
+        </el-form-item>
+        <el-form-item label="贷款类型" prop="productLoanType">
+          <el-select v-model="productDetailData.productLoanType" clearable placeholder="请选择贷款类型" class="checkbox-same">
+            <el-option
+              v-for="item in loanTypeData"
+              :key="item.id"
+              :label="item.typeName"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="发行机构" prop="productPublisher">
+          <el-input v-model="productDetailData.productPublisher"/>
+        </el-form-item>
+        <el-form-item label="业务类型" prop="productType">
+          <el-select v-model="productDetailData.productType" clearable placeholder="请选择业务类型">
+            <el-option
+              v-for="item in businessData"
+              :key="item.id"
+              :label="item.busName"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="放款时间" prop="producLoanLength">
+          <el-input v-model="productDetailData.producLoanLength" class="w60"/> 天
+        </el-form-item>
+        <el-form-item label="身份要求" prop="productIdentity">
+          <el-select v-model="productDetailData.productIdentity" placeholder="请选择身份要求" clearable>
+            <el-option
+              v-for="item in identifyData"
+              :key="item.id"
+              :label="item.identityName"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="年龄要求" prop="age">
+          <el-input v-model="productDetailData.productMinAge" class="w60"/> ~
+          <el-input v-model="productDetailData.productMaxAge" class="w60"/> 岁
+        </el-form-item>
+        <el-form-item label="使用期限" prop="productLife">
+          <el-input v-model="productDetailData.productLife" class="w60"/> 年
+        </el-form-item>
+        <el-form-item label="职业要求" prop="productOccupation" class="cover-full">
+          <el-select v-model="productDetailData.productOccupation" placeholder="请选择职业要求" multiple clearable class="w300" @change="handleWork">
+            <el-option
+              v-for="item in jobData"
+              :key="item.jobId"
+              :label="item.jobName"
+              :value="item.jobId"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="贷款条件" prop="productProperty" class="cover-full">
+          <el-select v-model="productDetailData.productProperty" placeholder="请选择贷款条件" multiple clearable class="w300" @change="handlerChange">
+            <el-option
+              v-for="item in loanData"
+              :key="item.lrId"
+              :label="item.lrName"
+              :value="item.lrId"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="条件" prop="productCondition" class="cover-full">
+          <el-input v-model="productDetailData.productCondition" type="textarea" rows="3"/>
+        </el-form-item>
+        <el-form-item label="特点" prop="productCharacteristic" class="cover-full">
+          <el-input v-model="productDetailData.productCharacteristic" type="textarea" rows="3"/>
+        </el-form-item>
+        <el-form-item class="cover-full"/>
+      </el-form>
+      <div class="btn" @click="proSave(productDetailData.productId)">保存</div>
+    </el-dialog>
   </div>
-  <div class="page" style="float: right;margin-top: 30px">
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      background=""
-      :page-size="size"
-      :pager-count="5"
-      layout="prev, pager, next"
-      :total="count"
-    ></el-pagination>
-  </div>
-  <!--蒙版-->
-  <el-dialog :visible.sync="dialogVisible" title="产品详情" :center="true" width="600px" :show-close="false" top="5vh">
-    <el-form ref="productDetailData" :model="productDetailData" :rules="productDetailDataRules" label-position="right" label-width="70px">
-      <el-form-item label="产品头像" prop="productLogo" class="cover-full">
-        <productImg @success="uploadSuccess" v-model="productDetailData.productLogo" :phone="phone" :value="productDetailData.productLogo"></productImg>
-        <div class="wenzi"> 支持JPG/JPEG/PNG格式图片，照片不大于2M</div>
-      </el-form-item>
-      <el-form-item label="产品名称" prop="productName">
-        <el-input v-model="productDetailData.productName"></el-input>
-      </el-form-item>
-      <el-form-item label="额度" prop="amount">
-        <el-input class="w60" v-model="productDetailData.productStartAmount"></el-input> ~
-        <el-input class="w60" v-model="productDetailData.productEndAmount"></el-input> 万
-      </el-form-item>
-      <el-form-item label="归还方式" prop="productRepaymentMethod">
-        <el-select v-model="productDetailData.productRepaymentMethod" clearable placeholder="请选择归还方式">
-          <el-option
-            v-for="item in returnData"
-            :key="item.prId"
-            :label="item.prName"
-            :value="item.prId"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="利息" prop="productInterest">
-        <el-input class="w60" v-model="productDetailData.productInterest"></el-input> %
-      </el-form-item>
-      <el-form-item label="贷款类型" prop="productLoanType">
-        <el-select v-model="productDetailData.productLoanType" clearable placeholder="请选择贷款类型" class="checkbox-same">
-          <el-option
-            v-for="item in loanTypeData"
-            :key="item.id"
-            :label="item.typeName"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="发行机构" prop="productPublisher">
-        <el-input v-model="productDetailData.productPublisher"></el-input>
-      </el-form-item>
-      <el-form-item label="业务类型" prop="productType">
-        <el-select v-model="productDetailData.productType" clearable placeholder="请选择业务类型">
-          <el-option
-            v-for="item in businessData"
-            :key="item.id"
-            :label="item.busName"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="放款时间" prop="producLoanLength">
-        <el-input class="w60" v-model="productDetailData.producLoanLength"></el-input> 天
-      </el-form-item>
-      <el-form-item label="身份要求" prop="productIdentity">
-        <el-select v-model="productDetailData.productIdentity" placeholder="请选择身份要求" clearable>
-          <el-option
-            v-for="item in identifyData"
-            :key="item.id"
-            :label="item.identityName"
-            :value="item.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="年龄要求" prop="age">
-        <el-input class="w60" v-model="productDetailData.productMinAge"></el-input> ~
-        <el-input class="w60" v-model="productDetailData.productMaxAge"></el-input> 岁
-      </el-form-item>
-      <el-form-item label="使用期限" prop="productLife">
-        <el-input class="w60" v-model="productDetailData.productLife"></el-input> 年
-      </el-form-item>
-      <el-form-item label="职业要求" prop="productOccupation" class="cover-full">
-        <el-select v-model="productDetailData.productOccupation" placeholder="请选择职业要求" multiple clearable @change="handleWork" class="w300">
-          <el-option
-            v-for="item in jobData"
-            :key="item.jobId"
-            :label="item.jobName"
-            :value="item.jobId"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="贷款条件" prop="productProperty" class="cover-full">
-        <el-select v-model="productDetailData.productProperty" placeholder="请选择贷款条件" multiple clearable @change="handlerChange" class="w300">
-          <el-option
-            v-for="item in loanData"
-            :key="item.lrId"
-            :label="item.lrName"
-            :value="item.lrId"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="条件" prop="productCondition" class="cover-full">
-        <el-input type="textarea" rows="3" v-model="productDetailData.productCondition"></el-input>
-      </el-form-item>
-      <el-form-item label="特点" prop="productCharacteristic" class="cover-full">
-        <el-input type="textarea" rows="3" v-model="productDetailData.productCharacteristic"></el-input>
-      </el-form-item>
-      <el-form-item class="cover-full">
-      </el-form-item>
-    </el-form>
-    <div class="btn" @click="proSave(productDetailData.productId)">保存</div>
-  </el-dialog>
-</div>
 </template>
 
 <script>
-import productImg from "../../../component/productImg";
+import productImg from '../../../component/productImg'
 import { randomWord } from '@/util/util'
 import { validaterInter, validaterFloat } from '@/util/validate'
 import { getCountByAgencyId } from '@/api/organ'
 export default {
-  name: "productCen",
+  name: 'ProductCen',
+  components: {
+    productImg
+  },
   data() {
     const validAmout = (rule, value, callback) => {
       if (this.productDetailData.productStartAmount && this.productDetailData.productEndAmount) {
@@ -183,7 +185,7 @@ export default {
       } else {
         callback(new Error('额度不能为空'))
       }
-    };
+    }
     const validRate = (rule, value, callback) => {
       if (value) {
         if (validaterFloat(value)) {
@@ -194,7 +196,7 @@ export default {
       } else {
         callback(new Error('利率不能为空'))
       }
-    };
+    }
     const validLoanTime = (rule, value, callback) => {
       if (value) {
         if (validaterInter(value)) {
@@ -205,7 +207,7 @@ export default {
       } else {
         callback(new Error('返款时间不能为空'))
       }
-    };
+    }
     const validAge = (rule, value, callback) => {
       if (this.productDetailData.productMinAge && this.productDetailData.productMaxAge) {
         if (validaterInter(this.productDetailData.productMinAge) && validaterInter(this.productDetailData.productMaxAge)) {
@@ -221,7 +223,7 @@ export default {
       } else {
         callback(new Error('年龄范围不能为空'))
       }
-    };
+    }
     const validUseDeadLine = (rule, value, callback) => {
       if (value) {
         if (validaterInter(value)) {
@@ -236,46 +238,46 @@ export default {
       } else {
         callback(new Error('使用年限不能为空'))
       }
-    };
-    
+    }
+
     return {
       dialogVisible: false,
-      phone:'',
+      phone: '',
       tableData: [],
       isShowing: true,
       productList: [],
       page: 1,
       size: 5,
       count: 1,
-      jobData: [], //获取职业
-      loanData: [], //获取贷款要求
-      returnData: [], //获取归还条件
-      loanTypeData: [], //贷款类型
-      yearData: [], //使用年限
-      businessData: [], //业务类型
-      identifyData: [], //身份要求
+      jobData: [], // 获取职业
+      loanData: [], // 获取贷款要求
+      returnData: [], // 获取归还条件
+      loanTypeData: [], // 贷款类型
+      yearData: [], // 使用年限
+      businessData: [], // 业务类型
+      identifyData: [], // 身份要求
       productDetailData: {
-        productId:'',
-        productName: "",
-        producLoanLength: "",
-        productRepaymentMethod: "",
-        productCharacteristic: "", //特点
-        productPublisher: "", //发型机构
-        productInterest: "", //利率
-        productLoanType: "", //贷款类型
-        productOccupation: "", //职业
-        productIdentity: "", //身份
-        productTimeType: "",
-        productType: "",
-        productMinAge: "",
-        productMaxAge: "",
-        productProperty: "", //资产
-        productStartAmount: "", //额度
-        productEndAmount: "",
-        productLife: "", //年限
-        productCondition: "", //条件
-        agencyId: "",
-        productLogo: ""
+        productId: '',
+        productName: '',
+        producLoanLength: '',
+        productRepaymentMethod: '',
+        productCharacteristic: '', // 特点
+        productPublisher: '', // 发型机构
+        productInterest: '', // 利率
+        productLoanType: '', // 贷款类型
+        productOccupation: '', // 职业
+        productIdentity: '', // 身份
+        productTimeType: '',
+        productType: '',
+        productMinAge: '',
+        productMaxAge: '',
+        productProperty: '', // 资产
+        productStartAmount: '', // 额度
+        productEndAmount: '',
+        productLife: '', // 年限
+        productCondition: '', // 条件
+        agencyId: '',
+        productLogo: ''
       },
       productDetailDataRules: {
         productLogo: [{ required: true, message: '产品头像不能为空', trigger: 'change' }],
@@ -295,50 +297,59 @@ export default {
         productCondition: [{ required: true, message: '条件不能为空', trigger: 'change' }],
         productCharacteristic: [{ required: true, message: '产品特点不能为空', trigger: 'change' }]
       }
-    };
+    }
   },
-  components: {
-    productImg
+  created() {
+    this.productDetailData.agencyId = this.$store.state.userInfo.id
+    this.phone = new Date().getTime() + randomWord(false, 10)
+    this.getJob()
+    this.getLoan()
+    this.getReturn()
+    this.getLoanType()
+    this.getYear()
+    this.getBusinessType()
+    this.getIdentify()
+    this.getProData()
   },
   methods: {
-    
+
     handleWork(val) {
-      let arr = []
+      const arr = []
       for (let i = 0; i < val.length; i++) {
         arr.push(val[i])
       }
-      let index = arr.indexOf(0);
+      const index = arr.indexOf(0)
       if (index > -1 && index === val.length - 1) {
-        this.productDetailData.productOccupation = [0];
+        this.productDetailData.productOccupation = [0]
       } else if (index > -1) {
-        this.productDetailData.productOccupation.splice(index, 1);
+        this.productDetailData.productOccupation.splice(index, 1)
       } else {
-        this.productDetailData.productOccupation = val;
+        this.productDetailData.productOccupation = val
       }
     },
     handlerChange(val) {
-      let arr = []
+      const arr = []
       for (let i = 0; i < val.length; i++) {
         arr.push(val[i])
       }
-      let index = arr.indexOf(0);
+      const index = arr.indexOf(0)
       if (index > -1 && index === val.length - 1) {
-        this.productDetailData.productProperty = [0];
+        this.productDetailData.productProperty = [0]
       } else if (index > -1) {
-        this.productDetailData.productProperty.splice(index, 1);
+        this.productDetailData.productProperty.splice(index, 1)
       } else {
-        this.productDetailData.productProperty = val;
+        this.productDetailData.productProperty = val
       }
     },
     handleCurrentChange(val) {
-      this.page = val;
-      this.getProData();
+      this.page = val
+      this.getProData()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getProData();
+      this.size = val
+      this.getProData()
     },
-    //添加产品
+    // 添加产品
     addItem() {
       getCountByAgencyId(this.$store.state.userInfo.id).then(res => {
         if (res.data.status === 200) {
@@ -353,167 +364,167 @@ export default {
       })
     },
     uploadSuccess(file) {
-      this.productDetailData.productLogo = file.data;
+      this.productDetailData.productLogo = file.data
     },
     editProduct(id) {
       this.dialogVisible = true
       this.$axios.get(`product/updateProductById/${id}`).then(res => {
-        let {
+        const {
           productId,
           productName,
           producLoanLength,
           productRepaymentMethod,
-          productCharacteristic, //特点
-          productPublisher, //发型机构
-          productInterest, //利率
-          productLoanType, //贷款类型
-          productOccupation, //职业
-          productIdentity, //身份
+          productCharacteristic, // 特点
+          productPublisher, // 发型机构
+          productInterest, // 利率
+          productLoanType, // 贷款类型
+          productOccupation, // 职业
+          productIdentity, // 身份
           productTimeType,
           productType,
           productMinAge,
           productMaxAge,
-          productProperty, //资产
-          productStartAmount, //额度
+          productProperty, // 资产
+          productStartAmount, // 额度
           productEndAmount,
-          productLife, //年限
-          productCondition, //条件
+          productLife, // 年限
+          productCondition, // 条件
           productLogo
-        } = res;
+        } = res
         this.productDetailData = {
           productId,
           productName,
           producLoanLength,
           productRepaymentMethod,
-          productCharacteristic, //特点
-          productPublisher, //发型机构
-          productInterest, //利率
-          productLoanType, //贷款类型
-          productOccupation, //职业
-          productIdentity, //身份
+          productCharacteristic, // 特点
+          productPublisher, // 发型机构
+          productInterest, // 利率
+          productLoanType, // 贷款类型
+          productOccupation, // 职业
+          productIdentity, // 身份
           productTimeType,
           productType,
           productMinAge,
           productMaxAge,
-          productProperty, //资产
-          productStartAmount, //额度
+          productProperty, // 资产
+          productStartAmount, // 额度
           productEndAmount,
-          productLife, //年限
-          productCondition, //条件
+          productLife, // 年限
+          productCondition, // 条件
           productLogo
-        };
+        }
         this.productDetailData.productProperty = res.productProperty
-          .split(",")
+          .split(',')
           .map(item => {
-            return parseInt(item);
-          });
+            return parseInt(item)
+          })
         this.productDetailData.productOccupation = res.productOccupation.toString()
-          .split(",")
+          .split(',')
           .map(item => {
-            return parseInt(item);
-          });
-      });
+            return parseInt(item)
+          })
+      })
     },
     proSave(id) {
       this.$refs.productDetailData.validate(valid => {
         if (valid) {
           if (id) {
             this.productDetailData.productId = id
-            let data = new FormData();
-            for (let item in this.productDetailData) {
-              data.append(item, this.productDetailData[item]);
+            const data = new FormData()
+            for (const item in this.productDetailData) {
+              data.append(item, this.productDetailData[item])
             }
             this.$axios.post(`product/updateProduct`, data).then(res => {
               if (res.status === 200) {
-                this.$message.success(res.msg);
+                this.$message.success(res.msg)
                 this.dialogVisible = false
-                this.getProData();
+                this.getProData()
               }
-            });
+            })
           } else {
-            let data = new FormData();
-            for (let item in this.productDetailData) {
-              data.append(item, this.productDetailData[item]);
+            const data = new FormData()
+            for (const item in this.productDetailData) {
+              data.append(item, this.productDetailData[item])
             }
-            data.delete("productId");
+            data.delete('productId')
             this.$axios.post(`product/addProduct`, data).then(res => {
               if (res.status === 200) {
-                this.$message.success(res.msg);
+                this.$message.success(res.msg)
                 this.dialogVisible = false
-                this.getProData();
+                this.getProData()
               } else {
-                this.$message.warning(res.msg);
+                this.$message.warning(res.msg)
               }
-            });
+            })
           }
         }
       })
     },
     delectProduct(id) {
-      this.$confirm("是否确认删除此产品？", "提示", {
-        confirmButtonText: "确认",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('是否确认删除此产品？', '提示', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           this.$axios.get(`product/deleteProduct/${id}`).then(res => {
             if (res.status === 200) {
-              this.$message.success(res.msg);
-              this.getProData();
+              this.$message.success(res.msg)
+              this.getProData()
             } else {
-              this.$message.warning(res.msg);
+              this.$message.warning(res.msg)
             }
-          });
+          })
         })
         .catch(() => {
           this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
 
-    //获取职业
+    // 获取职业
     getJob() {
-      this.$axios.get("get/getJob").then(res => {
-        this.jobData = res;
-      });
+      this.$axios.get('get/getJob').then(res => {
+        this.jobData = res
+      })
     },
-    //获取贷款要求
+    // 获取贷款要求
     getLoan() {
-      this.$axios.get("get/getLoanRequirements").then(res => {
-        this.loanData = res;
-      });
+      this.$axios.get('get/getLoanRequirements').then(res => {
+        this.loanData = res
+      })
     },
-    //获取归还条件
+    // 获取归还条件
     getReturn() {
-      this.$axios.get("get/getProductRepaymentMethod").then(res => {
-        this.returnData = res;
-      });
+      this.$axios.get('get/getProductRepaymentMethod').then(res => {
+        this.returnData = res
+      })
     },
-    //贷款类型
+    // 贷款类型
     getLoanType() {
-      this.$axios.get("get/getLoanType").then(res => {
-        this.loanTypeData = res;
-      });
+      this.$axios.get('get/getLoanType').then(res => {
+        this.loanTypeData = res
+      })
     },
-    //使用年限
+    // 使用年限
     getYear() {
-      this.$axios.get("get/getServiceLife").then(res => {
-        this.yearData = res;
-      });
+      this.$axios.get('get/getServiceLife').then(res => {
+        this.yearData = res
+      })
     },
-    //业务类型
+    // 业务类型
     getBusinessType() {
-      this.$axios.get("get/getType").then(res => {
-        this.businessData = res;
-      });
+      this.$axios.get('get/getType').then(res => {
+        this.businessData = res
+      })
     },
-    //身份要求
+    // 身份要求
     getIdentify() {
-      this.$axios.get("get/getIdentity").then(res => {
-        this.identifyData = res;
-      });
+      this.$axios.get('get/getIdentity').then(res => {
+        this.identifyData = res
+      })
     },
     getProData() {
       this.$axios
@@ -525,56 +536,44 @@ export default {
         .then(res => {
           if (res) {
             this.tableData = res.list.map(item => {
-              let moneyLimit =
-                item.productStartAmount + "~" + item.productEndAmount + "万";
-              let rate = item.productInterest + "%";
-              return { ...item, moneyLimit, save: false, rate };
-            });
-            this.count = res.totalCount;
+              const moneyLimit =
+                item.productStartAmount + '~' + item.productEndAmount + '万'
+              const rate = item.productInterest + '%'
+              return { ...item, moneyLimit, save: false, rate }
+            })
+            this.count = res.totalCount
           } else {
-            this.tableData = [];
+            this.tableData = []
           }
-        });
+        })
     },
     resetForm() {
       this.productDetailData = {
-        productName: "",
-        producLoanLength: "",
-        productRepaymentMethod: "",
-        productCharacteristic: "", //特点
-        productPublisher: "", //发型机构
-        productInterest: "", //利率
-        productLoanType: "", //贷款类型
-        productOccupation: [], //职业
-        productIdentity: "", //身份
-        productTimeType: "天",
-        productType: "",
-        productMinAge: "",
-        productMaxAge: "",
-        productProperty: [], //资产
-        productStartAmount: "", //额度
-        productEndAmount: "",
-        productLife: "", //年限
-        productCondition: "", //条件
-        agencyId: "",
-        productLogo: ""
+        productName: '',
+        producLoanLength: '',
+        productRepaymentMethod: '',
+        productCharacteristic: '', // 特点
+        productPublisher: '', // 发型机构
+        productInterest: '', // 利率
+        productLoanType: '', // 贷款类型
+        productOccupation: [], // 职业
+        productIdentity: '', // 身份
+        productTimeType: '天',
+        productType: '',
+        productMinAge: '',
+        productMaxAge: '',
+        productProperty: [], // 资产
+        productStartAmount: '', // 额度
+        productEndAmount: '',
+        productLife: '', // 年限
+        productCondition: '', // 条件
+        agencyId: '',
+        productLogo: ''
       }
       this.productDetailData.agencyId = this.$store.state.userInfo.id
     }
-  },
-  created() {
-    this.productDetailData.agencyId = this.$store.state.userInfo.id
-    this.phone = new Date().getTime() + randomWord(false, 10)
-    this.getJob();
-    this.getLoan();
-    this.getReturn();
-    this.getLoanType();
-    this.getYear();
-    this.getBusinessType();
-    this.getIdentify();
-    this.getProData();
   }
-};
+}
 </script>
 <style lang="scss">
 .pro-center-wrap {
@@ -633,7 +632,7 @@ export default {
       line-height: 30px;
     }
   }
-  
+
   .btn {
     width: 60px;
     height: 30px;

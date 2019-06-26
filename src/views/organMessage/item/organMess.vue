@@ -3,24 +3,24 @@
     <div class="clearfix title">
       <div class="title-text fll">机构信息</div>
       <div>
-        <div class="flr edit" v-if="!isEdit" @click="edit">编辑</div>
+        <div v-if="!isEdit" class="flr edit" @click="edit">编辑</div>
         <div v-else class="clearfix">
-          <div class="flr edit" @click="abandonPerson" style="margin-left: 10px">放弃</div>
+          <div class="flr edit" style="margin-left: 10px" @click="abandonPerson">放弃</div>
           <div class="flr edit" @click="savePerson(resultData.examineState)">保存</div>
         </div>
       </div>
     </div>
-    <el-form :class="{'border-show': !isEdit}" ref="organMessData" :model="organMessData" :rules="organMessRules" label-position="right" label-width="120px">
+    <el-form ref="organMessData" :class="{'border-show': !isEdit}" :model="organMessData" :rules="organMessRules" label-position="right" label-width="120px">
       <el-form-item label="机构名称" prop="agencyName">
-        <el-input v-if="isEdit" v-model="organMessData.agencyName" class="input-item"></el-input>
+        <el-input v-if="isEdit" v-model="organMessData.agencyName" class="input-item"/>
         <span v-else>{{ resultData.agencyName }}</span>
       </el-form-item>
       <el-form-item label="机构代码" prop="agencyCode">
-        <el-input v-if="isEdit" v-model="organMessData.agencyCode" class="input-item"></el-input>
+        <el-input v-if="isEdit" v-model="organMessData.agencyCode" class="input-item"/>
         <span v-else>{{ resultData.agencyCode }}</span>
       </el-form-item>
       <el-form-item label="机构介绍" prop="agencyIntroduction">
-        <el-input type="textarea" v-if="isEdit" v-model="organMessData.agencyIntroduction" class="input-item"></el-input>
+        <el-input v-if="isEdit" v-model="organMessData.agencyIntroduction" type="textarea" class="input-item"/>
         <span v-else>{{ resultData.agencyIntroduction }}</span>
       </el-form-item>
       <el-form-item label="营业执照" prop="agencyLicense">
@@ -29,14 +29,14 @@
             v-model="organMessData.agencyLicense"
             :phone="phone"
             @success="uploadSuccess"
-          ></personImg> &nbsp;&nbsp;<span>只能上传jpg/png文件，且不超过2MB</span>
+          /> &nbsp;&nbsp;<span>只能上传jpg/png文件，且不超过2MB</span>
         </div>
         <a v-else :href="resultData.agencyLicense" target="_blank">
           <img :src="resultData.agencyLicense" alt="" style="width: 80px;height: 80px;">
         </a>
       </el-form-item>
       <el-form-item label="成立年限" prop="agencyAgeLimit">
-        <el-input v-if="isEdit" v-model="organMessData.agencyAgeLimit" class="input-item"></el-input>
+        <el-input v-if="isEdit" v-model="organMessData.agencyAgeLimit" class="input-item"/>
         <span v-else>{{ resultData.agencyAgeLimit + '年' ? resultData.agencyAgeLimit : '' }}</span>
       </el-form-item>
       <el-form-item label="营业期限" prop="businessTime">
@@ -49,38 +49,38 @@
             style="width: 135px;"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
-          ></el-date-picker>
+          />
           <el-date-picker
-            style="width: 135px;"
             v-model="organMessData.endBusiness"
             :disabled="!isEdit"
+            style="width: 135px;"
             type="date"
             placeholder="结束日期"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
-          ></el-date-picker>
+          />
         </div>
         <span v-else>{{ resultData.startBusiness }}~{{ resultData.endBusiness }}</span>
       </el-form-item>
       <el-form-item label="机构电话" prop="agencyPhone">
-        <el-input v-if="isEdit" v-model="organMessData.agencyPhone" class="input-item" @change="checkOrgan"></el-input>
+        <el-input v-if="isEdit" v-model="organMessData.agencyPhone" class="input-item" @change="checkOrgan"/>
         <span v-else>{{ resultData.agencyPhone }}</span>
       </el-form-item>
       <el-form-item label="机构网址" prop="agencyURL">
-        <el-input v-if="isEdit" v-model="organMessData.agencyURL" class="input-item"></el-input>
+        <el-input v-if="isEdit" v-model="organMessData.agencyURL" class="input-item"/>
         <span v-else>{{ resultData.agencyURL ? resultData.agencyURL : '' }}</span>
       </el-form-item>
       <el-form-item label="所属公司" prop="companyOwned">
-        <el-input v-if="isEdit" v-model="organMessData.companyOwned" class="input-item"></el-input>
+        <el-input v-if="isEdit" v-model="organMessData.companyOwned" class="input-item"/>
         <span v-else>{{ resultData.companyOwned ? resultData.companyOwned : '' }}</span>
       </el-form-item>
       <el-form-item label="所在地区" prop="address">
         <div v-if="isEdit">
           <el-select
+            v-model="organMessData.agencyAddress"
             style="width: 100px;"
             @change="getCity"
             @visible-change="clearCity"
-            v-model="organMessData.agencyAddress"
           >
             <el-option
               v-for="item in provinceData"
@@ -88,25 +88,25 @@
               :label="item.provincial"
               :value="item.pid"
               style="width: 100px;"
-            ></el-option>
+            />
           </el-select>
           <el-select
-            style="margin-left: 10px;width: 100px;"
             v-model="organMessData.agencyAddress1"
+            style="margin-left: 10px;width: 100px;"
           >
             <el-option
-              style="width: 100px;"
               v-for="item in cityData"
               :key="item.cid"
               :label="item.city"
               :value="item.cid"
-            ></el-option>
+              style="width: 100px;"
+            />
           </el-select>
         </div>
-        <span v-else>{{provinceFilter(resultData.agencyAddress)}} {{cityFilter(resultData.agencyAddress1)}}</span>
+        <span v-else>{{ provinceFilter(resultData.agencyAddress) }} {{ cityFilter(resultData.agencyAddress1) }}</span>
       </el-form-item>
       <el-form-item label="填写人姓名" prop="agencyUsername">
-        <el-input v-if="isEdit" v-model="organMessData.agencyUsername" class="input-item"></el-input>
+        <el-input v-if="isEdit" v-model="organMessData.agencyUsername" class="input-item"/>
         <span v-else>{{ resultData.agencyUsername }}</span>
       </el-form-item>
       <el-form-item label="填写人身份" prop="agencyIdentity">
@@ -119,11 +119,11 @@
         <span v-else>{{ resultData.agencyIdentity | identityFilter }}</span>
       </el-form-item>
       <el-form-item label="手机号码" prop="phone">
-        <el-input v-if="isEdit" :disabled="true" v-model="organMessData.phone" class="input-item"></el-input>
+        <el-input v-if="isEdit" :disabled="true" v-model="organMessData.phone" class="input-item"/>
         <span v-else>{{ resultData.phone }}</span>
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
-        <el-input v-if="isEdit" :disabled="true" v-model="organMessData.email" class="input-item"></el-input>
+        <el-input v-if="isEdit" :disabled="true" v-model="organMessData.email" class="input-item"/>
         <span v-else>{{ resultData.email }}</span>
       </el-form-item>
     </el-form>
@@ -131,12 +131,13 @@
 </template>
 
 <script>
-import personImg from "@/component/imgUpload";
-import { mapMutations } from "vuex";
-import { randomWord } from "@/util/util";
-import { validaterName, validaterOragnName } from "@/util/validate";
+import personImg from '@/component/imgUpload'
+import { mapMutations } from 'vuex'
+import { randomWord } from '@/util/util'
+import { validaterName, validaterOragnName } from '@/util/validate'
+import { fetchProvince, fetchCity } from '@/api/register'
 export default {
-  name: "organMess",
+  name: 'OrganMess',
   components: {
     personImg
   },
@@ -153,86 +154,91 @@ export default {
     const validateStartBusiness = (rule, value, callback) => {
       if (this.organMessData.startBusiness && this.organMessData.endBusiness) {
         if (this.organMessData.endBusiness <= this.organMessData.startBusiness) {
-          callback(new Error("开始时间不能大于过期时间"));
+          callback(new Error('开始时间不能大于过期时间'))
         } else {
-          callback();
+          callback()
         }
       } else {
-        callback(new Error("营业期限不能为空"));
+        callback(new Error('营业期限不能为空'))
       }
-    };
+    }
     const validateName = (rule, value, callback) => {
       if (value) {
         if (validaterName(value)) {
-          callback();
+          callback()
         } else {
-          callback(new Error("填写人姓名格式错误"));
+          callback(new Error('填写人姓名格式错误'))
         }
       } else {
-        callback(new Error("填写人姓名不能为空"));
+        callback(new Error('填写人姓名不能为空'))
       }
-    };
+    }
     const validateOrganName = (rule, value, callback) => {
       if (value) {
         if (validaterOragnName(value)) {
-          callback();
+          callback()
         } else {
-          callback(new Error("机构名称格式错误，正确格式为汉字或英文"));
+          callback(new Error('机构名称格式错误，正确格式为汉字或英文'))
         }
       } else {
-        callback(new Error("机构名称不能为空"));
+        callback(new Error('机构名称不能为空'))
       }
-    };
-    
+    }
+
     const validateAdress = (rule, value, callback) => {
       if (this.organMessData.agencyAddress && this.organMessData.agencyAddress1) {
         callback()
       } else {
         callback(new Error('请选择所在地区'))
       }
-    };
+    }
     return {
-      phone: "",
+      phone: '',
       loading: false,
       isEdit: false,
-      //省
+      // 省
       provinceData: [],
-      //市 区
+      // 市 区
       cityData: [],
       organMessData: {
-        agencyId: "",
-        agencyName: "",
-        agencyCode: "",
-        agencyIntroduction: "",
-        agencyLicense: "",
-        agencyAgeLimit: "",
-        startBusiness: "",
-        endBusiness: "",
-        agencyURL: "",
-        agencyPhone: "",
-        companyOwned: "",
-        agencyAddress: "",
-        agencyAddress1: "",
-        agencyUsername: "",
-        agencyIdentity: "",
-        phone: "",
-        email: ""
+        agencyId: '',
+        agencyName: '',
+        agencyCode: '',
+        agencyIntroduction: '',
+        agencyLicense: '',
+        agencyAgeLimit: '',
+        startBusiness: '',
+        endBusiness: '',
+        agencyURL: '',
+        agencyPhone: '',
+        companyOwned: '',
+        agencyAddress: '',
+        agencyAddress1: '',
+        agencyUsername: '',
+        agencyIdentity: '',
+        phone: '',
+        email: ''
       },
       resultData: {},
       organMessRules: {
         agencyName: [{ required: true, trigger: 'change', validator: validateOrganName }],
         agencyCode: [{ required: true, message: '机构代码不能为空', trigger: 'change' }],
         agencyLicense: [{ required: true, message: '营业执照不能为空', trigger: 'change' }],
-        businessTime: [{ required: true, trigger: "change", validator: validateStartBusiness }],
+        businessTime: [{ required: true, trigger: 'change', validator: validateStartBusiness }],
         agencyPhone: [{ required: true, message: '机构电话不能为空', trigger: 'change' }],
         agencyIntroduction: [{ required: true, message: '机构介绍不能为空', trigger: 'change' }],
         address: [{ required: true, trigger: 'change', validator: validateAdress }],
-        agencyUsername: [{ required: true, trigger: "change", validator: validateName }],
+        agencyUsername: [{ required: true, trigger: 'change', validator: validateName }]
       }
-    };
+    }
+  },
+  created() {
+    this.phone = new Date().getTime() + randomWord(false, 10)
+    this.getData()
+    this.getProvince()
   },
   methods: {
-    ...mapMutations(["SET_USERNAME"]),
+    ...mapMutations(['SET_USERNAME']),
     provinceFilter(val) {
       for (let i = 0; i < this.provinceData.length; i++) {
         if (this.provinceData[i].pid === val) {
@@ -249,68 +255,72 @@ export default {
     },
     checkOrgan() {
       // let test=^[0-9]*$
-      let value = this.organMessData.agencyPhone;
+      const value = this.organMessData.agencyPhone
       if (!/^[0-9]*$/.test(value)) {
-        this.$message.warning("不符合规范");
-        this.organMessData.agencyPhone = "";
+        this.$message.warning('不符合规范')
+        this.organMessData.agencyPhone = ''
       }
     },
-    //编辑
+    // 编辑
     edit() {
-      this.isEdit = !this.isEdit;
+      this.isEdit = !this.isEdit
     },
-    //保存
+    // 保存
     savePerson(val) {
-      this.loading = true;
+      this.loading = true
       this.$refs.organMessData.validate(valid => {
         if (valid) {
           delete this.organMessData.examineState
           if (this.organMessData.agencyAgeLimit === '') {
             this.organMessData.agencyAgeLimit = 0
           }
-          let data = new FormData();
-          for (let item in this.organMessData) {
-            data.append(item, this.organMessData[item]);
+          const data = new FormData()
+          for (const item in this.organMessData) {
+            data.append(item, this.organMessData[item])
           }
-          this.$axios.post("userAgency/updateUserAgency", data).then(res => {
+          this.$axios.post('userAgency/updateUserAgency', data).then(res => {
             if (res.status === 500) {
-              this.$message.warning(res.msg);
-              this.getData();
+              this.$message.warning(res.msg)
+              this.getData()
             }
             if (res.status === 200) {
-              this.loading = false;
-              this.$message.success(res.msg);
-              this.getData();
-              this.SET_USERNAME(this.organMessData.agencyName);
+              this.loading = false
+              this.$message.success(res.msg)
+              this.getData()
+              this.SET_USERNAME(this.organMessData.agencyName)
             }
-            this.isEdit = !this.isEdit;
-          });
+            this.isEdit = !this.isEdit
+          })
         } else {
           return false
         }
       })
     },
-    //放弃修改
+    // 放弃修改
     abandonPerson() {
-      this.getData();
-      this.isEdit = false;
+      this.getData()
+      this.isEdit = false
       this.$refs.organMessData.clearValidate()
     },
-    //获取省
+
+    // 获取省
     getProvince() {
-      this.$axios.get("city/getShengHot").then(res => {
-        this.provinceData = res;
-      });
+      fetchProvince().then(res => {
+        this.provinceData = res.data
+      })
     },
-    //获取 市 区
+    // 获取 市 区
     getCity(val) {
-      this.$axios.get(`city/getCityHot/${val}`).then(res => {
-        this.cityData = res;
-      });
+      this.organMessData.agencyAddress1 = ''
+      if (val) {
+        fetchCity(val).then(res => {
+          this.cityData = res.data
+        })
+      }
     },
     clearCity(val) {
       if (!val) {
-        this.organMessData.agencyAddress1 = "";
+        this.organMessData.agencyAddress1 = ''
       }
     },
 
@@ -319,7 +329,7 @@ export default {
         .get(`userAgency/updateUserAgencyById/${this.$store.state.userInfo.id}`)
         .then(res => {
           this.resultData = res
-          let {
+          const {
             agencyId,
             agencyName,
             agencyCode,
@@ -338,7 +348,7 @@ export default {
             phone,
             email,
             examineState
-          } = res;
+          } = res
           this.organMessData = {
             agencyId,
             agencyName,
@@ -358,21 +368,16 @@ export default {
             phone,
             email,
             examineState
-          };
-          this.getCity(this.organMessData.agencyAddress);
-        });
+          }
+          this.getCity(this.organMessData.agencyAddress)
+        })
     },
     uploadSuccess(file) {
-      this.organMessData.agencyLicense = file.data;
+      this.organMessData.agencyLicense = file.data
       this.resultData.agencyLicense = file.data
     }
-  },
-  created() {
-    this.phone = new Date().getTime() + randomWord(false, 10);
-    this.getData();
-    this.getProvince();
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
