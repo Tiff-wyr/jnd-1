@@ -247,7 +247,7 @@ export default {
           }`
         )
         .then(res => {
-          if (res.status == 200) {
+          if (res.status === 200) {
             this.$message.success('删除成功')
             this.getSMessage()
             this.listLoading = false
@@ -260,7 +260,7 @@ export default {
           `message/removeSendMessage/${id}/${this.$store.state.userInfo.phone}`
         )
         .then(res => {
-          if (res.status == 200) {
+          if (res.status === 200) {
             this.$message.success('删除成功')
             this.getFMessage()
             this.listLoading = false

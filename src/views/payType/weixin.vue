@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div class="top1"></div>
+    <div class="top1"/>
     <div class="top2">
       <div class="clearfix w960 fs">
         <img src="./WePayLogo.png" alt="" class="fll" style="width: 119px;height: 32px;">
-        <div class="line fll"></div>
+        <div class="line fll"/>
         <div class="text fll">我的收银台</div>
       </div>
     </div>
     <div class="gray">
       <div class="w960">
         <div class="order">订单号：</div>
-        <div class="phone">{{uniqueId}}</div>
+        <div class="phone">{{ uniqueId }}</div>
       </div>
       <div class="main-pay">
         <div class="sao">扫一扫付款（元）</div>
@@ -42,7 +42,7 @@
         </div>
         <span slot="footer">
           <el-button type="danger" @click="handleBack">
-            <span v-if="time">({{time}})</span>返回上一页
+            <span v-if="time">({{ time }})</span>返回上一页
           </el-button>
         </span>
       </el-dialog>
@@ -51,22 +51,22 @@
 </template>
 
 <script>
-import success from "../../assets/success.png";
+import success from '../../assets/success.png'
 import { checkPayStatus, updateBaseStatus } from '@/api/pay.wxpay'
 import { param2Obj } from '../../util/util'
 export default {
-  name: "weixin",
+  name: 'Weixin',
   data() {
     return {
       success,
       dialogVisible: false,
-      codeWei: "",
+      codeWei: '',
       time: 5,
       uniqueId: '',
       code_url: '',
       params: {},
       wxMoney: ''
-    };
+    }
   },
   created() {
     this.uniqueId = sessionStorage.getItem('uniqueId')
@@ -76,50 +76,55 @@ export default {
     this.params = param2Obj(window.location.href)
     const timer1 = setInterval(() => {
       this.checkStatus(this.uniqueId, this.params)
-    }, 5000);
-    this.$once("hook:beforeDestroy", () => {
-      clearInterval(timer1);
-    });
+    }, 5000)
+    this.$once('hook:beforeDestroy', () => {
+      clearInterval(timer1)
+    })
+  },
+  destroyed() {
+    sessionStorage.removeItem('uniqueId')
+    sessionStorage.removeItem('code_url')
+    sessionStorage.removeItem('wxMoney')
   },
   methods: {
     getCode(url) {
-      let data = new FormData();
-      data.append("code_url", url);
+      const data = new FormData()
+      data.append('code_url', url)
       this.$axios
         .post(`WXPay/qr_codeImg`, data, {
-          responseType: "arraybuffer"
+          responseType: 'arraybuffer'
         })
         .then(response => {
           return (
-            "data:image/png;base64," +
+            'data:image/png;base64,' +
             btoa(
               new Uint8Array(response).reduce(
                 (data, byte) => data + String.fromCharCode(byte),
-                ""
+                ''
               )
             )
-          );
+          )
         })
         .then(data => {
-          this.codeWei = data;
-        });
+          this.codeWei = data
+        })
     },
     checkStatus(uniqueId, params) {
       checkPayStatus(uniqueId).then(res => {
         if (res.data.status === 200) {
-            this.$message.success(res.data.msg);
-            this.dialogVisible = true
-            this.updateBase(params, () => {
-              let timer2 = setInterval(() => {
-                this.time--;
-                if (!this.time) {
-                  this.dialogVisible = false
-                  clearInterval(timer2);
-                  window.close();
-                }
-              }, 1000);
-            })
-          }
+          this.$message.success(res.data.msg)
+          this.dialogVisible = true
+          this.updateBase(params, () => {
+            const timer2 = setInterval(() => {
+              this.time--
+              if (!this.time) {
+                this.dialogVisible = false
+                clearInterval(timer2)
+                window.close()
+              }
+            }, 1000)
+          })
+        }
       })
     },
     updateBase(params, callback) {
@@ -134,24 +139,19 @@ export default {
     complete() {
       checkPayStatus(this.uniqueId).then(res => {
         if (res.data.status === 200) {
-          this.$message.success(res.data.msg);
+          this.$message.success(res.data.msg)
           this.dialogVisible = true
           this.updateBase(this.params)
         } else {
-          this.$message.warning(res.data.msg);
+          this.$message.warning(res.data.msg)
         }
       })
     },
     handleBack() {
-      window.close();
+      window.close()
     }
-  },
-  destroyed() {
-    sessionStorage.removeItem('uniqueId')
-    sessionStorage.removeItem('code_url')
-    sessionStorage.removeItem('wxMoney')
-  },
-};
+  }
+}
 </script>
 <style lang="scss">
 .dialog-customer .el-dialog__body {

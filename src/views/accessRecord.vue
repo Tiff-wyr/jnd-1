@@ -29,9 +29,9 @@
           <el-pagination
             :page-size="size"
             :current-page="page"
+            :total="count"
             background=""
             layout="prev, pager, next"
-            :total="count"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
           />
@@ -64,9 +64,9 @@
           <el-pagination
             :page-size="Size"
             :current-page="Page"
+            :total="Count"
             background=""
             layout="prev, pager, next"
-            :total="Count"
             @size-change="handleSizeBChange"
             @current-change="handleCurrentBChange"
           />

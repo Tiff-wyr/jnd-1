@@ -123,6 +123,16 @@ export default {
       this.name = val.name
     }
   },
+  created() {
+    if (this.$store.state.userInfo !== null) {
+      this.name = this.$store.state.userInfo.name
+    }
+    const id = this.$route.params.id
+    this.userIdn = id
+    if (this.userInfo && this.userInfo.image) {
+      this.image = this.userInfo.image
+    }
+  },
   methods: {
     ...mapMutations(['SET_USER_IMAGE']),
     uploadFail(val) {
@@ -142,16 +152,6 @@ export default {
           this.$message.warning(res.msg)
         }
       })
-    }
-  },
-  created() {
-    if (this.$store.state.userInfo !== null) {
-      this.name = this.$store.state.userInfo.name
-    }
-    const id = this.$route.params.id
-    this.userIdn = id
-    if (this.userInfo && this.userInfo.image) {
-      this.image = this.userInfo.image
     }
   }
 }

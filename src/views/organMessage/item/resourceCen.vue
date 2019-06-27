@@ -278,6 +278,9 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState(['userInfo'])
+  },
   created() {
     this.getData()
     this.getFilterData()
@@ -287,9 +290,6 @@ export default {
       this.phone = this.$store.state.userInfo.phone
       this.listQuery.agencyId = this.$store.state.userInfo.id
     }
-  },
-  computed: {
-    ...mapState(['userInfo'])
   },
   methods: {
     ...mapMutations(['SET_USER_VIP']),
@@ -346,7 +346,7 @@ export default {
       })
     },
     handleCity(val) {
-      if (val.length == 1) {
+      if (val.length === 1) {
         this.listQuery.fAddress = val[0]
         api.getCity(val[0]).then(res => {
           const data = res.data
@@ -363,8 +363,7 @@ export default {
             }
           }
         })
-      } else if (val.length == 2) {
-        console.log(val, val.join(','))
+      } else if (val.length === 2) {
         this.listQuery.fAddress = val.join(',')
       } else {
         this.listQuery.fAddress = ''
@@ -491,7 +490,7 @@ export default {
       }
     },
     reviewPay(val) {
-      if (this.payType == 2) {
+      if (parseInt(this.payType) === 2) {
         reviewAliPay(this.orderSn, this.params)
       } else {
         reviewWxPay(this.orderSn, this.params)

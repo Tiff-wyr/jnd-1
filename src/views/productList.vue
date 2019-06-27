@@ -224,39 +224,25 @@ export default {
   },
   watch: {
     'query.city': function(val) {
-      (this.page = 1), (this.size = 5), (this.isJianSuo = true)
-      this.searchCon = ''
-      this.getDataCondition()
+      this.queryList()
     },
     'query.loan': function(val) {
-      (this.page = 1), (this.size = 5), (this.isJianSuo = true)
-      this.searchCon = ''
-      this.getDataCondition()
+      this.queryList()
     },
     'query.business': function(val) {
-      (this.page = 1), (this.size = 5), (this.isJianSuo = true)
-      this.searchCon = ''
-      this.getDataCondition()
+      this.queryList()
     },
     'query.loanLimit': function(val) {
-      (this.page = 1), (this.size = 5), (this.isJianSuo = true)
-      this.searchCon = ''
-      this.getDataCondition()
+      this.queryList()
     },
     'query.loanRate': function(val) {
-      (this.page = 1), (this.size = 5), (this.isJianSuo = true)
-      this.searchCon = ''
-      this.getDataCondition()
+      this.queryList()
     },
     'query.loanLife': function(val) {
-      (this.page = 1), (this.size = 5), (this.isJianSuo = true)
-      this.searchCon = ''
-      this.getDataCondition()
+      this.queryList()
     },
     'query.loanCondition': function(val) {
-      (this.page = 1), (this.size = 5), (this.isJianSuo = true)
-      this.searchCon = ''
-      this.getDataCondition()
+      this.queryList()
     }
   },
   created() {
@@ -270,20 +256,20 @@ export default {
     this.getProRate()
   },
   methods: {
+    queryList() {
+      this.page = 1
+      this.size = 5
+      this.isJianSuo = true
+      this.searchCon = ''
+      this.getDataCondition()
+    },
     search() {
       this.isJianSuo = false
       if (this.searchCon) {
-        this.$axios
-          .get(
-            `solr/getPageProduct?q=${this.searchCon}&page=${
-              this.Searchpn
-            }&size=${this.Searchpage}`
-          )
-          .then(res => {
-            console.log('产品', res)
-            this.formData = res.data
-            this.Searchcount = res.total
-          })
+        this.$axios.get(`solr/getPageProduct?q=${this.searchCon}&page=${this.Searchpn}&size=${this.Searchpage}`).then(res => {
+          this.formData = res.data
+          this.Searchcount = res.total
+        })
       } else {
         this.$message.warning('请输入查询内容')
       }

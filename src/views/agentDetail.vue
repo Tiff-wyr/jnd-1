@@ -112,7 +112,7 @@
             </div>
             <div v-if="loanData.length > 0" class="bottom">
               <div class="title">成功案例</div>
-              <div :key="index" v-for="(item,index) in loanData" class="content-item-victory">
+              <div v-for="(item,index) in loanData" :key="index" class="content-item-victory">
                 <span class="name">{{ item.borrowerName }}</span>
                 <span class="money">贷款金额：{{ item.loanAmountValue }}万</span>
               </div>
@@ -135,8 +135,9 @@
                   <el-select v-model="borrowerData.address1" style="width: 100px;" clearable @change="getCity">
                     <el-option
                       v-for="item in provinceData"
-                      :key="item.pid" 
-:label="item.provincial" :value="item.pid"/>
+                      :key="item.pid"
+                      :label="item.provincial"
+                      :value="item.pid"/>
                   </el-select>
                   <el-select v-model="borrowerData.address2" clearable style="margin-left: 10px;width: 100px;">
                     <el-option v-for="item in cityData" :key="item.cid" :label="item.city" :value="item.cid"/>
@@ -194,7 +195,7 @@
               </el-form>
             </div>
             <div class="bottom-form">
-              <div :key="index" v-for="(item,index) in productTableData" class="clearfix main-form">
+              <div v-for="(item,index) in productTableData" :key="index" class="clearfix main-form">
                 <div class="fll w180">
                   <div class="item1-num">{{ item.loanName }}</div>
                   <div class="item-same">无需抵车即可贷款</div>
@@ -394,13 +395,13 @@ export default {
     this.getProvince()
     this.skimRecord()
 
-    //收藏判断
+    // 收藏判断
     this.collectPan()
-    //年龄
+    // 年龄
     this.getAge()
-    //职业
+    // 职业
     this.getJob()
-    //月收入
+    // 月收入
     this.getMonthMoney()
   },
   methods: {
@@ -418,7 +419,7 @@ export default {
       this.$axios.get('get/getJob').then(res => {
         res.forEach(item => {
           if (item.jobId === 0) {
-            item.jobName = '其他';
+            item.jobName = '其他'
           }
         })
         this.jobData = res
@@ -441,7 +442,6 @@ export default {
     },
     // 发送验证码
     send() {
-      const value = this.borrowerData.phone
       if (this.borrowerData.phone) {
         if (!validaterPhone(this.borrowerData.phone)) {
           this.$message.warning('手机号码不符合规范')
@@ -478,7 +478,7 @@ export default {
     clearTimer() {
       clearInterval(this.timer)
       this.showing = true
-      this.verifyCode = '重新获取';
+      this.verifyCode = '重新获取'
       this.time = 60
     },
     // 免费申请
@@ -530,7 +530,7 @@ export default {
                 setTimeout(() => {
                   this.resetForm()
                 }, 100)
-                
+
                 if (this.timer !== null) {
                   this.clearTimer()
                 }
@@ -558,7 +558,7 @@ export default {
       this.$axios.get(`orderAll/getTopSixOrderByBrokerId/${id}`).then(res => {
         res.map(item => {
           const firstName = item.borrowerName.substr(0, 1)
-          let allName =
+          const allName =
             item.sex === '0' ? `${firstName}女士` : `${firstName}先生`
           return { ...item, allName }
         })

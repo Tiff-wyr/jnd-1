@@ -8,14 +8,14 @@
             <div class="fll">
               <div class="detail-left">
                 <div class="clearfix">
-                  <div class="fll" v-if="productDetailData.productLogo">
+                  <div v-if="productDetailData.productLogo" class="fll">
                     <img
                       :src="productDetailData.productLogo"
                       alt=""
                       style="width: 90px;height: 90px;border-radius: 50%"
                     >
                   </div>
-                  <div class="fll" v-else>
+                  <div v-else class="fll">
                     <img
                       src="/static/resource/pic/pro.png"
                       alt=""
@@ -23,13 +23,13 @@
                     >
                   </div>
                   <div class="fll">
-                    <div class="detail-loan-title">{{productDetailData.productName}}</div>
+                    <div class="detail-loan-title">{{ productDetailData.productName }}</div>
                     <div class="clearfix re-star">
-                      <img src="../../static/resource/agent/star.png" class="fll" v-if="isCollect" alt="" />
-                      <img src="../../static/resource/agent/star1.png" class="fll" v-else alt="" />
+                      <img v-if="isCollect" src="../../static/resource/agent/star.png" class="fll" alt="" >
+                      <img v-else src="../../static/resource/agent/star1.png" class="fll" alt="" >
                       <div class="fll">
-                        <div class="fll restore" @click="restore" v-if="isCollect">加入收藏</div>
-                        <div class="fll restore" @click="cancelRestore" v-else>取消收藏</div>
+                        <div v-if="isCollect" class="fll restore" @click="restore">加入收藏</div>
+                        <div v-else class="fll restore" @click="cancelRestore">取消收藏</div>
                       </div>
                     </div>
                   </div>
@@ -37,33 +37,33 @@
                     <div class="btn" @click="hurryUpApply">快速申请</div>
                   </div>
                 </div>
-                <div class="left-line"></div>
+                <div class="left-line"/>
                 <div class="left-limit">
                   额度：
-                  <span class="limit-same">{{productDetailData.productStartAmount}}万起</span>
+                  <span class="limit-same">{{ productDetailData.productStartAmount }}万起</span>
                 </div>
                 <div class="left-limit mt22">
                   期限：
-                  <span class="limit-same">{{productDetailData.productLife}}</span>
+                  <span class="limit-same">{{ productDetailData.productLife }}</span>
                 </div>
                 <div class="left-limit mt22">
                   利息：
-                  <span class="limit-same">{{productDetailData.productInterest}}%</span>
+                  <span class="limit-same">{{ productDetailData.productInterest }}%</span>
                 </div>
                 <div class="left-limit mt22">
                   身份要求：
-                  <span class="limit-same">{{productDetailData.productIdentity}}</span>
+                  <span class="limit-same">{{ productDetailData.productIdentity }}</span>
                 </div>
                 <div class="left-limit mt22">
                   贷款类型：
-                  <span class="limit-same">{{productDetailData.productLoanType}}</span>
+                  <span class="limit-same">{{ productDetailData.productLoanType }}</span>
                 </div>
                 <div class="left-limit mt22">
                   发行机构：
-                  <span class="limit-same">{{productDetailData.productPublisher}}</span>
+                  <span class="limit-same">{{ productDetailData.productPublisher }}</span>
                 </div>
                 <div class="clearfix mt25">
-                  <div class="fll yellow-line"></div>
+                  <div class="fll yellow-line"/>
                   <div class="fll ml10 apply">申请条件</div>
                   <img
                     src="../../static/resource/product-detail/apply.png"
@@ -71,70 +71,70 @@
                     class="fll ml400"
                   >
                 </div>
-                <div class="line2"></div>
+                <div class="line2"/>
                 <div class="left-limit">
                   年龄要求：
-                  <span class="limit-same">{{productDetailData.productAge}}</span>
+                  <span class="limit-same">{{ productDetailData.productAge }}</span>
                 </div>
                 <div class="left-limit mt22">
                   职业要求：
-                  <span class="limit-same">{{productDetailData.productOccupation}}</span>
+                  <span class="limit-same">{{ productDetailData.productOccupation }}</span>
                 </div>
                 <div class="left-limit mt22">
                   资产要求：
-                  <span class="limit-same">{{productDetailData.productProperty}}</span>
+                  <span class="limit-same">{{ productDetailData.productProperty }}</span>
                 </div>
                 <div class="clearfix mt22">
                   <div class="fll left-limit">其他要求:</div>
                   <div class="fll same">{{ productDetailData.productCondition | textFilter }}</div>
                 </div>
                 <div class="clearfix mt25">
-                  <div class="fll yellow-line"></div>
+                  <div class="fll yellow-line"/>
                   <div class="fll ml10 feature">产品特点</div>
                 </div>
-                <div class="line2"></div>
+                <div class="line2"/>
                 <div class="clearfix mt22">
                   <div class="fll left-limit">产品特点:</div>
-                  <div class="fll same">{{productDetailData.productCharacteristic | textFilter}}</div>
+                  <div class="fll same">{{ productDetailData.productCharacteristic | textFilter }}</div>
                 </div>
                 <div class="clearfix mt25">
-                  <div class="fll yellow-line"></div>
+                  <div class="fll yellow-line"/>
                   <div class="fll ml10 feature">热门产品推荐</div>
                 </div>
-                <div class="line2"></div>
+                <div class="line2"/>
                 <div class="clearfix">
                   <div
-                    class="product-tui fll clearfix"
                     v-for="(item,index) in hotProductData"
                     :key="index"
+                    class="product-tui fll clearfix"
                   >
                     <div class="fll">
                       <img
-                        :src="item.productLogo"
                         v-if="item.productLogo"
+                        :src="item.productLogo"
                         alt=""
-                        @click="enterProduct(item.productId)"
                         style="width: 60px;height: 60px;cursor: pointer"
+                        @click="enterProduct(item.productId)"
                       >
                       <img
-                        src="/static/resource/pic/pro.png"
                         v-else
+                        src="/static/resource/pic/pro.png"
                         alt=""
-                        @click="enterProduct(item.productId)"
                         style="width: 60px;height: 60px;cursor: pointer"
+                        @click="enterProduct(item.productId)"
                       >
                     </div>
                     <div class="fll ml10">
-                      <div class="name">{{item.productName}}</div>
+                      <div class="name">{{ item.productName }}</div>
                       <div class="rate">
                         月利率：
-                        <span style="color:#A80E0E">{{item.productInterest}}%</span>
+                        <span style="color:#A80E0E">{{ item.productInterest }}%</span>
                       </div>
                       <div class="limit">
                         额度：
                         <span
                           style="color:#A80E0E"
-                        >{{item.productStartAmount}}~{{item.productEndAmount}}万</span>
+                        >{{ item.productStartAmount }}~{{ item.productEndAmount }}万</span>
                       </div>
                     </div>
                   </div>
@@ -147,25 +147,25 @@
                 <div class="top-item">
                   <div class="clearfix">
                     <img
-                      :src="organData.agencyLogo"
                       v-if="organData.agencyLogo"
+                      :src="organData.agencyLogo"
                       alt=""
-                      @click="enterOrgan(organData.agencyId)"
                       class="fll"
                       style="width: 60px;height: 60px;cursor: pointer"
+                      @click="enterOrgan(organData.agencyId)"
                     >
                     <img
-                      src="/static/resource/pic/organ.png"
                       v-else
+                      src="/static/resource/pic/organ.png"
                       alt=""
-                      @click="enterOrgan(organData.agencyId)"
                       class="fll"
                       style="width: 60px;height: 60px;cursor: pointer"
+                      @click="enterOrgan(organData.agencyId)"
                     >
                     <div class="fll ml10 organ-info">
-                      <div class="title">{{organData.agencyName}}</div>
-                      <div class="area">{{organData.address}}</div>
-                      <div class="wang">{{organData.agencyURL}}</div>
+                      <div class="title">{{ organData.agencyName }}</div>
+                      <div class="area">{{ organData.address }}</div>
+                      <div class="wang">{{ organData.agencyURL }}</div>
                     </div>
                   </div>
                 </div>
@@ -179,15 +179,15 @@
       <el-dialog :visible.sync="dialogVisible" width="770px">
         <div class="dialog-title">
           <el-steps :active="stepStatus" align-center space="100%" class="init">
-            <el-step title="申请贷款" icon="el-icon-tickets" process-status="finish"></el-step>
-            <el-step title="成功了" icon="el-icon-success"></el-step>
+            <el-step title="申请贷款" icon="el-icon-tickets" process-status="finish"/>
+            <el-step title="成功了" icon="el-icon-success"/>
           </el-steps>
         </div>
-        <div class="dialog-container" v-if="isApply">
+        <div v-if="isApply" class="dialog-container">
           <div class="left">
             <el-form ref="applyForm" :model="applyForm" :rules="applyFormRules" label-position="right" label-width="120px">
               <el-form-item label="您的姓名" prop="borrowerName">
-                <el-input class="input-item" v-model="applyForm.borrowerName" placeholder="请输入您的姓名"></el-input>
+                <el-input v-model="applyForm.borrowerName" class="input-item" placeholder="请输入您的姓名"/>
               </el-form-item>
               <el-form-item label="性别" prop="sex">
                 <el-radio-group v-model="applyForm.sex">
@@ -196,27 +196,27 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="贷款金额" prop="loanAmount">
-                <el-input class="input-item" v-model="applyForm.loanAmount" placeholder="请输入金额（万元）"></el-input>
+                <el-input v-model="applyForm.loanAmount" class="input-item" placeholder="请输入金额（万元）"/>
               </el-form-item>
               <el-form-item label="选择地区" prop="address">
-                <el-select class="select-item" @change="handleProvince" v-model="applyForm.address1" placeholder="请选择地区">
-                  <el-option v-for="item in provinceList" :value="item.pid" :key="item.pid + 'Province'" :label="item.provincial"></el-option>
+                <el-select v-model="applyForm.address1" class="select-item" placeholder="请选择地区" @change="handleProvince">
+                  <el-option v-for="item in provinceList" :value="item.pid" :key="item.pid + 'Province'" :label="item.provincial"/>
                 </el-select>
-                <el-select class="select-item address2" v-model="applyForm.address2" placeholder="请选择地区">
-                  <el-option v-for="item in cityList" :value="item.cid" :key="item.cid + 'city'" :label="item.city"></el-option>
+                <el-select v-model="applyForm.address2" class="select-item address2" placeholder="请选择地区">
+                  <el-option v-for="item in cityList" :value="item.cid" :key="item.cid + 'city'" :label="item.city"/>
                 </el-select>
               </el-form-item>
               <el-form-item label="联系手机" prop="phone">
-                <el-input class="input-item" placeholder="请输入手机号" v-model="applyForm.phone"></el-input>
+                <el-input v-model="applyForm.phone" class="input-item" placeholder="请输入手机号"/>
               </el-form-item>
               <el-form-item label="手机验证码" prop="code">
-                <el-input class="input-item code" placeholder="请输入验证码" v-model="applyForm.code"></el-input>
-                <el-button type="info" @click="getVertifyCode" v-show="codeBtnShow" style="width: 115px;">{{ codeBtnText }}</el-button>
-                <el-button type="info" v-show="!codeBtnShow" style="width: 115px; margin-left: 0;">{{ times }}</el-button>
+                <el-input v-model="applyForm.code" class="input-item code" placeholder="请输入验证码"/>
+                <el-button v-show="codeBtnShow" type="info" style="width: 115px;" @click="getVertifyCode">{{ codeBtnText }}</el-button>
+                <el-button v-show="!codeBtnShow" type="info" style="width: 115px; margin-left: 0;">{{ times }}</el-button>
               </el-form-item>
               <el-form-item>
                 <span>
-                  <el-checkbox v-model="checked" class="check-box"></el-checkbox>阅读并同意<a href="#/agreement?userRegister" target="_blank" style="color: #4a90e2;">《9能贷用户注册协议》</a><a href="#/agreement?userProtect" target="_blank" style="color: #4a90e2;">《用户隐私保护政策》</a>
+                  <el-checkbox v-model="checked" class="check-box"/>阅读并同意<a href="#/agreement?userRegister" target="_blank" style="color: #4a90e2;">《9能贷用户注册协议》</a><a href="#/agreement?userProtect" target="_blank" style="color: #4a90e2;">《用户隐私保护政策》</a>
                 </span>
               </el-form-item>
               <el-form-item>
@@ -230,10 +230,10 @@
             <p>填写虚假信息将对您办理贷款带来不利影响，建议您不要这么做。</p>
           </div>
         </div>
-        <div class="dialog-container is-finish" v-else>
+        <div v-else class="dialog-container is-finish">
           <p>您的申请已经提交, 请保持电话联系通畅</p>
           <p>账号：{{ applyForm.phone }}&nbsp;&nbsp;&nbsp;&nbsp;密码：（您手机收到的验证码）</p>
-          <p>这是您的平台账号，<span @click="$router.push({path:'/home',query:{login:1}})" style="color: #A80E0E;">登录</span>平台，即可享受平台专业的金融服务。</p>
+          <p>这是您的平台账号，<span style="color: #A80E0E;" @click="$router.push({path:'/home',query:{login:1}})">登录</span>平台，即可享受平台专业的金融服务。</p>
           <div class="btn-box">
             <a href="#/home">返回首页</a><span @click="dialogVisible = false">关闭窗口</span>
           </div>
@@ -244,48 +244,45 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 import { validaterPhone, validaterName, validaterLoanAmount } from '@/util/validate'
 import api from '@/api/filterData'
-import {saveNotLoginProductOrder} from '@/api/apply'
+import { saveNotLoginProductOrder } from '@/api/apply'
 import publicApi from '@/api/public'
 export default {
-  name: "productDetail",
+  name: 'ProductDetail',
   filters: {
     textFilter(val) {
-      if (val == "null") {
-        return "暂无";
+      if (val === 'null' || val === null) {
+        return '暂无'
       } else {
-        return val;
+        return val
       }
     }
-  },
-  computed: {
-    ...mapState(["userInfo"])
   },
   data() {
     const validatePhone = (rule, value, callback) => {
       if (!value) {
-        callback(new Error("手机号不能为空"));
+        callback(new Error('手机号不能为空'))
       } else {
         if (validaterPhone(value)) {
-          callback();
+          callback()
         } else {
-          callback(new Error("手机号格式不正确"));
+          callback(new Error('手机号格式不正确'))
         }
       }
-    };
+    }
     const validateName = (rule, value, callback) => {
       if (value) {
         if (validaterName(value)) {
-          callback();
+          callback()
         } else {
-          callback(new Error("姓名格式错误"));
+          callback(new Error('姓名格式错误'))
         }
       } else {
-        callback(new Error("姓名不能为空"));
+        callback(new Error('姓名不能为空'))
       }
-    };
+    }
     const validateAddress = (rule, value, callback) => {
       if (this.applyForm.address1) {
         callback()
@@ -296,43 +293,43 @@ export default {
     const validateLoanAmount = (rule, value, callback) => {
       if (value) {
         if (validaterLoanAmount(value)) {
-          callback();
+          callback()
         } else {
-          callback(new Error("贷款金额格式错误"));
+          callback(new Error('贷款金额格式错误'))
         }
       } else {
-        callback(new Error("贷款金额不能为空"));
+        callback(new Error('贷款金额不能为空'))
       }
     }
     return {
       flag: false,
-      isCollect: true, //收藏
+      isCollect: true, // 收藏
       productTable: [],
       tableData: [],
       formData: [],
       productDetailData: {
-        productName: "",
-        productCharacteristic: "", //特点
-        productPublisher: "", // 发型机构
-        productInterest: "", //利率
-        productLoanType: "", //贷款类型
-        productOccupation: "", //职业
-        productIdentity: "", //身份
-        productMinAge: "",
-        productMaxAge: "",
-        productProperty: "", //资产
-        productStartAmount: "", //额度
-        productEndAmount: "",
-        productLife: "", //年限
-        productCondition: "" //条件
+        productName: '',
+        productCharacteristic: '', // 特点
+        productPublisher: '', // 发型机构
+        productInterest: '', // 利率
+        productLoanType: '', // 贷款类型
+        productOccupation: '', // 职业
+        productIdentity: '', // 身份
+        productMinAge: '',
+        productMaxAge: '',
+        productProperty: '', // 资产
+        productStartAmount: '', // 额度
+        productEndAmount: '',
+        productLife: '', // 年限
+        productCondition: '' // 条件
       },
       organData: {
-        agencyName: "",
-        agencyLogo: "",
-        agencyAddress: "",
-        agencyURL: ""
+        agencyName: '',
+        agencyLogo: '',
+        agencyAddress: '',
+        agencyURL: ''
       },
-      productId: "",
+      productId: '',
       hotProductData: [],
       isApply: true,
       stepStatus: 0,
@@ -349,7 +346,7 @@ export default {
         loanAmount: ''
       },
       applyFormRules: {
-        borrowerName: [{ required: true, trigger: 'change', validator: validateName}],
+        borrowerName: [{ required: true, trigger: 'change', validator: validateName }],
         address: [{ required: true, trigger: 'change', validator: validateAddress }],
         phone: [{ required: true, trigger: 'change', validator: validatePhone }],
         code: [{ required: true, message: '验证码不能为空', trigger: 'change' }],
@@ -364,7 +361,23 @@ export default {
       cityList: [],
       isClick: true,
       clickInterval: false
-    };
+    }
+  },
+  computed: {
+    ...mapState(['userInfo'])
+  },
+  created() {
+    const id = this.$route.params.id
+    this.productId = id
+    this.applyForm.productId = id
+    this.getDetail(id)
+    this.getOrgan(id)
+    this.getHotProduct()
+    // 收藏判断
+    if (this.$store.state.userInfo) {
+      this.collectPan()
+      this.skimRecord()
+    }
   },
   methods: {
     getProvinceList() {
@@ -382,33 +395,33 @@ export default {
       this.applyForm.address2 = ''
       this.getCityList(val)
     },
-    //机构详情页
+    // 机构详情页
     enterOrgan(id) {
-      this.$router.push(`/organDetail/${id}`);
+      this.$router.push(`/organDetail/${id}`)
     },
-    //产品详情页
+    // 产品详情页
     enterProduct(id) {
-      this.$router.push(`/productDetail/${id}`);
-      this.getDetail(id);
+      this.$router.push(`/productDetail/${id}`)
+      this.getDetail(id)
     },
-    //快速申请
+    // 快速申请
     hurryUpApply() {
       this.isApply = true
       this.stepStatus = 0
       if (this.$store.state.userInfo) {
         if (this.$store.state.userInfo.roleId === 1) {
-          let data = new FormData();
-          data.append("borrowerId", this.$store.state.userInfo.id);
-          data.append("productId", this.productId);
+          const data = new FormData()
+          data.append('borrowerId', this.$store.state.userInfo.id)
+          data.append('productId', this.productId)
           this.$axios.post(`orderAll/saveProductOrder`, data).then(res => {
             if (res.status === 200) {
-              this.$message.success(res.msg);
+              this.$message.success(res.msg)
             } else {
-              this.$message.warning(res.msg);
+              this.$message.warning(res.msg)
             }
-          });
+          })
         } else {
-          this.$message.warning("借款人方可申请");
+          this.$message.warning('借款人方可申请')
         }
       } else {
         this.resetForm()
@@ -421,7 +434,7 @@ export default {
       this.$refs.applyForm.validate(valid => {
         if (valid) {
           if (this.checked) {
-            if(!this.clickInterval) {
+            if (!this.clickInterval) {
               saveNotLoginProductOrder(this.applyForm).then(res => {
                 if (res.data.status === 200) {
                   this.stepStatus = 1
@@ -433,14 +446,13 @@ export default {
               this.clickInterval = true
               setTimeout(() => {
                 this.clickInterval = false
-              }, 5000);
+              }, 5000)
             } else {
               this.$message.warning('请不要重复点击')
             }
           } else {
             this.$message.warning('请阅读并同意《就能贷用户注册协议》')
           }
-          
         } else {
           return false
         }
@@ -453,56 +465,54 @@ export default {
       this.times = 60
     },
     getVertifyCode() {
-      
       if (this.applyForm.phone) {
         if (this.isClick) {
           this.isClick = false
           setTimeout(() => {
             this.isClick = true
-          }, 2000);
+          }, 2000)
           this.timer = setInterval(() => {
-            this.times--;
+            this.times--
             this.codeBtnShow = false
             if (this.times <= 0) {
               this.clearTimer()
             }
-          }, 1000);
+          }, 1000)
           publicApi.validateRegister(this.applyForm.phone).then(res => { // 检测手机号是否注册
             if (res.data.status === 500) {
-              this.$message.success("该手机号已被注册，请登录后再进行申请");
+              this.$message.success('该手机号已被注册，请登录后再进行申请')
               this.clearTimer()
               this.resetForm()
             } else {
               publicApi.sendPhoneCode(this.applyForm.phone).then(res => {
                 if (res.data.status === 500) {
-                  this.$message.warning(res.data.msg);
-                  this.clearTimer();
+                  this.$message.warning(res.data.msg)
+                  this.clearTimer()
                   this.resetForm()
                 } else {
-                  this.$message.success('验证码已发送');
+                  this.$message.success('验证码已发送')
                 }
-              });
+              })
             }
           })
         }
       } else {
         this.$message.warning('请填写手机号')
       }
-      
     },
-    //产品详情
+    // 产品详情
     getDetail(id) {
       this.$axios.get(`product/selectProductById/${id}`).then(res => {
-        this.productDetailData = res;
-      });
+        this.productDetailData = res
+      })
     },
-    //代理该产品的机构
+    // 代理该产品的机构
     getOrgan(id) {
       this.$axios.get(`product/selectAgencyByProId/${id}`).then(res => {
-        this.organData = res;
-      });
+        this.organData = res
+      })
     },
-    //收藏产品
+    // 收藏产品
     restore() {
       if (this.$store.state.userInfo) {
         if (this.$store.state.userInfo.roleId === 1) {
@@ -513,17 +523,17 @@ export default {
               }&productId=${this.productId}`
             )
             .then(res => {
-              this.isCollect = false;
-              this.$message.success("收藏成功");
-            });
+              this.isCollect = false
+              this.$message.success('收藏成功')
+            })
         } else {
-          this.$message.warning("借款人方可收藏");
+          this.$message.warning('借款人方可收藏')
         }
       } else {
-        this.$message.warning("请先登录");
+        this.$message.warning('请先登录')
       }
     },
-    //取消产品
+    // 取消产品
     cancelRestore() {
       this.$axios
         .post(
@@ -532,38 +542,35 @@ export default {
           }&productId=${this.productId}`
         )
         .then(res => {
-          this.isCollect = true;
-          this.$message.success("取消收藏");
-        });
+          this.isCollect = true
+          this.$message.success('取消收藏')
+        })
     },
     // 热门产品推荐
     getHotProduct() {
       this.$axios.get(`product/getHotPro/1/6`).then(res => {
-        this.hotProductData = res;
-      });
+        this.hotProductData = res
+      })
     },
     collectPan() {
-      let data = new FormData();
-      data.append("borId", this.$store.state.userInfo.id);
-      data.append("productId", this.productId);
+      const data = new FormData()
+      data.append('borId', this.$store.state.userInfo.id)
+      data.append('productId', this.productId)
       this.$axios.post(`borpro/selectBorPro`, data).then(res => {
         if (res === 0) {
-          this.isCollect = true;
+          this.isCollect = true
         } else {
-          this.isCollect = false;
+          this.isCollect = false
         }
-      });
+      })
     },
     skimRecord() {
       if (this.$store.state.userInfo) {
         if (this.$store.state.userInfo.roleId === 1) {
-          let data = new FormData();
-          data.append("borId", this.$store.state.userInfo.id);
-          data.append("proId", this.productId);
-          this.$axios.post(`borLookPro/addLookPro`, data).then(res => {
-            if (res.status === 200) {
-            }
-          });
+          const data = new FormData()
+          data.append('borId', this.$store.state.userInfo.id)
+          data.append('proId', this.productId)
+          this.$axios.post(`borLookPro/addLookPro`, data) // 访问记录
         }
       }
     },
@@ -579,21 +586,8 @@ export default {
         loanAmount: ''
       }
     }
-  },
-  created() {
-    let id = this.$route.params.id;
-    this.productId = id;
-    this.applyForm.productId = id
-    this.getDetail(id);
-    this.getOrgan(id);
-    this.getHotProduct();
-    //收藏判断
-    if (this.$store.state.userInfo) {
-      this.collectPan();
-      this.skimRecord();
-    }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
