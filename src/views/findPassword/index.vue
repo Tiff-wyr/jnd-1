@@ -7,11 +7,11 @@
     <div class="main-find">
       <div class="forget-wrap">
         <div class="title">修改密码</div>
-        <Step :list="steps" :active="activeStep"></Step>
+        <Step :list="steps" :active="activeStep"/>
         <div class="content">
           <div v-if="activeStep === 1">
             <div class="select_type">
-              <div class="phone" @click="setPhone"></div>
+              <div class="phone" @click="setPhone"/>
               <span class="type_text">手机号修改密码</span>
             </div>
             <!--<div class="select_type">-->
@@ -24,26 +24,26 @@
             :type="type"
             @error="goFirstStep"
             @success="handleSubmit"
-          ></TypeInput>
+          />
           <div v-if="activeStep === 3" class="three_step">
             <p>请设置新密码：</p>
-            <input type="password" @keyup="checkPassword" v-model="password">
-            <div class="level clearfix" v-if="level > 0">
-              <div :class="level >= 1 ? 'level-item item' : 'level-item' "></div>
-              <div :class="level >= 2 ? 'level-item item' : 'level-item' "></div>
-              <div :class="level === 3 ? 'level-item item' : 'level-item' "></div>
+            <input v-model="password" type="password" @keyup="checkPassword">
+            <div v-if="level > 0" class="level clearfix">
+              <div :class="level >= 1 ? 'level-item item' : 'level-item' "/>
+              <div :class="level >= 2 ? 'level-item item' : 'level-item' "/>
+              <div :class="level === 3 ? 'level-item item' : 'level-item' "/>
             </div>
             <span
               class="level-text"
-            >{{level === 1 ? '弱' : level === 2 ? '中' : level === 3 ? '强' : ''}}</span>
-            <div class="pwd-wran" v-if="password.length < 6">密码长度6~10位，字母数字组合</div>
+            >{{ level === 1 ? '弱' : level === 2 ? '中' : level === 3 ? '强' : '' }}</span>
+            <div v-if="password.length < 6" class="pwd-wran">密码长度6~10位，字母数字组合</div>
             <p>再次输入新密码：</p>
-            <input type="password" v-model="newPassword">
+            <input v-model="newPassword" type="password">
             <br>
             <button @click="resetPassword">确认</button>
           </div>
           <div v-if="activeStep === 4">
-            <div class="success"></div>
+            <div class="success"/>
             <p class="success_text">重置密码成功</p>
           </div>
         </div>
@@ -53,37 +53,38 @@
 </template>
 
 <script>
-import Step from "../../component/step";
-import TypeInput from "../../component/inputType";
+import Step from '../../component/step'
+import TypeInput from '../../component/inputType'
+import { validatrerPassword } from '@/util/validate'
 
 export default {
-  name: "index",
-  data() {
-    return {
-      steps: ["选择找回方式", "身份验证", "设置密码", "完成"],
-      activeStep: 1,
-      type: "",
-      password: "",
-      newPassword: "",
-      num: "",
-      level: 0 //密码等级
-    };
-  },
+  name: 'Index',
   components: {
     Step,
     TypeInput
   },
+  data() {
+    return {
+      steps: ['选择找回方式', '身份验证', '设置密码', '完成'],
+      activeStep: 1,
+      type: '',
+      password: '',
+      newPassword: '',
+      num: '',
+      level: 0 // 密码等级
+    }
+  },
   methods: {
     goLogin() {
-      this.$router.push({ path: "/home", query: { login: 1 } });
+      this.$router.push({ path: '/home', query: { login: 1 }})
     },
     goHelp() {
-      this.$router.push("/help/guide");
+      this.$router.push('/help/guide')
     },
 
     setPhone() {
-      this.activeStep++;
-      this.type = "phone";
+      this.activeStep++
+      this.type = 'phone'
     },
     // setEmail () {
     //   this.activeStep++
@@ -91,36 +92,36 @@ export default {
     // },
     // 填写成功
     handleSubmit(val) {
-      this.num = val;
-      this.activeStep++;
+      this.num = val
+      this.activeStep++
     },
     // 不填写
     goFirstStep() {
-      this.activeStep = 1;
+      this.activeStep = 1
     },
-    //校验密码
+    // 校验密码
     checkPassword() {
-      let checkChar = /[a-zA-Z]/g;
-      let checkNum = /[0-9]/g;
+      const checkChar = /[a-zA-Z]/g
+      const checkNum = /[0-9]/g
       if (this.password.length >= 6) {
         if (checkChar.test(this.password) && checkNum.test(this.password)) {
-          this.level = 2;
-          if (this.password.length > 8) this.level = 3;
+          this.level = 2
+          if (this.password.length > 8) this.level = 3
         } else if (
           (checkChar.test(this.password) || checkNum.test(this.password)) &&
           this.password.length > 8
         ) {
-          this.level = 2;
+          this.level = 2
         }
       } else if (this.password.length > 0) {
-        this.level = 1;
+        this.level = 1
       } else {
-        this.level = 0;
+        this.level = 0
       }
     },
     // 重置密码
     resetPassword() {
-      if (this.password.length >= 6 && this.password.length <= 10) {
+      if (validatrerPassword(this.password)) {
         if (this.password === this.newPassword) {
           this.$axios
             .get(
@@ -129,23 +130,23 @@ export default {
             .then(res => {
               if (res.status === 200) {
                 setTimeout(() => {
-                  this.activeStep++;
-                }, 1000);
+                  this.activeStep++
+                }, 1000)
               } else {
-                this.$message.warning(res.msg);
-                this.newPassword = "";
-                this.password = "";
+                this.$message.warning(res.msg)
+                this.newPassword = ''
+                this.password = ''
               }
-            });
+            })
         } else {
-          this.$message.warning("两次密码不一致");
+          this.$message.warning('两次密码不一致')
         }
       } else {
-        this.$message.warning("密码长度设置不规范");
+        this.$message.warning('密码格式为字母开头6至18位的字母数字组合')
       }
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

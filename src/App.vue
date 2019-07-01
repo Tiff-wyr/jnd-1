@@ -55,7 +55,6 @@ export default {
     box-sizing: border-box;
   }
 
-
   .line{
     width: 1200px;
     height: 2px;

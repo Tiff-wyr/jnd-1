@@ -1,38 +1,38 @@
 <template>
-    <div class="input-wrap">
-      <div class="code_wrap" v-if="isCode">
-        <p>请用绑定的{{name}}{{number}}获取验证码</p>
+  <div class="input-wrap">
+    <div v-if="isCode" class="code_wrap">
+      <p>请用绑定的{{ name }}{{ number }}获取验证码</p>
 
-        <button class="code_btn" v-if="showing" @click="sendCode">{{verifyCode}}</button>
-        <button v-else class="code_btn">{{time}}s</button>
+      <button v-if="showing" class="code_btn" @click="sendCode">{{ verifyCode }}</button>
+      <button v-else class="code_btn">{{ time }}s</button>
 
-        <br>
-        <input type="text" class="code_input" v-model="code" placeholder="输入验证码">
-        <span class="input-rule">{{rule}}</span>
-      </div>
-      <div v-else>
-        <p>请输入您绑定的{{name}}</p>
-        <div class="num_wrap">
-          <input class="number" v-model="inputNumber" type="text" :placeholder="`完整的${name}号`">
-          <span class="input-rule">{{rule}}</span>
-        </div>
-      </div>
-      <div class="btn_wrap">
-        <button class="btn" @click="HandleSubmit">确认</button>
-        <!--<p class="change_type_wrap">-->
-          <!--记不清了？<span class="change_type" @click="changeType">更换其他方式</span>-->
-        <!--</p>-->
+      <br>
+      <input v-model="code" type="text" class="code_input" placeholder="输入验证码">
+      <span class="input-rule">{{ rule }}</span>
+    </div>
+    <div v-else>
+      <p>请输入您绑定的{{ name }}</p>
+      <div class="num_wrap">
+        <input v-model="inputNumber" :placeholder="`完整的${name}号`" class="number" type="text">
+        <span class="input-rule">{{ rule }}</span>
       </div>
     </div>
+    <div class="btn_wrap">
+      <button class="btn" @click="HandleSubmit">确认</button>
+      <!--<p class="change_type_wrap">-->
+      <!--记不清了？<span class="change_type" @click="changeType">更换其他方式</span>-->
+      <!--</p>-->
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'selectType',
+  name: 'SelectType',
   props: {
     type: String
   },
-  data () {
+  data() {
     return {
       name: '',
       number: '',
@@ -40,13 +40,16 @@ export default {
       inputNumber: '',
       isCode: false,
       code: '',
-      verifyCode:"获取验证码",
-      showing:true,
-      time:59
+      verifyCode: '获取验证码',
+      showing: true,
+      time: 59
     }
   },
+  created() {
+    this.initData()
+  },
   methods: {
-    initData () {
+    initData() {
       let str = ''
       switch (this.type) {
         case 'phone':
@@ -65,7 +68,7 @@ export default {
       }
     },
     // 点击确认执行
-    HandleSubmit () {
+    HandleSubmit() {
       this.initData()
       if (this.isCode) {
         if (this.code) {
@@ -79,18 +82,17 @@ export default {
         } else {
           this.rule = '验证码不能为空'
         }
-      }
-      else {
+      } else {
         if (this.inputNumber === '' || this.inputNumber === null) {
           this.rule = '手机号不能为空'
-        }else {
+        } else {
           this.verify()
           this.rule = ''
         }
       }
     },
     // 更换方式
-    changeType () {
+    changeType() {
       this.isCode = false
       this.inputNumber = ''
       this.name = ''
@@ -98,10 +100,10 @@ export default {
       this.rule = ''
       this.$emit('error')
     },
-    verify(){
-      if( this.type === 'phone'){
-        this.$axios.get(`user/selectPhone/${this.inputNumber}`).then(res=>{
-          if(res.status === 500){
+    verify() {
+      if (this.type === 'phone') {
+        this.$axios.get(`user/selectPhone/${this.inputNumber}`).then(res => {
+          if (res.status === 500) {
             this.$message.warning(res.msg)
           } else {
             this.isCode = true
@@ -121,25 +123,22 @@ export default {
       //   })
       // }
     },
-    sendCode(){
-      if( this.type === 'phone'){
-        this.$axios.get(`/base/getUpdatePasswordCode/${this.inputNumber}`).then(res=>{
-          this.showing=false;
-          let timer=setInterval(()=>{
+    sendCode() {
+      if (this.type === 'phone') {
+        this.$axios.get(`/base/getUpdatePasswordCode/${this.inputNumber}`).then(res => {
+          this.showing = false
+          const timer = setInterval(() => {
             this.time--
-            if(this.time < 0){
+            if (this.time < 0) {
               clearInterval(timer)
-              this.showing=true
-              this.verifyCode='重新获取'
-              this.time=60
+              this.showing = true
+              this.verifyCode = '重新获取'
+              this.time = 60
             }
-          },1000)
+          }, 1000)
         })
       }
     }
-  },
-  created () {
-    this.initData()
   }
 }
 </script>

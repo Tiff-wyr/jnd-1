@@ -12,7 +12,6 @@ function getContent(key) {
   meta2.content = content[key].description
   head[0].appendChild(meta1)
   head[0].appendChild(meta2)
-  console.log(head)
 }
 
 router.beforeEach((to, from, next) => {
