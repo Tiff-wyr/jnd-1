@@ -6,15 +6,15 @@
           <div class="banner-wrap">
             <div class="left">
               <div class="banner-main">
-                <div class="tips">几万块小额贷款怎么申请？教你6招快速…</div>
+                <!-- <div class="tips">几万块小额贷款怎么申请？教你6招快速…</div> -->
               </div>
             </div>
             <div class="right">
               <div class="banner-main top">
-                <div class="tips">几万块小额贷款怎么申请？教你6招快速…</div>
+                <!-- <div class="tips">几万块小额贷款怎么申请？教你6招快速…</div> -->
               </div>
               <div class="banner-main bottom">
-                <div class="tips">几万块小额贷款怎么申请？教你6招快速…</div>
+                <!-- <div class="tips">几万块小额贷款怎么申请？教你6招快速…</div> -->
               </div>
             </div>
           </div>

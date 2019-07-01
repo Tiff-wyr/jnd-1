@@ -10,7 +10,7 @@
         <li v-for="item in data" :key="item.id" class="article-item" @click="handleDetail(item.id)">
           <dl>
             <dt>
-              <img src="../../../../static/consult/1.jpg" alt="title">
+              <img :src="item.image" alt="title">
             </dt>
             <dd>
               <h3>{{ item.topic }}</h3>
@@ -65,6 +65,7 @@ export default {
 .article-list .article-item {
   padding: 30px 16px;
   border-top: 1px solid #D9D9D9;
+  cursor: pointer;
   dl {
     overflow: hidden;
     dt {
