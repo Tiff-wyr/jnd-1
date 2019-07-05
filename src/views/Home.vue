@@ -240,10 +240,9 @@
                     <p>暂无数据...</p>
                   </div>
                   <div v-for="(item,index) in organData" :key="index" class="fll organW">
-                    <a v-if="item.agencyLogo" :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', background: 'url(' + item.agencyLogo + ') center center no-repeat', backgroundSize: '100% auto'}" :href="'#/organDetail/' + item.agencyId" target="_blank"/>
-                    <a v-else :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', background: 'url(/static/resource/pic/organ.png) center center no-repeat', backgroundSize: '100% auto'}" :href="'#/organDetail/' + item.agencyId" target="_blank"/>
-                    <div class="organ-text1">{{ item.agencyName }}</div>
-                    <div class="organ-text2">{{ item.agencyIntroduction }}</div>
+                    <a v-if="item.agencyLogo" :style="{background: 'url(' + item.agencyLogo + ') center center no-repeat', backgroundSize: '100% auto'}" :href="'#/organDetail/' + item.agencyId" target="_blank"/>
+                    <a v-else :style="{ background: 'url(/static/resource/pic/organ.png) center center no-repeat', backgroundSize: '100% auto'}" :href="'#/organDetail/' + item.agencyId" target="_blank"/>
+                    {{ item.agencyName }}
                   </div>
                 </div>
               </div>
@@ -302,11 +301,12 @@ import { publics } from '@/api/validateApply'
 import emptyList from '../assets/empty-list.png'
 import { validaterPhone, validaterLoanAmount, validaterName } from '@/util/validate'
 import banner01 from '@/assets/banner01.png'
+import banner02 from '@/assets/banner02.png'
 import banner03 from '@/assets/banner03.png'
-import banner04 from '@/assets/banner04.png'
 import { getGetStatus } from '@/api/activity'
 import { applyLoanByNoLogin } from '@/api/apply'
-const bannerList = [banner04, banner01, banner03]
+import { fetchAgent, fetchSpecial, fetchProduct } from '@/api/home'
+const bannerList = [banner01, banner02, banner03]
 export default {
   name: 'Home',
   components: {
@@ -590,20 +590,20 @@ export default {
 
     // 特别推荐
     getSpecial() {
-      this.$axios.get('product/getHotPro/1/4').then(res => {
-        this.specialData = res
+      fetchSpecial().then(res => {
+        this.specialData = res.data
       })
     },
     // 产品推荐
     getProduct() {
-      this.$axios.get('product/getLimitPro/1/3').then(res => {
-        this.productData = res.list
+      fetchProduct().then(res => {
+        this.productData = res.data
       })
     },
     // 经纪人推荐
     getAgentData() {
-      this.$axios.get('userBroker/showPageUserBroker').then(res => {
-        this.agentData = res.rows
+      fetchAgent().then(res => {
+        this.agentData = res.data
       })
     },
     // 机构推荐
@@ -726,14 +726,6 @@ $gray: #333;
 }
 /deep/ .el-radio__inner:hover {
   border-color: $gray;
-}
-.organW {
-  width: 100px;
-  height: 139px;
-  overflow: hidden;
-  text-align: center;
-  margin-right: 38px;
-  margin-bottom: 24px;
 }
 .mb24 {
   margin-bottom: 24px;
@@ -1020,6 +1012,27 @@ $gray: #333;
     padding: 24px 0 0 32px;
     box-sizing: border-box;
     margin-left: 30px;
+  }
+  .organize-table {
+    width: 590px;
+    display: flex;
+    align-items: center;
+    .organW {
+      width: 100px;
+      overflow: hidden;
+      text-align: center;
+      margin-right: 36px;
+      margin-bottom: 36px;
+      a {
+        display: block;
+        width: 100px;
+        height: 100px;
+        border: 1px solid #f0f0f0;
+        box-sizing: border-box;
+        cursor: pointer;
+        margin-bottom: 14px;
+      }
+    }
   }
 }
 .product-table {

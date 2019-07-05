@@ -1,42 +1,42 @@
 <template>
-    <div>
-      <div class="user-top">
-        <div class="w1200">
-          <div class="clearfix">
-            <div class="fll clearfix">
-              <img src="/static/1.png" alt="" @click="$router.push('/home')" style="cursor: pointer;float: left;margin-top: 7px;">
-              <div class="fll user-text" style="cursor: pointer" @click="$router.push('/home')">就能贷</div>
-              <div class="fll user-text"> | </div>
-              <div :class="this.$route.path === '/userRegister' ? 'active fll user-text cursor-re' : 'fll user-text cursor-re'" @click="user">个人注册</div>
-            </div>
-            <div class="flr clearfix">
-              <div :class="this.$route.path === '/agentRegister' ? 'active fll user-text agent cursor-re' : 'fll user-text agent cursor-re'" @click="agent">经纪人注册</div>
-              <div class="fll user-text"> | </div>
-              <div :class="this.$route.path === '/organRegister' ? 'active fll user-text cursor-re' : 'fll user-text cursor-re'" @click="organ">机构注册</div>
-            </div>
+  <div>
+    <div class="user-top">
+      <div class="w1200">
+        <div class="clearfix">
+          <div class="fll clearfix">
+            <img src="/static/1.png" alt="" style="cursor: pointer;float: left;margin-top: 7px;" @click="$router.push('/home')">
+            <div class="fll user-text" style="cursor: pointer" @click="$router.push('/home')">就能贷</div>
+            <div class="fll user-text"> | </div>
+            <div :class="this.$route.path === '/userRegister' ? 'active fll user-text cursor-re' : 'fll user-text cursor-re'" @click="user">个人注册</div>
+          </div>
+          <div class="flr clearfix">
+            <div :class="this.$route.path === '/agentRegister' ? 'active fll user-text agent cursor-re' : 'fll user-text agent cursor-re'" @click="agent">经纪人注册</div>
+            <div class="fll user-text"> | </div>
+            <div :class="this.$route.path === '/organRegister' ? 'active fll user-text cursor-re' : 'fll user-text cursor-re'" @click="organ">机构注册</div>
           </div>
         </div>
-
       </div>
+
     </div>
+  </div>
 </template>
 
 <script>
-  import router from '../router/index'
-    export default {
-      name: "registerTop",
-      methods:{
-        user(){
-          router.push('/userRegister')
-        } ,
-        agent(){
-          router.push('/agentRegister')
-        } ,
-        organ(){
-          router.push('/organRegister')
-        } ,
-      }
+import router from '../router/index'
+export default {
+  name: 'RegisterTop',
+  methods: {
+    user() {
+      router.push('/userRegister')
+    },
+    agent() {
+      router.push('/agentRegister')
+    },
+    organ() {
+      router.push('/organRegister')
     }
+  }
+}
 </script>
 
 <style scoped lang="scss">

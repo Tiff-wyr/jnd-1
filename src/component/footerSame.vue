@@ -3,7 +3,7 @@
     <div class="footer">
       <div class="partner">合作机构</div>
       <div style="margin-top: 28px">
-        <a v-for="item in bankList" :key="item.src" target="_blank" :href="item.src">
+        <a v-for="item in bankList" :key="item.src" :href="item.src" target="_blank">
           <img :src="item.imgUrl" alt="" class="ml42">
         </a>
       </div>
@@ -17,16 +17,16 @@ const bankList = [
   { label: '中国建设银行', id: 3, src: 'http://www.ccb.com', imgUrl: '../../static/resource/bank3.png' },
   { label: '中信银行', id: 4, src: 'http://www.citicbank.com', imgUrl: '../../static/resource/bank4.png' },
   { label: '中国农业银行', id: 5, src: 'http://www.abchina.com', imgUrl: '../../static/resource/bank5.png' },
-  { label: '中国光大银行', id: 6, src: 'http://www.cebbank.com', imgUrl: '../../static/resource/bank6.png' },
+  { label: '中国光大银行', id: 6, src: 'http://www.cebbank.com', imgUrl: '../../static/resource/bank6.png' }
 ]
 export default {
-  name: "footerSame",
+  name: 'FooterSame',
   data() {
     return {
       bankList
-    };
+    }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
@@ -43,6 +43,21 @@ export default {
     line-height: 65px;
     padding-left: 40px;
     border-bottom: 2px solid #f0f0f0;
+  }
+}
+.friend-link {
+  background: #fff;
+  margin-top: 30px;
+  padding: 22px 40px;
+  font-size: 14px;
+  .title {
+    margin-bottom: 14px;
+  }
+  span {
+    margin-right: 10px;
+  }
+  a {
+    color: #515151;
   }
 }
 </style>

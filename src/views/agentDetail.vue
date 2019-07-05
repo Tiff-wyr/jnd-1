@@ -356,7 +356,7 @@ export default {
         sex: [{ required: true, trigger: 'change', message: '请选择性别' }],
         loanAmount: [{ required: true, trigger: 'change', validator: validateLoanAmount }],
         address: [{ required: true, trigger: 'change', validator: validateAddress }],
-        businessType: [{ required: true, trigger: 'change', message: '请选择所在地' }],
+        businessType: [{ required: true, trigger: 'change', message: '请选择业务类型' }],
         isPawn: [{ required: true, trigger: 'change', message: '请选择有无抵押' }],
         pawnKey: [{ required: true, trigger: 'change', validator: validatePawnKey }],
         noPawn: [{ required: true, trigger: 'change', validator: validateNoPawn }],

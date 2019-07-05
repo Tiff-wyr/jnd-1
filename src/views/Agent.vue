@@ -163,10 +163,6 @@ import wcheckbox from '../component/w-checkBox'
 import emptyList from '../assets/empty-list.png'
 import detailApi from '@/api/detail'
 import { backTop } from '@/util/util'
-import banner01 from '@/assets/banner01.png'
-import banner02 from '@/assets/banner02.png'
-import banner03 from '@/assets/banner03.png'
-const bannerList = [banner01, banner02, banner03]
 import { formatPhone } from '@/util/util'
 import { HappyScroll } from 'vue-happy-scroll'
 import 'vue-happy-scroll/docs/happy-scroll.css'
@@ -192,7 +188,6 @@ export default {
   },
   data() {
     return {
-      bannerList,
       emptyList,
       isJianSuo: true,
       isMask: false,

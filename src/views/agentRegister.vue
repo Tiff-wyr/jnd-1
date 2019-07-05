@@ -266,7 +266,6 @@ import { mapState, mapMutations } from 'vuex'
 import { validaterName } from '@/util/validate'
 import { registerAccount, fetchProvince, fetchCity } from '@/api/register'
 import uploadImg from '@/component/uploadImg'
-import banner from '@/assets/banner01.png'
 const reg = /^\d+(\.(?!.*0$)\d{1,2})?$/
 const regZ = /^\d+$/
 export default {
@@ -319,11 +318,6 @@ export default {
       }
     }
     return {
-      option: {
-        img: banner,
-        size: 1,
-        outputType: 'jpeg'
-      },
       flag1: false,
       flag2: false,
       flag3: false,

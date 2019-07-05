@@ -1,18 +1,18 @@
 <template>
   <div class="jnd-container">
-    <activityBox :visible="activityVisble" :phone="phone" @close="handleCloseAvtivity" @useMember="useMember"></activityBox>
+    <activityBox :visible="activityVisble" :phone="phone" @close="handleCloseAvtivity" @useMember="useMember"/>
     <div class="top">
       <div class="member-info">
-        <div class="left" :class="{'member0': vipLevel == 0, 'member1': vipLevel == 1, 'member2': vipLevel == 2, 'member3': vipLevel == 3, }">
-          <p class="user">{{ userIdentity | levelFilter }}{{ phone | phoneFilter}}</p>
-          <span class="dredge" v-if="vipLevel == 0" @click="handleDredge">开通会员</span>
+        <div :class="{'member0': vipLevel == 0, 'member1': vipLevel == 1, 'member2': vipLevel == 2, 'member3': vipLevel == 3, }" class="left">
+          <p class="user">{{ userIdentity | levelFilter }}{{ phone | phoneFilter }}</p>
+          <span v-if="vipLevel == 0" class="dredge" @click="handleDredge">开通会员</span>
           <template v-else>
             <p class="time">{{ memberData.closeVipTime | closeVipTimeFilter }}</p>
-            <span class="itme upgrade" v-if="vipLevel !== 3" @click="handleUpGrade">升级</span><span class="itme" @click="handleRenew">续费</span>
+            <span v-if="vipLevel !== 3" class="itme upgrade" @click="handleUpGrade">升级</span><span class="itme" @click="handleRenew">续费</span>
           </template>
           <span class="dredge" @click="handlePayOnce">购买单次</span>
         </div>
-        <div class="right"></div>
+        <div class="right"/>
       </div>
     </div>
     <div class="member-system">
@@ -21,19 +21,19 @@
         <p class="tips">多种选择 定制化会员</p>
       </div>
       <div class="member-container">
-        <div class="item"  :class="{'member0': item.vid == 0, 'member1': item.vid == 1, 'member2': item.vid == 2, 'member3': item.vid == 3, }" v-for="item in memberData.vipLevel" :key="item.vid">
-          <div class="title"><i class="logo"></i>9能贷</div>
+        <div v-for="item in memberData.vipLevel" :class="{'member0': item.vid == 0, 'member1': item.vid == 1, 'member2': item.vid == 2, 'member3': item.vid == 3, }" :key="item.vid" class="item">
+          <div class="title"><i class="logo"/>9能贷</div>
           <div class="container">{{ item.vipName }}</div>
           <div class="price">￥{{ item.price }}</div>
           <img :src="item.vid === 3 ? cNum : oNum" alt="">
-          <img class="projection" v-if="item.vid === 3" :src="tyM3" alt="">
-          <img class="projection" v-if="item.vid === 2" :src="tyM2" alt="">
-          <img class="projection" v-if="item.vid === 1" :src="tyM1" alt="">
-          <img class="projection" v-if="item.vid === 0" :src="tyM0" alt="">
+          <img v-if="item.vid === 3" :src="tyM3" class="projection" alt="">
+          <img v-if="item.vid === 2" :src="tyM2" class="projection" alt="">
+          <img v-if="item.vid === 1" :src="tyM1" class="projection" alt="">
+          <img v-if="item.vid === 0" :src="tyM0" class="projection" alt="">
         </div>
       </div>
     </div>
-    
+
     <div class="member-privilege">
       <div class="title-container">
         <p class="member-title lr-lines">会员特权</p>
@@ -41,7 +41,7 @@
       </div>
       <div class="member-privilege-container">
         <ul class="member-list">
-          <li class="list-header"><span>功能特权</span><span v-for="item in memberData.vipAdvantage" :key="item.vipName">{{item.vipName}}</span></li>
+          <li class="list-header"><span>功能特权</span><span v-for="item in memberData.vipAdvantage" :key="item.vipName">{{ item.vipName }}</span></li>
 
           <li><span>电话数量(/天)</span><span v-for="(item, index) in memberData.vipAdvantage" :key="index" :class="{ 'noVip': !item.phoneNum }">{{ item.phoneNum ? item.phoneNum : '×' }}</span></li>
 
@@ -56,16 +56,16 @@
         <p class="hint-info">电话数量：获取平台第一手资源。</p>
       </div>
     </div>
-    <memberBox :visible="isMask" @close="isMask = false" @goPay="handlePay" :phone="phone" :data="memberDataList" @change="payInfo"></memberBox>
-    <payTypeBox :visible="payTypeMask" @close="payTypeMask = false" @goPay="handleGoPayOnce"></payTypeBox>
-    
+    <memberBox :visible="isMask" :phone="phone" :data="memberDataList" @close="isMask = false" @goPay="handlePay" @change="payInfo"/>
+    <payTypeBox :visible="payTypeMask" @close="payTypeMask = false" @goPay="handleGoPayOnce"/>
+
     <div class="agent-member-dialog">
       <el-dialog
         :visible.sync="dialogVisible"
-        width="500px"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         :show-close="false"
+        width="500px"
       >
         <div class="container">
           <div class="tips">
@@ -91,10 +91,10 @@
     <div class="dialog-customer">
       <el-dialog
         :visible.sync="dialogSuccessVisible"
-        width="500px"
         :close-on-click-modal="false"
         :close-on-press-escape="false"
         :show-close="false"
+        width="500px"
       >
         <div class="container">
           <div class="tips">
@@ -115,15 +115,15 @@
 </template>
 
 <script>
-import success from "../../../assets/success.png";
-import warning from "../../../assets/warning.png";
+import success from '../../../assets/success.png'
+import warning from '../../../assets/warning.png'
 import cNum from '../../../../static/resource/vip/c-num.png'
 import oNum from '../../../../static/resource/vip/other-num.png'
 import tyM0 from '../../../../static/resource/vip/ty-member0.png'
 import tyM1 from '../../../../static/resource/vip/ty-member1.png'
 import tyM2 from '../../../../static/resource/vip/ty-member2.png'
 import tyM3 from '../../../../static/resource/vip/ty-member3.png'
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations } from 'vuex'
 import { getMember } from '@/api/pay.alipay'
 import { formatPhone } from '@/util/util'
 import memberBox from '@/component/memberBox'
@@ -133,11 +133,28 @@ import { getQrCodes, checkWxPayRusult, reviewWxPay } from '@/util/pay.wxpay'
 import activityBox from '@/component/activityBox'
 import { getGetStatus } from '@/api/activity'
 export default {
-  name: "agentMember",
+  name: 'AgentMember',
   components: {
     activityBox,
     memberBox,
     payTypeBox
+  },
+  filters: {
+    phoneFilter(val) {
+      return formatPhone(val)
+    },
+    closeVipTimeFilter(val) {
+      return val + '到期'
+    },
+    levelFilter(val) {
+      const levelMap = {
+        0: '用户',
+        1: '会员',
+        2: '高级会员',
+        3: '超级会员'
+      }
+      return levelMap[val]
+    }
   },
   data() {
     return {
@@ -158,32 +175,15 @@ export default {
       memberDataList: [],
       dialogVisible: false,
       dialogSuccessVisible: false,
-      payType: "",
+      payType: '',
       vipType: '',
       month: '',
       businessType: 0,
       activityVisble: false
-    };
-  },
-  filters: {
-    phoneFilter(val) {
-      return formatPhone(val)
-    },
-    closeVipTimeFilter(val) {
-      return val + '到期'
-    },
-    levelFilter(val) {
-      const levelMap = {
-        0: '用户',
-        1: '会员',
-        2: '高级会员',
-        3: '超级会员'
-      }
-      return levelMap[val]
     }
   },
   computed: {
-    ...mapState(["userInfo", "isPay"]),
+    ...mapState(['userInfo', 'isPay']),
     userIdentity() {
       return this.$store.state.userInfo.vip
     }
@@ -191,7 +191,7 @@ export default {
   watch: {
     isPay(val, oldVal) {
       if (val.isPay) {
-        this.dialogVisible = true;
+        this.dialogVisible = true
       }
     },
     userIdentity(val) {
@@ -207,7 +207,7 @@ export default {
     this.getStatus()
   },
   methods: {
-    ...mapMutations(["SET_USER_VIP"]),
+    ...mapMutations(['SET_USER_VIP']),
     getStatus() {
       getGetStatus(this.phone).then(res => {
         if (res.data.status === 200) {
@@ -231,7 +231,7 @@ export default {
     },
     getMemberDatas(businessType) {
       getMemberDatas(businessType, this.phone, (res) => {
-        for (let key in res.data) {
+        for (const key in res.data) {
           this.memberDataList.push(res.data[key])
         }
       })
@@ -296,12 +296,11 @@ export default {
             this.wxPay(this.params)
           }
         } else {
-          this.$message.warning("请选择支付方式");
+          this.$message.warning('请选择支付方式')
         }
       } else {
-        this.$message.warning("需同意《服务条款》");
+        this.$message.warning('需同意《服务条款》')
       }
-
     },
     handlePay(val) { // 去支付
       // val.payType 1 weixin 2 alipay
@@ -324,16 +323,16 @@ export default {
             this.wxPay(this.params)
           }
         } else {
-          this.$message.warning("请选择要开通的会员和支付方式");
+          this.$message.warning('请选择要开通的会员和支付方式')
         }
       } else {
-        this.$message.warning("需同意《服务条款》");
+        this.$message.warning('需同意《服务条款》')
       }
     },
     handleSuccessDialog(msg) {
-      this.$message.success(msg);
-      this.dialogVisible = false;
-      this.dialogSuccessVisible = false;
+      this.$message.success(msg)
+      this.dialogVisible = false
+      this.dialogSuccessVisible = false
       this.isMask = false
       this.payTypeMask = false
       if (this.businessType !== 3) {
@@ -343,9 +342,9 @@ export default {
       this.getMember()
     },
     handleFailDialog(msg) {
-      this.$message.warning(msg);
-      this.dialogVisible = false;
-      this.dialogSuccessVisible = true;
+      this.$message.warning(msg)
+      this.dialogVisible = false
+      this.dialogSuccessVisible = true
     },
     checkAliPay(msg) {
       checkAliPayRusult(this.orderSn, res => {
@@ -375,25 +374,25 @@ export default {
       } else {
         reviewWxPay(this.orderSn, this.params)
       }
-      this.dialogSuccessVisible = false;
-      this.dialogVisible = true;
+      this.dialogSuccessVisible = false
+      this.dialogVisible = true
     },
     handlePayFail() {
       this.handlePayComplete()
-      this.dialogSuccessVisible = false;
-      this.dialogVisible = false;
+      this.dialogSuccessVisible = false
+      this.dialogVisible = false
       this.isMask = false
       this.payTypeMask = false
     },
     handleConfirmPay() {
-      this.dialogSuccessVisible = false;
-      this.dialogVisible = false;
+      this.dialogSuccessVisible = false
+      this.dialogVisible = false
       this.isMask = false
       this.payTypeMask = false
       this.getMember()
     }
   }
-};
+}
 </script>
 <style lang="scss">
 .agent-member-dialog .el-dialog__body {

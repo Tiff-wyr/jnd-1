@@ -108,10 +108,6 @@ import footerSame from '../component/footerSame'
 import bottomTap from '../component/bottomTap'
 import emptyList from '../assets/empty-list.png'
 import { backTop } from '@/util/util'
-import banner01 from '@/assets/banner01.png'
-import banner02 from '@/assets/banner02.png'
-import banner03 from '@/assets/banner03.png'
-const bannerList = [banner01, banner02, banner03]
 export default {
   name: 'Loans',
   components: {
@@ -120,7 +116,6 @@ export default {
   },
   data() {
     return {
-      bannerList,
       emptyList,
       tableData: [],
       formData: [],
