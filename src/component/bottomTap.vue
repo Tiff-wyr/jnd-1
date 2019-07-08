@@ -56,7 +56,8 @@
 const cooperationList = [
   { name: '畅想合伙人', src: 'http://www.xxsqian.com' },
   { name: '股票配资', src: 'http://www.zshhcl.com' },
-  { name: '贷款论坛', src: 'https://www.daikuanbbs.com' }
+  { name: '贷款论坛', src: 'https://www.daikuanbbs.com' },
+  { name: '大额贷款', src: 'https://www.jiedianqian.com/zx' }
 ]
 export default {
   name: 'BottomTap',
