@@ -48,7 +48,7 @@ module.exports = {
     // Paths
     assetsRoot: process.env.npm_lifecycle_event === 'test' ? path.resolve(__dirname, '../distTest') : path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: './',
+    assetsPublicPath: '/',
 
     /**
      * Source Maps

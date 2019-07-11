@@ -233,7 +233,7 @@ export default {
       this.phone = this.$store.state.userInfo.phone
       this.getPersonal()
     } else {
-      this.$router.push('/home')
+      this.$router.push('/')
     }
   },
   methods: {
@@ -296,7 +296,7 @@ export default {
     confirm() {
       this.dialogVisible = false
       this.SET_USER(null)
-      this.$router.push('/home')
+      this.$router.push('/')
       const phone = localStorage.getItem('phone')
       const password = localStorage.getItem('password')
       if (phone && password) {

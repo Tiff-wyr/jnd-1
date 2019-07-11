@@ -7,7 +7,7 @@
           <div class="user-title">
             <div class="title">欢迎注册就能贷网</div>
             <div class="number">已有账号，</div>
-            <div class="login" @click="$router.push({path:'/home',query:{login:1}})">立即登陆</div>
+            <div class="login" @click="$router.push({path:'/',query:{login:1}})">立即登陆</div>
           </div>
           <el-form
             ref="organMess"
@@ -160,7 +160,7 @@
                     <div class="fll agree" @click="register">同意协议并注册</div>
                     <div
                       class="fll immediate"
-                      @click="$router.push({path:'/home',query:{login:1}})"
+                      @click="$router.push({path:'/',query:{login:1}})"
                     >已有账号？立即登陆</div>
                   </div>
                   <div class="agreement">

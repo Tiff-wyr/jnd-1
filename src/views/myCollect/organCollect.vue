@@ -2,12 +2,12 @@
   <div>
     <div class="agentC">
       <div class="clearfix main-collect">
-        
-        <div class="empty-list-show" v-if="!tableData.length">
+
+        <div v-if="!tableData.length" class="empty-list-show">
           <img :src="emptyList" alt="">
           <p>暂无数据...</p>
         </div>
-        <div class="agentItem fll" v-for="(item,index) in tableData" :key="index" @click="agentD(item.agency.agencyId)">
+        <div v-for="(item,index) in tableData" :key="index" class="agentItem fll" @click="agentD(item.agency.agencyId)">
           <div class="clearfix fs">
             <img
               :src="item.agency.agencyLogo"
@@ -16,36 +16,36 @@
               style="cursor: pointer"
             >
             <div class="fll ml4">
-              <div class="name">{{item.agency.agencyName}}</div>
-              <div class="job">{{item.agency.agencyURL}}</div>
-              <div class="tel">{{item.agency.phone}}</div>
+              <div class="name">{{ item.agency.agencyName }}</div>
+              <div class="job">{{ item.agency.agencyURL }}</div>
+              <div class="tel">{{ item.agency.phone }}</div>
             </div>
             <div class="fll sub" @click.stop="cancelRestore(item.agency.agencyId)">X</div>
           </div>
-          <div class="mt16 little-item mb20">{{item.agency.agencyIntroduction}}</div>
+          <div class="mt16 little-item mb20">{{ item.agency.agencyIntroduction }}</div>
           <div class="btn" @click.stop="chat(item.agency.agencyId)">立即联系</div>
         </div>
       </div>
     </div>
     <div class="page" style="margin-bottom:-50px;text-align: right">
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        background=""
         :page-size="size"
         :pager-count="5"
-        layout="prev, pager, next"
         :total="count"
-      ></el-pagination>
+        background=""
+        layout="prev, pager, next"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import emptyList from "@/assets/empty-list2.png";
+import { mapState } from 'vuex'
+import emptyList from '@/assets/empty-list2.png'
 export default {
-  name: "organCollect",
+  name: 'OrganCollect',
   data() {
     return {
       emptyList,
@@ -53,20 +53,23 @@ export default {
       size: 6,
       count: 1,
       tableData: []
-    };
+    }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(['userInfo'])
+  },
+  created() {
+    this.getOrganColl()
   },
   methods: {
     chat(id) {
       this.$router.push({
         path: `/myMessage/${this.$store.state.userInfo.id}/messageCenter`,
         query: { id: id, roleId: 3 }
-      });
+      })
     },
     agentD(id) {
-      this.$router.push(`/organDetail/${id}`);
+      this.$router.push(`/organDetail/${id}`)
     },
     getOrganColl() {
       this.$axios
@@ -76,20 +79,20 @@ export default {
           }/${this.size}`
         )
         .then(res => {
-          this.tableData = res.list;
-          console.log(this.tableData, "1111");
-          this.count = res.totalCount;
-        });
+          this.tableData = res.list
+          console.log(this.tableData, '1111')
+          this.count = res.totalCount
+        })
     },
     handleCurrentChange(val) {
-      this.page = val;
-      this.getOrganColl();
+      this.page = val
+      this.getOrganColl()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getOrganColl();
+      this.size = val
+      this.getOrganColl()
     },
-    //取消机构
+    // 取消机构
     cancelRestore(id) {
       this.$axios
         .post(
@@ -98,15 +101,12 @@ export default {
           }&agencyId=${id}`
         )
         .then(res => {
-          this.$message.success("取消收藏");
-          this.getOrganColl();
-        });
+          this.$message.success('取消收藏')
+          this.getOrganColl()
+        })
     }
-  },
-  created() {
-    this.getOrganColl();
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

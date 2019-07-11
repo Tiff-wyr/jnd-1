@@ -211,8 +211,8 @@
               </div>
               <div class="agent-table fll">
                 <div class="clearfix">
-                  <div v-for="(item,index) in agentData" :key="index" class="fll align mr42">
-                    <a :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', backgroundImage: 'url(' + item.image + ')', backgroundSize: '100% auto', 'background-position': 'center center', 'backgroundRepeat': 'no-repeat'}" :href="'#/agentDetail/' + item.brokerId" target="_blank"/>
+                  <div v-for="(item,index) in agentData" :key="index" class="fll align mr42" @click="agDetail(item.brokerId)">
+                    <span :style="{display: 'block', width: '100px', height: '100px', cursor: 'pointer', backgroundImage: 'url(' + item.image + ')', backgroundSize: '100% auto', 'background-position': 'center center', 'backgroundRepeat': 'no-repeat'}" />
                     <div class="agent-name">{{ item.brokerName }}</div>
                     <div class="agent-job">金融顾问</div>
                   </div>
@@ -239,9 +239,9 @@
                     <img :src="emptyList" alt="">
                     <p>暂无数据...</p>
                   </div>
-                  <div v-for="(item,index) in organData" :key="index" class="fll organW">
-                    <a v-if="item.agencyLogo" :style="{background: 'url(' + item.agencyLogo + ') center center no-repeat', backgroundSize: '100% auto'}" :href="'#/organDetail/' + item.agencyId" target="_blank"/>
-                    <a v-else :style="{ background: 'url(/static/resource/pic/organ.png) center center no-repeat', backgroundSize: '100% auto'}" :href="'#/organDetail/' + item.agencyId" target="_blank"/>
+                  <div v-for="(item,index) in organData" :key="index" class="fll organW" @click="orDetail(item.agencyId)">
+                    <a v-if="item.agencyLogo" :style="{background: 'url(' + item.agencyLogo + ') center center no-repeat', backgroundSize: '100% auto'}"/>
+                    <a v-else :style="{ background: 'url(/static/resource/pic/organ.png) center center no-repeat', backgroundSize: '100% auto'}" />
                     {{ item.agencyName }}
                   </div>
                 </div>
@@ -495,9 +495,9 @@ export default {
                 }
               })
           } else {
-            if (this.$store.state.userInfo.roleId == 1) {
+            if (parseInt(this.$store.state.userInfo.roleId) === 1) {
               publics(this.borrowerData.phone).then(res => { // 验证该手机号今天是否在此申请过
-                if (res.data.status == 200) { // 可以申请
+                if (res.data.status === 200) { // 可以申请
                   this.sendPhoneCode(this.borrowerData.phone)
                 } else {
                   this.$message.warning(res.data.msg)

@@ -1,13 +1,10 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 // 创建axios实例
-const url = window.location.origin
-const baseURL = url.indexOf('localhost') === -1 ? url : url
 const service = axios.create({
-  baseURL: process.env.BASE_URI, // api 的 base_url
+  baseURL: process.env.BASE_URI + 'api', // api 的 base_url
   timeout: 10000 // 请求超时时间
 })
-
 // request拦截器
 service.interceptors.request.use(
   config => {
@@ -28,7 +25,7 @@ service.interceptors.response.use(
      */
     if (response.status !== 200) {
       Message({
-        message: res.message,
+        message: response.message,
         type: 'error',
         duration: 5 * 1000
       })

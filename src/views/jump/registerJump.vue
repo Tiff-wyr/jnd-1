@@ -1,6 +1,6 @@
 <template>
   <div>
-    <layout></layout>
+    <layout/>
     <div class="wrappy">
       <div class="free">
         <div class="title">注册成功</div>
@@ -8,44 +8,49 @@
           <img src="/static/resource/appVic.png" alt="">
           <div class="fll">
             <div class="same">恭喜您成为9能贷平台会员，您可以通过</div>
-            <div class="same">账号：{{number}}</div>
+            <div class="same">账号：{{ number }}</div>
             <div class="same">密码：（您手机收到的验证码）</div>
             <div class="same">
-              <span class="reHome" @click="$router.push({path:'/home',query:{login:1}})">登录</span>平台，即可享受平台专业的金融服务
+              <span class="reHome" @click="$router.push({path:'/',query:{login:1}})">登录</span>平台，即可享受平台专业的金融服务
             </div>
-            <div class="reHome same" @click="$router.push('/home')" style="margin-top: 5px">返回首页</div>
+            <div class="reHome same" style="margin-top: 5px" @click="$router.push('/')">返回首页</div>
           </div>
         </div>
       </div>
     </div>
-    <bottomTap></bottomTap>
+    <bottomTap/>
   </div>
 </template>
 
 <script>
-import bottomTap from "../../component/bottomTap";
-import layout from "../../layout/layout";
+import bottomTap from '../../component/bottomTap'
+import layout from '../../layout/layout'
 export default {
-  name: "applyVictory",
+  name: 'ApplyVictory',
   components: {
     bottomTap,
     layout
   },
   data() {
     return {
-      number: "",
+      number: '',
       flag: true
-    };
+    }
+  },
+  created() {
+    if (this.$route.query.number) {
+      this.number = this.$route.query.number
+    }
   },
   methods: {
     click() {
-      if (flag) {
-        flag = false;
-        let num = 5;
-        let timer = setInterval(() => {
-          num--;
+      if (this.flag) {
+        this.flag = false
+        let num = 5
+        const timer = setInterval(() => {
+          num--
           if (!num) {
-            flag = true
+            this.flag = true
             clearInterval(timer)
           }
         }, 1000)
@@ -53,13 +58,8 @@ export default {
         alert('点击过快')
       }
     }
-  },
-  created() {
-    if (this.$route.query.number) {
-      this.number = this.$route.query.number;
-    }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

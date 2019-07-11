@@ -1,38 +1,38 @@
 <template>
   <div>
-    <layout></layout>
+    <layout/>
     <div class="wrappy">
       <div class="free">
         <div class="title">申请成功</div>
         <div class="clearfix w350">
           <img src="../../static/resource/appVic.png" alt="">
-          <div class="fll" v-if="isShow" style="margin-top: 20px">
+          <div v-if="isShow" class="fll" style="margin-top: 20px">
             <div
               class="victory"
-            >{{$store.state.userInfo ? $store.state.userInfo.name : ''}}，恭喜您完成贷款申请！</div>
+            >{{ $store.state.userInfo ? $store.state.userInfo.name : '' }}，恭喜您完成贷款申请！</div>
             <div class="vic-text">近期会有贷款商家联系您，请注意接听。</div>
           </div>
           <div v-else class="fll">
             <div class="same">恭喜您成为9能贷平台会员，您可以通过</div>
-            <div class="same">账号：{{number}}</div>
+            <div class="same">账号：{{ number }}</div>
             <div class="same">密码：（您手机收到的验证码）</div>
             <div class="same">
-              <span class="reHome" @click="$router.push({path:'/home',query:{login:1}})">登录</span>平台，即可享受平台专业的金融服务
+              <span class="reHome" @click="$router.push({path:'/',query:{login:1}})">登录</span>平台，即可享受平台专业的金融服务
             </div>
-            <div class="reHome same" @click="$router.push('/home')" style="margin-top: 5px">返回首页</div>
+            <div class="reHome same" style="margin-top: 5px" @click="$router.push('/')">返回首页</div>
           </div>
         </div>
       </div>
     </div>
-    <bottomTap></bottomTap>
+    <bottomTap/>
   </div>
 </template>
 
 <script>
-import bottomTap from "../component/bottomTap";
-import layout from "../layout/layout";
+import bottomTap from '../component/bottomTap'
+import layout from '../layout/layout'
 export default {
-  name: "applyVictory",
+  name: 'ApplyVictory',
   components: {
     bottomTap,
     layout
@@ -40,21 +40,21 @@ export default {
   data() {
     return {
       isShow: false,
-      number: ""
-    };
+      number: ''
+    }
   },
   created() {
-    //申请人的姓名
+    // 申请人的姓名
     if (this.$store.state.userInfo) {
-      this.isShow = true;
+      this.isShow = true
     } else {
       if (this.$route.query.number) {
-        this.number = this.$route.query.number;
-        this.isShow = false;
+        this.number = this.$route.query.number
+        this.isShow = false
       }
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

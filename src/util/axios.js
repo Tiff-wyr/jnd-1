@@ -4,8 +4,8 @@
 import axios from 'axios'
 // import store from '../store'
 
-const baseURL =process.env.BASE_URI
- console.log(baseURL)
+const baseURL = process.env.BASE_URI + 'api'
+console.log(baseURL)
 class Axios {
   static instance = axios.create({
     baseURL,
@@ -18,18 +18,18 @@ class Axios {
     // }
     return new Promise((resolve, reject) => {
       this.instance.get(url, {
-          params: data,
-          ...config
-        }
+        params: data,
+        ...config
+      }
       ).then(res => {
         resolve(res.data)
       })
     })
   }
-// config={
-//   headers:{ 'token': store.state.token}
-// }
-  static fetch(url, data, config={}, method) {
+  // config={
+  //   headers:{ 'token': store.state.token}
+  // }
+  static fetch(url, data, config = {}, method) {
     // config.headers= {
     //   'token': store.state.token
     // }
@@ -42,10 +42,10 @@ class Axios {
     })
   }
   static put(url, data, config) {
-    return this.fetch(url,data,config,'put')
+    return this.fetch(url, data, config, 'put')
   }
   static post(url, data, config) {
-    return this.fetch(url,data,config,'post')
+    return this.fetch(url, data, config, 'post')
   }
 }
 export default Axios

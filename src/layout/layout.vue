@@ -23,7 +23,7 @@
       <div class="w1200">
         <div class="link-wrap clearfix">
           <div class="fll">
-            <a href="#/home">
+            <a href="#/">
               <img
                 src="/static/1.png"
                 style="margin-top: 8px;float: left"
@@ -34,7 +34,7 @@
           <div class="flr">
             <router-link
               :style="$route.meta.classify === 'home' ? 'color:rgba(168,14,14,1)' : ''"
-              to="/home"
+              to="/"
             >首页</router-link>
             <router-link
               :style="$route.meta.classify === 'loans' ? 'color:rgba(168,14,14,1)' : ''"
@@ -163,6 +163,22 @@ export default {
   computed: {
     ...mapState(['userInfo'])
   },
+  watch: {
+    '$route': function(val) {
+      if (val.path === '/' && val.query.login === 1) {
+        this.isMask = true
+        this.isContain = true
+      }
+    }
+  },
+  created() {
+    this.loginFrame = this.$route.query.login
+    if (this.loginFrame) {
+      this.isMask = true
+      this.isContain = true
+    }
+    this.autoLogin()
+  },
   methods: {
     ...mapMutations(['SET_USER']),
     subNum() {
@@ -204,7 +220,7 @@ export default {
       }
       this.showing = true
       this.time = 60
-      this.$router.push('/home')
+      this.$router.push('/')
       const phone = localStorage.getItem('phone')
       const password = localStorage.getItem('password')
       removeToken()
@@ -386,22 +402,6 @@ export default {
         password: ''
       }
     }
-  },
-  watch: {
-    '$route': function(val) {
-      if (val.path === '/home' && val.query.login === 1) {
-        this.isMask = true
-        this.isContain = true
-      }
-    }
-  },
-  created() {
-    this.loginFrame = this.$route.query.login
-    if (this.loginFrame) {
-      this.isMask = true
-      this.isContain = true
-    }
-    this.autoLogin()
   }
 }
 </script>

@@ -8,7 +8,7 @@
           <div class="user-title">
             <div class="title">欢迎注册就能贷网</div>
             <div class="number">已有账号，</div>
-            <div class="login" @click="$router.push({path:'/home',query:{login:1}})">立即登陆</div>
+            <div class="login" @click="$router.push({path:'/',query:{login:1}})">立即登陆</div>
           </div>
           <el-form
             ref="formData"
@@ -217,7 +217,7 @@
                     <div class="fll agree" @click="register">同意协议并注册</div>
                     <div
                       class="fll immediate"
-                      @click="$router.push({path:'/home',query:{login:1}})"
+                      @click="$router.push({path:'/',query:{login:1}})"
                     >已有账号？立即登陆</div>
                   </div>
                   <div class="agreement"><el-checkbox v-model="isChecked"/> 阅读并同意 <a href="#/agreement?userRegister" target="_blank">《9能贷用户注册协议》</a></div>
@@ -419,6 +419,11 @@ export default {
   },
   computed: {
     ...mapState(['userInfo'])
+  },
+  created() {
+    this.phone = new Date().getTime() + randomWord(false, 10)
+    this.getProvince()
+    this.getGoodBusiness()
   },
   methods: {
     ...mapMutations(['SET_USER']),
@@ -679,11 +684,6 @@ export default {
     uploadFail(val, field) {
       console.log('上传失败', val, field)
     }
-  },
-  created() {
-    this.phone = new Date().getTime() + randomWord(false, 10)
-    this.getProvince()
-    this.getGoodBusiness()
   }
 }
 </script>

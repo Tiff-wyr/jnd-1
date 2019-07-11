@@ -310,7 +310,7 @@ export default {
     },
     // 经纪人详情
     detail(id) {
-      this.$router.push(`agentDetail/${id}`)
+      this.$router.push(`/agentDetail/${id}`)
     },
     handleCurrentChange(val) {
       this.pn = val
@@ -331,7 +331,7 @@ export default {
     },
     returnF() {
       setTimeout(() => {
-        this.$router.push('/home')
+        this.$router.push('/')
       }, 500)
     },
     closeW() {

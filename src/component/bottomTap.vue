@@ -24,9 +24,9 @@
         <div class="right">
           <div class="loan-guide">
             <h3>贷款指南</h3>
-            <p class="container" @click="$router.push(`/help/guide`)">如何办理贷款</p>
-            <p class="container" @click="$router.push(`/help/matter`)">资质相关问题</p>
-            <p class="container" @click="$router.push(`/help/question`)">相关注意事项</p>
+            <p class="container" @click="$router.push(`/guide`)">如何办理贷款</p>
+            <p class="container" @click="$router.push(`/matter`)">资质相关问题</p>
+            <p class="container" @click="$router.push(`/question`)">相关注意事项</p>
           </div>
           <div class="contact-us">
             <h3>联系我们</h3>

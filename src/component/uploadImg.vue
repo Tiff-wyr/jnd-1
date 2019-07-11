@@ -1,61 +1,60 @@
 <template>
   <div class="cropper-container">
-    <a class="btn" @click="toggleShow" v-if="isShow && !imgDataUrl">
-      <i class="el-icon-plus micon"></i>
+    <a v-if="isShow && !imgDataUrl" class="btn" @click="toggleShow">
+      <i class="el-icon-plus micon"/>
     </a>
-    <img :src="imgDataUrl" @click="toggleShow" v-if="!isShow || imgUrl || imgDataUrl" style="width: 80px; height: 80px;">
+    <img v-if="!isShow || imgUrl || imgDataUrl" :src="imgDataUrl" style="width: 80px; height: 80px;" @click="toggleShow">
     <my-upload
-      field="file"
-      @crop-success="cropSuccess"
-      @crop-upload-success="cropUploadSuccess"
-      @crop-upload-fail="cropUploadFail"
       v-model="show"
       :width="80"
       :height="80"
-      url="https://www.9nengdai.com/aly/aliyun/headImgUpload"
       :params="params"
       :headers="headers"
+      field="file"
+      url="https://www.9nengdai.com/aly/aliyun/headImgUpload"
       img-format="png"
-    ></my-upload>
+      @crop-success="cropSuccess"
+      @crop-upload-success="cropUploadSuccess"
+      @crop-upload-fail="cropUploadFail"
+    />
   </div>
 </template>
 <script>
-import "babel-polyfill"; // es6 shim
-import Vue from "vue";
-import myUpload from 'vue-image-crop-upload';
-import { randomWord } from "@/util/util";
+import 'babel-polyfill' // es6 shim
+import myUpload from 'vue-image-crop-upload'
+import { randomWord } from '@/util/util'
 export default {
+  components: {
+    'my-upload': myUpload
+  },
   props: {
     imgUrl: {
       type: String
     }
   },
-  components: {
-    "my-upload": myUpload
-  },
   data() {
     return {
       isShow: true,
       show: false,
-			params: {
-				phone: ''
-			},
-			headers: {
-				smail: '*_~'
-			},
-			imgDataUrl: '' // the datebase64 url of created image
-    };
+      params: {
+        phone: ''
+      },
+      headers: {
+        smail: '*_~'
+      },
+      imgDataUrl: '' // the datebase64 url of created image
+    }
   },
   created() {
     this.imgDataUrl = ''
     if (this.imgUrl) {
       this.imgDataUrl = this.imgUrl
     }
-    this.params.phone = new Date().getTime() + randomWord(false, 10);
+    this.params.phone = new Date().getTime() + randomWord(false, 10)
   },
   methods: {
     toggleShow() {
-      this.show = !this.show;
+      this.show = !this.show
     },
     /**
      * crop success
@@ -63,7 +62,8 @@ export default {
      * [param] field
      */
     cropSuccess(imgDataUrl, field) {
-      this.imgDataUrl = imgDataUrl;
+      console.log(imgDataUrl, field)
+      this.imgDataUrl = imgDataUrl
     },
     /**
      * upload success
@@ -74,13 +74,15 @@ export default {
     cropUploadSuccess(jsonData, field) {
       this.isShow = false
       this.show = false
+      console.log(jsonData, field)
       this.$emit('uploadSuccess', { jsonData, field })
     },
-    cropUploadFail(status, field){
+    cropUploadFail(status, field) {
+      console.log(status, field)
       this.$emit('uploadFail', { status, field })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .cropper-container > .btn {

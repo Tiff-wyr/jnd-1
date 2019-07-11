@@ -82,7 +82,7 @@
                     <div class="agree" @click="register">同意协议并注册</div>
                     <div
                       class="immediate"
-                      @click="$router.push({path:'/home', query:{login:1}})"
+                      @click="$router.push({path:'/', query:{login:1}})"
                     >已有账号？立即登陆</div>
                   </div>
                   <div class="agreement">
@@ -181,7 +181,7 @@ export default {
   methods: {
     ...mapMutations(['SET_USER']),
     loginPush() {
-      this.$router.push({ path: '/home', query: { login: 1 }})
+      this.$router.push({ path: '/', query: { login: 1 }})
     },
     clearTimer(timer) {
       clearInterval(timer)

@@ -7,26 +7,26 @@
             <div class="main">
               <div class="img-main">
                 <div style="width: 76px;height: 76px;margin: 0 auto">
-                  <upload-img class="fll" @uploadSuccess="uploadSuccess" @uploadFail="uploadFail" :imgUrl="image"></upload-img>
+                  <upload-img :img-url="image" class="fll" @uploadSuccess="uploadSuccess" @uploadFail="uploadFail"/>
                 </div>
-                <div class="court-num">{{userInfo ? userInfo.name : ''}}</div>
+                <div class="court-num">{{ userInfo ? userInfo.name : '' }}</div>
               </div>
               <div
                 :class="this.$route.path === `/myMessage/${userIdn}/personMessage` ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-daikuanrengerenxinxi-copy icon"></div>
+                <div class="iconfont icon-daikuanrengerenxinxi-copy icon"/>
                 <router-link :to="{path:`/myMessage/${userIdn}/personMessage`}">个人信息</router-link>
               </div>
               <div
                 :class="this.$route.path === `/myMessage/${userIdn}/myCollect` ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-shoucangzhongxin-copy icon"></div>
+                <div class="iconfont icon-shoucangzhongxin-copy icon"/>
                 <router-link :to="{path:`/myMessage/${userIdn}/myCollect`}">我的收藏</router-link>
               </div>
               <div
                 :class="this.$route.path === '/myMessage/accessRecord' ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-fangwenjilu-copy-copy icon" style="margin-left: -4px"></div>
+                <div class="iconfont icon-fangwenjilu-copy-copy icon" style="margin-left: -4px"/>
                 <router-link
                   :to="{path:`/myMessage/${userIdn}/accessRecord`}"
                   style="margin-left: 12px"
@@ -35,31 +35,31 @@
               <div
                 :class="this.$route.path === `/myMessage/${userIdn}/applyRecordMy` ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-shenqingjilu-copy icon"></div>
+                <div class="iconfont icon-shenqingjilu-copy icon"/>
                 <router-link :to="{path:`/myMessage/${userIdn}/applyRecordMy`}">申请记录</router-link>
               </div>
               <div
                 :class="this.$route.path === `/myMessage/${userIdn}/messageCenter` ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-xiaoxizhongxin icon"></div>
+                <div class="iconfont icon-xiaoxizhongxin icon"/>
                 <router-link :to="{path:`/myMessage/${userIdn}/messageCenter`}">消息中心</router-link>
               </div>
               <div
                 :class="this.$route.path === `/myMessage/${userIdn}/emailCenter` ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-youjianzhongxin-copy-copy icon" style="margin-left: -4px"></div>
+                <div class="iconfont icon-youjianzhongxin-copy-copy icon" style="margin-left: -4px"/>
                 <router-link :to="{path:`/myMessage/${userIdn}/emailCenter`}">邮件中心</router-link>
               </div>
               <div
                 :class="this.$route.path === `/myMessage/${userIdn}/secureCenter` ? 'my-item clearfix fs active' : 'my-item clearfix fs'"
               >
-                <div class="iconfont icon-anquanzhongxin-copy-copy icon"></div>
+                <div class="iconfont icon-anquanzhongxin-copy-copy icon"/>
                 <router-link :to="{path:`/myMessage/${userIdn}/secureCenter`}">安全中心</router-link>
               </div>
             </div>
           </div>
           <div class="fll ml30">
-            <router-view></router-view>
+            <router-view/>
           </div>
         </div>
       </div>
@@ -68,51 +68,51 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations } from 'vuex'
 import uploadImg from '@/component/uploadImg'
 export default {
-  name: "myMessage",
-  data() {
-    return {
-      userIdn: "",
-      image: ""
-    };
-  },
+  name: 'MyMessage',
   components: {
     uploadImg
   },
+  data() {
+    return {
+      userIdn: '',
+      image: ''
+    }
+  },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(['userInfo'])
+  },
+  created() {
+    if (this.$store.state.userInfo) {
+      console.log(this.$route)
+      const id = this.$route.params.id
+      this.userIdn = id
+      if (this.userInfo.image) {
+        this.image = this.userInfo.image
+      }
+    }
   },
   methods: {
-    ...mapMutations(["SET_USER_IMAGE"]),
+    ...mapMutations(['SET_USER_IMAGE']),
     uploadFail(val, field) {
       console.log('上传失败', val, field)
     },
     uploadSuccess(val, field) {
       console.log(val, field)
-      let data = new FormData();
-      data.append("image", val.jsonData.data);
-      data.append("borrowerId", this.$store.state.userInfo.id);
+      const data = new FormData()
+      data.append('image', val.jsonData.data)
+      data.append('borrowerId', this.$store.state.userInfo.id)
       this.$axios.post(`userBorrower/updateLogoById`, data).then(res => {
         if (res.status === 200) {
-          this.$message.success("修改头像成功");
+          this.$message.success('修改头像成功')
           this.SET_USER_IMAGE(val.jsonData.data)
         }
-      });
+      })
     }
-  },
-  created() {
-    if (this.$store.state.userInfo) {
-      let id = this.$route.params.id;
-      this.userIdn = id;
-      if (this.userInfo.image) {
-        this.image = this.userInfo.image;
-      }
-    }
-    
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

@@ -4,8 +4,8 @@
       <div class="w1200">
         <div class="clearfix">
           <div class="fll clearfix">
-            <img src="/static/1.png" alt="" style="cursor: pointer;float: left;margin-top: 7px;" @click="$router.push('/home')">
-            <div class="fll user-text" style="cursor: pointer" @click="$router.push('/home')">就能贷</div>
+            <img src="/static/1.png" alt="" style="cursor: pointer;float: left;margin-top: 7px;" @click="$router.push('/')">
+            <div class="fll user-text" style="cursor: pointer" @click="$router.push('/')">就能贷</div>
             <div class="fll user-text"> | </div>
             <div :class="this.$route.path === '/userRegister' ? 'active fll user-text cursor-re' : 'fll user-text cursor-re'" @click="user">个人注册</div>
           </div>

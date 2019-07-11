@@ -2,12 +2,12 @@
   <div>
     <div class="agentC">
       <div class="clearfix">
-        
-        <div class="empty-list-show" v-if="!tableData.length">
+
+        <div v-if="!tableData.length" class="empty-list-show">
           <img :src="emptyList" alt="">
           <p>暂无数据...</p>
         </div>
-        <div class="agentItem fll" v-for="(item,index) in tableData" :key="index" @click="agentD(item.product.productId)">
+        <div v-for="(item,index) in tableData" :key="index" class="agentItem fll" @click="agentD(item.product.productId)">
           <div class="clearfix fs">
             <img
               :src="item.product.productLogo"
@@ -16,39 +16,39 @@
               style="cursor: pointer"
             >
             <div class="fll ml4">
-              <div class="name">{{item.product.productName}}</div>
-              <div class="job">{{item.product.productPublisher}}</div>
+              <div class="name">{{ item.product.productName }}</div>
+              <div class="job">{{ item.product.productPublisher }}</div>
               <div
-                class="tel"
                 v-if="item.product.productStartAmount && item.product.productEndAmount"
-              >{{item.product.productStartAmount}}万~{{item.product.productEndAmount}}万</div>
+                class="tel"
+              >{{ item.product.productStartAmount }}万~{{ item.product.productEndAmount }}万</div>
             </div>
             <div class="fll sub" @click.stop="cancelRestore(item.product.productId)">X</div>
           </div>
-          <div class="mt16 little-item mb20">{{item.product.productCharacteristic}}</div>
+          <div class="mt16 little-item mb20">{{ item.product.productCharacteristic }}</div>
           <div class="btn" @click.stop="agentD(item.product.productId)">立即查看</div>
         </div>
       </div>
     </div>
     <div class="page" style="margin-top: 50px;text-align: right">
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        background=""
         :page-size="size"
         :pager-count="5"
-        layout="prev, pager, next"
         :total="count"
-      ></el-pagination>
+        background=""
+        layout="prev, pager, next"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import emptyList from "@/assets/empty-list2.png";
+import { mapState } from 'vuex'
+import emptyList from '@/assets/empty-list2.png'
 export default {
-  name: "productCollect",
+  name: 'ProductCollect',
   data() {
     return {
       emptyList,
@@ -56,14 +56,17 @@ export default {
       size: 5,
       count: 6,
       tableData: []
-    };
+    }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(['userInfo'])
+  },
+  created() {
+    this.getProductColl()
   },
   methods: {
     agentD(id) {
-      this.$router.push(`/productDetail/${id}`);
+      this.$router.push(`/productDetail/${id}`)
     },
     getProductColl() {
       this.$axios
@@ -71,19 +74,19 @@ export default {
           `borpro/selectByBorId/${this.userInfo.id}/${this.page}/${this.size}`
         )
         .then(res => {
-          this.tableData = res.list;
-          this.count = res.totalCount;
-        });
+          this.tableData = res.list
+          this.count = res.totalCount
+        })
     },
     handleCurrentChange(val) {
-      this.page = val;
-      this.getProductColl();
+      this.page = val
+      this.getProductColl()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getProductColl();
+      this.size = val
+      this.getProductColl()
     },
-    //取消产品
+    // 取消产品
     cancelRestore(id) {
       this.$axios
         .post(
@@ -92,15 +95,12 @@ export default {
           }&productId=${id}`
         )
         .then(res => {
-          this.$message.success("取消收藏");
-          this.getProductColl();
-        });
+          this.$message.success('取消收藏')
+          this.getProductColl()
+        })
     }
-  },
-  created() {
-    this.getProductColl();
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

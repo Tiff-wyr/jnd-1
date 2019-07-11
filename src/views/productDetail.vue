@@ -233,9 +233,9 @@
         <div v-else class="dialog-container is-finish">
           <p>您的申请已经提交, 请保持电话联系通畅</p>
           <p>账号：{{ applyForm.phone }}&nbsp;&nbsp;&nbsp;&nbsp;密码：（您手机收到的验证码）</p>
-          <p>这是您的平台账号，<span style="color: #A80E0E;" @click="$router.push({path:'/home',query:{login:1}})">登录</span>平台，即可享受平台专业的金融服务。</p>
+          <p>这是您的平台账号，<span style="color: #A80E0E;" @click="$router.push({path:'/',query:{login:1}})">登录</span>平台，即可享受平台专业的金融服务。</p>
           <div class="btn-box">
-            <a href="#/home">返回首页</a><span @click="dialogVisible = false">关闭窗口</span>
+            <a href="/">返回首页</a><span @click="dialogVisible = false">关闭窗口</span>
           </div>
         </div>
       </el-dialog>

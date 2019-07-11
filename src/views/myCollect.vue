@@ -1,29 +1,29 @@
 <template>
-<div class="collect">
-  <div class="title">我的收藏</div>
-  <div class="clearfix">
-    <router-link class="agentColl fll" :to="{path:`/myMessage/${userIdn}/myCollect/agentCollect`}">经纪人收藏</router-link>
-    <router-link class="organColl fll" :to="{path:`/myMessage/${userIdn}/myCollect/organCollect`}">机构收藏</router-link>
-    <router-link class="productColl fll" :to="{path:`/myMessage/${userIdn}/myCollect/productCollect`}">产品收藏</router-link>
+  <div class="collect">
+    <div class="title">我的收藏</div>
+    <div class="clearfix">
+      <router-link :to="{path:`/myMessage/${userIdn}/myCollect/agentCollect`}" class="agentColl fll">经纪人收藏</router-link>
+      <router-link :to="{path:`/myMessage/${userIdn}/myCollect/organCollect`}" class="organColl fll">机构收藏</router-link>
+      <router-link :to="{path:`/myMessage/${userIdn}/myCollect/productCollect`}" class="productColl fll">产品收藏</router-link>
+    </div>
+    <router-view/>
   </div>
-  <router-view></router-view>
-</div>
 </template>
 
 <script>
-    export default {
-        name: "myCollect",
-      data(){
-          return {
-            userIdn:'',
-          }
-      },
-      created(){
-          let id=this.$route.params.id
-          this.userIdn=id
-      }
-
+export default {
+  name: 'MyCollect',
+  data() {
+    return {
+      userIdn: ''
     }
+  },
+  created() {
+    const id = this.$route.params.id
+    this.userIdn = id
+  }
+
+}
 </script>
 
 <style scoped lang="scss">

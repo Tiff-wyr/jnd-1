@@ -68,12 +68,13 @@ const components = {
   agentResource: () => import('@/views/agentMessage/item/agentResource'),
   agentSecure: () => import('@/views/agentMessage/item/agentSecure'),
   applyRecordAg: () => import('@/views/agentMessage/item/applyRecordAg'),
-  agreement: () => import('@/views/agreement')
+  agreement: () => import('@/views/agreement'),
+  NotFoundComponent: () => import('@/views/404')
 }
 
 export default new Router({
 
-  mode: 'hash',
+  mode: 'history',
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
@@ -111,11 +112,11 @@ export default new Router({
     {
       path: '/',
       component: components.layout,
-      redirect: '/home',
+      redirect: '/',
       name: 'Ahome',
       children: [
         {
-          path: 'home',
+          path: '/',
           name: 'home',
           component: components.home,
           meta: {
@@ -178,12 +179,13 @@ export default new Router({
             setSeo: true,
             seoKey: 'help'
           },
-          redirect: '/help/guide',
+          redirect: '/guide',
           children: [
             {
               path: 'question',
               name: 'question',
               component: components.question,
+              alias: '/question',
               meta: {
                 classify: 'help',
                 setSeo: true,
@@ -193,6 +195,7 @@ export default new Router({
             {
               path: 'guide',
               name: 'guide',
+              alias: '/guide',
               component: components.guide,
               meta: {
                 classify: 'help',
@@ -204,6 +207,7 @@ export default new Router({
               path: 'matter',
               name: 'matter',
               component: components.matter,
+              alias: '/matter',
               meta: {
                 classify: 'help',
                 setSeo: true,
@@ -249,14 +253,16 @@ export default new Router({
         {
           path: 'myMessage/:id',
           component: components.myMessage,
-          redirect: '/myMessage/:id/personMessage',
+          redirect: '/personMessage/:id',
           children: [
             {
               path: 'personMessage',
+              alias: '/personMessage/:id',
               component: components.personMessage
             },
             {
               path: 'applyRecordMy',
+              alias: '/applyRecordMy/:id',
               component: components.applyRecordMy
             },
             {
@@ -410,7 +416,8 @@ export default new Router({
     {
       path: '/organRegister',
       component: components.organRegister
-    }
+    },
+    { path: '*', component: components.NotFoundComponent }
 
   ]
 })

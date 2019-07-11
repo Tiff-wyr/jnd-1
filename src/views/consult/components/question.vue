@@ -30,7 +30,7 @@ const questionList = [
   { value: 2, label: '哪些情况会导致贷款失败?' }
 ]
 export default {
-  name: 'question',
+  name: 'Question',
   data() {
     return {
       guideList,
@@ -41,7 +41,7 @@ export default {
   methods: {
     handleLook(val, type) {
       this.$router.push({
-        path: '/help/' + type,
+        path: '/' + type,
         query: {
           id: val
         }
@@ -66,6 +66,6 @@ export default {
         color: #515151;
       }
     }
-  } 
+  }
 }
 </style>

@@ -76,10 +76,10 @@ export default {
   },
   methods: {
     goLogin() {
-      this.$router.push({ path: '/home', query: { login: 1 }})
+      this.$router.push({ path: '/', query: { login: 1 }})
     },
     goHelp() {
-      this.$router.push('/help/guide')
+      this.$router.push('/guide')
     },
 
     setPhone() {

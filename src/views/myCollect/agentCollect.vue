@@ -2,52 +2,53 @@
   <div>
     <div class="agentC">
       <div class="clearfix">
-        
-        <div class="empty-list-show" v-if="!tableData.length">
+
+        <div v-if="!tableData.length" class="empty-list-show">
           <img :src="emptyList" alt="">
           <p>暂无数据...</p>
         </div>
-        <div class="agentItem fll" v-for="(item,index) in tableData" :key="index" @click="agentD(item.brokerId)">
+        <div v-for="(item,index) in tableData" :key="index" class="agentItem fll" @click="agentD(item.brokerId)">
           <div class="clearfix fs">
             <img :src="item.image" alt="" class="fll pic" style="cursor: pointer">
             <div class="fll ml4">
-              <div class="name">{{item.brokerName}}</div>
+              <div class="name">{{ item.brokerName }}</div>
               <div class="job">金融顾问</div>
-              <div class="tel">{{item.phone}}</div>
+              <div class="tel">{{ item.phone }}</div>
             </div>
             <div class="fll sub" @click.stop="sub(item.brokerId)">X</div>
           </div>
           <div class="clearfix mt8 mb16">
             <div
-              class="fll mt8 little-item"
               v-for="(it,id) in item.businessList"
+              v-if="id < 6"
               :key="id"
-            >{{it.business}}</div>
+              class="fll mt8 little-item"
+            >{{ it.business }}</div>
           </div>
           <div class="btn" @click.stop="chat(item.brokerId)">立即联系</div>
         </div>
       </div>
-      
+
     </div>
     <div class="page" style="margin-top: 50px;text-align: right">
       <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        background=""
         :page-size="size"
         :pager-count="5"
-        layout="prev, pager, next"
         :total="count"
-      ></el-pagination>
+        background=""
+        layout="prev, pager, next"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import emptyList from "@/assets/empty-list2.png";
-import { mapState } from "vuex";
+import emptyList from '@/assets/empty-list2.png'
+import { mapState } from 'vuex'
 export default {
-  name: "agentCollect",
+  name: 'AgentCollect',
   data() {
     return {
       emptyList,
@@ -55,20 +56,23 @@ export default {
       size: 5,
       count: 6,
       tableData: []
-    };
+    }
   },
   computed: {
-    ...mapState(["userInfo"])
+    ...mapState(['userInfo'])
+  },
+  created() {
+    this.getAgentColl()
   },
   methods: {
     chat(id) {
       this.$router.push({
         path: `/myMessage/${this.$store.state.userInfo.id}/messageCenter`,
         query: { id: id, roleId: 2 }
-      });
+      })
     },
     agentD(id) {
-      this.$router.push(`/agentDetail/${id}`);
+      this.$router.push(`/agentDetail/${id}`)
     },
     getAgentColl() {
       this.$axios
@@ -78,17 +82,17 @@ export default {
           }&page=${this.size}`
         )
         .then(res => {
-          this.tableData = res.rows;
-          this.count = res.total;
-        });
+          this.tableData = res.rows
+          this.count = res.total
+        })
     },
     handleCurrentChange(val) {
-      this.page = val;
-      this.getAgentColl();
+      this.page = val
+      this.getAgentColl()
     },
     handleSizeChange(val) {
-      this.size = val;
-      this.getAgentColl();
+      this.size = val
+      this.getAgentColl()
     },
     sub(id) {
       this.$axios
@@ -99,16 +103,13 @@ export default {
         )
         .then(res => {
           if (res.status === 200) {
-            this.$message.success("删除成功");
-            this.getAgentColl();
+            this.$message.success('删除成功')
+            this.getAgentColl()
           }
-        });
+        })
     }
-  },
-  created() {
-    this.getAgentColl();
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
