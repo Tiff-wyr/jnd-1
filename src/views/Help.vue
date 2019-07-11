@@ -36,6 +36,16 @@ import bottomTap from '../component/bottomTap'
 import footerSame from '../component/footerSame'
 export default {
   name: 'Help',
+  metaInfo: {
+    title: '怎么办贷款_贷款逾期怎么办_贷款多久能办下来_买二手房怎么办贷款_9能贷款',
+    meta: [{
+      name: 'keyWords',
+      content: '如何办贷款,办卡贷款吗,哪个机构贷款,贷款卡怎么办,怎么办抵押贷款,抵押贷款怎么办,无息贷款怎么办,贷款机构有哪些,贷款还不上怎么办,贷款办不下来怎么办,还不起贷款怎么办,怎么办信用卡贷款,网上贷款怎么办,买房子怎么办贷款,信用卡呢能办贷款吗,正规贷款机构有哪些,贷款买车需要什么手续,公积金贷款能贷多少,9能贷款'
+    }, {
+      name: 'description',
+      content: '9能贷联合各类大型的金融机构,深度挖掘安全的金融服务渠道机构,为用户提供安全、多元的贷款产品和定制化的专业资金服务,打造更契合用户自身需求的贷款管理方案.办贷款手续,贷款买房流程,二手房贷款流程,公积金贷款流程,公积金贷款额度,住房公积金贷款条件,住房公积金贷款额度,住房公积金贷款利率.'
+    }]
+  },
   components: {
     footerSame,
     bottomTap

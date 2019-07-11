@@ -11,12 +11,13 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './style/iconfont/iconfont.css'
 import scroll from 'vue-seamless-scroll'
-import './util/setTitle'
 Vue.config.productionTip = false
 Vue.prototype.$isPay = false
 Vue.prototype.$axios = axios
+import MetaInfo from 'vue-meta-info'
 Vue.use(ElementUI)
 Vue.use(scroll)
+Vue.use(MetaInfo)
 import './icons' // icon
 
 new Vue({
@@ -24,6 +25,9 @@ new Vue({
   router,
   store,
   components: { App },
+  mounted() {
+    document.dispatchEvent(new Event('render-event'))
+  },
   template: '<App/>',
   render: h => h(App)
 })

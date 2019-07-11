@@ -38,6 +38,16 @@ import apply from './components/apply'
 import question from './components/question'
 import { fetchList } from '@/api/consult'
 export default {
+  metaInfo: {
+    title: '金融资讯_互联网金融资讯_金融资讯平台_北京金融资讯_最新金融资讯_9能贷款',
+    meta: [{
+      name: 'keyWords',
+      content: '金融资讯,金融资讯类,金融资讯协会,最新金融资讯,金融资讯行业,金融资讯网,金融资讯新闻,今日金融资讯,财经金融资讯,金融资讯北京,金融资讯类,金融资讯公司,金融资讯app,银行金融资讯,汽车金融资讯,金融资讯服务,金融资讯行业分析,2019年金融资讯,互联网金融资讯门户'
+    }, {
+      name: 'description',
+      content: '9能贷联合各类大型的金融机构,深度挖掘安全的金融服务渠道机构,为用户提供安全、多元的贷款产品和定制化的专业资金服务,打造更契合用户自身需求的贷款管理方案.金融资讯平台哪家最好.专业金融资讯平台,9能贷款.'
+    }]
+  },
   components: {
     footerSame,
     articleList,
