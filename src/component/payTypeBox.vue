@@ -5,7 +5,7 @@
         <img src="../../static/resource/vip/vip.png" alt="">
         <span class="title">就能贷VIP会员</span>
         <input v-model="checked" type="checkbox" class="check-box">
-        <span class="tips">同意<a href="#/agreement?memberService" target="_blank" style="color: #4a90e2;">《服务条款》</a></span>
+        <span class="tips">同意<a href="/agreement?memberService" target="_blank" style="color: #4a90e2;">《服务条款》</a></span>
         <i class="close" @click="closeDialog">×</i>
       </div>
       <div class="member-body">

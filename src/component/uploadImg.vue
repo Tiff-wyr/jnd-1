@@ -11,7 +11,7 @@
       :params="params"
       :headers="headers"
       field="file"
-      url="https://www.9nengdai.com/aly/aliyun/headImgUpload"
+      url="https://www.9nengdai.com/api/aly/aliyun/headImgUpload"
       img-format="png"
       @crop-success="cropSuccess"
       @crop-upload-success="cropUploadSuccess"
@@ -28,6 +28,7 @@ export default {
     'my-upload': myUpload
   },
   props: {
+    // eslint-disable-next-line vue/require-default-prop
     imgUrl: {
       type: String
     }

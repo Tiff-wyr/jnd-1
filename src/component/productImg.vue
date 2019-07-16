@@ -1,21 +1,22 @@
 <template>
-<!-- https://www.rjkf001.com -->
+  <!-- https://www.rjkf001.com -->
   <el-upload
-    class="myupload"
     :data="uploadData"
-    :action="uploadUrl + '/aly/aliyun/headImgUpload'"
+    :action="'https://www.9nengdai.com/api/aly/aliyun/headImgUpload'"
     :show-file-list="false"
     :on-success="uploadSuccess"
     :phone="phone"
-    :before-upload="beforeUpload">
-    <img :src="value" v-show="value" style="width: 30px;height: 30px;">
-    <i class="el-icon-plus my-icon" v-show="!value"></i>
+    :before-upload="beforeUpload"
+    class="myupload">
+    <img v-show="value" :src="value" style="width: 30px;height: 30px;">
+    <i v-show="!value" class="el-icon-plus my-icon"/>
   </el-upload>
 </template>
 
 <script>
 export default {
   props: {
+    // eslint-disable-next-line vue/require-default-prop
     value: {
       type: String
     },
@@ -27,10 +28,10 @@ export default {
   data() {
     return {
       uploadData: {
-        phone: ""
+        phone: ''
       },
       uploadUrl: ''
-    };
+    }
   },
   created() {
     this.uploadUrl = location.host.includes('localhost') ? location.origin + '/api' : location.origin
@@ -38,26 +39,26 @@ export default {
   methods: {
     uploadSuccess(file) {
       if (file.data.indexOf('http') !== -1) {
-        this.value = file.data + "?" + new Date().getTime();
-        this.$emit("success", file);
+        this.value = file.data + '?' + new Date().getTime()
+        this.$emit('success', file)
       } else {
-        this.$message.warning(file.msg);
+        this.$message.warning(file.msg)
       }
     },
     beforeUpload(file) {
-      this.uploadData.phone = this.phone;
-      const isJPG = file.type === "image/jpeg" || file.type === "image/png";
-      const isLt2M = file.size / 1024 / 1024 < 1;
+      this.uploadData.phone = this.phone
+      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
+      const isLt2M = file.size / 1024 / 1024 < 1
       if (!isLt2M) {
-        this.$message.warning("上传头像图片大小不能超过 1MB!");
+        this.$message.warning('上传头像图片大小不能超过 1MB!')
       }
       if (!isJPG) {
-        this.$message.warning("上传图片格式不正确!");
+        this.$message.warning('上传图片格式不正确!')
       }
-      return isLt2M && isJPG;
+      return isLt2M && isJPG
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

@@ -1,26 +1,28 @@
 <template>
   <div class="clearfix">
-    <label class="radio_wrap fll" v-for="item in radios" :key="item.value">
-      <input @change="handlerChange" class="none" :value="item.value" type="radio" :name="name">
-      <div class="radio_label">{{item.label}}</div>
+    <label v-for="item in radios" :key="item.value" class="radio_wrap fll">
+      <input :value="item.value" :name="name" class="none" type="radio" @change="handlerChange">
+      <div class="radio_label">{{ item.label }}</div>
     </label>
   </div>
 </template>
 
 <script>
-    export default {
-      name: "w-radios",
-      props: {
-        name: String,
-        radios: Array
-      },
-      methods: {
-        handlerChange(e){
-          let val = e.target.value
-          this.$emit('input', val)
-        }
-      }
+export default {
+  name: 'WRadios',
+  props: {
+    // eslint-disable-next-line vue/require-default-prop
+    name: String,
+    // eslint-disable-next-line vue/require-default-prop
+    radios: Array
+  },
+  methods: {
+    handlerChange(e) {
+      const val = e.target.value
+      this.$emit('input', val)
     }
+  }
+}
 </script>
 
 <style scoped lang="scss">

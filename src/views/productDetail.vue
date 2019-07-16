@@ -216,7 +216,7 @@
               </el-form-item>
               <el-form-item>
                 <span>
-                  <el-checkbox v-model="checked" class="check-box"/>阅读并同意<a href="#/agreement?userRegister" target="_blank" style="color: #4a90e2;">《9能贷用户注册协议》</a><a href="#/agreement?userProtect" target="_blank" style="color: #4a90e2;">《用户隐私保护政策》</a>
+                  <el-checkbox v-model="checked" class="check-box"/>阅读并同意<a href="/agreement?userRegister" target="_blank" style="color: #4a90e2;">《9能贷用户注册协议》</a><a href="/agreement?userProtect" target="_blank" style="color: #4a90e2;">《用户隐私保护政策》</a>
                 </span>
               </el-form-item>
               <el-form-item>

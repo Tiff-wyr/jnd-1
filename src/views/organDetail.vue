@@ -162,8 +162,8 @@
                     <el-option
                       v-for="item in provinceData"
                       :key="item.pid"
-                      :label="item.provincial" 
-:value="item.pid"/>
+                      :label="item.provincial"
+                      :value="item.pid"/>
                   </el-select>
                   <el-select v-model="borrowerData.address2" clearable style="margin-left: 10px;width: 100px;">
                     <el-option v-for="item in cityData" :key="item.cid" :label="item.city" :value="item.cid"/>
@@ -213,7 +213,7 @@
                   <el-button v-else style="width: 110px;" @click="send">{{ time }}s</el-button>
                 </el-form-item>
                 <el-form-item prop="agree">
-                  <el-checkbox v-model="agree" style="display: inline-block">阅读并同意</el-checkbox><a href="#/agreement?userRegister" target="_blank" style="color: #4a90e2;">《9能贷用户注册协议》</a><a href="#/agreement?userProtect" target="_blank" style="color: #4a90e2;">《用户隐私保护政策》</a>
+                  <el-checkbox v-model="agree" style="display: inline-block">阅读并同意</el-checkbox><a href="/agreement?userRegister" target="_blank" style="color: #4a90e2;">《9能贷用户注册协议》</a><a href="/agreement?userProtect" target="_blank" style="color: #4a90e2;">《用户隐私保护政策》</a>
                 </el-form-item>
                 <el-form-item>
                   <el-button class="apply" @click="freeApply">免费申请</el-button>
@@ -659,10 +659,7 @@ export default {
           const data = new FormData()
           data.append('borId', this.$store.state.userInfo.id)
           data.append('agencyId', this.organId)
-          this.$axios.post(`borLook/addLook`, data).then(res => {
-            if (res.status === 200) {
-            }
-          })
+          this.$axios.post(`borLook/addLook`, data)
         }
       }
     },

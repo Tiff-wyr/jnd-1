@@ -220,7 +220,7 @@
                       @click="$router.push({path:'/',query:{login:1}})"
                     >已有账号？立即登陆</div>
                   </div>
-                  <div class="agreement"><el-checkbox v-model="isChecked"/> 阅读并同意 <a href="#/agreement?userRegister" target="_blank">《9能贷用户注册协议》</a></div>
+                  <div class="agreement"><el-checkbox v-model="isChecked"/> 阅读并同意 <a href="/agreement?userRegister" target="_blank">《9能贷用户注册协议》</a></div>
                 </el-form-item>
               </div>
             </div>

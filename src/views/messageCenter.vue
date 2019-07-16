@@ -235,7 +235,7 @@ export default {
     // 单独删除
     deleteShouRow(id) {
       this.$axios.get(`message/removeReceiveMessage/${id}/${this.$store.state.userInfo.phone}`).then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           this.$message.success('删除成功')
           this.getSMessage()
           this.listLoading = false
@@ -244,7 +244,7 @@ export default {
     },
     deleteFaRow(id) {
       this.$axios.get(`message/removeSendMessage/${id}/${this.$store.state.userInfo.phone}`).then(res => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           this.$message.success('删除成功')
           this.getFMessage()
           this.listLoading = false

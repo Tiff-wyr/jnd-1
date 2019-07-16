@@ -1,29 +1,30 @@
 <template>
   <div class="step-wrap clearfix">
-    <div class="step-item fll clearfix" v-for="(item, index) in list" :key="index">
+    <div v-for="(item, index) in list" :key="index" class="step-item fll clearfix">
       <div class="step-content fll">
-        <div :class="index <= active-1 ? 'step step_active': 'step'">{{index + 1}}</div>
-        <div class="content">{{item}}</div>
+        <div :class="index <= active-1 ? 'step step_active': 'step'">{{ index + 1 }}</div>
+        <div class="content">{{ item }}</div>
       </div>
       <div
-        :class="index < active-1 ? 'line line-arrive fll': (index === active-1 ? 'line line-active fll' : 'line fll')"
         v-if="index < list.length-1"
-      ></div>
+        :class="index < active-1 ? 'line line-arrive fll': (index === active-1 ? 'line line-active fll' : 'line fll')"
+      />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "step",
+  name: 'Step',
   props: {
+    // eslint-disable-next-line vue/require-default-prop
     list: Array,
     active: {
       type: Number,
       default: 1
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

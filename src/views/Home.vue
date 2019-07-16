@@ -75,8 +75,8 @@
               阅读并同意9能贷用户相关协议<i class="el-icon-arrow-down el-icon--right"/>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-plus"><a href="#/agreement?userProtect" target="_blank">《9能贷用户隐私保护政策》</a></el-dropdown-item>
-              <el-dropdown-item icon="el-icon-circle-plus"><a href="#/agreement?userRegister" target="_blank">《9能贷用户注册协议》</a></el-dropdown-item>
+              <el-dropdown-item icon="el-icon-plus"><a href="/agreement?userProtect" target="_blank">《9能贷用户隐私保护政策》</a></el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-plus"><a href="/agreement?userRegister" target="_blank">《9能贷用户注册协议》</a></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>

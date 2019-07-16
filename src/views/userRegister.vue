@@ -87,8 +87,8 @@
                   </div>
                   <div class="agreement">
                     <el-checkbox v-model="isChecked"/>阅读并同意
-                    <a href="#/agreement?userProtect" target="_blank">《9能贷用户隐私保护政策》</a>
-                    <a href="#/agreement?userRegister" target="_blank">《9能贷用户注册协议》</a>
+                    <a href="/agreement?userProtect" target="_blank">《9能贷用户隐私保护政策》</a>
+                    <a href="/agreement?userRegister" target="_blank">《9能贷用户注册协议》</a>
                   </div>
                 </el-form-item>
               </div>

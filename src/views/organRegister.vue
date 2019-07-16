@@ -165,8 +165,8 @@
                   </div>
                   <div class="agreement">
                     <el-checkbox v-model="isChecked"/>阅读并同意
-                    <a href="#/agreement?loanOfficerRegister" target="_blank">《9能贷信贷员注册协议》</a>
-                    <a href="#/agreement?loanOfficerCodeConduct" target="_blank">《9能贷信贷员行为规范》</a>
+                    <a href="/agreement?loanOfficerRegister" target="_blank">《9能贷信贷员注册协议》</a>
+                    <a href="/agreement?loanOfficerCodeConduct" target="_blank">《9能贷信贷员行为规范》</a>
                   </div>
                 </el-form-item>
               </div>

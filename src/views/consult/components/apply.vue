@@ -34,7 +34,7 @@
           <span class="btn apply" @click="handleApply">立即申请</span>
           <p>
             <el-checkbox v-model="checked"/>
-            <a href="#/agreement?loanOfficerRegister" target="_blank">阅读并同意9能贷相关注册协议</a>
+            <a href="/agreement?loanOfficerRegister" target="_blank">阅读并同意9能贷相关注册协议</a>
           </p>
         </el-form-item>
       </el-form>

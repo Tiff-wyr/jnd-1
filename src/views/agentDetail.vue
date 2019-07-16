@@ -187,7 +187,7 @@
                   <el-button v-else style="width: 110px;" @click="send">{{ time }}s</el-button>
                 </el-form-item>
                 <el-form-item prop="agree">
-                  <el-checkbox v-model="agree" style="display: inline-block">阅读并同意</el-checkbox><a href="#/agreement?userRegister" target="_blank" style="color: #4a90e2;">《9能贷用户注册协议》</a><a href="#/agreement?userProtect" target="_blank" style="color: #4a90e2;">《用户隐私保护政策》</a>
+                  <el-checkbox v-model="agree" style="display: inline-block">阅读并同意</el-checkbox><a href="/agreement?userRegister" target="_blank" style="color: #4a90e2;">《9能贷用户注册协议》</a><a href="/agreement?userProtect" target="_blank" style="color: #4a90e2;">《用户隐私保护政策》</a>
                 </el-form-item>
                 <el-form-item>
                   <el-button class="apply" @click="freeApply">免费申请</el-button>

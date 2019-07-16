@@ -1,38 +1,41 @@
 <template>
   <div class="clearfix">
-    <label class="radio_wrap fll" v-for="item in radios" :key="item.value">
-      <input @change="handlerChange" class="none" v-model="valueData" :value="item.value" type="checkbox" :name="name">
-      <div class="radio_label">{{item.label}}</div>
+    <label v-for="item in radios" :key="item.value" class="radio_wrap fll">
+      <input v-model="valueData" :value="item.value" :name="name" class="none" type="checkbox" @change="handlerChange">
+      <div class="radio_label">{{ item.label }}</div>
     </label>
   </div>
 </template>
 
 <script>
-  export default {
-    name: "w-checkBox",
-    props: {
-      name: String,
-      radios: Array
-    },
-    data() {
-      return {
-        valueData: []
+export default {
+  name: 'WCheckBox',
+  props: {
+    // eslint-disable-next-line vue/require-default-prop
+    name: String,
+    // eslint-disable-next-line vue/require-default-prop
+    radios: Array
+  },
+  data() {
+    return {
+      valueData: []
+    }
+  },
+  methods: {
+    handlerChange(e) {
+      const nowVal = e.target.value
+      const index = this.valueData.indexOf(0)
+      // eslint-disable-next-line eqeqeq
+      if (index > -1 && nowVal != '0') {
+        this.valueData.splice(index, 1)
+      } else if (parseInt(nowVal) === 0) {
+        this.valueData = [0]
       }
-    },
-    methods: {
-      handlerChange(e){
-        let nowVal = e.target.value
-        let index = this.valueData.indexOf(0)
-        if (index > -1 && nowVal != "0") {
-          this.valueData.splice(index, 1)
-        } else if (nowVal == "0") {
-          this.valueData = [0]
-        }
-        console.log(this.valueData)
-        this.$emit('input', this.valueData.toString())
-      }
+      console.log(this.valueData)
+      this.$emit('input', this.valueData.toString())
     }
   }
+}
 </script>
 
 <style scoped lang="scss">

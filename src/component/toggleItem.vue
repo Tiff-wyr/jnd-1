@@ -1,17 +1,17 @@
 <template>
-    <div class="toggle-wrap">
-      <div class="toggle-title" :class="{'border-dashed': isShow}">{{ title }}<span @click="update">{{ isShow ? '收起' : '修改' }}</span></div>
-      <p class="container" v-if="!isShow"><slot></slot></p>
-      <transition name="toggle">
-        <div class="toggle-hidden-container" v-if="$slots.hidden && isShow">
-          <slot name="hidden"></slot>
-        </div>
-      </transition>
-    </div>
+  <div class="toggle-wrap">
+    <div :class="{'border-dashed': isShow}" class="toggle-title">{{ title }}<span @click="update">{{ isShow ? '收起' : '修改' }}</span></div>
+    <p v-if="!isShow" class="container"><slot/></p>
+    <transition name="toggle">
+      <div v-if="$slots.hidden && isShow" class="toggle-hidden-container">
+        <slot name="hidden"/>
+      </div>
+    </transition>
+  </div>
 </template>
 <script>
 export default {
-  name: "toggleItem",
+  name: 'ToggleItem',
   props: {
     title: {
       type: String,
@@ -28,7 +28,7 @@ export default {
       this.$emit('click')
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .toggle-enter-active, .toggle-leave-active {

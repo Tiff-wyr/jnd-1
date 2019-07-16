@@ -1,15 +1,15 @@
 <template>
-  <div class="jnd-wrap" v-if="visible">
-    <div class="jnd-dialog" :style="{top: top, width: width}">
+  <div v-if="visible" class="jnd-wrap">
+    <div :style="{top: top, width: width}" class="jnd-dialog">
       <div class="jnd-title">
         <img v-if="msgType === 'warning'" :src="warning" alt="" class="jnd-msg-type">
         <span>{{ title }}</span>
       </div>
       <div class="jnd-container">
-        <slot></slot>
+        <slot/>
       </div>
-      <div class="jnd-footer" v-if="$slots.footer">
-        <slot name="footer"></slot>
+      <div v-if="$slots.footer" class="jnd-footer">
+        <slot name="footer"/>
       </div>
     </div>
   </div>
@@ -17,7 +17,7 @@
 <script>
 import warning from '../assets/warning.png'
 export default {
-  name: "jndDialog",
+  name: 'JndDialog',
   props: {
     visible: {
       type: Boolean,
@@ -44,41 +44,41 @@ export default {
   data() {
     return {
       warning
-    };
+    }
   },
-  created() {},
   watch: {
     visible: function(val, oldVal) {
       if (val) {
-        this.stop();
+        this.stop()
       } else {
-        this.move();
+        this.move()
       }
     }
   },
+  created() {},
   mounted() {
     console.log('mounted', this.visible)
-  },
-  methods: {
-    stop() {
-      var mo = function(e) {
-        e.preventDefault();
-      };
-      document.body.style.overflow = "hidden";
-      document.addEventListener("touchmove", mo, false); //禁止页面滑动
-    },
-    move() {
-      var mo = function(e) {
-        e.preventDefault();
-      };
-      document.body.style.overflow = ""; //出现滚动条
-      document.removeEventListener("touchmove", mo, false);
-    }
   },
   destroyed() {
     this.move()
   },
-};
+  methods: {
+    stop() {
+      var mo = function(e) {
+        e.preventDefault()
+      }
+      document.body.style.overflow = 'hidden'
+      document.addEventListener('touchmove', mo, false) // 禁止页面滑动
+    },
+    move() {
+      var mo = function(e) {
+        e.preventDefault()
+      }
+      document.body.style.overflow = '' // 出现滚动条
+      document.removeEventListener('touchmove', mo, false)
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 .jnd-wrap {
