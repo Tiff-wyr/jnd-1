@@ -29,12 +29,8 @@ export default {
       uploadData: {
         phone: ''
       },
-      currentValue: this.value,
-      uploadUrl: ''
+      currentValue: this.value
     }
-  },
-  created() {
-    this.uploadUrl = location.host.includes('localhost') ? location.origin + '/api' : location.origin
   },
   methods: {
     uploadSuccess(file) {
