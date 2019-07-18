@@ -23,7 +23,7 @@
       <div class="w1200">
         <div class="link-wrap clearfix">
           <div class="fll">
-            <a href="#/">
+            <a href="/">
               <img
                 src="/static/1.png"
                 style="margin-top: 8px;float: left"

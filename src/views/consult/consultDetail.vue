@@ -79,7 +79,7 @@ export default {
         this.getUpDown(id)
         this.readArticle(id)
         backTop()
-        location.hash = '#/consultDetail?id=' + id
+        location.hash = '/consultDetail?id=' + id
       }
     },
     readArticle(id) {
