@@ -96,10 +96,10 @@ export function formatPhone(phone) {
  * @param {*} max
  */
 export function randomWord(randomFlag, min, max) {
-  var str = '',
-    pos = '',
-    range = min,
-    arr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+  var str = ''
+  var pos = ''
+  var range = min
+  var arr = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
   // 随机产生
   if (randomFlag) {
@@ -119,6 +119,7 @@ export function createA(url) {
   const a = document.createElement('a')
   a.href = url
   a.target = '_blank'
+  console.log(a)
   a.click()
 }
 

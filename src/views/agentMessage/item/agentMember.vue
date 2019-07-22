@@ -369,6 +369,7 @@ export default {
       this.getMember()
     },
     reviewPay(val) {
+      // eslint-disable-next-line eqeqeq
       if (this.payType == 2) {
         reviewAliPay(this.orderSn, this.params)
       } else {
