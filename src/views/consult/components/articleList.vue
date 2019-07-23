@@ -12,7 +12,7 @@
               <img :src="item.image" alt="title">
             </dt>
             <dd>
-              <h3 :title="item.topic">{{ item.topic }}</h3>
+              <h3 :title="item.topic" :class="{active: index === 0}">{{ item.topic }}</h3>
               <div v-if="index === 0" :title="item.introduction" class="article-main">{{ item.introduction }}</div>
             </dd>
           </dl>
@@ -75,10 +75,16 @@ export default {
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
+          font-weight: 500;
+          &.active {
+            font-weight: 600;
+          }
         }
         .article-main {
           display: -webkit-box;
+           /*! autoprefixer: off */
           -webkit-box-orient: vertical;
+          /* autoprefixer: on */
           -webkit-line-clamp: 3;
           overflow: hidden;
           margin-top: 10px;

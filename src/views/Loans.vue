@@ -6,7 +6,7 @@
           <ul class="list">
             <li v-for="(item, index) in items" :key="index" :class="{ active: currentIndex === index }" :style="{ backgroundImage: 'url(' + item.bg + ')' }" class="item" @mouseover="mouseover(index)">
               <h3>{{ item.title }}</h3>
-              <div class="content" v-if="currentIndex === index" v-html="item.content"/>
+              <div v-if="currentIndex === index" class="content" v-html="item.content"/>
               <a v-if="currentIndex === index" :href="'/productList?type=' + item.key" class="btn">{{ item.title }}</a>
             </li>
           </ul>
@@ -253,6 +253,7 @@ export default {
       .content {
         line-height: 2;
         font-size: 14px;
+        white-space: nowrap;
       }
       .btn {
         position: absolute;
