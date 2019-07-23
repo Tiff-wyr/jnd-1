@@ -1,11 +1,4 @@
 import request from './request'
-export function fetchList(params) {
-  return request({
-    url: `/information/getList`,
-    method: 'post',
-    params
-  })
-}
 
 export function fetchDetail(id) {
   return request({
@@ -24,6 +17,24 @@ export function addNum(id) {
 export function upDownArticle(id) {
   return request({
     url: '/information/upDownInformation/' + id,
+    method: 'get'
+  })
+}
+
+export function fetchUp(id) {
+  const params = {
+    id
+  }
+  return request({
+    url: '/information/getUpList',
+    method: 'get',
+    params
+  })
+}
+
+export function fetchDown() {
+  return request({
+    url: '/information/getDownList',
     method: 'get'
   })
 }

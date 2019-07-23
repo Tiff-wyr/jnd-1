@@ -235,6 +235,16 @@ import { validaterPhone, validaterName, validaterLoanAmount } from '@/util/valid
 import { formatPhone } from '@/util/util'
 export default {
   name: 'OrganDetail',
+  metaInfo: {
+    title: '9能贷款_贷款申请_申请贷款100%下款_个人贷款申请找9能贷款',
+    meta: [{
+      name: 'keyWords',
+      content: '助学贷款申请,贷款申请,申请贷款,助学贷款申请表,信用贷款申请,公积金贷款申请,个人贷款申请书,个人贷款申请,企业贷款申请书,贷款卡申请书,公司贷款申请书范文,大学生创业贷款申请,银行申请贷款,申请公积金贷款,申请贷款表,贷款申请表,银行贷款申请,个人申请贷款,贷款申请条件,申请创业贷款,公司贷款申请,小额贷款申请,申请小额贷款,装修贷款申请,企业贷款申请,网上申请贷款'
+    }, {
+      name: 'description',
+      content: '9能贷款联合各类大型的金融机构,深度挖掘安全的金融服务渠道机构,为用户提供安全、多元的贷款产品和定制化的专业资金服务,打造更契合用户自身需求的贷款管理方案.找贷款,找经纪人,找机构,办理贷款上9能贷款;放款快,利率低0.35%,额度高,门槛低,渠道广.怎样申请助学贷款,如何申请助学贷款,助学贷款怎么申请,怎样申请小额贷款,怎样写贷款申请书,如何向银行申请贷款,如何申请创业贷款'
+    }]
+  },
   components: {
     footerSame
   },
@@ -443,7 +453,7 @@ export default {
       this.borrowerData.borrowerName = this.$store.state.userInfo.name
       this.borrowerData.sex = this.$store.state.userInfo.sex
     }
-    this.organId = this.$route.params.id
+    this.organId = this.$route.query.id
     this.getDetail(this.organId)
     this.getProduct(this.organId)
     this.getVictory(this.organId)
@@ -476,7 +486,7 @@ export default {
       }
     },
     lookDetail(id) {
-      this.$router.push(`/productDetail/${id}`)
+      this.$router.push(`/productDetail?id=${id}`)
     },
     // 获取省
     getProvince() {

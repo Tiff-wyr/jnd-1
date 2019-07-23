@@ -586,16 +586,16 @@ export default {
     },
     // 特别推荐详情页
     specialLook(id) {
-      this.$router.push(`/productDetail/${id}`)
+      this.$router.push(`/productDetail?id=${id}`)
     },
     proDetail(id) {
-      this.$router.push(`/productDetail/${id}`)
+      this.$router.push(`/productDetail?id=${id}`)
     },
     orDetail(id) {
-      this.$router.push(`/organDetail/${id}`)
+      this.$router.push(`/organDetail`)
     },
     agDetail(id) {
-      this.$router.push(`/agentDetail/${id}`)
+      this.$router.push(`/agentDetail`)
     },
 
     // 特别推荐

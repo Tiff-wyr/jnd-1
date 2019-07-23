@@ -2,58 +2,14 @@
   <div>
     <div class="wrappy">
       <div class="w1200">
-        <div class="clearfix">
-          <div class="loan-left fll">
-            <div v-for="(item,index) in proData" :key="index" class="left1 clearfix">
-              <img :src="item.productOccupation" alt="" class="fll">
-              <div class="fll left-one">
-                <div class="salary mt4">{{ item.productProperty }}</div>
-                <div class="credit mt18">{{ item.productCharacteristic }}</div>
-              </div>
-              <div class="fll left-two">
-                <div class="same mt14">抵押物:
-                  <span class="toge">&nbsp;{{ item.productCondition }}</span>
-                </div>
-                <div class="same mt18">利率范围:
-                  <span class="toge">&nbsp;{{ item.productInterest }}%</span>
-                </div>
-              </div>
-              <div class="fll left-three">
-                <div class="same mt14">到账时间：
-                  <span class="toge">&nbsp;{{ item.producLoanLength }}</span>
-                </div>
-                <div class="same mt18">贷款金额:
-                  <span class="toge">&nbsp;&nbsp;最高{{ item.productEndAmount }}万</span>
-                </div>
-              </div>
-              <div class="btn fll left-four" @click="enterDetail">立即查看</div>
-            </div>
-          </div>
-          <div class="loan-right fll">
-            <div class="top">
-              <div class="agent-rank">经纪人排行榜</div>
-              <div
-                v-for="(item,index) in agentNumData"
-                :key="index"
-                class="rank-item clearfix fs"
-                @click="enterAgent(item.brokerId)"
-              >
-                <div class="fll" style="width: 50px;text-align: center;margin-top: 13px;">
-                  <img :src="item.icon" alt="">
-                </div>
-                <img v-if="item.image" :src="item.image" alt="" class="fll agent-img">
-                <img v-else src="/static/resource/pic/agent.png" alt="" class="fll agent-img">
-                <div class="fll ml5">
-                  <div class="clearfix mt8 w120">
-                    <div class="name fll">{{ item.brokerName }}</div>
-                    <!-- <div class="num flr">{{item.count}}笔</div> -->
-                  </div>
-                  <div class="desc">{{ item.company }}</div>
-                </div>
-              </div>
-            </div>
-            <div class="bottom" @click="$router.push('/agent')">更多顾问>></div>
-          </div>
+        <div class="accordion-wrap">
+          <ul class="list">
+            <li v-for="(item, index) in items" :key="index" :class="{ active: currentIndex === index }" :style="{ backgroundImage: 'url(' + item.bg + ')' }" class="item" @mouseover="mouseover(index)">
+              <h3>{{ item.title }}</h3>
+              <div class="content" v-if="currentIndex === index" v-html="item.content"/>
+              <a v-if="currentIndex === index" :href="'/productList?type=' + item.key" class="btn">{{ item.title }}</a>
+            </li>
+          </ul>
         </div>
         <div class="clearfix mt48 mb24">
           <div class="loans-product fll">贷款产品</div>
@@ -126,14 +82,113 @@ export default {
   },
   data() {
     return {
+      currentIndex: 0,
+      items: [{
+        title: '车贷',
+        content: `
+          <p>按揭房也能贷</p>
+          <p>抵押物: 房产抵押</p>
+          <p>到账时间: 3 ~ 7个工作日</p>
+          <p>利率范围: 0.35% ~ 0.65%</p>
+          <p>贷款金额: 最高3000万</p>
+        `,
+        bg: '../static/loans/loans0.png',
+        key: 6
+      }, {
+        title: '芝麻分贷',
+        content: `
+          <p>按揭房也能贷</p>
+          <p>抵押物: 房产抵押</p>
+          <p>到账时间: 3 ~ 7个工作日</p>
+          <p>利率范围: 0.35% ~ 0.65%</p>
+          <p>贷款金额: 最高3000万</p>
+        `,
+        bg: '../static/loans/loans1.png',
+        key: 9
+      }, {
+        title: '信用贷',
+        content: `
+          <p>按揭房也能贷</p>
+          <p>抵押物: 房产抵押</p>
+          <p>到账时间: 3 ~ 7个工作日</p>
+          <p>利率范围: 0.35% ~ 0.65%</p>
+          <p>贷款金额: 最高3000万</p>
+        `,
+        bg: '../static/loans/loans2.png',
+        key: 8
+      }, {
+        title: '社保贷',
+        content: `
+          <p>按揭房也能贷</p>
+          <p>抵押物: 房产抵押</p>
+          <p>到账时间: 3 ~ 7个工作日</p>
+          <p>利率范围: 0.35% ~ 0.65%</p>
+          <p>贷款金额: 最高3000万</p>
+        `,
+        bg: '../static/loans/loans3.png',
+        key: 3
+      }, {
+        title: '经营贷',
+        content: `
+          <p>按揭房也能贷</p>
+          <p>抵押物: 房产抵押</p>
+          <p>到账时间: 3 ~ 7个工作日</p>
+          <p>利率范围: 0.35% ~ 0.65%</p>
+          <p>贷款金额: 最高3000万</p>
+        `,
+        bg: '../static/loans/loans4.png',
+        key: 1
+      }, {
+        title: '公积金贷',
+        content: `
+          <p>按揭房也能贷</p>
+          <p>抵押物: 房产抵押</p>
+          <p>到账时间: 3 ~ 7个工作日</p>
+          <p>利率范围: 0.35% ~ 0.65%</p>
+          <p>贷款金额: 最高3000万</p>
+        `,
+        bg: '../static/loans/loans5.png',
+        key: 4
+      }, {
+        title: '房贷',
+        content: `
+          <p>按揭房也能贷</p>
+          <p>抵押物: 房产抵押</p>
+          <p>到账时间: 3 ~ 7个工作日</p>
+          <p>利率范围: 0.35% ~ 0.65%</p>
+          <p>贷款金额: 最高3000万</p>
+        `,
+        bg: '../static/loans/loans6.png',
+        key: 7
+      }, {
+        title: '打卡工资贷',
+        content: `
+          <p>按揭房也能贷</p>
+          <p>抵押物: 房产抵押</p>
+          <p>到账时间: 3 ~ 7个工作日</p>
+          <p>利率范围: 0.35% ~ 0.65%</p>
+          <p>贷款金额: 最高3000万</p>
+        `,
+        bg: '../static/loans/loans7.png',
+        key: 5
+      }, {
+        title: '保险贷',
+        content: `
+          <p>按揭房也能贷</p>
+          <p>抵押物: 房产抵押</p>
+          <p>到账时间: 3 ~ 7个工作日</p>
+          <p>利率范围: 0.35% ~ 0.65%</p>
+          <p>贷款金额: 最高3000万</p>
+        `,
+        bg: '../static/loans/loans8.png',
+        key: 2
+      }],
       emptyList,
       tableData: [],
       formData: [],
       page: 1,
       size: 5,
-      count: 1,
-      agentNumData: [],
-      proData: []
+      count: 1
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -143,36 +198,19 @@ export default {
   },
   created() {
     this.getData()
-    // 经纪人排行榜
-    this.getAgentNum()
-    // 产品
-    this.getPro()
   },
   methods: {
-    enterAgent(id) {
-      this.$router.push(`/agentDetail/${id}`)
-    },
-    enterDetail(id) {
-      this.$router.push(`/productList`)
-    },
     lookDetail(id) {
-      this.$router.push(`productDetail/${id}`)
+      this.$router.push(`productDetail?id=${id}`)
     },
     enter() {
       router.push('/productList')
     },
     getData() {
-      this.$axios
-        .get(`product/getLimitProduct/${this.page}/${this.size}`)
-        .then(res => {
-          this.tableData = res.list
-          this.count = res.totalCount
-          backTop()
-        })
-    },
-    getPro() {
-      this.$axios.get(`product/proList`).then(res => {
-        this.proData = res
+      backTop()
+      this.$axios.get(`product/getLimitProduct/${this.page}/${this.size}`).then(res => {
+        this.tableData = res.list
+        this.count = res.totalCount
       })
     },
     handleCurrentChange(val) {
@@ -183,23 +221,65 @@ export default {
       this.size = val
       this.getData()
     },
-    getAgentNum() {
-      this.$axios.get('userBroker/getUserBrokerByOrderCountDesc').then(res => {
-        this.agentNumData = res
-      })
+    mouseover(val) {
+      console.log(1)
+      this.currentIndex = val
     }
   }
 }
 </script>
 <style scoped lang="scss">
-.w120 {
-  width: 120px;
-}
-.mb22 {
-  margin-bottom: 22px;
-}
-.ml5 {
-  margin-left: 5px;
+.accordion-wrap {
+  width: 100%;
+  height: 560px;
+  .list {
+    list-style: none;
+    display: flex;
+    height: 100%;
+    color: #fff;
+    .item {
+      position: relative;
+      width: 96px;
+      transition: all .5s;
+      padding: 50px 16px;
+      box-sizing: border-box;
+      &.active {
+        width: 432px;
+      }
+      h3 {
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
+      .content {
+        line-height: 2;
+        font-size: 14px;
+      }
+      .btn {
+        position: absolute;
+        left: 0;
+        bottom: 74px;
+        height: 40px;
+        padding: 0 30px 0 10px;
+        box-sizing: border-box;
+        line-height: 40px;
+        background: #A80E0E;
+        color: #fff;
+        &::after {
+          display: inline-block;
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          content: ' ';
+          width: 0;
+          height: 0;
+          right: 0;
+          border-width: 6px 6px 6px 14px;
+          border-style: solid;
+          border-color: transparent transparent transparent #fff;
+        }
+      }
+    }
+  }
 }
 .loans-pro {
   width: 1200px;
@@ -232,165 +312,6 @@ export default {
   margin-top: 14px;
   /*margin-left: 1030px;*/
   cursor: pointer;
-}
-
-.mt8 {
-  margin-top: 8px;
-}
-.mt18 {
-  margin-top: 18px;
-}
-.mt14 {
-  margin-top: 14px;
-}
-.mt4 {
-  margin-top: 4px;
-}
-.mt68 {
-  margin-top: 68px;
-}
-.loan-left {
-  width: 902px;
-  height: 580px;
-  background: rgba(255, 255, 255, 1);
-  padding: 60px 49px 0 49px;
-  box-sizing: border-box;
-}
-.loan-right {
-  margin-left: 30px;
-  .top {
-    width: 268px;
-    background: rgba(255, 255, 255, 1);
-    .agent-rank {
-      text-align: center;
-      height: 70px;
-      font-size: 20px;
-      font-family: PingFangSC-Medium;
-      font-weight: 500;
-      color: rgba(81, 81, 81, 1);
-      line-height: 70px;
-    }
-    .rank-item {
-      height: 82px;
-      padding: 0 20px 22px 12px;
-      box-sizing: border-box;
-      cursor: pointer;
-      .medal {
-        margin-top: 11px;
-        margin-right: 4px;
-      }
-      .agent-img {
-        width: 60px;
-        height: 60px;
-      }
-      .name {
-        height: 16px;
-        font-size: 16px;
-        font-family: PingFangSC-Medium;
-        font-weight: 500;
-        color: rgba(81, 81, 81, 1);
-        line-height: 16px;
-      }
-      .num {
-        height: 16px;
-        font-size: 16px;
-        font-family: DINAlternate-Bold;
-        font-weight: bold;
-        color: rgba(81, 81, 81, 1);
-        line-height: 16px;
-        letter-spacing: 1px;
-      }
-      .desc {
-        height: 12px;
-        font-size: 12px;
-        font-family: PingFangSC-Regular;
-        font-weight: 400;
-        color: rgba(155, 155, 155, 1);
-        line-height: 12px;
-        letter-spacing: 1px;
-        margin-top: 16px;
-      }
-    }
-  }
-  .bottom {
-    text-align: center;
-    width: 268px;
-    height: 31px;
-    background: rgba(234, 234, 234, 1);
-    font-size: 16px;
-    font-family: PingFangSC-Regular;
-    font-weight: 400;
-    color: rgba(155, 155, 155, 1);
-    line-height: 31px;
-    cursor: pointer;
-  }
-}
-.left1 {
-  font-size: 0;
-  margin-bottom: 60px;
-}
-
-.left-one {
-  width: 126px;
-  height: 68px;
-  margin-left: 30px;
-}
-.left-two {
-  width: 149px;
-  height: 68px;
-  margin-left: 76px;
-}
-.left-three {
-  width: 151px;
-  height: 68px;
-  margin-left: 22px;
-}
-.left-four {
-  text-align: center;
-  margin-left: 38px;
-  width: 120px;
-  height: 55px;
-  background: rgba(208, 172, 86, 1);
-  border-radius: 4px;
-  font-size: 18px;
-  font-family: PingFangSC-Regular;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 1);
-  line-height: 55px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-.salary {
-  height: 24px;
-  font-size: 20px;
-  font-family: PingFangSC-Medium;
-  font-weight: 500;
-  color: rgba(81, 81, 81, 1);
-  line-height: 24px;
-}
-.credit {
-  height: 14px;
-  font-size: 14px;
-  font-family: PingFangSC-Regular;
-  font-weight: 400;
-  color: rgba(127, 127, 127, 1);
-  line-height: 14px;
-}
-.same {
-  height: 14px;
-  font-size: 14px;
-  font-family: PingFangSC-Regular;
-  font-weight: 400;
-  color: rgba(127, 127, 127, 1);
-  line-height: 14px;
-}
-.toge {
-  height: 14px;
-  font-size: 14px;
-  font-family: PingFangSC-Regular;
-  font-weight: 400;
-  color: rgba(168, 14, 14, 1);
-  line-height: 14px;
 }
 .loans-product {
   width: 112px;

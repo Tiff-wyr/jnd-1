@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     agentD(id) {
-      this.$router.push(`/productDetail/${id}`)
+      this.$router.push(`/productDetail?id=${id}`)
     },
     getProductColl() {
       this.$axios

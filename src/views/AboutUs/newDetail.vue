@@ -4,14 +4,9 @@
       <div class="consult-main">
         <div class="left">
           <div class="title-wrap">
-            <h2 class="title">{{ resultData.topic }}</h2>
-            <acticle-footer :time="resultData.releaseTime" :source="resultData.source" :num="resultData.viewNumber"/>
+            <h2 class="title">{{ resultData.name }}</h2>
           </div>
           <div class="consult-content" v-html="resultData.content"/>
-          <div class="consult-footer">
-            <div :title="upDownData.upTopic" class="prev common" @click="handleUpDown(upDownData.upId)">上一篇: {{ upDownData.upTopic | titleFitler }}</div>
-            <div :title="upDownData.downTopic" class="next common" @click="handleUpDown(upDownData.downId)">下一篇: {{ upDownData.downTopic | titleFitler }}</div>
-          </div>
         </div>
         <div class="right">
           <apply/>
@@ -26,13 +21,11 @@
 <script>
 import footerSame from '@/component/footerSame'
 import bottomTap from '@/component/bottomTap'
-import apply from './components/apply'
-import question from './components/question'
-import acticleFooter from './components/acticleFooter'
-import { fetchDetail, addNum, upDownArticle } from '@/api/consult'
-import { backTop } from '@/util/util'
+import apply from '@/views/consult/components/apply'
+import question from '@/views/consult/components/question'
+import { fetchDetail } from '@/api/aboutUs'
 export default {
-  name: 'ConsultDetail',
+  name: 'NewDetail',
   metaInfo: {
     title: '贷款资讯_质押贷款资讯_创业贷款资讯_新车贷款资讯_贷款产品资讯找9能贷款',
     meta: [{
@@ -56,44 +49,23 @@ export default {
     footerSame,
     bottomTap,
     apply,
-    acticleFooter,
     question
   },
   data() {
     return {
-      resultData: {},
-      upDownData: {},
-      interval: null
+      resultData: {}
     }
   },
   created() {
     const id = location.href.split('?')[1].split('=')[1]
     this.getData(id)
-    this.readArticle(id)
-    this.getUpDown(id)
   },
   methods: {
     getData(id) {
       fetchDetail(id).then(res => {
-        this.resultData = res.data.data
+        console.log(res)
+        this.resultData = res.data
       })
-    },
-    getUpDown(id) {
-      upDownArticle(id).then(res => {
-        this.upDownData = res.data.data
-      })
-    },
-    handleUpDown(id) {
-      if (id) {
-        this.getData(id)
-        this.getUpDown(id)
-        this.readArticle(id)
-        backTop()
-        location.hash = '/consultDetail?id=' + id
-      }
-    },
-    readArticle(id) {
-      addNum(id)
     }
   }
 }

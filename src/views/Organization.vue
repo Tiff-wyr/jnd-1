@@ -364,7 +364,7 @@ export default {
       }
     },
     lookDetail(id) {
-      this.$router.push(`/organDetail/${id}`)
+      this.$router.push(`/organDetail?id=${id}`)
     },
     getData() {
       this.$axios

@@ -8,6 +8,8 @@ const components = {
   agent: () => import('@/views/Agent'),
   organization: () => import('@/views/Organization'),
   help: () => import('@/views/Help'),
+  aboutUs: () => import('@/views/aboutUs'),
+  newDetail: () => import('@/views/aboutUs/newDetail'),
   consult: () => import('@/views/consult/consult'),
   consultDetail: () => import('@/views/consult/consultDetail'),
   layout: () => import('@/layout/layout'),
@@ -75,13 +77,7 @@ const components = {
 export default new Router({
 
   mode: 'history',
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return { x: 0, y: 0 }
-    }
-  },
+  scrollBehavior: () => ({ y: 0 }),
 
   routes: [
     {
@@ -171,6 +167,17 @@ export default new Router({
           component: components.consultDetail
         },
         {
+          path: 'aboutUs',
+          name: 'aboutUs',
+          cache: true,
+          component: components.aboutUs
+        },
+        {
+          path: 'newDetail',
+          name: 'newDetail',
+          component: components.newDetail
+        },
+        {
           path: 'help',
           name: 'help',
           component: components.help,
@@ -225,7 +232,7 @@ export default new Router({
           }
         },
         {
-          path: '/agentDetail/:id',
+          path: '/agentDetail',
           component: components.agentDetail,
           meta: {
             classify: 'agent'
@@ -236,14 +243,14 @@ export default new Router({
           component: components.userDetail
         },
         {
-          path: '/organDetail/:id',
+          path: '/organDetail',
           component: components.organDetail,
           meta: {
             classify: 'organ'
           }
         },
         {
-          path: '/productDetail/:id',
+          path: '/productDetail',
           component: components.productDetail,
           meta: {
             classify: 'loans'

@@ -38,11 +38,13 @@
             <div class="clearfix area-item">
               <div class="fll city">贷款条件</div>
               <div
-                :class="loanUp? 'fll radio-wrap clearfix radio-wrap-active' : 'fll radio-wrap clearfix'"
+                :class="loanUp? 'radio-wrap-active' : ''"
+                class="fll radio-wrap clearfix"
               >
                 <wcheckBox
                   :radios="loanConditions"
                   v-model="query.loanCondition"
+                  :val="query.loanCondition"
                   name="loanCondition"
                   class="fll"
                   style="width: 700px"
@@ -181,7 +183,7 @@ import footerSame from '../component/footerSame'
 import wradio from '../component/w-radios'
 import wcheckBox from '../component/w-checkBox'
 import emptyList from '../assets/empty-list.png'
-import { backTop } from '@/util/util'
+import { backTop, param2Obj } from '@/util/util'
 export default {
   name: 'ProductList',
   components: {
@@ -246,6 +248,8 @@ export default {
     }
   },
   created() {
+    console.log()
+    this.query.loanCondition = param2Obj(window.location.href).type
     this.getData()
     this.getCity()
     this.getLoanType()
@@ -335,7 +339,7 @@ export default {
     },
     // 查看进入详情页
     lookDetail(id) {
-      this.$router.push(`productDetail/${id}`)
+      this.$router.push(`productDetail?id=${id}`)
     },
     // 贷款类型
     getLoanType() {

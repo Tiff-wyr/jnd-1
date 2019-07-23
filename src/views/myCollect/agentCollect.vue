@@ -72,7 +72,7 @@ export default {
       })
     },
     agentD(id) {
-      this.$router.push(`/agentDetail/${id}`)
+      this.$router.push(`/agentDetail?id=${id}`)
     },
     getAgentColl() {
       this.$axios

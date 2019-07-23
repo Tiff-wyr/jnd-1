@@ -40,7 +40,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     new PrerenderSpaPlugin({
       staticDir: path.join(__dirname, '../dist'),
-      routes: ['/', '/home', '/agent', '/organization', '/consult', '/help']
+      routes: ['/', '/home', '/agent', '/organization', '/consult', '/help', '/productDetail', '/agentDetail', '/organDetail', '/consultDetail', '/newDetail']
     }
     ),
     new UglifyJsPlugin({

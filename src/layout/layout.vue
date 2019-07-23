@@ -39,23 +39,23 @@
             <router-link
               :style="$route.meta.classify === 'loans' ? 'color:rgba(168,14,14,1)' : ''"
               to="/loans"
-            >找贷款</router-link>
+            >贷款产品</router-link>
             <router-link
               :style="$route.meta.classify === 'agent'? 'color:rgba(168,14,14,1)' : ''"
               to="/agent"
-            >找经纪人</router-link>
+            >贷款经纪人</router-link>
             <router-link
               :style="$route.meta.classify === 'organ' ? 'color:rgba(168,14,14,1)' : ''"
               to="/organization"
-            >找机构</router-link>
+            >贷款机构</router-link>
             <router-link
               :style="$route.meta.classify === 'consult' ? 'color:rgba(168,14,14,1)' : ''"
               to="/consult"
-            >金融资讯</router-link>
+            >贷款资讯</router-link>
             <router-link
-              :style="$route.meta.classify === 'help' ? 'color:rgba(168,14,14,1)' : ''"
-              to="/help"
-            >贷款帮助</router-link>
+              :style="$route.meta.classify === 'aboutUs' ? 'color:rgba(168,14,14,1)' : ''"
+              to="/aboutUs"
+            >关于平台</router-link>
           </div>
         </div>
       </div>

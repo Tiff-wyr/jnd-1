@@ -251,6 +251,16 @@ import { saveNotLoginProductOrder } from '@/api/apply'
 import publicApi from '@/api/public'
 export default {
   name: 'ProductDetail',
+  metaInfo: {
+    title: '9能贷款_住房公积金贷款条件_银行贷款需要哪些条件找9能贷款',
+    meta: [{
+      name: 'keyWords',
+      content: '农村信用社贷款条件,住房公积金贷款条件,公积金贷款条件,工商银行贷款条件,商业贷款转公积金贷款条件,农业银行贷款条件,大学生创业贷款条件,银行贷款条件,公积金贷款的条件,小额贷款条件,个人贷款条件,信用社贷款条件,个人贷款需要什么条件,建行个人贷款条件,个人贷款的条件,邮政小额贷款条件,个人小额贷款条件,个人商业贷款条件,创业贷款条件,个人无抵押贷款条件,汽车贷款条件,个人信用贷款条件,大学生贷款条件,二手房贷款条件,个人公积金贷款条件,邮政贷款条件,个人消费贷款条件,银行个人贷款条件'
+    }, {
+      name: 'description',
+      content: '9能贷款联合各类大型的金融机构,深度挖掘安全的金融服务渠道机构,为用户提供安全、多元的贷款产品和定制化的专业资金服务,打造更契合用户自身需求的贷款管理方案.找贷款,找经纪人,找机构,办理贷款上9能贷款;放款快,利率低0.35%,额度高,门槛低,渠道广.小额贷款公司成立条件,银行小额贷款条件,信用社小额贷款条件,信用社个人贷款条件,招行个人贷款条件,无抵押个人贷款条件,个人住房贷款条件,农业贷款条件,贷款条件,公积金贷款 条件,贷款的条件,贷款要什么条件'
+    }]
+  },
   filters: {
     textFilter(val) {
       if (val === 'null' || val === null) {
@@ -367,7 +377,7 @@ export default {
     ...mapState(['userInfo'])
   },
   created() {
-    const id = this.$route.params.id
+    const id = this.$route.query.id
     this.productId = id
     this.applyForm.productId = id
     this.getDetail(id)
@@ -397,11 +407,11 @@ export default {
     },
     // 机构详情页
     enterOrgan(id) {
-      this.$router.push(`/organDetail/${id}`)
+      this.$router.push(`/organDetail?id=${id}`)
     },
     // 产品详情页
     enterProduct(id) {
-      this.$router.push(`/productDetail/${id}`)
+      this.$router.push(`/productDetail?id=${id}`)
       this.getDetail(id)
     },
     // 快速申请

@@ -69,7 +69,7 @@ export default {
       })
     },
     agentD(id) {
-      this.$router.push(`/organDetail/${id}`)
+      this.$router.push(`/organDetail?id=${id}`)
     },
     getOrganColl() {
       this.$axios

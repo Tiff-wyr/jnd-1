@@ -18,7 +18,15 @@
               </div>
             </div>
           </div>
-          <article-list :data="resultList"/>
+          <!-- <article-list :data="resultList"/> -->
+          <tabbar :tabbar="tabbarArr" @change="handleTabbar">
+            <articleList :data="resultList"/>
+          </tabbar>
+          <tabbar :tabbar="tabbarArr2" @change="handleTabbar2">
+            <articleList :data="resultList2"/>
+          </tabbar>
+          <loanEncyclopedia :data="bkList"/>
+
         </div>
         <div class="right">
           <apply/>
@@ -33,10 +41,28 @@
 <script>
 import footerSame from '@/component/footerSame'
 import bottomTap from '@/component/bottomTap'
+import tabbar from './components/tabbar'
 import articleList from './components/articleList'
+import loanEncyclopedia from './components/loanEncyclopedia'
 import apply from './components/apply'
 import question from './components/question'
-import { fetchList } from '@/api/consult'
+import { fetchUp, fetchDown } from '@/api/consult'
+const tabbarArr = [
+  { label: '中信银行', id: 1 },
+  { label: '工商银行', id: 2 },
+  { label: '建设银行', id: 3 },
+  { label: '交通银行', id: 4 },
+  { label: '农业银行', id: 5 },
+  { label: '中国银行', id: 6 }
+]
+const tabbarArr2 = [
+  { label: '个人贷款', id: 7 },
+  { label: '小额贷款', id: 8 },
+  { label: '抵押贷款', id: 9 },
+  { label: '信用贷款', id: 10 },
+  { label: '新手贷款', id: 11 },
+  { label: '贷款攻略', id: 12 }
+]
 export default {
   metaInfo: {
     title: '金融资讯_互联网金融资讯_金融资讯平台_北京金融资讯_最新金融资讯_9能贷款',
@@ -50,7 +76,9 @@ export default {
   },
   components: {
     footerSame,
+    tabbar,
     articleList,
+    loanEncyclopedia,
     bottomTap,
     apply,
     question
@@ -62,19 +90,40 @@ export default {
         currentPage: 1,
         pageSize: 10
       },
-      resultList: []
+      resultList: [],
+      resultList2: [],
+      tabbarArr,
+      tabbarArr2,
+      bkList: []
     }
   },
   created() {
-    this.getList()
+    this.getUp(1)
+    this.getUp2(7)
+    this.getDown()
   },
   methods: {
-    getList() {
-      fetchList(this.listQuery).then(res => {
-        if (res.data.status === 200) {
-          this.resultList = res.data.data.list
-        }
+    getUp(id) {
+      fetchUp(id).then(res => {
+        this.resultList = res.data.data
       })
+    },
+    getUp2(id) {
+      fetchUp(id).then(res => {
+        this.resultList2 = res.data.data
+      })
+    },
+    getDown() {
+      fetchDown().then(res => {
+        console.log(res)
+        this.bkList = res.data.data
+      })
+    },
+    handleTabbar(id) {
+      this.getUp(id)
+    },
+    handleTabbar2(id) {
+      this.getUp2(id)
     }
   }
 }

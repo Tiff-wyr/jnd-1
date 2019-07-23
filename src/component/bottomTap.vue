@@ -44,7 +44,7 @@
           <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502037638" target="_blank">京ICP备15017094号-5&nbsp;&nbsp;&nbsp; 京ICP证B2-20170492</a>
         </p>
         <p class="firend-link">
-          <span>友情链接：</span><span v-for="(item, index) in cooperationList" :key="index"><a :href="item.src" target="_blank">{{ item.name }}</a></span>
+          <span>友情链接：</span><span v-for="(item, index) in firendLink" :key="index"><a :href="item.url" target="_blank">{{ item.name }}</a></span>
         </p>
       </div>
     </div>
@@ -52,18 +52,22 @@
 </template>
 
 <script>
-
-const cooperationList = [
-  { name: '畅想合伙人', src: 'http://www.xxsqian.com' },
-  { name: '股票配资', src: 'http://www.zshhcl.com' },
-  { name: '贷款论坛', src: 'https://www.daikuanbbs.com' },
-  { name: '大额贷款', src: 'https://www.jiedianqian.com/zx' }
-]
+import { fetchFirendLink } from '@/api/firendLink'
 export default {
   name: 'BottomTap',
   data() {
     return {
-      cooperationList
+      firendLink: []
+    }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    getList() {
+      fetchFirendLink().then(res => {
+        this.firendLink = res.data
+      })
     }
   }
 }

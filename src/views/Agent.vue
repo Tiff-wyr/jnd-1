@@ -320,7 +320,7 @@ export default {
     },
     // 经纪人详情
     detail(id) {
-      this.$router.push(`/agentDetail/${id}`)
+      this.$router.push(`/agentDetail?id=${id}`)
     },
     handleCurrentChange(val) {
       this.pn = val

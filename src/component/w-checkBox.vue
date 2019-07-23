@@ -1,9 +1,10 @@
 <template>
   <div class="clearfix">
     <label v-for="item in radios" :key="item.value" class="radio_wrap fll">
-      <input v-model="valueData" :value="item.value" :name="name" class="none" type="checkbox" @change="handlerChange">
-      <div class="radio_label">{{ item.label }}</div>
+      <input v-model="valueData" :checked="item.value == val ? 'checked' : ''" :value="item.value" :name="name" class="none" type="checkbox" @change="handlerChange">
+      <div class="radio_label" :class="{ active: item.value == val }">{{ item.label }}</div>
     </label>
+    <!-- item.value === val -->
   </div>
 </template>
 
@@ -14,15 +15,20 @@ export default {
     // eslint-disable-next-line vue/require-default-prop
     name: String,
     // eslint-disable-next-line vue/require-default-prop
-    radios: Array
+    radios: Array,
+    val: String | Number
   },
   data() {
     return {
       valueData: []
     }
   },
+  created() {
+    console.log(this.val)
+  },
   methods: {
     handlerChange(e) {
+      console.log(1)
       const nowVal = e.target.value
       const index = this.valueData.indexOf(0)
       // eslint-disable-next-line eqeqeq
@@ -31,7 +37,6 @@ export default {
       } else if (parseInt(nowVal) === 0) {
         this.valueData = [0]
       }
-      console.log(this.valueData)
       this.$emit('input', this.valueData.toString())
     }
   }
@@ -51,6 +56,9 @@ export default {
       margin-left: 30px;
       margin-bottom: 10px;
       user-select: none;
+    }
+    .active {
+      color: #F10B28;
     }
   }
   input:checked+.radio_label {

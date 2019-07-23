@@ -105,25 +105,25 @@ export default {
     enterDetail(role, id) {
       if (role === 2) {
         // 经纪人
-        this.$router.push(`/agentDetail/${id}`)
+        this.$router.push(`/agentDetail?id=${id}`)
       } else if (role === 3) {
         // 机构
-        this.$router.push(`/organDetail/${id}`)
+        this.$router.push(`/organDetail?id=${id}`)
       } else {
         // 产品
-        this.$router.push(`/productDetail/${id}`)
+        this.$router.push(`/productDetail?id=${id}`)
       }
     },
     enter(role, id) {
       if (role === 2) {
         // 经纪人
-        this.$router.push(`/agentDetail/${id}`)
+        this.$router.push(`/agentDetail?id=${id}`)
       } else if (role === 3) {
         // 机构
-        this.$router.push(`/organDetail/${id}`)
+        this.$router.push(`/organDetail?id=${id}`)
       } else {
         // 产品
-        this.$router.push(`/productDetail/${id}`)
+        this.$router.push(`/productDetail?id=${id}`)
       }
     },
     handleCurrentChange(val) {
