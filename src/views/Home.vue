@@ -592,10 +592,10 @@ export default {
       this.$router.push(`/productDetail?id=${id}`)
     },
     orDetail(id) {
-      this.$router.push(`/organDetail`)
+      this.$router.push(`/organDetail?id=${id}`)
     },
     agDetail(id) {
-      this.$router.push(`/agentDetail`)
+      this.$router.push(`/agentDetail?id=${id}`)
     },
 
     // 特别推荐

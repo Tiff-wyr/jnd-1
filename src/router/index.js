@@ -170,7 +170,10 @@ export default new Router({
           path: 'aboutUs',
           name: 'aboutUs',
           cache: true,
-          component: components.aboutUs
+          component: components.aboutUs,
+          meta: {
+            classify: 'aboutUs'
+          }
         },
         {
           path: 'newDetail',

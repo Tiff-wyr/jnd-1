@@ -44,7 +44,10 @@
           <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502037638" target="_blank">京ICP备15017094号-5&nbsp;&nbsp;&nbsp; 京ICP证B2-20170492</a>
         </p>
         <p class="firend-link">
-          <span>友情链接：</span><span v-for="(item, index) in firendLink" :key="index"><a :href="item.url" target="_blank">{{ item.name }}</a></span>
+          <span>友情链接：</span><span v-for="(item, index) in link" :key="index"><a :href="item.url" target="_blank">{{ item.name }}</a></span>
+          <span><a href="https://www.jiedianqian.com/zx" target="_blank">大额贷款</a></span>
+          <span><a href="https://www.daikuanbbs.com/" target="_blank">云南期货配资</a></span>
+          <span><a href="http://www.ycxykdh.com" target="_blank">银川信用卡代还</a></span>
         </p>
       </div>
     </div>
@@ -52,23 +55,23 @@
 </template>
 
 <script>
-import { fetchFirendLink } from '@/api/firendLink'
+const link = [
+  { name: '畅想合伙人', url: 'http://www.xxsqian.com/' },
+  { name: '股票配资', url: 'http://www.zshhcl.com/' },
+  { name: '贷款论坛', url: '' },
+  { name: '香港汇丰银行开户', url: 'http://www.hkkdconsultant.com' }
+]
+
 export default {
   name: 'BottomTap',
   data() {
     return {
+      link,
       firendLink: []
     }
   },
   created() {
     this.getList()
-  },
-  methods: {
-    getList() {
-      fetchFirendLink().then(res => {
-        this.firendLink = res.data
-      })
-    }
   }
 }
 </script>
