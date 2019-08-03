@@ -14,8 +14,8 @@
       </div>
       <!-- .borrower.borrowerId -->
       <div v-for="(item,index) in tableData" :key="index" class="record-item" @click="pushUserDetail(item)">
-        <div class="year fll">{{ item.startTime }}</div>
-        <div class="year fll">{{ item.borrower.borrowerName }}</div>
+        <div class="year fll">{{ item.startTime | timeFilter }}</div>
+        <div class="year fll">{{ item.borrowerName }}</div>
       </div>
     </div>
     <div class="page">
@@ -34,9 +34,14 @@
 
 <script>
 import emptyList from '../../../assets/empty-list2.png'
-import { backTop } from '@/util/util'
+import { backTop, parseTime } from '@/util/util'
 export default {
   name: 'AgentAccess',
+  filters: {
+    timeFilter(val) {
+      return parseTime(val)
+    }
+  },
   data() {
     return {
       emptyList,
@@ -69,6 +74,7 @@ export default {
         )
         .then(res => {
           this.tableData = res.rows
+          console.log(this.tableData)
           this.count = res.total
           this.listLoading = false
           backTop()

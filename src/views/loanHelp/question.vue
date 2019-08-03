@@ -63,6 +63,11 @@ export default {
   }
 }
 </script>
+<style>
+.guid .el-collapse {
+  border-top: none;
+}
+</style>
 
 <style scoped>
 .guid {
@@ -70,8 +75,5 @@ export default {
   padding: 20px 50px;
   box-sizing: border-box;
   background: rgba(255, 255, 255, 1);
-}
-/deep/ .el-collapse {
-  border-top: none;
 }
 </style>

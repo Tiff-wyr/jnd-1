@@ -311,7 +311,6 @@ export default {
       }
     }
     const validateNoPawn = (rule, value, callback) => {
-      console.log(this.borrowerData.age)
       if (!this.borrowerData.isPawn) {
         if (this.borrowerData.age !== '' && this.borrowerData.borrowerJob !== '' && this.borrowerData.borrowerMonthlyIncome !== '') {
           callback()

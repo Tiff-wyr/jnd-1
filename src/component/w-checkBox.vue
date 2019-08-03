@@ -2,7 +2,7 @@
   <div class="clearfix">
     <label v-for="item in radios" :key="item.value" class="radio_wrap fll">
       <input v-model="valueData" :checked="item.value == val ? 'checked' : ''" :value="item.value" :name="name" class="none" type="checkbox" @change="handlerChange">
-      <div class="radio_label" :class="{ active: item.value == val }">{{ item.label }}</div>
+      <div :class="{ active: item.value == val }" class="radio_label">{{ item.label }}</div>
     </label>
     <!-- item.value === val -->
   </div>
@@ -16,6 +16,7 @@ export default {
     name: String,
     // eslint-disable-next-line vue/require-default-prop
     radios: Array,
+    // eslint-disable-next-line vue/require-default-prop
     val: String | Number
   },
   data() {

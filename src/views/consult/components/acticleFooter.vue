@@ -8,7 +8,7 @@
 <script>
 import { parseTime } from '@/util/util'
 export default {
-  name: 'acticleFooter',
+  name: 'ActicleFooter',
   filters: {
     parseTimeFilter(val) {
       return parseTime(val)
@@ -20,10 +20,12 @@ export default {
       default: parseTime(new Date(), '{y}-{m}-{d}')
     },
     source: {
-      type: String
+      type: String,
+      default: ''
     },
     num: {
-      type: String | Number
+      type: String | Number,
+      default: ''
     }
   }
 }

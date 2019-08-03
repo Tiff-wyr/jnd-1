@@ -78,7 +78,6 @@
 </template>
 
 <script>
-import { time } from '../util/util'
 import { backTop } from '@/util/util'
 export default {
   name: 'AgentEmail',

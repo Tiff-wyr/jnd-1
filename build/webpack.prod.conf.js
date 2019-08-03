@@ -13,6 +13,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const env = require('../config/prod.env')
 var PrerenderSpaPlugin = require('prerender-spa-plugin')
+const Renderer = PrerenderSpaPlugin.PuppeteerRenderer
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
@@ -40,7 +41,16 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     new PrerenderSpaPlugin({
       staticDir: path.join(__dirname, '../dist'),
-      routes: ['/', '/home', '/agent', '/organization', '/consult', '/aboutUs', '/help', '/productDetail', '/agentDetail', '/organDetail', '/consultDetail', '/newDetail']
+      routes: ['/', '/home', '/agent', '/organization', '/consult', '/aboutUs', '/help', '/productDetail', '/agentDetail', '/organDetail', '/consultDetail', '/newDetail'],
+      renderer: new Renderer({
+        inject: {
+            foo: 'bar'
+        },
+        headless: false,
+        renderAfterDocumentEvent: 'render-event',
+        //renderAfterTime: 5000,
+        //renderAfterElementExists: 'my-app-element'
+    })
     }
     ),
     new UglifyJsPlugin({

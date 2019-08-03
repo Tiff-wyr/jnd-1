@@ -236,7 +236,6 @@ export default {
         fAddress: '',
         fLoanAmount: '',
         fBusinessType: '',
-        fIsPawn: '',
         fAge: '',
         fJob: '',
         fIncome: '',
@@ -279,6 +278,9 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState(['userInfo'])
+  },
   created() {
     this.getData()
     this.getFilterData()
@@ -286,9 +288,6 @@ export default {
       this.isVip = this.$store.state.userInfo.vip > 0
       this.phone = this.$store.state.userInfo.phone
     }
-  },
-  computed: {
-    ...mapState(['userInfo'])
   },
   methods: {
     ...mapMutations(['SET_USER_VIP']),
@@ -512,7 +511,7 @@ export default {
       }
     },
     reviewPay(val) {
-      if (this.payType == 2) {
+      if (this.payType === 2) {
         reviewAliPay(this.orderSn, this.params)
       } else {
         reviewWxPay(this.orderSn, this.params)

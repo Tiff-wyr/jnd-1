@@ -807,6 +807,6 @@ export function getData(params) {
       ]
     }
 
-  };
-  return data[params];
+  }
+  return data[params]
 }

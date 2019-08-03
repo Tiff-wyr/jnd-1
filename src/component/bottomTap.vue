@@ -44,10 +44,7 @@
           <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502037638" target="_blank">京ICP备15017094号-5&nbsp;&nbsp;&nbsp; 京ICP证B2-20170492</a>
         </p>
         <p class="firend-link">
-          <span>友情链接：</span><span v-for="(item, index) in link" :key="index"><a :href="item.url" target="_blank">{{ item.name }}</a></span>
-          <span><a href="https://www.jiedianqian.com/zx" target="_blank">大额贷款</a></span>
-          <span><a href="https://www.daikuanbbs.com/" target="_blank">云南期货配资</a></span>
-          <span><a href="http://www.ycxykdh.com" target="_blank">银川信用卡代还</a></span>
+          <span>友情链接：</span><span v-for="(item, index) in linkList" :key="index"><a :href="item.url" target="_blank">{{ item.name }}</a></span>
         </p>
       </div>
     </div>
@@ -58,20 +55,20 @@
 const link = [
   { name: '畅想合伙人', url: 'http://www.xxsqian.com/' },
   { name: '股票配资', url: 'http://www.zshhcl.com/' },
-  { name: '贷款论坛', url: '' },
-  { name: '香港汇丰银行开户', url: 'http://www.hkkdconsultant.com' }
+  { name: '贷款论坛', url: 'https://www.daikuanbbs.com' },
+  { name: '香港汇丰银行开户', url: 'http://www.hkkdconsultant.com' },
+  { name: '大额贷款', url: 'https://www.jiedianqian.com/zx' },
+  { name: '云南期货配资', url: 'https://www.daikuanbbs.com/' },
+  { name: '银川信用卡代还', url: 'http://www.ycxykdh.com' },
+  { name: '盈思创通', url: 'http://www.rjkf001.com' },
+  { name: '软盈平台', url: 'http://www.softtrade.top' }
 ]
-
 export default {
   name: 'BottomTap',
   data() {
     return {
-      link,
-      firendLink: []
+      linkList: link
     }
-  },
-  created() {
-    this.getList()
   }
 }
 </script>

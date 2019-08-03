@@ -1,20 +1,20 @@
 <template>
   <div class="container">
     <div class="content">
-      <div class="title" v-html="data.title"></div>
+      <div class="title" v-html="data.title"/>
       <div v-for="(item, index) in data.container" :key="index">
-        <div class="sub-title" v-html="item.title"></div>
-        <p v-for="(i, idx) in item.content" :key="idx" v-html="i.text"></p>
+        <div class="sub-title" v-html="item.title"/>
+        <p v-for="(i, idx) in item.content" :key="idx" v-html="i.text"/>
       </div>
     </div>
     <!-- <bottomTap></bottomTap> -->
   </div>
 </template>
 <script>
-import bottomTap from "../component/bottomTap";
+import bottomTap from '../component/bottomTap'
 import { getData } from '@/util/agreement'
 export default {
-  name: "agreement",
+  name: 'Agreement',
   components: {
     bottomTap
   },

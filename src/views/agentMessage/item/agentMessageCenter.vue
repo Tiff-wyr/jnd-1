@@ -2,15 +2,15 @@
   <div>
     <div class="collect mb24">
       <div class="title">消息中心</div>
-      <el-tabs @tab-click="tabClick" v-model="activeName">
+      <el-tabs v-model="activeName" @tab-click="tabClick">
         <el-tab-pane><span slot="label">收件箱</span>
           <div>
             <div v-if="isInbox" class="inbox">
               <el-table
+                v-loading="listLoading"
                 ref="multipleTable"
                 :data="shouData"
                 tooltip-effect="dark"
-                v-loading="listLoading"
                 element-loading-text="数据正在加载中..."
                 element-loading-spinner="el-icon-loading"
                 element-loading-background="rgba(0, 0, 0, 0.5)"
@@ -19,8 +19,7 @@
                 <el-table-column
                   type="selection"
                   align="center"
-                  width="55">
-                </el-table-column>
+                  width="55"/>
                 <el-table-column label="发件人" align="center" width="150">
                   <template slot-scope="scope">
                     <div @click="lookShouRow(scope.row.id)">{{ scope.row.fromName }}</div>
@@ -28,7 +27,7 @@
                 </el-table-column>
                 <el-table-column label="内容" show-overflow-tooltip align="center">
                   <template slot-scope="scope">
-                    <div @click="lookShouRow(scope.row.id)">{{scope.row.content}}</div>
+                    <div @click="lookShouRow(scope.row.id)">{{ scope.row.content }}</div>
                   </template>
                 </el-table-column>
                 <el-table-column label="发送时间" show-overflow-tooltip align="center">
@@ -46,19 +45,19 @@
             <div v-if="!isInbox" class="inbox-detail">
               <div class="chat-top-wrap clearfix">
                 <div class="fll return-inbox" @click="returnS">&nbsp;&lt; &nbsp;返回收件箱</div>
-                <div class="fll inbox-title"> 与 {{detailData.fromName}}的对话</div>
+                <div class="fll inbox-title"> 与 {{ detailData.fromName }}的对话</div>
               </div>
               <div class="chat-box">
                 <div class="box-left clearfix" style="margin-top: 20px">
                   <div class="fll">
-                    <div class="message-box-left">{{detailData.content}}</div>
-                    <div class="box-time">{{detailData.startTime}}</div>
+                    <div class="message-box-left">{{ detailData.content }}</div>
+                    <div class="box-time">{{ detailData.startTime }}</div>
                   </div>
                 </div>
 
               </div>
               <div class="chat-send-box">
-                <input class="chat-message" placeholder="请输入内容" type="text" v-model="sendMessData.content" @keyup.enter="sendMess">
+                <input v-model="sendMessData.content" class="chat-message" placeholder="请输入内容" type="text" @keyup.enter="sendMess">
                 <button class="send" @click="sendMess">发送</button>
               </div>
             </div>
@@ -67,10 +66,10 @@
         <el-tab-pane><span slot="label">发件箱</span>
           <div class="outbox">
             <el-table
+              v-loading="listLoading"
               ref="multipleTable"
               :data="faData"
               tooltip-effect="dark"
-              v-loading="listLoading"
               element-loading-text="数据正在加载中..."
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(0, 0, 0, 0.5)"
@@ -79,26 +78,23 @@
               <el-table-column
                 type="selection"
                 align="center"
-                width="55">
-              </el-table-column>
+                width="55"/>
               <el-table-column
                 prop="toName"
                 label="收件人"
                 align="center"
-                width="200">
-              </el-table-column>
+                width="200"/>
               <el-table-column align="center" label="内容" show-overflow-tooltip>
                 <template slot-scope="scope">
-                  <span>{{scope.row.content}}</span>
+                  <span>{{ scope.row.content }}</span>
                 </template>
               </el-table-column>
               <el-table-column
                 prop="startTime"
                 label="发送时间"
                 width="200"
-                 align="center"
-                show-overflow-tooltip>
-              </el-table-column>
+                align="center"
+                show-overflow-tooltip/>
             </el-table>
           </div>
           <div v-show="!isChange" class="clearfix" style="margin-top: 30px">
@@ -113,135 +109,143 @@
 </template>
 
 <script>
-  import {time} from '../../../util/util'
-  export default {
-    name: "agentMessageCenter",
-    data() {
-      return {
-        listLoading: true,
-        isInbox: true,    // 切换收件箱的聊天与列表
-        isChange: false,  // 列表与聊天框是否切换
-        checkAll: false,
-        isIndeterminate: true,
-        checked: false,
-        shouData: [],
-        faData: [],
-        selectMultipleInbox: [],
-        selectMultipleOutbox: [],
-        arrInbox: [],
-        arrOutbox: [],
-        inbox: '',
-        outbox: '',
-        userId:'',
-        detailData:{
-          content: '',
-          from: '',
-          id: '',
-          isRead: 1,
-          startTime: '',
-          to: '',
-          type: 2,
-          fromName:''
-        },
-        shouPhone:'',
-        sendMessData:{
-          from:this.$store.state.userInfo.phone,
-          to:'',
-          content:'',
-          startTime:'',
-          type:2,
-          isRead:0
-        },
-        activeName: ''
-      }
+import { time } from '../../../util/util'
+export default {
+  name: 'AgentMessageCenter',
+  data() {
+    return {
+      listLoading: true,
+      isInbox: true, // 切换收件箱的聊天与列表
+      isChange: false, // 列表与聊天框是否切换
+      checkAll: false,
+      isIndeterminate: true,
+      checked: false,
+      shouData: [],
+      faData: [],
+      selectMultipleInbox: [],
+      selectMultipleOutbox: [],
+      arrInbox: [],
+      arrOutbox: [],
+      inbox: '',
+      outbox: '',
+      userId: '',
+      detailData: {
+        content: '',
+        from: '',
+        id: '',
+        isRead: 1,
+        startTime: '',
+        to: '',
+        type: 2,
+        fromName: ''
+      },
+      shouPhone: '',
+      sendMessData: {
+        from: this.$store.state.userInfo.phone,
+        to: '',
+        content: '',
+        startTime: '',
+        type: 2,
+        isRead: 0
+      },
+      activeName: ''
+    }
+  },
+  created() {
+    this.getSMessage()
+    this.getFMessage()
+    // userId 借款人 的id
+    this.userId = this.$route.query.id
+    if (this.userId) {
+      this.isInbox = false
+      this.isChange = true
+      this.getUserData()
+    }
+  },
+  methods: {
+    tabClick() {
+      this.isInbox = true
+      this.isChange = false
+      this.sendMessData.content = ''
     },
-    methods: {
-      tabClick() {
-        this.isInbox=true
-        this.isChange=false
-        this.sendMessData.content = "";
-      },
-      returnS(){
-        this.isInbox=true
-        this.isChange=false
-        this.sendMessData.content = "";
-      },
-      lookShouRow(id){
-        this.isInbox = false
-        this.isChange = true
-        let shouId=id
-        this.getDetailMess(shouId)
-      },
-      getDetailMess(id){
-        this.$axios.get(`message/getMessageById/${id}`).then(res=>{
-          this.detailData=res
-          this.shouPhone=res.from
-        })
-      },
+    returnS() {
+      this.isInbox = true
+      this.isChange = false
+      this.sendMessData.content = ''
+    },
+    lookShouRow(id) {
+      this.isInbox = false
+      this.isChange = true
+      const shouId = id
+      this.getDetailMess(shouId)
+    },
+    getDetailMess(id) {
+      this.$axios.get(`message/getMessageById/${id}`).then(res => {
+        this.detailData = res
+        this.shouPhone = res.from
+      })
+    },
 
-      handleSelectionChange(val) {
-        this.selectMultipleInbox = val
-
-      },
-      handleSelectionChangeOutbox(val) {
-        this.selectMultipleOutbox = val
-
-      },
-      //收件箱
-      getSMessage() {
-        this.listLoading = true
-        this.$axios.get(`/message/getPageReceiveMessage/${this.$store.state.userInfo.phone}`).then(res => {
-          this.shouData = res.rows
+    handleSelectionChange(val) {
+      this.selectMultipleInbox = val
+    },
+    handleSelectionChangeOutbox(val) {
+      this.selectMultipleOutbox = val
+    },
+    // 收件箱
+    getSMessage() {
+      this.listLoading = true
+      this.$axios.get(`/message/getPageReceiveMessage/${this.$store.state.userInfo.phone}`).then(res => {
+        this.shouData = res.rows
+        this.listLoading = false
+      })
+    },
+    // 发件箱
+    getFMessage() {
+      this.listLoading = true
+      this.$axios.get(`/message/getPageSendMessage/${this.$store.state.userInfo.phone}`).then(res => {
+        this.faData = res.rows
+        this.listLoading = false
+      })
+    },
+    // 单独删除
+    deleteShouRow(id) {
+      this.$axios.get(`message/removeReceiveMessage/${id}/${this.$store.state.userInfo.phone}`).then(res => {
+        if (res.status === 200) {
+          this.$message.success('删除成功')
+          this.getSMessage()
           this.listLoading = false
-        })
-      },
-      //发件箱
-      getFMessage() {
-        this.listLoading = true
-        this.$axios.get(`/message/getPageSendMessage/${this.$store.state.userInfo.phone}`).then(res => {
-          this.faData = res.rows
+        }
+      })
+    },
+    deleteFaRow(id) {
+      this.$axios.get(`message/removeSendMessage/${id}/${this.$store.state.userInfo.phone}`).then(res => {
+        if (res.status === 200) {
+          this.$message.success('删除成功')
+          this.getFMessage()
           this.listLoading = false
-        })
-      },
-      //单独删除
-      deleteShouRow(id) {
-        this.$axios.get(`message/removeReceiveMessage/${id}/${this.$store.state.userInfo.phone}`).then(res => {
-          if (res.status == 200) {
-            this.$message.success("删除成功")
-            this.getSMessage()
-            this.listLoading = false
-          }
-        })
-      },
-      deleteFaRow(id) {
-        this.$axios.get(`message/removeSendMessage/${id}/${this.$store.state.userInfo.phone}`).then(res => {
-          if (res.status == 200) {
-            this.$message.success("删除成功")
-            this.getFMessage()
-            this.listLoading = false
-          }
-        })
-      },
-      subInbox() {
-        if(this.selectMultipleInbox.length > 0){
+        }
+      })
+    },
+    subInbox() {
+      if (this.selectMultipleInbox.length > 0) {
         this.selectMultipleInbox.forEach(item => {
           this.arrInbox.push(item.id)
           this.inbox = this.arrInbox.join(',')
         })
         this.$axios.get(`/message/removeReceiveMessageBatch/${this.inbox}/${this.$store.state.userInfo.phone}`).then(res => {
           if (res.status === 200) {
-            this.$message.success("删除成功")
+            this.$message.success('删除成功')
             this.getSMessage()
             this.listLoading = false
           }
         })
-        }else{
-          this.$message.warning("请选择您要删除的项")
-        }
-
-      },
-      subOutbox() {
-        if(this.selectMultipleOutbox.length > 0){
+      } else {
+        this.$message.warning('请选择您要删除的项')
+      }
+    },
+    subOutbox() {
+      if (this.selectMultipleOutbox.length > 0) {
         this.selectMultipleOutbox.forEach(item => {
           this.arrOutbox.push(item.id)
           this.outbox = this.arrOutbox.join(',')
@@ -249,65 +253,50 @@
         console.log('ffff', this.outbox)
         this.$axios.get(`message/removeSendMessageBatch/${this.outbox}/${this.$store.state.userInfo.phone}`).then(res => {
           if (res.status === 200) {
-            this.$message.success("删除成功")
+            this.$message.success('删除成功')
             this.getFMessage()
             this.listLoading = false
           }
         })
-      }else{
-        this.$message.warning("请选择您要删除的项")
-    }
-
-  },
-      //从外面过来的，发信息，先获取 这个借款人的信息 名字 头像
-      getUserData(){
-          this.$axios.get(`userBorrower/selectUserBorrowerById/${this.userId}`).then(res=>{
-            console.log('xinxi',res);
-            this.detailData.fromName=res.borrowerName
-            this.shouPhone=res.phone
-          })
-      },
-      sendMess(){
-        console.log(1)
-        if(this.sendMessData.content) {
-          //点击列表发送信息
-          let data = new FormData()
-          this.sendMessData.startTime = time()
-          for (let item in this.sendMessData) {
-            if (item === 'to') {
-              data.append(item, this.shouPhone)
-            } else {
-              data.append(item, this.sendMessData[item])
-            }
-          }
-          this.$axios.post('message/saveMessage', data).then(res => {
-            if (res.status === 200) {
-              this.$message.success(res.msg)
-              this.activeName = '1'
-              this.sendMessData.content = ''
-              this.getFMessage()
-            }
-          })
-        }else{
-          this.$message.warning("内容不能为空")
-        }
-
+      } else {
+        this.$message.warning('请选择您要删除的项')
       }
     },
-    created() {
-      this.getSMessage()
-      this.getFMessage()
-      //userId 借款人 的id
-      this.userId = this.$route.query.id
-      if(this.userId){
-        this.isInbox=false
-        this.isChange = true
-        this.getUserData()
+    // 从外面过来的，发信息，先获取 这个借款人的信息 名字 头像
+    getUserData() {
+      this.$axios.get(`userBorrower/selectUserBorrowerById/${this.userId}`).then(res => {
+        console.log('xinxi', res)
+        this.detailData.fromName = res.borrowerName
+        this.shouPhone = res.phone
+      })
+    },
+    sendMess() {
+      console.log(1)
+      if (this.sendMessData.content) {
+        // 点击列表发送信息
+        const data = new FormData()
+        this.sendMessData.startTime = time()
+        for (const item in this.sendMessData) {
+          if (item === 'to') {
+            data.append(item, this.shouPhone)
+          } else {
+            data.append(item, this.sendMessData[item])
+          }
+        }
+        this.$axios.post('message/saveMessage', data).then(res => {
+          if (res.status === 200) {
+            this.$message.success(res.msg)
+            this.activeName = '1'
+            this.sendMessData.content = ''
+            this.getFMessage()
+          }
+        })
+      } else {
+        this.$message.warning('内容不能为空')
       }
-
-
     }
   }
+}
 </script>
 
 <style scoped lang="scss">

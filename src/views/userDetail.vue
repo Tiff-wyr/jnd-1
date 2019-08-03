@@ -102,7 +102,7 @@
 <script>
 import footerSame from '../component/footerSame'
 import detailApi from '@/api/detail'
-import { formatPhone, param2Obj } from '../util/util'
+import { param2Obj } from '../util/util'
 export default {
   name: 'UserDetail',
   components: {
@@ -117,7 +117,7 @@ export default {
   created() {
     const params = param2Obj(location.href)
     this.userId = params.borId
-    if (params.type == 2) {
+    if (params.type === 2) {
       delete params.borId
     }
     this.getData(params)
