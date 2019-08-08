@@ -61,7 +61,8 @@ const link = [
   { name: '云南期货配资', url: 'https://www.daikuanbbs.com/' },
   { name: '银川信用卡代还', url: 'http://www.ycxykdh.com' },
   { name: '盈思创通', url: 'http://www.rjkf001.com' },
-  { name: '软盈平台', url: 'http://www.softtrade.top' }
+  { name: '软盈平台', url: 'http://www.softtrade.top' },
+  { name: '下载之家', url: 'http://www.downza.cn' }
 ]
 export default {
   name: 'BottomTap',

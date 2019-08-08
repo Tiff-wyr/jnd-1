@@ -24,12 +24,8 @@ export default {
       valueData: []
     }
   },
-  created() {
-    console.log(this.val)
-  },
   methods: {
     handlerChange(e) {
-      console.log(1)
       const nowVal = e.target.value
       const index = this.valueData.indexOf(0)
       // eslint-disable-next-line eqeqeq

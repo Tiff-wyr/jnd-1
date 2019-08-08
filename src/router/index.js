@@ -81,31 +81,6 @@ export default new Router({
 
   routes: [
     {
-      path: '/findPassword',
-      name: 'findPassword',
-      component: components.findPassword
-    },
-    {
-      path: '/applyVictory',
-      name: 'applyVictory',
-      component: components.applyVictory
-    },
-    {
-      path: '/registerJump',
-      name: 'registerJump',
-      component: components.registerJump
-    },
-    {
-      path: '/weixin',
-      name: 'weixin',
-      component: components.weixin
-    },
-    {
-      path: '/aliPay',
-      name: 'aliPay',
-      component: components.aliPay
-    },
-    {
       path: '/',
       component: components.layout,
       redirect: '/',
@@ -409,7 +384,31 @@ export default new Router({
         }
       ]
     },
-
+    {
+      path: '/findPassword',
+      name: 'findPassword',
+      component: components.findPassword
+    },
+    {
+      path: '/applyVictory',
+      name: 'applyVictory',
+      component: components.applyVictory
+    },
+    {
+      path: '/registerJump',
+      name: 'registerJump',
+      component: components.registerJump
+    },
+    {
+      path: '/weixin',
+      name: 'weixin',
+      component: components.weixin
+    },
+    {
+      path: '/aliPay',
+      name: 'aliPay',
+      component: components.aliPay
+    },
     {
       path: '/agreement',
       component: components.agreement

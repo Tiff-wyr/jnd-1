@@ -1,652 +1,491 @@
 <template>
-  <div>
-    <div class="wrappy">
-      <div class="w1200">
-        <div class="clearfix">
-          <div class="area fll">
-            <div class="clearfix mb15 area-item">
-              <div class="fll city">所在地区</div>
-              <div
-                :class="cityUp? 'fll radio-wrap clearfix radio-wrap-active' : 'fll radio-wrap clearfix'"
-              >
-                <wradio :radios="cities" v-model="query.city" name="city" class="fll"/>
+  <div class="product-wrap">
+    <main class="product-main">
+      <section class="top">
+        <div :class="{ toggle: filterBoxToggle }" class="filter-container">
+          <div class="filter-main">
+            <div class="filter-item">
+              <div class="label">所在地区</div>
+              <div class="filter-content">
+                <city-radios :conditions="cityShowNum"/>
               </div>
-              <div class="up" @click="citySpread">展开
-                <span :class="cityUp? 'arrow rotate' : 'arrow' "/>
+              <div :class="{ toggle: cityShowNum !== 6 }" class="toggle-item" @click="handleCityShow">
+                {{ cityShowNum === 6 ? '展开' : '收起' }}
               </div>
             </div>
-            <div class="clearfix mb15">
-              <div class="fll city">贷款类型</div>
-              <wradio :radios="loans" v-model="query.loan" name="loan" class="fll"/>
-            </div>
-            <div class="clearfix mb15">
-              <div class="fll city">业务分类</div>
-              <wradio :radios="business" v-model="query.business" name="business" class="fll"/>
-            </div>
-            <div class="clearfix mb15">
-              <div class="fll city">贷款额度</div>
-              <wradio :radios="loanLimits" v-model="query.loanLimit" name="loanLimit" class="fll"/>
-            </div>
-            <div class="clearfix mb15">
-              <div class="fll city">贷款利率(月)</div>
-              <wradio :radios="loanRates" v-model="query.loanRate" name="loanRate" class="fll"/>
-            </div>
-            <div class="clearfix mb15">
-              <div class="fll city">贷款期限</div>
-              <wradio :radios="loanLifes" v-model="query.loanLife" name="loanLife" class="fll"/>
-            </div>
-            <div class="clearfix area-item">
-              <div class="fll city">贷款条件</div>
-              <div
-                :class="loanUp? 'radio-wrap-active' : ''"
-                class="fll radio-wrap clearfix"
-              >
-                <wcheckBox
-                  :radios="loanConditions"
-                  v-model="query.loanCondition"
-                  :val="query.loanCondition"
-                  name="loanCondition"
-                  class="fll"
-                  style="width: 700px"
-                />
-              </div>
-              <div class="up" @click="loanSpread">展开
-                <span :class="loanUp? 'arrow rotate' : 'arrow' "/>
+            <div class="filter-item">
+              <div class="label">贷款类型</div>
+              <div class="filter-content">
+                <filter-list :data-list="loansTypeOptions" v-model="listQuery.productLoanType" @change="handleChange"/>
               </div>
             </div>
+            <div class="filter-item">
+              <div class="label">业务分类</div>
+              <div class="filter-content">
+                <filter-list :data-list="businessTypeOptions" v-model="listQuery.productType" @change="handleChange"/>
+              </div>
+            </div>
+            <template v-if="filterBoxToggle">
+              <div class="filter-item">
+                <div class="label">贷款额度</div>
+                <div class="filter-content">
+                  <filter-list :data-list="loanAmountOptions" v-model="listQuery.productAmount" :options="{ key: 'amountName', value: 'id' }" @change="handleChange"/>
+                </div>
+              </div>
+              <div class="filter-item">
+                <div class="label">贷款利率（月）</div>
+                <div class="filter-content">
+                  <filter-list :data-list="intersetOptions" v-model="listQuery.interest" :options="{ key: 'interestName', value: 'id' }" @change="handleChange"/>
+                </div>
+              </div>
+              <div class="filter-item">
+                <div class="label">贷款期限</div>
+                <div class="filter-content">
+                  <filter-list :data-list="lifeOptions" v-model="listQuery.productLife" :options="{ key: 'lifeName', value: 'id' }" @change="handleChange"/>
+                </div>
+              </div>
+              <div class="filter-item">
+                <div class="label">贷款条件</div>
+                <div class="filter-content">
+                  <filter-list :data-list="conditionOptions" v-model="listQuery.productProperty" :options="{ key: 'lrName', value: 'lrId' }" :mutiple="true" @change="handleChange"/>
+                </div>
+              </div>
+            </template>
           </div>
-          <div class="fll organ-right">
-            <div class="clearfix mb40">
-              <input v-model="searchCon" type="text" class="fll con-search" placeholder="请输入内容">
-              <div class="search fll" @click="search">搜索</div>
+          <div class="tips-btn" @click="handleMore">{{ filterBoxToggle ? '收起更多' : '展开更多' }}</div>
+        </div>
+        <div class="right">
+          <div class="input-wrap">
+            <input v-model="searchKey" type="text" placeholder="请输入内容"><span @click="handleSearch">搜索</span>
+          </div>
+          <div class="img-box">
+            <div>
+              <img src="../../static/resource/organ/veri.png" alt="">
+              <div class="organ-text">专业认证</div>
             </div>
-            <div class="top clearfix">
-              <div class="top1 fll">
-                <img src="../../static/resource/organ/veri.png" alt="">
-                <div class="organ-text">专业认证</div>
-              </div>
-              <div class="top1 fll">
-                <img src="../../static/resource/organ/xin.png" alt="">
-                <div class="organ-text">信誉平台</div>
-              </div>
-              <div class="fll top2">
-                <img src="../../static/resource/organ/mian.png" alt="">
-                <div class="organ-text">免费服务</div>
-              </div>
+            <div>
+              <img src="../../static/resource/organ/xin.png" alt="">
+              <div class="organ-text">信誉平台</div>
+            </div>
+            <div>
+              <img src="../../static/resource/organ/mian.png" alt="">
+              <div class="organ-text">免费服务</div>
             </div>
           </div>
         </div>
-        <div class="mt30 mb24 organ-loan">贷款产品</div>
-        <div v-if="isJianSuo">
-          <div class="loans-pro">
-            <div class="loans-header clearfix">
-              <div class="header-same fll">产品名称</div>
-              <div class="header-same fll">额度</div>
-              <div class="header-same fll">使用年限</div>
-              <div class="header-same fll">利息</div>
-              <div class="header-same fll">放款时间</div>
-              <div class="header-same fll">发行机构</div>
-              <div class="header-same fll">操作</div>
-            </div>
-
-            <div v-if="tableData.length == 0" class="empty-list">
+      </section>
+      <section class="bottom">
+        <div class="title">贷款产品</div>
+        <div class="list">
+          <div v-loading="listLoading" element-loading-text="数据正在加载中..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)" class="table-main">
+            <ul>
+              <li class="table-header">
+                <div>产品名称</div>
+                <div>额度</div>
+                <div>使用年限</div>
+                <div>利息</div>
+                <div>放款时间</div>
+                <div>发行机构</div>
+                <div>操作</div>
+              </li>
+              <li v-for="(item, index) in resultList" :key="index">
+                <div v-if="conditionQuery" class="base-color">{{ item.productName }}</div>
+                <div v-else class="base-color" v-html="item.productName"/>
+                <div class="theme-color">{{ item.productStartAmount }}-{{ item.productEndAmount }}万</div>
+                <div class="theme-color">{{ item.productLife }}</div>
+                <div class="theme-color">{{ item.productInterest }}%</div>
+                <div class="theme-color">{{ item.producLoanLength }}</div>
+                <div class="base-color">{{ item.productPublisher }}</div>
+                <div class="base-color">
+                  <span class="btn" @click="handleDetail(item)">立即查看</span>
+                </div>
+              </li>
+            </ul>
+            <div v-if="resultList.length == 0" class="empty-list">
               <img :src="emptyList" alt="" class="empty-img">
               <p>暂无数据...</p>
             </div>
-            <div v-for="(item,index) in tableData" :key="index" class="loans-pro-item clearfix">
-              <div class="name fll pro-item-same">{{ item.productName }}</div>
-              <div
-                class="rate fll pro-item-same"
-              >{{ item.productStartAmount }}-{{ item.productEndAmount }}万</div>
-              <div class="deadline fll pro-item-same">{{ item.productLife }}</div>
-              <div class="limit fll pro-item-same">{{ item.productInterest }}%</div>
-              <div class="time fll pro-item-same">{{ item.producLoanLength }}</div>
-              <div class="bank fll pro-item-same">{{ item.productPublisher }}</div>
-              <div class="operate fll pro-item-same">
-                <div class="look" @click="lookDetail(item.productId)">查看</div>
-              </div>
-            </div>
-          </div>
-          <div class="page">
-            <el-pagination
-              :current-page="page"
-              :page-size="size"
-              :pager-count="5"
-              :total="count"
-              background=""
-              layout="prev, pager, next"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-            />
           </div>
         </div>
-        <div v-else>
-          <div class="loans-pro">
-            <div class="loans-header clearfix">
-              <div class="header-same fll">产品名称</div>
-              <div class="header-same fll">额度</div>
-              <div class="header-same fll">使用年限</div>
-              <div class="header-same fll">利息</div>
-              <div class="header-same fll">放款时间</div>
-              <div class="header-same fll">发行机构</div>
-              <div class="header-same fll">操作</div>
-            </div>
-
-            <div v-if="formData.length == 0" class="empty-list">
-              <img :src="emptyList" alt="" class="empty-img">
-              <p>暂无数据...</p>
-            </div>
-
-            <div v-for="(item,index) in formData" :key="index" class="loans-pro-item clearfix">
-              <div class="name fll pro-item-same" v-html="item.productName">{{ item.productName }}</div>
-              <div class="rate fll pro-item-same">
-                <span>{{ item.productStartAmount }}</span>~
-                <span>{{ item.productEndAmount }}</span>万
-              </div>
-              <div
-                class="time fll pro-item-same"
-              >{{ item.producLoanLength }}年</div>
-              <div
-                class="limit fll pro-item-same"
-              >{{ item.productInterest }}%</div>
-              <div class="deadline fll pro-item-same">{{ item.productLife }}天</div>
-              <div
-                class="bank fll pro-item-same"
-                v-html="item.productPublisher"
-              >{{ item.productPublisher }}</div>
-              <div class="operate fll pro-item-same">
-                <div class="look" @click="lookDetail(item.productId)">查看</div>
-              </div>
-            </div>
-          </div>
-          <div class="page">
-            <el-pagination
-              :current-page="Searchpn"
-              :page-size="Searchpage"
-              :pager-count="5"
-              :total="Searchcount"
-              background=""
-              layout="prev, pager, next"
-              @size-change="handleSizeSearchChange"
-              @current-change="handleCurrentSearchChange"
-            />
-          </div>
+        <div class="page-container">
+          <el-pagination
+            :current-page="listQuery.currentPage"
+            :page-size="listQuery.pageSize"
+            :pager-count="5"
+            :total="totalCount"
+            background=""
+            layout="prev, pager, next"
+            @current-change="handleCurrentChange"/>
         </div>
-        <footerSame/>
-      </div>
-    </div>
+      </section>
+      <footerSame/>
+    </main>
+    <bottomTap/>
   </div>
 </template>
 
 <script>
+import cityRadios from '@/component/cityRadios'
 import footerSame from '../component/footerSame'
-import wradio from '../component/w-radios'
-import wcheckBox from '../component/w-checkBox'
+import filterList from '@/component/filter'
+import { fetchList, searchByKey } from '@/api/productList'
 import emptyList from '../assets/empty-list.png'
-import { backTop, param2Obj } from '@/util/util'
+import bottomTap from '../component/bottomTap'
+import { param2Obj } from '@/util/util'
+import { fetchAmount, fetchInterest, fetchLife, fetchCondition } from '@/api/filterCondition'
+const loansTypeOptions = [
+  { label: '不限', value: 0 },
+  { label: '信用贷', value: 1 },
+  { label: '抵押贷', value: 2 }
+]
+const businessTypeOptions = [
+  { label: '不限', value: 0 },
+  { label: '个人贷款', value: 1 },
+  { label: '企业贷款', value: 2 }
+]
 export default {
   name: 'ProductList',
   components: {
+    cityRadios,
     footerSame,
-    wradio,
-    wcheckBox
+    filterList,
+    bottomTap
   },
   data() {
     return {
       emptyList,
-      formData: [],
-      isJianSuo: true,
-      searchCon: '',
-      cityUp: false, // 城市是否展开
-      loanUp: false, // 贷款
-      tableData: [],
-      cities: [],
-      loans: [], // 贷款类型
-      business: [], // 业务分类
-      loanLimits: [{}], // 贷款额度
-      loanRates: [{}], // 贷款利
-      loanLifes: [], // 贷款期限
-      loanConditions: [], // 贷款条件
-      query: {
-        city: '',
-        loan: '',
-        business: '',
-        loanLimit: '',
-        loanRate: '',
-        loanLife: '',
-        loanCondition: ''
+      loansTypeOptions,
+      businessTypeOptions,
+      loanAmountOptions: [],
+      intersetOptions: [],
+      lifeOptions: [],
+      conditionOptions: [],
+      filterBoxToggle: false,
+      cityShowNum: 6,
+      listLoading: false,
+      searchKey: '',
+      listQuery: {
+        currentPage: 1,
+        pageSize: 5,
+        address1: '',
+        address2: '',
+        productLoanType: '', // 贷款类型
+        productType: '', // 业务分类
+        productAmount: '', // 额度
+        interest: '', // 利率
+        productLife: '', // 期限
+        productProperty: '' // 条件
       },
-      page: 1,
-      size: 5,
-      count: 0,
-      Searchpn: 1,
-      Searchpage: 5,
-      Searchcount: 1
-    }
-  },
-  watch: {
-    'query.city': function(val) {
-      this.queryList()
-    },
-    'query.loan': function(val) {
-      this.queryList()
-    },
-    'query.business': function(val) {
-      this.queryList()
-    },
-    'query.loanLimit': function(val) {
-      this.queryList()
-    },
-    'query.loanRate': function(val) {
-      this.queryList()
-    },
-    'query.loanLife': function(val) {
-      this.queryList()
-    },
-    'query.loanCondition': function(val) {
-      this.queryList()
+      resultList: [],
+      totalCount: 0
     }
   },
   created() {
-    console.log()
-    this.query.loanCondition = param2Obj(window.location.href).type
-    this.getData()
-    this.getCity()
-    this.getLoanType()
-    this.getBusinessType()
-    this.getLoanLimit()
-    this.getLoanLife()
-    this.getLoanCondition()
-    this.getProRate()
+    this.listQuery.productProperty = param2Obj(window.location.href).type
+    this.getList()
+    this.getAmount()
+    this.getInterest()
+    this.getLife()
+    this.getCondition()
   },
   methods: {
-    queryList() {
-      this.page = 1
-      this.size = 5
-      this.isJianSuo = true
-      this.searchCon = ''
-      this.getDataCondition()
+    getList() {
+      this.conditionQuery = true
+      this.listLoading = true
+      fetchList(this.listQuery).then(res => {
+        this.listLoading = false
+        this.resultList = res.data.list
+        this.totalCount = res.data.totalCount
+      })
     },
-    search() {
-      this.isJianSuo = false
-      if (this.searchCon) {
-        this.$axios.get(`solr/getPageProduct?q=${this.searchCon}&page=${this.Searchpn}&size=${this.Searchpage}`).then(res => {
-          this.formData = res.data
-          this.Searchcount = res.total
+    getAmount() {
+      fetchAmount().then(res => {
+        this.loanAmountOptions = res.data
+      })
+    },
+    getInterest() {
+      fetchInterest().then(res => {
+        this.intersetOptions = res.data
+      })
+    },
+    getLife() {
+      fetchLife().then(res => {
+        this.lifeOptions = res.data
+      })
+    },
+    getCondition() {
+      fetchCondition().then(res => {
+        this.conditionOptions = res.data.map(item => {
+          item.flag = false
+          return item
         })
-      } else {
-        this.$message.warning('请输入查询内容')
-      }
-    },
-    handleSizeSearchChange(val) {
-      this.Searchpage = val
-      this.search()
-    },
-    handleCurrentSearchChange(val) {
-      this.Searchpn = val
-      this.search()
+      })
     },
     handleCurrentChange(val) {
-      this.page = val
-      this.getDataCondition()
+      this.listQuery.currentPage = val
+      console.log(this.listQuery.currentPage)
+      if (this.conditionQuery) {
+        this.getList()
+      } else {
+        this.searchList()
+      }
     },
-    handleSizeChange(val) {
-      this.size = val
-      this.getDataCondition()
+    handleChange() {
+      this.getList()
     },
-    getData() {
-      this.$axios
-        .get(`/product/getLimitProduct/${this.page}/${this.size}`)
-        .then(res => {
-          this.tableData = res.list
-          this.count = res.totalCount
-          backTop()
-        })
+    handleSearch() {
+      this.resetForm()
+      this.searchList()
     },
-    // 根据条件
-    getDataCondition() {
-      this.$axios
-        .get(
-          `product/selectByCondition?agencyAddress=${
-            this.query.city
-          }&productLoanType=${this.query.loan}&productType=${
-            this.query.business
-          }&productAmount=${this.query.loanLimit}&interest=${
-            this.query.loanRate
-          }&productLife=${this.query.loanLife}&productProperty=${
-            this.query.loanCondition
-          }&currentPage=${this.page}&pageSize=${this.size}`
-        )
-        .then(res => {
-          this.tableData = res.list
-          this.count = res.totalCount
-        })
-    },
-    // 获取地区
-    getCity() {
-      this.$axios.get('city/getAHotCity').then(res => {
-        this.cities = res.map(item => {
-          return { value: item.hid, label: item.cname }
-        })
+    searchList() {
+      this.listLoading = true
+      this.conditionQuery = false
+      const obj = {
+        q: this.searchKey,
+        page: this.listQuery.currentPage,
+        size: this.listQuery.pageSize
+      }
+      searchByKey(obj).then(res => {
+        this.listLoading = false
+        this.resultList = res.data.data
+        this.totalCount = res.data.total
       })
     },
-    //  展开或关闭城市
-    citySpread() {
-      this.cityUp = !this.cityUp
+    handleMore() {
+      this.filterBoxToggle = !this.filterBoxToggle
     },
-    loanSpread() {
-      this.loanUp = !this.loanUp
+    handleCityShow() {
+      this.cityShowNum = this.cityShowNum === 6 ? 50 : 6
     },
-    // 查看进入详情页
-    lookDetail(id) {
-      this.$router.push(`productDetail?id=${id}`)
+    handleDetail(item) {
+      this.$router.push(`productDetail?id=${item.productId}`)
     },
-    // 贷款类型
-    getLoanType() {
-      this.$axios.get('get/getLoanType').then(res => {
-        this.loans = res.map(item => {
-          return { value: item.id, label: item.typeName }
-        })
-      })
-    },
-    // 业务分类
-    getBusinessType() {
-      this.$axios.get('get/getType').then(res => {
-        this.business = res.map(item => {
-          return { value: item.id, label: item.busName }
-        })
-      })
-    },
-    // 贷款额度
-    getLoanLimit() {
-      this.$axios.get('get/getAmount').then(res => {
-        this.loanLimits = res.map(item => {
-          return { value: item.id, label: item.amountName }
-        })
-      })
-    },
-    // 利率
-    getProRate() {
-      this.$axios.get('get/getInterest').then(res => {
-        this.loanRates = res.map(item => {
-          return { value: item.id, label: item.interestName }
-        })
-      })
-    },
-    // 贷款期限
-    getLoanLife() {
-      this.$axios.get('get/getServiceLife').then(res => {
-        this.loanLifes = res.map(item => {
-          return { value: item.id, label: item.lifeName }
-        })
-      })
-    },
-    // 贷款条件
-    getLoanCondition() {
-      this.$axios.get('get/getLoanRequirements').then(res => {
-        this.loanConditions = res.map(item => {
-          return { value: item.lrId, label: item.lrName }
-        })
-      })
+    resetForm() {
+      this.listQuery = {
+        currentPage: 1,
+        pageSize: 5,
+        address1: '',
+        address2: '',
+        productLoanType: '', // 贷款类型
+        productType: '', // 业务分类
+        productAmount: '', // 额度
+        interest: '', // 利率
+        productLife: '', // 期限
+        productProperty: '' // 条件
+      }
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.organ-right {
-  width: 268px;
-  height: 201px;
-  background: rgba(255, 255, 255, 1);
-  margin-left: 30px;
-  padding: 10px 18px;
-  box-sizing: border-box;
-  .search {
-    width: 60px;
-    height: 40px;
-    background: rgba(168, 14, 14, 1);
-    border-radius: 0px 4px 4px 0px;
-    color: #fff;
-    line-height: 40px;
-    text-align: center;
-    cursor: pointer;
-  }
-  .con-search {
-    width: 170px;
-    height: 40px;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-    border: 1px solid rgba(205, 205, 205, 1);
-    padding-left: 5px;
-    line-height: 40px;
-    box-sizing: border-box;
-    color: #333;
-  }
-  .organ-text {
-    margin-top: 18px;
-    width: 56px;
-    height: 14px;
-    font-size: 14px;
-    font-family: PingFangSC-Regular;
-    font-weight: 400;
-    color: rgba(81, 81, 81, 1);
-    line-height: 14px;
-  }
-  .organ-line {
-    width: 216px;
-    height: 1px;
-    background: #ccc;
-    margin-top: 30px;
-  }
-  .top1 {
-    margin-right: 24px;
-    font-size: 0;
-  }
-  .top2 {
-    font-size: 0;
-  }
-  .bottom {
-    margin-top: 29px;
-    .bottom1,
-    .bottom2 {
-      text-align: center;
-    }
-    .bottom1 {
-      margin-right: 16px;
-    }
-  }
-  .num {
-    height: 24px;
-    font-size: 18px;
-    font-family: DINAlternate-Bold;
-    font-weight: bold;
-    color: rgba(208, 172, 86, 1);
-    line-height: 24px;
-    letter-spacing: 2px;
-    overflow: hidden;
-  }
-  .num2 {
-    height: 14px;
-    font-size: 14px;
-    font-family: PingFangSC-Regular;
-    font-weight: 400;
-    color: rgba(81, 81, 81, 1);
-    line-height: 14px;
-    margin-top: 24px;
+$jnd-bg-color-white: #ffffff;
+$jnd-bg-color-theme: #A80E0E;
+$jnd-font-color-white: #ffffff;
+$jnd-font-color-black: #000000;
+$jnd-font-color-base: #515151;
+$jnd-font-color-gray: #9b9b9b;
+$jnd-font-color-theme: #A80E0E;
+$jnd-font-size-base: 14px;
+$jnd-font-size-small: 12px;
+$jnd-font-size-big: 16px;
+$jnd-font-size-title: 24px;
+.base-color {
+  color: $jnd-font-color-base;
+}
+.theme-color {
+  color: $jnd-font-color-theme;
+}
+@mixin clearFix {
+  &::after {
+    display: table;
+    content: ' ';
+    clear: both;
   }
 }
-.mb40 {
-  margin-bottom: 40px;
-}
-
-.mb15 {
-  margin-bottom: 15px;
-}
-.mb20 {
-  margin-bottom: 20px;
-}
-.image {
-  img {
-    width: 100%;
-    height: auto;
+@mixin arrow {
+  &::after {
+    display: inline-block;
+    content: ' ';
+    width: 0;
+    height: 0;
+    border-width: 8px;
+    border-style: solid;
+    border-color: #9E9E9E transparent transparent transparent;
+    vertical-align: middle;
+    transform: translateY(2px);
+  }
+  &.toggle::after {
+    transform: rotate(180deg);
+    vertical-align: top;
   }
 }
-.area {
-  padding: 20px 18px;
-  box-sizing: border-box;
-  width: 902px;
-  background: rgba(255, 255, 255, 1);
-  .area-item {
-    position: relative;
-    .up {
-      position: absolute;
-      right: 0;
-      top: 13px;
-      height: 14px;
-      font-size: 14px;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
-      color: rgba(155, 155, 155, 1);
-      line-height: 14px;
-      cursor: pointer;
-      .arrow {
-        display: inline-block;
-        vertical-align: middle;
-        margin-top: 3px;
-        margin-left: 3px;
-        width: 0;
-        height: 0;
-        border: 7px solid transparent;
-        border-top-color: rgba(155, 155, 155, 1);
+.product-wrap {
+  background: #F5F5F5;
+  min-height: 100vh;
+  height: auto;
+  padding-top: 30px;
+  font-size: $jnd-font-size-base;
+  .product-main {
+    width: 1200px;
+    margin: 0 auto 30px;
+    .top {
+      @include clearFix;
+      width: 1200px;
+      margin: 0 auto;
+      .filter-container, .right {
+        background: $jnd-bg-color-white;
       }
-      .rotate {
-        transform: rotateZ(180deg);
-        margin-top: -10px;
+      .filter-container {
+        width: 902px;
+        height: auto;
+        float: left;
+        padding-bottom: 20px;
+        position: relative;
+        box-sizing: border-box;
+        transition: height .5s ease;
+        &.toggle {
+          transition: all .5s ease;
+          .tips-btn::after {
+            transform: rotate(180deg);
+            vertical-align: top;
+          }
+        }
+        .tips-btn {
+          @include arrow;
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          height: 20px;
+          width: 80px;
+          transform: translateX(-50%);
+          background: #EBEBEB;
+          font-size: $jnd-font-size-small;
+          text-align: center;
+          line-height: 20px;
+          cursor: pointer;
+        }
+        .filter-item {
+          @include clearFix;
+          position: relative;
+          margin-bottom: 20px;
+          .label {
+            float: left;
+            width: 112px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background: #D0AC56;
+            color: $jnd-font-color-white;
+            font-size: $jnd-font-size-big;
+          }
+          .filter-content {
+            float: left;
+            width: 672px;
+          }
+          .toggle-item {
+            @include arrow;
+            position: absolute;
+            right: 0;
+            top: 10px;
+            color: $jnd-font-color-gray;
+            cursor: pointer;
+          }
+        }
       }
-    }
-    .radio-wrap {
-      box-sizing: border-box;
-      width: 700px;
-      height: 30px;
-      overflow: hidden;
-      padding-bottom: 20px;
-      transition: height ease 0.5s;
-    }
-    .radio-wrap-active {
-      height: auto;
-    }
-  }
-  .city {
-    width: 112px;
-    height: 40px;
-    background: rgba(208, 172, 86, 1);
-    text-align: center;
-    font-size: 16px;
-    font-family: PingFangSC-Medium;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 1);
-    line-height: 40px;
-  }
-}
-.organ-loan {
-  width: 96px;
-  height: 24px;
-  font-size: 24px;
-  font-family: PingFangSC-Medium;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 1);
-  line-height: 24px;
-}
-.loans-pro {
-  width: 1200px;
-
-  background: rgba(255, 255, 255, 1);
-
-  .loans-header {
-    height: 53px;
-    box-shadow: 2px 2px 4px 1px #fefefe;
-    .header-same {
-      text-align: center;
-      width: 171px;
-      height: 53px;
-      font-size: 16px;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
-      color: rgba(81, 81, 81, 1);
-      line-height: 53px;
-    }
-  }
-
-  .loans-pro-item {
-    height: 80px;
-    .pro-item-same {
-      width: 171px;
-      line-height: 80px;
-      text-align: center;
-    }
-    .rate {
-      font-size: 16px;
-      font-weight: bold;
-      color: rgba(168, 14, 14, 1);
-    }
-    .name {
-      font-size: 16px;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
-      color: rgba(81, 81, 81, 1);
-    }
-    .time {
-      font-size: 16px;
-      font-family: PingFangSC-Regular;
-      font-weight: bold;
-      color: rgba(168, 14, 14, 1);
-    }
-    .limit {
-      font-size: 16px;
-      font-family: DINAlternate-Bold;
-      font-weight: bold;
-      color: rgba(168, 14, 14, 1);
-    }
-    .deadline {
-      font-size: 16px;
-      font-family: PingFangSC-Regular;
-      font-weight: bold;
-      color: rgba(168, 14, 14, 1);
-    }
-    .bank {
-      font-size: 16px;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
-      color: rgba(81, 81, 81, 1);
-    }
-    .operate {
-      font-size: 16px;
-      font-family: PingFangSC-Regular;
-      font-weight: 400;
-      color: rgba(155, 155, 155, 1);
-      .look {
-        width: 120px;
-        height: 50px;
-        line-height: 50px;
-        margin-top: 14px;
-        margin-left: 27px;
-        cursor: pointer;
+      .right {
+        width: 268px;
+        height: 201px;
+        float: right;
+        padding: 10px 18px;
+        box-sizing: border-box;
+        .input-wrap {
+          width: 232px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          margin-bottom: 44px;
+          input {
+            width: 170px;
+            box-sizing: border-box;
+            height: 40px;
+            padding-left: 10px;
+            border:1px solid #CDCDCD;
+            outline: none;
+            border-radius: 4px 0 0 4px;
+            border-right: none;
+          }
+          span {
+            width: 60px;
+            height: 40px;
+            background: $jnd-bg-color-theme;
+            border-radius:0px 4px 4px 0px;
+            color: $jnd-font-color-white;
+            line-height: 40px;
+            text-align: center;
+            cursor: pointer;
+          }
+        }
+        .img-box {
+          display: flex;
+          justify-content: space-around;
+          .organ-text {
+            margin-top: 10px;
+            color: $jnd-font-color-base;
+          }
+        }
       }
     }
-
-    &:hover {
-      box-shadow: 0px 4px 13px 0px rgba(217, 217, 217, 1);
-      background: rgba(250, 250, 250, 1);
-    }
-    &:hover .operate .look {
-      background: rgba(168, 14, 14, 1);
-      color: rgba(255, 255, 255, 1);
+    .bottom {
+      width: 1200px;
+      margin: 50px auto 0;
+      .title {
+        font-size: $jnd-font-size-title;
+        color: $jnd-font-color-black;
+        margin-bottom: 20px;
+      }
+      .list {
+        background: $jnd-bg-color-white;
+        .table-main {
+          min-height: 300px;
+          li {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 80px;
+            transition: all .5s;
+            text-align: center;
+            &.table-header {
+              height: 48px;
+              font-size: $jnd-font-size-big;
+              color: $jnd-font-color-gray;
+            }
+            div {
+              width: calc(100% / 7);
+              .btn {
+                display: inline-block;
+                width:120px;
+                height:50px;
+                margin: 0 auto;
+                line-height: 50px;
+              }
+            }
+            &:hover {
+              background: #FAFAFA;
+              .btn {
+                color: $jnd-font-color-white;
+                background: $jnd-bg-color-theme;
+                cursor: pointer;
+              }
+            }
+          }
+        }
+      }
+      .page-container {
+        margin-top: 20px;
+        text-align: right;
+      }
     }
   }
-}
-.page {
-  margin-top: 24px;
-  text-align: right;
-  margin-bottom: 30px;
 }
 </style>
