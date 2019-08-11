@@ -71,6 +71,7 @@ const components = {
   agentSecure: () => import('@/views/agentMessage/item/agentSecure'),
   applyRecordAg: () => import('@/views/agentMessage/item/applyRecordAg'),
   agreement: () => import('@/views/agreement'),
+  download: () => import('@/views/download/index'),
   NotFoundComponent: () => import('@/views/404')
 }
 
@@ -383,6 +384,10 @@ export default new Router({
           ]
         }
       ]
+    },
+    {
+      path: '/download',
+      component: components.download
     },
     {
       path: '/findPassword',

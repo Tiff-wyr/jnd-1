@@ -1,0 +1,19 @@
+$jnd-font-size-base: 14px;
+$jnd-font-color-theme: #a80e0e;
+$jnd-font-color-base: #515151;
+$jnd-font-color-gray: #9B9B9B;
+$jnd-font-color-white: #ffffff;
+$jnd-font-weigth-base: 400;
+$jnd-bg-color-white: #ffffff;
+$jnd-bg-color-base: #F9F9F9;
+@mixin box-center {
+  width: 1200px;
+  margin: 0 auto;
+}
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}

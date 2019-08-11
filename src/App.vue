@@ -11,7 +11,6 @@ export default {
 </script>
 
 <style lang="scss">
-
   body {
     height: 100%;
     user-select:none;
