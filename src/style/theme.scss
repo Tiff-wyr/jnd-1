@@ -1,11 +1,17 @@
+$jnd-font-size-small: 12px;
 $jnd-font-size-base: 14px;
+$jnd-font-size-big: 16px;
+$jnd-font-size-title: 24px;
 $jnd-font-color-theme: #a80e0e;
 $jnd-font-color-base: #515151;
 $jnd-font-color-gray: #9B9B9B;
 $jnd-font-color-white: #ffffff;
+$jnd-font-color-black: #000000;
 $jnd-font-weigth-base: 400;
 $jnd-bg-color-white: #ffffff;
 $jnd-bg-color-base: #F9F9F9;
+$jnd-bg-color-theme: #A80E0E;
+
 @mixin box-center {
   width: 1200px;
   margin: 0 auto;
@@ -15,5 +21,23 @@ $jnd-bg-color-base: #F9F9F9;
     content: "";
     display: table;
     clear: both;
+  }
+}
+
+@mixin arrow {
+  &::after {
+    display: inline-block;
+    content: ' ';
+    width: 0;
+    height: 0;
+    border-width: 8px;
+    border-style: solid;
+    border-color: #9E9E9E transparent transparent transparent;
+    vertical-align: middle;
+    transform: translateY(2px);
+  }
+  &.toggle::after {
+    transform: rotate(180deg);
+    vertical-align: top;
   }
 }

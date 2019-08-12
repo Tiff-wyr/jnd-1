@@ -165,7 +165,7 @@
               <div class="product-table fll">
                 <ul v-for="(item,index) in productData" :key="index" class="product-item">
                   <li>
-                    <span>{{ item.productName }}</span>
+                    <span class="product-name">{{ item.productName }}</span>
                     <br>
                     <span>产品名称</span>
                   </li>
@@ -574,14 +574,23 @@ export default {
     // 获取省
     getProvince() {
       this.$axios.get('city/getAllProvincial').then(res => {
-        this.provinceData = res
+        for (let i = 0, len = res.length; i < len; i++) {
+          if (res[i].pid !== 0) {
+            this.provinceData.push(res[i])
+          }
+        }
       })
     },
     // 获取 市 区
     getCity(val) {
       this.borrowerData.address2 = ''
+      this.cityData.splice(0)
       this.$axios.get(`city/getAllCity/${val}`).then(res => {
-        this.cityData = res
+        for (let i = 0, len = res.length; i < len; i++) {
+          if (res[i].cid !== 0) {
+            this.cityData.push(res[i])
+          }
+        }
       })
     },
     // 特别推荐详情页
@@ -673,7 +682,6 @@ export default {
 }
 </script>
 <style lang="scss">
-
 .el-carousel, .el-carousel__container {
   height: 368px!important;
   min-width: 1200px;
@@ -1063,9 +1071,15 @@ $gray: #333;
       width: 120px;
       line-height: 44px;
       text-align: center;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       span {
         color: #515151;
         font-weight: 500;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
       span:first-of-type {
         color: #a80e0e;

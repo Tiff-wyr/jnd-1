@@ -492,12 +492,13 @@ export default {
         }
         .dredge {
           display: block;
-          width:100px;
-          height:28px;
-          line-height: 28px;
+          width:92px;
+          height:26px;
+          line-height: 26px;
           margin: 12px auto;
           background: #fff;
           border-radius:14px;
+          font-size: $jnd-font-size-base;
           cursor: pointer;
         }
         .itme {

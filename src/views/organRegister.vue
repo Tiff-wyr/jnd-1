@@ -424,15 +424,24 @@ export default {
     // 获取省
     getProvince() {
       fetchProvince().then(res => {
-        this.provinceData = res.data
+        for (let i = 0, len = res.data.length; i < len; i++) {
+          if (res.data[i].pid !== 0) {
+            this.provinceData.push(res.data[i])
+          }
+        }
       })
     },
     // 获取 市 区
     getCity(val) {
       this.organMess.agencyAddress1 = ''
+      this.cityData.splice(0)
       if (val) {
         fetchCity(val).then(res => {
-          this.cityData = res.data
+          for (let i = 0, len = res.data.length; i < len; i++) {
+            if (res.data[i].cid !== 0) {
+              this.cityData.push(res.data[i])
+            }
+          }
         })
       }
     },

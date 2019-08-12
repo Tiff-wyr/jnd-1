@@ -81,7 +81,7 @@ export default {
         })
     },
     pushUserDetail(item) {
-      this.$router.push(`/userDetail?type=3&roleId=${this.$store.state.userInfo.roleId}&brokerOrAgencyId=${this.$store.state.userInfo.id}&borId=${item.borrower.borrowerId}`)
+      this.$router.push(`/userDetail?type=3&roleId=${this.$store.state.userInfo.roleId}&brokerOrAgencyId=${this.$store.state.userInfo.id}&borId=${item.borrowerId}`)
     }
   }
 }

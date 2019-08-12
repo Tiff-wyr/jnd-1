@@ -220,7 +220,7 @@
                       @click="$router.push({path:'/',query:{login:1}})"
                     >已有账号？立即登陆</div>
                   </div>
-                  <div class="agreement"><el-checkbox v-model="isChecked"/> 阅读并同意 <a href="/agreement?userRegister" target="_blank">《9能贷用户注册协议》</a></div>
+                  <div class="agreement"><el-checkbox v-model="isChecked"/> 阅读并同意 <a href="/agreement?loanOfficerRegister" target="_blank">《9能贷信贷员注册协议》</a><a href="/agreement?loanOfficerCodeConduct" target="_blank">《9能贷信贷员行为规范》</a></div>
                 </el-form-item>
               </div>
             </div>
@@ -658,15 +658,24 @@ export default {
     // 获取省
     getProvince() {
       fetchProvince().then(res => {
-        this.provinceData = res.data
+        for (let i = 0, len = res.data.length; i < len; i++) {
+          if (res.data[i].pid !== 0) {
+            this.provinceData.push(res.data[i])
+          }
+        }
       })
     },
     // 获取 市 区
     getCity(val) {
       this.formData.address2 = ''
+      this.cityData.splice(0)
       if (val) {
         fetchCity(val).then(res => {
-          this.cityData = res.data
+          for (let i = 0, len = res.data.length; i < len; i++) {
+            if (res.data[i].cid !== 0) {
+              this.cityData.push(res.data[i])
+            }
+          }
         })
       }
     },

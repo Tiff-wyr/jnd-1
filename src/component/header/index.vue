@@ -12,7 +12,13 @@
             <span v-if="userInfo === null" class="text" @click="register">注册</span>
             <span v-else class="text" @click="logout">退出</span>
             <a class="text gray download tips" href="/guide">帮助中心</a>
-            <a class="text gray tips" href="/download">下载APP <img src="../../assets/download/code.png" alt=""></a>
+            <a class="text gray tips" href="/download">
+              下载APP
+              <div class="code-box">
+                <img src="../../assets/download/code.png" alt="">
+                <span>9能贷APP</span>
+              </div>
+            </a>
           </div>
         </div>
         <!-- 导航条 -->
@@ -84,7 +90,7 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import validater from '@/util/validater'
 import { setToken, removeToken } from '@/util/auth'
 const linkOptions = [
@@ -155,6 +161,7 @@ export default {
     this.autoLogin()
   },
   methods: {
+    ...mapMutations(['SET_USER']),
     // 检测是否 自动登录
     autoLogin() {
       const phone = localStorage.getItem('phone')
@@ -164,6 +171,54 @@ export default {
         this.passwordLogin.phone = phone
         this.passwordLogin.password = password
         this.handlePasswordLogin()
+      }
+    },
+    // 用户登录后可进入自己的个人页面
+    personDetail(role, id) {
+      if (role === 2 || role === 8) {
+        this.$router.push(`/agentMessage/${id}`)
+      }
+      if (role === 1) {
+        this.$router.push(`/myMessage/${id}`)
+      }
+      if (role === 3) {
+        this.$router.push(`/organMessage/${id}`)
+      }
+    },
+    handlePasswordLogin() {
+      if (this.passwordLogin.phone) {
+        if (this.passwordLogin.password) {
+          const phone = this.passwordLogin.phone.trim()
+          this.$axios.get(`user/selectPhone/${phone}`).then(res => {
+            if (res.status === 500) {
+              this.$message.warning(res.msg)
+              this.passwordLogin.phone = ''
+              this.passwordLogin.password = ''
+            } else {
+              this.$axios
+                .get(
+                  `user/loginByPhoneAndPassword/${this.passwordLogin.phone}/${
+                    this.passwordLogin.password
+                  }/0`
+                )
+                .then(res => {
+                  if (res.status === 200) {
+                    setToken(new Date())
+                    this.SET_USER(res.data)
+                    this.$message.success(res.msg)
+                    this.isMask = false
+                    this.isContain = false
+                  } else if (res.status === 500) {
+                    this.$message.warning(res.msg)
+                  }
+                })
+            }
+          })
+        } else {
+          this.$message.warning('密码不能为空')
+        }
+      } else {
+        this.$message.warning('手机号不能为空')
       }
     },
     subNum() {
@@ -319,16 +374,30 @@ export default {
 <style lang="scss" scoped>
 @mixin hover {
   position: relative;
-  & > img {
+  & > .code-box {
     position: absolute;
     top: 100%;
     left: 50%;
+    width: 100px;
+    padding: 8px 8px 5px;
     display: none;
+    box-sizing: border-box;
     transform: translateX(-50%);
+    background: $jnd-bg-color-white;
+    border: 1px solid #D9D9D9;
     z-index: 99999;
+    text-align: center;
+    color: $jnd-font-color-base;
+    font-size: $jnd-font-size-small;
+    line-height: 1.5;
+    img {
+      width: 100%;
+    }
   }
   &:hover {
-    img {
+    background: $jnd-bg-color-white;
+    color: $jnd-font-color-base!important;
+    .code-box {
       display: block;
     }
   }
@@ -356,6 +425,8 @@ export default {
         .tips {
           @include hover;
           margin-left: 10px;
+          display: inline-block;
+          height: 100%;
         }
       }
     }

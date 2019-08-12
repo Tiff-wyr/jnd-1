@@ -4,14 +4,14 @@
     <div class="main">
       <div class="item">
         <div class="img-box">
-          <img src="" alt="">
+          <img src="../../../assets/contact1.png" alt="">
         </div>
         <p>友联合作：顾女士</p>
         <p>电话：<span>18310526603</span>(微信同步)</p>
       </div>
       <div class="item">
         <div class="img-box">
-          <img src="" alt="">
+          <img src="../../../assets/contact2.png" alt="">
         </div>
         <p>市场合作：<span>15210097461</span></p>
         <p>市场合作：<span>15144715931</span></p>

@@ -3,7 +3,7 @@
     <heade :style-options="styleOptions" />
     <swiper id="swiperBox" ref="mySwiper" :options="swiperOption">
       <swiper-slide :style="{background: 'url(' + bg0 + ') center center / cover no-repeat'}">
-        <div class="page">
+        <div class="page page1">
           <div class="info">
             <div class="title">
               <img src="../../assets/download/logo.png" class="logo" alt="">
@@ -186,11 +186,13 @@ export default {
     rSty(item) {
       if (item.lInfo.textAlign === 'left') {
         return {
-          right: 0
+          right: 0,
+          bottom: 0
         }
       } else {
         return {
-          left: 0
+          left: 0,
+          bottom: 0
         }
       }
     }
@@ -213,9 +215,11 @@ export default {
     @include box-center;
     position: relative;
     padding-top: 80px;
-      .code {
-        width: 200px;
-      }
+    height: 100%;
+    box-sizing: border-box;
+    .code {
+      width: 200px;
+    }
     .info {
       float: left;
       color: $jnd-font-color-white;
@@ -253,10 +257,15 @@ export default {
       }
     }
     .phone {
-      width: 350px;
+      width: 380px;
       position: absolute;
       right: 0;
-      top: 80px;
+    }
+    &.page1 {
+      .phone {
+        top: 50%;
+        transform: translateY(-50%);
+      }
     }
     .page-info {
       position: absolute;

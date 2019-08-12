@@ -246,7 +246,7 @@
 <script>
 import { mapState } from 'vuex'
 import { validaterPhone, validaterName, validaterLoanAmount } from '@/util/validate'
-import api from '@/api/filterData'
+import { fetchProvince, fetchCity } from '@/api/register'
 import { saveNotLoginProductOrder } from '@/api/apply'
 import publicApi from '@/api/public'
 export default {
@@ -391,18 +391,26 @@ export default {
   },
   methods: {
     getProvinceList() {
-      api.getProvice().then(res => {
-        this.provinceList = res.data
+      fetchProvince().then(res => {
+        for (let i = 0, len = res.data.length; i < len; i++) {
+          if (res.data[i].pid !== 0) {
+            this.provinceList.push(res.data[i])
+          }
+        }
       })
     },
     getCityList(id) {
-      api.getCity(id).then(res => {
-        console.log(res)
-        this.cityList = res.data
+      fetchCity(id).then(res => {
+        for (let i = 0, len = res.data.length; i < len; i++) {
+          if (res.data[i].cid !== 0) {
+            this.cityList.push(res.data[i])
+          }
+        }
       })
     },
     handleProvince(val) {
       this.applyForm.address2 = ''
+      this.cityList.splice(0)
       this.getCityList(val)
     },
     // 机构详情页
@@ -413,6 +421,7 @@ export default {
     enterProduct(id) {
       this.$router.push(`/productDetail?id=${id}`)
       this.getDetail(id)
+      this.getOrgan(id)
     },
     // 快速申请
     hurryUpApply() {
@@ -476,35 +485,39 @@ export default {
     },
     getVertifyCode() {
       if (this.applyForm.phone) {
-        if (this.isClick) {
-          this.isClick = false
-          setTimeout(() => {
-            this.isClick = true
-          }, 2000)
-          this.timer = setInterval(() => {
-            this.times--
-            this.codeBtnShow = false
-            if (this.times <= 0) {
-              this.clearTimer()
-            }
-          }, 1000)
-          publicApi.validateRegister(this.applyForm.phone).then(res => { // 检测手机号是否注册
-            if (res.data.status === 500) {
-              this.$message.success('该手机号已被注册，请登录后再进行申请')
-              this.clearTimer()
-              this.resetForm()
-            } else {
-              publicApi.sendPhoneCode(this.applyForm.phone).then(res => {
-                if (res.data.status === 500) {
-                  this.$message.warning(res.data.msg)
-                  this.clearTimer()
-                  this.resetForm()
-                } else {
-                  this.$message.success('验证码已发送')
-                }
-              })
-            }
-          })
+        if (validaterPhone(this.applyForm.phone)) {
+          if (this.isClick) {
+            this.isClick = false
+            setTimeout(() => {
+              this.isClick = true
+            }, 2000)
+            this.timer = setInterval(() => {
+              this.times--
+              this.codeBtnShow = false
+              if (this.times <= 0) {
+                this.clearTimer()
+              }
+            }, 1000)
+            publicApi.validateRegister(this.applyForm.phone).then(res => { // 检测手机号是否注册
+              if (res.data.status === 500) {
+                this.$message.success(res.data.msg)
+                this.clearTimer()
+                this.resetForm()
+              } else {
+                publicApi.sendPhoneCode(this.applyForm.phone).then(res => {
+                  if (res.data.status === 500) {
+                    this.$message.warning(res.data.msg)
+                    this.clearTimer()
+                    this.resetForm()
+                  } else {
+                    this.$message.success('验证码已发送')
+                  }
+                })
+              }
+            })
+          }
+        } else {
+          this.$message.warning('手机号错误')
         }
       } else {
         this.$message.warning('请填写手机号')
@@ -513,6 +526,7 @@ export default {
     // 产品详情
     getDetail(id) {
       this.$axios.get(`product/selectProductById/${id}`).then(res => {
+        console.log(res)
         this.productDetailData = res
       })
     },
@@ -607,9 +621,6 @@ export default {
 .mt25 {
   margin-top: 25px;
 }
-.mt22 {
-  margin-top: 10px;
-}
 .ml10 {
   margin-left: 10px;
 }
@@ -665,12 +676,11 @@ export default {
     margin-bottom: 20px;
   }
   .left-limit {
-    height: 14px;
     font-size: 14px;
     font-family: PingFangSC-Regular;
     font-weight: 400;
     color: rgba(155, 155, 155, 1);
-    line-height: 2;
+    line-height: 1;
   }
   .limit-same {
     font-size: 14px;
@@ -687,6 +697,7 @@ export default {
     line-height: 2;
     width: 465px;
     margin-left: 10px;
+    white-space: pre-wrap;
   }
   .detail-loan-title {
     font-size: 20px;

@@ -7,7 +7,7 @@
             <div class="filter-item">
               <div class="label">所在地区</div>
               <div class="filter-content">
-                <city-radios :conditions="cityShowNum"/>
+                <city-radios :conditions="cityShowNum" @selectProvince="selectProvince" @selectCity="selectCity"/>
               </div>
               <div :class="{ toggle: cityShowNum !== 6 }" class="toggle-item" @click="handleCityShow">
                 {{ cityShowNum === 6 ? '展开' : '收起' }}
@@ -221,6 +221,16 @@ export default {
         })
       })
     },
+    selectProvince(val) {
+      this.listQuery.address1 = val.pid
+      this.listQuery.address2 = ''
+      this.getList()
+    },
+    selectCity(val) {
+      this.listQuery.address1 = val.pid
+      this.listQuery.address2 = val.cid
+      this.getList()
+    },
     handleCurrentChange(val) {
       this.listQuery.currentPage = val
       console.log(this.listQuery.currentPage)
@@ -279,46 +289,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$jnd-bg-color-white: #ffffff;
-$jnd-bg-color-theme: #A80E0E;
-$jnd-font-color-white: #ffffff;
-$jnd-font-color-black: #000000;
-$jnd-font-color-base: #515151;
-$jnd-font-color-gray: #9b9b9b;
-$jnd-font-color-theme: #A80E0E;
-$jnd-font-size-base: 14px;
-$jnd-font-size-small: 12px;
-$jnd-font-size-big: 16px;
-$jnd-font-size-title: 24px;
 .base-color {
   color: $jnd-font-color-base;
 }
 .theme-color {
   color: $jnd-font-color-theme;
-}
-@mixin clearFix {
-  &::after {
-    display: table;
-    content: ' ';
-    clear: both;
-  }
-}
-@mixin arrow {
-  &::after {
-    display: inline-block;
-    content: ' ';
-    width: 0;
-    height: 0;
-    border-width: 8px;
-    border-style: solid;
-    border-color: #9E9E9E transparent transparent transparent;
-    vertical-align: middle;
-    transform: translateY(2px);
-  }
-  &.toggle::after {
-    transform: rotate(180deg);
-    vertical-align: top;
-  }
 }
 .product-wrap {
   background: #F5F5F5;
@@ -330,7 +305,7 @@ $jnd-font-size-title: 24px;
     width: 1200px;
     margin: 0 auto 30px;
     .top {
-      @include clearFix;
+      @include clearfix;
       width: 1200px;
       margin: 0 auto;
       .filter-container, .right {
@@ -366,7 +341,7 @@ $jnd-font-size-title: 24px;
           cursor: pointer;
         }
         .filter-item {
-          @include clearFix;
+          @include clearfix;
           position: relative;
           margin-bottom: 20px;
           .label {

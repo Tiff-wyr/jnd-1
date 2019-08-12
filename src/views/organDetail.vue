@@ -20,7 +20,7 @@
           <div class="fll">
             <div class="clearfix">
               <div class="fll" style="margin-left: 14px">
-                <div class="clearfix">
+                <div class="name-box">
                   <div class="name fll">{{ organDetail.agencyName }}</div>
                   <img src="../../static/resource/agent/vip.png" alt="">
                 </div>
@@ -488,17 +488,27 @@ export default {
     lookDetail(id) {
       this.$router.push(`/productDetail?id=${id}`)
     },
+
     // 获取省
     getProvince() {
       this.$axios.get('city/getAllProvincial').then(res => {
-        this.provinceData = res
+        for (let i = 0, len = res.length; i < len; i++) {
+          if (res[i].pid !== 0) {
+            this.provinceData.push(res[i])
+          }
+        }
       })
     },
     // 获取 市 区
     getCity(val) {
       this.borrowerData.address2 = ''
+      this.cityData.splice(0)
       this.$axios.get(`city/getAllCity/${val}`).then(res => {
-        this.cityData = res
+        for (let i = 0, len = res.length; i < len; i++) {
+          if (res[i].cid !== 0) {
+            this.cityData.push(res[i])
+          }
+        }
       })
     },
     clearTimer() {
@@ -804,13 +814,14 @@ export default {
   background: rgba(255, 255, 255, 1);
   padding: 20px 60px;
   box-sizing: border-box;
-  .name {
-    height: 28px;
-    font-size: 20px;
-    font-family: PingFangSC-Medium;
-    font-weight: 500;
-    color: rgba(81, 81, 81, 1);
-    line-height: 28px;
+  .name-box {
+    display: flex;
+    align-items: center;
+    .name {
+      font-size: 20px;
+      color: $jnd-font-color-base;
+      margin-right: 4px;
+    }
   }
   a {
     display: block;

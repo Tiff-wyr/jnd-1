@@ -34,7 +34,16 @@
           <span class="btn apply" @click="handleApply">立即申请</span>
           <p>
             <el-checkbox v-model="checked"/>
-            <a href="/agreement?loanOfficerRegister" target="_blank">阅读并同意9能贷相关注册协议</a>
+            <el-dropdown trigger="click">
+              <span class="el-dropdown-link">
+                阅读并同意9能贷用户相关协议<i class="el-icon-arrow-down el-icon--right"/>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item icon="el-icon-plus"><a class="link" href="/agreement?userProtect" target="_blank">《9能贷用户隐私保护政策》</a></el-dropdown-item>
+                <el-dropdown-item icon="el-icon-circle-plus"><a class="link" href="/agreement?userRegister" target="_blank">《9能贷用户注册协议》</a></el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <!-- <a href="/agreement?loanOfficerRegister" target="_blank">阅读并同意9能贷相关注册协议</a> -->
           </p>
         </el-form-item>
       </el-form>
@@ -158,17 +167,26 @@ export default {
     // 获取省
     getProvince() {
       fetchProvince().then(res => {
-        this.provinceData = res.data
+        for (let i = 0, len = res.data.length; i < len; i++) {
+          if (res.data[i].pid !== 0) {
+            this.provinceData.push(res.data[i])
+          }
+        }
       })
     },
     // 获取 市 区
     getCity(val) {
       fetchCity(val).then(res => {
-        console.log(res)
-        this.cityData = res.data
+        for (let i = 0, len = res.data.length; i < len; i++) {
+          if (res.data[i].cid !== 0) {
+            this.cityData.push(res.data[i])
+          }
+        }
       })
     },
     handleProvince(val) {
+      this.cityData.splice(0)
+      this.applyForm.address2 = ''
       this.getCity(val)
     },
     ifRegister() {
@@ -277,6 +295,15 @@ export default {
   }
 }
 </script>
+<style>
+.el-dropdown-menu__item {
+  color: #4a90e2;
+}
+.link {
+  color: #4a90e2;
+}
+</style>
+
 <style lang="scss" scoped>
 @import './common.scss';
 .apply-wrap {

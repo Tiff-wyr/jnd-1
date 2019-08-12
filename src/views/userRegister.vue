@@ -267,14 +267,23 @@ export default {
     // 获取省
     getProvince() {
       this.$axios.get('city/getAllProvincial').then(res => {
-        this.provinceData = res
+        for (let i = 0, len = res.length; i < len; i++) {
+          if (res[i].pid !== 0) {
+            this.provinceData.push(res[i])
+          }
+        }
       })
     },
     // 获取 市 区
     getCity(val) {
+      this.cityData.splice(0)
       this.form.borrower2 = ''
       this.$axios.get(`city/getAllCity/${val}`).then(res => {
-        this.cityData = res
+        for (let i = 0, len = res.length; i < len; i++) {
+          if (res[i].cid !== 0) {
+            this.cityData.push(res[i])
+          }
+        }
       })
     }
   }

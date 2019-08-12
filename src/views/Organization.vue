@@ -4,16 +4,13 @@
       <div class="w1200">
         <div class="clearfix">
           <div class="organ-left fll">
-            <div class="area-item clearfix mb15">
+            <div class="filter-item clearfix mb15">
               <div class="fll city">所在地区</div>
-              <div
-                :class="cityUp? 'fll radio-wrap clearfix radio-wrap-active' : 'fll radio-wrap clearfix'"
-              >
-                <wradio :radios="cities" v-model="query.city" name="city" class="fll"/>
+              <div class="filter-content">
+                <city-radios :conditions="cityShowNum" @selectProvince="selectProvince" @selectCity="selectCity"/>
               </div>
-              <div class="up" @click="citySpread">
-                展开
-                <span :class="cityUp? 'arrow rotate' : 'arrow' "/>
+              <div :class="{ toggle: cityShowNum !== 6 }" class="toggle-item" @click="handleCityShow">
+                {{ cityShowNum === 6 ? '展开' : '收起' }}
               </div>
             </div>
             <div class="clearfix mb15">
@@ -250,6 +247,7 @@ import footerSame from '../component/footerSame'
 import wradio from '../component/w-radios'
 import bottomTap from '../component/bottomTap'
 import emptyList from '../assets/empty-list.png'
+import cityRadios from '@/component/cityRadios'
 import { backTop } from '@/util/util'
 export default {
   name: 'Organization',
@@ -266,10 +264,12 @@ export default {
   components: {
     footerSame,
     wradio,
-    bottomTap
+    bottomTap,
+    cityRadios
   },
   data() {
     return {
+      cityShowNum: 6,
       emptyList,
       isJianSuo: true,
       searchCon: '',
@@ -287,7 +287,8 @@ export default {
       business: [],
       tableData: [],
       query: {
-        city: '',
+        address1: '',
+        address2: '',
         loan: '',
         business: ''
       },
@@ -299,13 +300,6 @@ export default {
     }
   },
   watch: {
-    'query.city': function(val) {
-      this.page = 1
-      this.size = 10
-      this.isJianSuo = true
-      this.searchCon = ''
-      this.getCondition()
-    },
     'query.loan': function(val) {
       this.page = 1
       this.size = 10
@@ -328,15 +322,8 @@ export default {
       this.getCondition()
     }
   },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.getData()
-    })
-  },
   created() {
-    this.getData()
-    this.getCity()
-    this.getCount()
+    this.getCondition()
     this.getType()
     this.getBusiness()
   },
@@ -366,24 +353,24 @@ export default {
     lookDetail(id) {
       this.$router.push(`/organDetail?id=${id}`)
     },
-    getData() {
-      this.$axios
-        .get(
-          `/userAgency/selectByCondition?currentPage=${this.page}&pageSize=${
-            this.size
-          }`
-        )
-        .then(res => {
-          this.formData = res.data.list
-          this.count = res.data.totalCount
-        })
+    selectProvince(val) {
+      this.query.address1 = val.pid
+      this.query.address2 = ''
+      this.getCondition()
+    },
+    selectCity(val) {
+      this.query.address1 = val.pid
+      this.query.address2 = val.cid
+      this.getCondition()
     },
     // 根据条件
     getCondition() {
       this.$axios
         .get(
-          `userAgency/selectByCondition?agencyAddress=${
-            this.query.city
+          `userAgency/selectByCondition?address1=${
+            this.query.address1
+          }&address2=${
+            this.query.address2
           }&agencyName=${this.query.loan}&agencyProperty=${
             this.query.business
           }&currentPage=${this.page}&pageSize=${this.size}`
@@ -414,22 +401,8 @@ export default {
       this.size = val
       this.getCondition()
     },
-    // 获取地区
-    getCity() {
-      this.$axios.get('city/getAHotCity').then(res => {
-        this.cities = res.map(item => {
-          return { value: item.hid, label: item.cname }
-        })
-      })
-    },
-    //  展开或关闭城市
-    citySpread() {
-      this.cityUp = !this.cityUp
-    },
-    getCount() {
-      this.$axios.get('get/getCount').then(res => {
-        this.countData = res
-      })
+    handleCityShow() {
+      this.cityShowNum = this.cityShowNum === 6 ? 50 : 6
     },
     // 类别
     getType() {
@@ -451,6 +424,33 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.filter-item {
+  @include clearfix;
+  position: relative;
+  margin-bottom: 20px;
+  .label {
+    float: left;
+    width: 112px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: #D0AC56;
+    color: $jnd-font-color-white;
+    font-size: $jnd-font-size-big;
+  }
+  .filter-content {
+    float: left;
+    width: 672px;
+  }
+  .toggle-item {
+    @include arrow;
+    position: absolute;
+    right: 0;
+    top: 10px;
+    color: $jnd-font-color-gray;
+    cursor: pointer;
+  }
+}
 .isProduct {
   margin: 35px 0 50px;
 }
@@ -500,6 +500,7 @@ export default {
 .page {
   text-align: right;
 }
+
 .organ-loan {
   width: 168px;
   height: 28px;
@@ -750,6 +751,7 @@ export default {
   font-weight: 600;
   color: rgba(81, 81, 81, 1);
   line-height: 16px;
+  white-space: nowrap;
 }
 .item-num {
   height: 16px;
