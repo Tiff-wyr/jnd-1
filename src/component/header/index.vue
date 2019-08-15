@@ -93,6 +93,7 @@
 import { mapState, mapMutations } from 'vuex'
 import validater from '@/util/validater'
 import { setToken, removeToken } from '@/util/auth'
+import { validaterPhone } from '@/util/validate'
 const linkOptions = [
   { link: 'home', name: '首页', to: '/' },
   { link: 'loans', name: '贷款产品', to: '/loans' },
@@ -113,6 +114,7 @@ export default {
   },
   data() {
     return {
+      time: 60,
       linkList: linkOptions,
       showing: true,
       isMask: false,
@@ -245,40 +247,45 @@ export default {
     // 获取验证码
     send() {
       if (this.loginNum.phone) {
-        this.time = 60
-        this.showing = false
-        this.timer = setInterval(() => {
-          this.time--
-          if (this.time < 0) {
-            clearInterval(this.timer)
-            this.showing = true
-            this.verifyCode = '重新获取'
-            this.time = 60
-          }
-        }, 1000)
-        const phone = this.loginNum.phone.trim()
-        this.$axios.get(`user/selectPhone/${phone}`).then(res => {
-          if (res.status === 500) {
-            this.$message.warning(res.msg)
-            this.loginNum.phone = ''
-            clearInterval(this.timer)
-            this.showing = true
-            this.verifyCode = '重新获取'
-            this.time = 60
-          } else {
-            this.$axios
-              .get(`base/getLoginCode/${this.loginNum.phone}`)
-              .then(res => {
-                if (res.status !== 200) {
-                  clearInterval(this.timer)
-                  this.showing = true
-                  this.verifyCode = '重新获取'
-                  this.time = 60
-                  this.$message.warning(res.msg)
-                }
-              })
-          }
-        })
+        if (validaterPhone(this.loginNum.phone)) {
+          this.time = 60
+          this.showing = false
+          this.timer = setInterval(() => {
+            this.time--
+            console.log(this.time)
+            if (this.time < 0) {
+              clearInterval(this.timer)
+              this.showing = true
+              this.verifyCode = '重新获取'
+              this.time = 60
+            }
+          }, 1000)
+          const phone = this.loginNum.phone.trim()
+          this.$axios.get(`user/selectPhone/${phone}`).then(res => {
+            if (res.status === 500) {
+              this.$message.warning(res.msg)
+              this.loginNum.phone = ''
+              clearInterval(this.timer)
+              this.showing = true
+              this.verifyCode = '重新获取'
+              this.time = 60
+            } else {
+              this.$axios
+                .get(`base/getLoginCode/${this.loginNum.phone}`)
+                .then(res => {
+                  if (res.status !== 200) {
+                    clearInterval(this.timer)
+                    this.showing = true
+                    this.verifyCode = '重新获取'
+                    this.time = 60
+                    this.$message.warning(res.msg)
+                  }
+                })
+            }
+          })
+        } else {
+          this.$message.warning('手机号格式错误')
+        }
       } else {
         this.$message.warning('手机号不能为空')
       }

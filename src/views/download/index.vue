@@ -5,12 +5,14 @@
       <swiper-slide :style="{background: 'url(' + bg0 + ') center center / cover no-repeat'}">
         <div class="page page1">
           <div class="info">
-            <div class="title">
-              <img src="../../assets/download/logo.png" class="logo" alt="">
-              9能贷——APP全新上线
+            <div class="top">
+              <div class="title">
+                <img src="../../assets/download/logo.png" class="logo" alt="">
+                9能贷——APP全新上线
+              </div>
+              <p class="subtitle">专业大型一站式金融服务平台</p>
+              <p class="subtitle">万款产品汇聚 100%下载</p>
             </div>
-            <p class="subtitle">专业大型一站式金融服务平台</p>
-            <p class="subtitle">万款产品汇聚 1000%下载</p>
             <div class="download-info">
               <img class="code" src="../../assets/download/code.png" alt="">
               <div class="download-action"><img src="../../assets/download/andriod.png">Android版下载</div>
@@ -238,9 +240,10 @@ export default {
         font-family: 'a';
       }
       .download-info {
-        margin-top: 150px;
         display: flex;
         flex-direction: column;
+        position: absolute;
+        bottom: 10vh;
         width:260px;
         align-items: center;
         .download-action {
@@ -257,7 +260,7 @@ export default {
       }
     }
     .phone {
-      width: 380px;
+      height: 80%;
       position: absolute;
       right: 0;
     }
@@ -269,7 +272,7 @@ export default {
     }
     .page-info {
       position: absolute;
-      top: 200px;
+      bottom: 15vh;
       color: $jnd-font-color-white;
       h2 {
         font-size: 40px;

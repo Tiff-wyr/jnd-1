@@ -263,7 +263,7 @@ import wcheckbox from '../component/w-checkBox'
 import validater from '../util/validater'
 import { randomWord } from '@/util/util'
 import { mapState, mapMutations } from 'vuex'
-import { validaterName } from '@/util/validate'
+import { validaterName, validaterPhone } from '@/util/validate'
 import { registerAccount, fetchProvince, fetchCity } from '@/api/register'
 import uploadImg from '@/component/uploadImg'
 const reg = /^\d+(\.(?!.*0$)\d{1,2})?$/
@@ -373,7 +373,7 @@ export default {
       isMask: false,
       isBusiness: false,
       tags: [],
-
+      timer: null,
       query: {
         tag: ''
       },
@@ -496,6 +496,7 @@ export default {
           this.$message.success('验证码发送成功，请注意查收')
         } else {
           this.$message.warning(res.msg)
+          this.clearTimer(this.timer)
         }
       })
     },
@@ -507,17 +508,18 @@ export default {
     },
     // 发送验证码
     send() {
-      const reg = /^1\d{10}$/
       if (this.formData.phone) {
-        if (reg.test(this.formData.phone)) {
+        if (validaterPhone(this.formData.phone)) {
           this.showing = false
-          const timer = setInterval(() => {
+          this.timer = setInterval(() => {
             this.time--
             if (this.time < 0) {
-              this.clearTimer(timer)
+              this.clearTimer(this.timer)
             }
           }, 1000)
-          this.checkPhone(timer)
+          this.checkPhone(this.timer)
+        } else {
+          this.$message.warning('手机号格式不正确')
         }
       } else {
         this.$message.warning('请输入手机号')

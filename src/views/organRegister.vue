@@ -266,6 +266,7 @@ export default {
         email: '',
         password: ''
       },
+      timer: null,
       options: [
         {
           value: '1',
@@ -353,6 +354,7 @@ export default {
           this.$message.success('验证码发送成功，请注意查收')
         } else {
           this.$message.warning(res.msg)
+          this.clearTimer(this.timer)
         }
       })
     },
@@ -363,17 +365,16 @@ export default {
       this.time = 60
     },
     send() {
-      const reg = /^1\d{10}$/
       if (this.organMess.phone) {
-        if (reg.test(this.organMess.phone)) {
+        if (validaterPhone(this.organMess.phone)) {
           this.showing = false
-          const timer = setInterval(() => {
+          this.timer = setInterval(() => {
             this.time--
             if (this.time < 0) {
-              this.clearTimer()
+              this.clearTimer(this.timer)
             }
           }, 1000)
-          this.checkPhone(timer)
+          this.checkPhone(this.timer)
         }
       } else {
         this.$message.warning('请输入手机号')

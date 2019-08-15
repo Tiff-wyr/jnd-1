@@ -104,7 +104,7 @@
 import registerTop from '../component/registerTop'
 import { mapState, mapMutations } from 'vuex'
 import validater from '../util/validater'
-import { validaterName } from '@/util/validate'
+import { validaterName, validaterPhone } from '@/util/validate'
 export default {
   name: 'UserRegister',
   components: {
@@ -144,6 +144,7 @@ export default {
         loanAmount: '',
         flag: false
       },
+      timer: null,
       // 省
       provinceData: [],
       // 市 区
@@ -206,6 +207,7 @@ export default {
         if (res.status === 200) {
           this.$message.success('验证码发送成功，请注意查收')
         } else {
+          this.clearTimer(this.timer)
           this.$message.warning(res.msg)
         }
       })
@@ -213,14 +215,18 @@ export default {
     //  获取验证码
     send() {
       if (this.form.phone) {
-        this.showing = false
-        const timer = setInterval(() => {
-          this.time--
-          if (this.time < 0) {
-            this.clearTimer(timer)
-          }
-        }, 1000)
-        this.checkPhone(timer)
+        if (validaterPhone(this.form.phone)) {
+          this.showing = false
+          this.timer = setInterval(() => {
+            this.time--
+            if (this.time < 0) {
+              this.clearTimer(this.timer)
+            }
+          }, 1000)
+          this.checkPhone(this.timer)
+        } else {
+          this.$message.warning('手机号格式不正确')
+        }
       } else {
         this.$message.warning('请输入手机号')
       }

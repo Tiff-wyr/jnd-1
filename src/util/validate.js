@@ -2,11 +2,11 @@
  * @returns {Boolean}
  */
 /**
- * 
- * @param {string|number} val 
+ *
+ * @param {string|number} val
  */
 export function validaterPhone(val) {
-  const reg = /^1[\d]{10}$/
+  const reg = /^1[3578][\d]{9}$/
   return reg.test(val)
 }
 
@@ -29,8 +29,7 @@ export function validaterFloat(val) {
   return reg.test(val)
 }
 /**
- * 
- * @param {string} val 
+ * @param {string} val
  */
 export function validatrerPassword(val) {
   const reg = /^[a-zA-Z]+\d+[a-zA-Z\d]+$/
