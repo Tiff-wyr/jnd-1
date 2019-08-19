@@ -367,7 +367,7 @@ export default {
     getCondition() {
       this.$axios
         .get(
-          `userAgency/selectByCondition?address1=${
+          `userAgency/selectByConditionShengShi?address1=${
             this.query.address1
           }&address2=${
             this.query.address2

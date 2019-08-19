@@ -28,7 +28,7 @@
               <img src="/static/1.png" alt="">
             </div>
             <div>
-              <router-link v-for="(item, index) in linkList" :key="index" :style="$route.meta.classify === item.link ? 'color:#a80e0e' : ''" :to="item.to">{{ item.name }}</router-link>
+              <router-link v-for="(item, index) in linkList" :key="index" :style="$route.meta.classify === item.link ? 'color:#a80e0e' : 'color:#333333'" :to="item.to">{{ item.name }}</router-link>
             </div>
           </div>
         </nav>

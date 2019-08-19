@@ -1,45 +1,49 @@
 <template>
   <div class="wrap">
     <heade :style-options="styleOptions" />
-    <swiper id="swiperBox" ref="mySwiper" :options="swiperOption">
-      <swiper-slide :style="{background: 'url(' + bg0 + ') center center / cover no-repeat'}">
-        <div class="page page1">
-          <div class="info">
-            <div class="top">
-              <div class="title">
-                <img src="../../assets/download/logo.png" class="logo" alt="">
-                9能贷——APP全新上线
+    <div class="page">
+      <ul :style="{top: top}">
+        <li :style="{background: 'url(' + bg0 + ') center center / cover no-repeat'}">
+          <div class="page page1">
+            <div class="info">
+              <div class="top">
+                <div class="title">
+                  <img src="../../assets/download/logo.png" class="logo" alt="">
+                  9能贷——APP全新上线
+                </div>
+                <p class="subtitle">专业大型一站式金融服务平台</p>
+                <p class="subtitle">万款产品汇聚 100%下载</p>
               </div>
-              <p class="subtitle">专业大型一站式金融服务平台</p>
-              <p class="subtitle">万款产品汇聚 100%下载</p>
+              <div class="download-info">
+                <img class="code" src="../../assets/download/code.png" alt="">
+                <div class="download-action"><img src="../../assets/download/andriod.png">Android版下载</div>
+              </div>
             </div>
-            <div class="download-info">
-              <img class="code" src="../../assets/download/code.png" alt="">
-              <div class="download-action"><img src="../../assets/download/andriod.png">Android版下载</div>
-            </div>
+            <img class="phone" src="../../assets/download/0.png" alt="">
           </div>
-          <img class="phone" src="../../assets/download/0.png" alt="">
-        </div>
-      </swiper-slide>
-      <swiper-slide v-for="(item, index) in list" :key="index" :style="sty(item)" class="swiper-slide">
-        <div class="page">
-
-          <div :style="lSty(item)" class="page-info">
-            <h2 v-if="item.lInfo.title"> {{ item.lInfo.title }}</h2>
-            <p class="id">{{ item.lInfo.type }}</p>
-            <p v-for="(p, index) in item.lInfo.p" :key="index">{{ p }}</p>
-            <div :style="sunLSty(item)" class="download-info">
-              <img class="code" src="../../assets/download/code.png" alt="">
-              <p>扫码直接下载</p>
+        </li>
+        <li v-for="(item, index) in list" :key="index" :style="sty(item)">
+          <div class="page">
+            <div :style="lSty(item)" class="page-info">
+              <h2 v-if="item.lInfo.title"> {{ item.lInfo.title }}</h2>
+              <p class="id">{{ item.lInfo.type }}</p>
+              <p v-for="(p, index) in item.lInfo.p" :key="index">{{ p }}</p>
+              <div :style="sunLSty(item)" class="download-info">
+                <img class="code" src="../../assets/download/code.png" alt="">
+                <p>扫码直接下载</p>
+              </div>
             </div>
-          </div>
-          <img :style="rSty(item)" :src="item.rInfo.url" class="phone" alt="">
-        </div>
-      </swiper-slide>
-    </swiper>
+            <img :style="rSty(item)" :src="item.rInfo.url" class="phone" alt="">
+        </div></li>
+      </ul>
+    </div>
+    <footerSame/>
+    <bottomTap/>
   </div>
 </template>
 <script>
+import footerSame from '@/component/footerSame'
+import bottomTap from '@/component/bottomTap'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import heade from '@/component/header'
 import bg0 from '@/assets/download/bg0.png'
@@ -53,6 +57,7 @@ import phone2 from '@/assets/download/2.png'
 import phone3 from '@/assets/download/3.png'
 import phone4 from '@/assets/download/4.png'
 import phone5 from '@/assets/download/5.png'
+
 const listOptions = [
   { id: 0,
     url: bg1,
@@ -126,7 +131,9 @@ export default {
   components: {
     swiper,
     swiperSlide,
-    heade
+    heade,
+    footerSame,
+    bottomTap
   },
   data() {
     return {
@@ -148,13 +155,109 @@ export default {
         top: 0,
         width: '100%',
         zIndex: 9999
-      }
+      },
+      flag: true,
+      count: 0,
+      top: 0
     }
   },
   created() {
     console.log(window.innerHeight)
   },
+  mounted() {
+    window.addEventListener('mousewheel', this.handleScroll, false)
+    // // firefox
+    window.addEventListener('DOMMouseScroll', this.handleScroll, false)
+    this.stop()
+  },
   methods: {
+    stop() {
+      var mo = function(e) { e.preventDefault() }
+      document.body.style.overflow = 'hidden'
+      document.addEventListener('touchmove', mo, false)// 禁止页面滑动
+    },
+    move() {
+      var mo = function(e) { e.preventDefault() }
+      document.body.style.overflow = ''// 出现滚动条
+      document.removeEventListener('touchmove', mo, false)
+    },
+    // 判断浏览器类型, 只判断是否是火狐
+    checkBorrowerType() {
+      const userAgent = navigator.userAgent // 取得浏览器的userAgent字符串\
+      if (userAgent.indexOf('Firefox') > -1) {
+        return 'firefox'
+      } else {
+        return 'other'
+      }
+    },
+    scrollDownPage(viewHeight) {
+      if (this.count < 5) {
+        if (this.flag) {
+          this.count++
+          this.flag = false
+          let num = parseInt(this.top)
+          const timer = setInterval(() => {
+            num -= 30
+            this.top = num + 'px'
+            if (num <= -viewHeight * this.count) {
+              this.top = -viewHeight * this.count + 'px'
+              clearInterval(timer)
+              this.flag = true
+            }
+          }, 10)
+        }
+      } else {
+        this.move()
+      }
+    },
+    scrollTopPage(viewHeight) {
+      if (this.count > 0) {
+        if (this.flag) {
+          this.count--
+          this.flag = false
+          let num = parseInt(this.top)
+          const timer = setInterval(() => {
+            num += 30
+            this.top = num + 'px'
+            if (num >= -viewHeight * this.count) {
+              this.top = -viewHeight * this.count + 'px'
+              clearInterval(timer)
+              this.flag = true
+              this.stop()
+            }
+          }, 10)
+        }
+      }
+    },
+    handleScroll(e) {
+      const windowHeight = document.documentElement.clientHeight || document.body.clientHeight
+      const viewHeight = windowHeight - 92
+      var scrollTop = 0
+      if (document.documentElement && document.documentElement.scrollTop) {
+        scrollTop = document.documentElement.scrollTop
+      } else if (document.body) {
+        scrollTop = document.body.scrollTop
+      }
+      console.log(scrollTop)
+      // 滑轮向上滚为正  向下为负
+      if (this.checkBorrowerType() === 'firefox') {
+        if (e.detail > 0) { // 滚轮向下滚
+          this.scrollDownPage(viewHeight)
+        } else { // 滚轮向上滚
+          if (scrollTop <= 0) {
+            this.scrollTopPage(viewHeight)
+          }
+        }
+      } else {
+        if (e.wheelDeltaY > 0) { // 滚轮向上滚
+          if (scrollTop <= 0) {
+            this.scrollTopPage(viewHeight)
+          }
+        } else { // 滚轮向下滚
+          this.scrollDownPage(viewHeight)
+        }
+      }
+    },
     sty(item) {
       return {
         background: `url(${item.url}) center center / cover no-repeat`,
@@ -214,11 +317,25 @@ export default {
   padding-top: 92px;
   box-sizing: border-box;
   .page{
-    @include box-center;
     position: relative;
-    padding-top: 80px;
-    height: 100%;
+    height: calc(100vh - 92px);
+    min-height: 500px;
     box-sizing: border-box;
+    overflow: hidden;
+    .page {
+      @include box-center;
+      height: 100%;
+    }
+    ul {
+      position: absolute;
+      width: 100%;
+      list-style: none;
+      li {
+        height: calc(100vh - 92px);
+        padding-top: 80px;
+        box-sizing: border-box;
+      }
+    }
     .code {
       width: 200px;
     }
@@ -260,7 +377,7 @@ export default {
       }
     }
     .phone {
-      height: 80%;
+      height: 75%;
       position: absolute;
       right: 0;
     }

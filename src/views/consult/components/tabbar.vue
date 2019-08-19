@@ -2,7 +2,7 @@
   <div class="tabbar-wrap">
     <div class="tabbar-header">
       <ul>
-        <li v-for="(item, index) in tabbar" :key="index" :class="{ active: currentIndex === index }" class="item" @click="handleTabbar(index, item.id)">{{ item.label }}</li>
+        <li v-for="(item, index) in tabbar" :key="index" :class="{ active: currentIndex === index }" class="item" @mouseover="handleTabbar(index, item.id)">{{ item.label }}</li>
       </ul>
     </div>
     <div class="tabbar-main">
