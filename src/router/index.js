@@ -72,12 +72,13 @@ const components = {
   applyRecordAg: () => import('@/views/agentMessage/item/applyRecordAg'),
   agreement: () => import('@/views/agreement'),
   download: () => import('@/views/download/index'),
+  counter: () => import('@/views/counter/index'),
   NotFoundComponent: () => import('@/views/404')
 }
 
 export default new Router({
 
-  mode: 'history',
+  // mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
 
   routes: [
@@ -335,6 +336,10 @@ export default new Router({
               component: components.applyRecord
             }
           ]
+        },
+        {
+          path: '/counter',
+          component: components.counter
         },
         {
           path: 'agentMessage/:id',

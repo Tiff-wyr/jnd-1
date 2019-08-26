@@ -1,44 +1,47 @@
 <template>
   <div class="wrap">
     <heade :style-options="styleOptions" />
-    <div class="page">
-      <ul :style="{top: top}">
-        <li :style="{background: 'url(' + bg0 + ') center center / cover no-repeat'}">
-          <div class="page page1">
-            <div class="info">
-              <div class="top">
-                <div class="title">
-                  <img src="../../assets/download/logo.png" class="logo" alt="">
-                  9能贷——APP全新上线
+    <div :style="scrollBoxSty" class="scroll-box">
+      <div class="page">
+        <ul :style="{top: top}">
+          <li :style="{background: 'url(' + bg0 + ') center center / cover no-repeat'}">
+            <div class="page page1">
+              <div class="info">
+                <div class="top">
+                  <div class="title">
+                    <img src="../../assets/download/logo.png" class="logo" alt="">
+                    9能贷——APP全新上线
+                  </div>
+                  <p class="subtitle">专业大型一站式金融服务平台</p>
+                  <p class="subtitle">万款产品汇聚 100%下载</p>
                 </div>
-                <p class="subtitle">专业大型一站式金融服务平台</p>
-                <p class="subtitle">万款产品汇聚 100%下载</p>
+                <div class="download-info">
+                  <img class="code" src="../../assets/download/code.png" alt="">
+                  <div class="download-action"><img src="../../assets/download/andriod.png">Android版下载</div>
+                </div>
               </div>
-              <div class="download-info">
-                <img class="code" src="../../assets/download/code.png" alt="">
-                <div class="download-action"><img src="../../assets/download/andriod.png">Android版下载</div>
-              </div>
+              <img class="phone" src="../../assets/download/0.png" alt="">
             </div>
-            <img class="phone" src="../../assets/download/0.png" alt="">
-          </div>
-        </li>
-        <li v-for="(item, index) in list" :key="index" :style="sty(item)">
-          <div class="page">
-            <div :style="lSty(item)" class="page-info">
-              <h2 v-if="item.lInfo.title"> {{ item.lInfo.title }}</h2>
-              <p class="id">{{ item.lInfo.type }}</p>
-              <p v-for="(p, index) in item.lInfo.p" :key="index">{{ p }}</p>
-              <div :style="sunLSty(item)" class="download-info">
-                <img class="code" src="../../assets/download/code.png" alt="">
-                <p>扫码直接下载</p>
+          </li>
+          <li v-for="(item, index) in list" :key="index" :style="sty(item)">
+            <div class="page">
+              <div :style="lSty(item)" class="page-info">
+                <h2 v-if="item.lInfo.title"> {{ item.lInfo.title }}</h2>
+                <p class="id">{{ item.lInfo.type }}</p>
+                <p v-for="(p, index) in item.lInfo.p" :key="index">{{ p }}</p>
+                <div :style="sunLSty(item)" class="download-info">
+                  <img class="code" src="../../assets/download/code.png" alt="">
+                  <p>扫码直接下载</p>
+                </div>
               </div>
+              <img :style="rSty(item)" :src="item.rInfo.url" class="phone" alt="">
             </div>
-            <img :style="rSty(item)" :src="item.rInfo.url" class="phone" alt="">
-        </div></li>
-      </ul>
+          </li>
+        </ul>
+      </div>
+      <footerSame/>
+      <bottomTap/>
     </div>
-    <footerSame/>
-    <bottomTap/>
   </div>
 </template>
 <script>
@@ -138,7 +141,7 @@ export default {
   data() {
     return {
       bg0,
-      list: listOptions,
+      list: [],
       swiperOption: {
         notNextTick: true,
         direction: 'vertical',
@@ -158,17 +161,23 @@ export default {
       },
       flag: true,
       count: 0,
-      top: 0
+      top: 0,
+      htmlStr: '',
+      scrollBoxSty: {
+        top: '92px'
+      },
+      scrollFlag: true
     }
   },
-  created() {
-    console.log(window.innerHeight)
-  },
   mounted() {
+    this.list.push(listOptions[this.count])
     window.addEventListener('mousewheel', this.handleScroll, false)
     // // firefox
     window.addEventListener('DOMMouseScroll', this.handleScroll, false)
     this.stop()
+  },
+  beforeDestroy() {
+    this.move()
   },
   methods: {
     stop() {
@@ -178,7 +187,7 @@ export default {
     },
     move() {
       var mo = function(e) { e.preventDefault() }
-      document.body.style.overflow = ''// 出现滚动条
+      document.body.style.overflow = 'auto'// 出现滚动条
       document.removeEventListener('touchmove', mo, false)
     },
     // 判断浏览器类型, 只判断是否是火狐
@@ -194,6 +203,9 @@ export default {
       if (this.count < 5) {
         if (this.flag) {
           this.count++
+          if (this.count >= this.list.length && this.count < listOptions.length) {
+            this.list.push(listOptions[this.count])
+          }
           this.flag = false
           let num = parseInt(this.top)
           const timer = setInterval(() => {
@@ -207,25 +219,60 @@ export default {
           }, 10)
         }
       } else {
-        this.move()
+        if (this.scrollBoxSty.bottom >= 0) {
+          return
+        }
+        if (this.scrollFlag) {
+          this.scrollFlag = false
+          this.scrollBoxSty = {
+            bottom: '-528px'
+          }
+          let num = -528
+          const timer = setInterval(() => {
+            num += 30
+            this.scrollBoxSty.bottom = num + 'px'
+            if (num >= 0) {
+              this.scrollBoxSty.bottom = 0
+              clearInterval(timer)
+              this.scrollFlag = true
+            }
+          }, 10)
+        }
       }
     },
     scrollTopPage(viewHeight) {
-      if (this.count > 0) {
-        if (this.flag) {
-          this.count--
-          this.flag = false
-          let num = parseInt(this.top)
-          const timer = setInterval(() => {
-            num += 30
-            this.top = num + 'px'
-            if (num >= -viewHeight * this.count) {
-              this.top = -viewHeight * this.count + 'px'
-              clearInterval(timer)
+      if (this.scrollBoxSty.bottom === 0) {
+        this.flag = false
+        let num = 0
+        const timer = setInterval(() => {
+          num -= 30
+          this.scrollBoxSty.bottom = num + 'px'
+          if (num <= -528) {
+            this.scrollBoxSty.bottom = '-528px'
+            clearInterval(timer)
+            setTimeout(() => {
               this.flag = true
-              this.stop()
-            }
-          }, 10)
+            }, 100)
+          }
+        }, 10)
+        return
+      } else {
+        if (this.count > 0) {
+          if (this.flag) {
+            this.count--
+            this.flag = false
+            let num = parseInt(this.top)
+            const timer = setInterval(() => {
+              num += 30
+              this.top = num + 'px'
+              if (num >= -viewHeight * this.count) {
+                this.top = -viewHeight * this.count + 'px'
+                clearInterval(timer)
+                this.flag = true
+                this.stop()
+              }
+            }, 10)
+          }
         }
       }
     },
@@ -238,7 +285,6 @@ export default {
       } else if (document.body) {
         scrollTop = document.body.scrollTop
       }
-      console.log(scrollTop)
       // 滑轮向上滚为正  向下为负
       if (this.checkBorrowerType() === 'firefox') {
         if (e.detail > 0) { // 滚轮向下滚
@@ -265,7 +311,6 @@ export default {
       }
     },
     lSty(item) {
-      console.log(item.lInfo)
       if (item.lInfo.textAlign === 'left') {
         return {
           left: 0
@@ -309,19 +354,24 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-@font-face {
-  font-family: 'a';
-  src: url('../../assets/fonts/STXingkaiTC-Bold.ttf?t=1546944470368') format('truetype');
-}
 .wrap {
+  position: relative;
   padding-top: 92px;
   box-sizing: border-box;
+  height: 100vh;
+  .scroll-box {
+    position: absolute;
+    width: 100%;
+  }
   .page{
     position: relative;
     height: calc(100vh - 92px);
     min-height: 500px;
     box-sizing: border-box;
     overflow: hidden;
+    .info {
+      padding: 40px 0;
+    }
     .page {
       @include box-center;
       height: 100%;
@@ -332,40 +382,47 @@ export default {
       list-style: none;
       li {
         height: calc(100vh - 92px);
-        padding-top: 80px;
         box-sizing: border-box;
+        overflow: hidden;
       }
     }
     .code {
-      width: 200px;
+      width: 160px;
     }
     .info {
       float: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
       color: $jnd-font-color-white;
+      box-sizing: border-box;
+      // position: absolute;
+      // bottom: 10vh;
       .logo {
-        width: 96px;
+        width: 72px;
       }
       .title {
         display: flex;
         align-items: center;
-        font-size: 40px;
+        font-size: 36px;
         text-shadow:0px 2px 10px rgba(50,50,50,0.25);
       }
       .subtitle {
-        font-size: 32px;
+        font-size: 28px;
         margin: 10px 0;
-        font-family: 'a';
       }
       .download-info {
         display: flex;
         flex-direction: column;
-        position: absolute;
-        bottom: 10vh;
+        // position: absolute;
+        // bottom: 10vh;
+        justify-content: space-between;
         width:260px;
         align-items: center;
         .download-action {
-          width:260px;
-          height:68px;
+          width:240px;
+          height:60px;
           border:2px solid #ffffff;
           border-radius: 50px;
           display: flex;
