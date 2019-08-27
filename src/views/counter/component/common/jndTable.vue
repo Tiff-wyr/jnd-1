@@ -48,6 +48,10 @@ export default {
 .table-container {
   font-size: $jnd-font-size-base;
   color: #6b6b6b;
+  flex-grow: 1;
+  width: 426px;
+  padding: 0 30px;
+  box-sizing: border-box;
   .title  {
     color: $jnd-font-color-base;
     font-size: 16px;
@@ -56,7 +60,7 @@ export default {
     text-align: center;
   }
   .table {
-    width: 426px;
+    width: 100%;
     border: 1px solid $jnd-border-color-base;
     .tr {
       display: flex;

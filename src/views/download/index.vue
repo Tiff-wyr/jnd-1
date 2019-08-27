@@ -13,7 +13,7 @@
                     9能贷——APP全新上线
                   </div>
                   <p class="subtitle">专业大型一站式金融服务平台</p>
-                  <p class="subtitle">万款产品汇聚 100%下载</p>
+                  <p class="subtitle">万款产品汇聚 100%下款</p>
                 </div>
                 <div class="download-info">
                   <img class="code" src="../../assets/download/code.png" alt="">

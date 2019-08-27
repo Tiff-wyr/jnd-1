@@ -42,7 +42,7 @@ export default {
   methods: {
     handleComputed() {
       this.$router.push({
-        path: '/counter/index'
+        path: '/counter'
       })
     },
     handleLook(val, type) {

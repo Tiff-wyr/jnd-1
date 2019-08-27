@@ -1,19 +1,8 @@
 <template>
   <div class="house-wrap">
     <section class="top">
-      <jnd-input :is-slot="true" label="计算方式" >
-        <el-radio v-model="radio" :label="1">按贷款额度计算</el-radio>
-        <el-radio v-model="radio" :label="2">按面积计算</el-radio>
-      </jnd-input>
-      <template v-if="radio === 1">
-        <jnd-input v-model="form.loanAmount" label="贷款金额" unit="元"/>
-        <jnd-input v-model="year" label="贷款期限" unit="年" @change="handleYear"/>
-      </template>
-      <template v-if="radio === 2">
-        <jnd-input v-model="form.area" label="房屋面积" unit="m²"/>
-        <jnd-input v-model="form.unitPrice" label="房屋单价" unit="元/m²"/>
-        <jnd-input v-model="form.deadLine" label="还款期限" unit="年" @change="handleYear"/>
-      </template>
+      <jnd-input v-model="form.loanAmount" label="贷款金额" unit="元"/>
+      <jnd-input v-model="form.deadLine" label="还款期限" unit="年" @change="handleYear"/>
 
       <jnd-input v-model="form.interset" :select="true" label="年利率" @select="handleSelect" @change="change"/>
       <jnd-input :is-slot="true" style="margin-top: 40px">
@@ -44,7 +33,6 @@ export default {
   },
   data() {
     return {
-      radio: 1,
       year: 0,
       form: {
         loanAmount: 0,

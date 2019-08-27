@@ -1,22 +1,28 @@
 <template>
   <div class="house-wrap">
     <section class="top">
-      <h3>购房计算器-商业贷款</h3>
-      <jnd-input :is-slot="true" label="计算方式" >
-        <el-radio v-model="radio" :label="1">按贷款额度计算</el-radio>
-        <el-radio v-model="radio" :label="2">按面积计算</el-radio>
-      </jnd-input>
-      <template v-if="radio === 1">
-        <jnd-input v-model="form.loanAmount" label="贷款金额" unit="元"/>
-        <jnd-input v-model="year" label="贷款期限" unit="年" @change="handleYear"/>
-      </template>
-      <template v-if="radio === 2">
-        <jnd-input v-model="form.area" label="房屋面积" unit="m²"/>
-        <jnd-input v-model="form.unitPrice" label="房屋单价" unit="元/m²"/>
-        <jnd-input v-model="form.deadLine" label="还款期限" unit="年" @change="handleYear"/>
-      </template>
+      <h3>房贷提前还款计算器</h3>
 
-      <jnd-input v-model="form.interset" :select="true" :loan-type="loanType" label="年利率" @select="handleSelect" @change="change"/>
+      <jnd-input :is-slot="true" label="还款方式" label-width="98" >
+        <el-radio v-model="repayType" :label="1">每月等额还款法</el-radio>
+        <el-radio v-model="repayType" :label="2">逐月递减还款法</el-radio>
+      </jnd-input>
+
+      <jnd-input :is-slot="true" label-width="98" label="贷款类型" >
+        <el-radio v-model="loansType" :label="1">商业贷款</el-radio>
+        <el-radio v-model="loansType" :label="2">公积金贷款</el-radio>
+      </jnd-input>
+      <jnd-input v-model="form.loanAmount" label-width="98" label="贷款总额" unit="元"/>
+      <jnd-input v-model="year" label-width="98" label="原贷款期限" unit="年" @change="handleYear"/>
+
+      <jnd-input v-model="form.interset" :select="true" :loan-type="propLoanType" label="年利率" label-width="98" @select="handleSelect" @change="change"/>
+
+      <jnd-input :is-slot="true" label="第一次还款时间" label-width="98">
+        <el-date-picker v-model="firstRepay" type="date" placeholder="选择日期"/>
+      </jnd-input>
+      <jnd-input :is-slot="true" label="预计提前还款时间" label-width="98">
+        <el-date-picker v-model="advanceRepay" type="date" placeholder="选择日期"/>
+      </jnd-input>
       <jnd-input :is-slot="true" style="margin-top: 40px">
         <el-button style="margin-right: 20px;" type="danger">计算</el-button>
         <el-button type="primary">重置</el-button>
@@ -25,7 +31,6 @@
     <section class="bottom">
       <div class="table-box">
         <jnd-table :obj="sameMoney" title="每月等额还款法"/>
-        <jnd-table :obj="decreasingMoney" title="逐月递减还款法"/>
       </div>
 
       <div class="tips-bar">
@@ -51,8 +56,12 @@ export default {
   },
   data() {
     return {
-      radio: 1,
+      repayType: 1,
+      loansType: 1,
+      propLoanType: 'business',
       year: 0,
+      firstRepay: '', // 第一次还款时间
+      advanceRepay: '', // 预计提前还款时间
       form: {
         loanAmount: 0,
         month: 0,
@@ -67,12 +76,16 @@ export default {
     }
   },
   watch: {
-    loanType(val) {
-      console.log(val)
+    loansType(val) {
+      if (val === 1) {
+        this.propLoanType = 'business'
+      } else {
+        this.propLoanType = 'accumulationFund'
+      }
     }
   },
   created() {
-    console.log(this.loanType)
+    this.propLoanType = this.loanType
   },
   methods: {
     handleYear(val) {

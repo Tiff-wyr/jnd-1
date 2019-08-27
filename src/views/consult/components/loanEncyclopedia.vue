@@ -16,7 +16,8 @@
                   <img :src="item.image" alt="title">
                 </dt>
                 <dd>
-                  <h3 :title="item.topic">{{ item.topic }}</h3>
+                  <h3 v-if="index === 0" :title="item.topic" class="title">{{ item.topic }}</h3>
+                  <p v-else :title="item.topic" class="title">{{ item.topic }}</p>
                   <div v-if="index === 0" :title="item.introduction" class="article-main">{{ item.introduction }}</div>
                 </dd>
               </dl>
@@ -92,7 +93,7 @@ export default {
             }
             dd {
               color: #9B9B9B;
-              h3 {
+              .title {
                 color: #515151;
                 text-overflow: ellipsis;
                 overflow: hidden;

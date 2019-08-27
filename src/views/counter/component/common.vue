@@ -1,22 +1,10 @@
 <template>
   <div class="house-wrap">
     <section class="top">
-      <h3>购房计算器-商业贷款</h3>
-      <jnd-input :is-slot="true" label="计算方式" >
-        <el-radio v-model="radio" :label="1">按贷款额度计算</el-radio>
-        <el-radio v-model="radio" :label="2">按面积计算</el-radio>
-      </jnd-input>
-      <template v-if="radio === 1">
-        <jnd-input v-model="form.loanAmount" label="贷款金额" unit="元"/>
-        <jnd-input v-model="year" label="贷款期限" unit="年" @change="handleYear"/>
-      </template>
-      <template v-if="radio === 2">
-        <jnd-input v-model="form.area" label="房屋面积" unit="m²"/>
-        <jnd-input v-model="form.unitPrice" label="房屋单价" unit="元/m²"/>
-        <jnd-input v-model="form.deadLine" label="还款期限" unit="年" @change="handleYear"/>
-      </template>
+      <jnd-input v-model="form.loanAmount" label="贷款金额" unit="元"/>
+      <jnd-input v-model="form.deadLine" label="还款期限" unit="年" @change="handleYear"/>
 
-      <jnd-input v-model="form.interset" :select="true" :loan-type="loanType" label="年利率" @select="handleSelect" @change="change"/>
+      <jnd-input v-model="form.interset" :select="true" label="年利率" @select="handleSelect" @change="change"/>
       <jnd-input :is-slot="true" style="margin-top: 40px">
         <el-button style="margin-right: 20px;" type="danger">计算</el-button>
         <el-button type="primary">重置</el-button>
@@ -38,20 +26,13 @@
 import jndInput from './common/jndInput'
 import jndTable from './common/jndTable'
 export default {
-  name: 'HouseBusiness',
+  name: 'Common',
   components: {
     jndInput,
     jndTable
   },
-  props: {
-    loanType: {
-      type: String,
-      default: 'business'
-    }
-  },
   data() {
     return {
-      radio: 1,
       year: 0,
       form: {
         loanAmount: 0,
@@ -65,14 +46,6 @@ export default {
       sameMoney: {},
       decreasingMoney: {}
     }
-  },
-  watch: {
-    loanType(val) {
-      console.log(val)
-    }
-  },
-  created() {
-    console.log(this.loanType)
   },
   methods: {
     handleYear(val) {
@@ -95,12 +68,6 @@ export default {
   .top {
     padding: 50px 23px;
     margin-bottom: 24px;
-    h3 {
-      font-size: 20px;
-      color: $jnd-font-color-base;
-      font-weight: 500;
-      margin-bottom: 30px;
-    }
   }
   .bottom {
       padding: 40px 20px;

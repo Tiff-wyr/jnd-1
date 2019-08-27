@@ -1,22 +1,24 @@
 <template>
   <div class="house-wrap">
     <section class="top">
-      <h3>购房计算器-商业贷款</h3>
-      <jnd-input :is-slot="true" label="计算方式" >
-        <el-radio v-model="radio" :label="1">按贷款额度计算</el-radio>
-        <el-radio v-model="radio" :label="2">按面积计算</el-radio>
+      <jnd-input :is-slot="true" label="收入类型" >
+        <el-select v-model="form.interset">
+          <el-option v-for="item in incomeTypeOptions" :key="item.id" :label="item.label" :value="item.id"/>
+        </el-select>
       </jnd-input>
-      <template v-if="radio === 1">
-        <jnd-input v-model="form.loanAmount" label="贷款金额" unit="元"/>
-        <jnd-input v-model="year" label="贷款期限" unit="年" @change="handleYear"/>
+      <template>
+        <jnd-input v-model="form.income" label="工资月收入" unit="元"/>
+        <jnd-input v-model="form.socialSecurity" label="社会保险费" unit="元"/>
+        <jnd-input v-model="form.deadLine" label="个税起征点" unit="年"/>
       </template>
-      <template v-if="radio === 2">
-        <jnd-input v-model="form.area" label="房屋面积" unit="m²"/>
-        <jnd-input v-model="form.unitPrice" label="房屋单价" unit="元/m²"/>
-        <jnd-input v-model="form.deadLine" label="还款期限" unit="年" @change="handleYear"/>
+      <template>
+        <jnd-input v-model="form.income" label="收入金额" unit="元"/>
+      </template>
+      <template>
+        <jnd-input v-model="form.income" label="年度总收入" unit="元"/>
+        <jnd-input v-model="form.income" label="年度总成本" unit="元"/>
       </template>
 
-      <jnd-input v-model="form.interset" :select="true" :loan-type="loanType" label="年利率" @select="handleSelect" @change="change"/>
       <jnd-input :is-slot="true" style="margin-top: 40px">
         <el-button style="margin-right: 20px;" type="danger">计算</el-button>
         <el-button type="primary">重置</el-button>
@@ -37,8 +39,21 @@
 <script>
 import jndInput from './common/jndInput'
 import jndTable from './common/jndTable'
+const incomeTypeOptions = [
+  { id: 0, label: '工资，薪金所得（月薪税前）', interset: 0.1, type: 1 },
+  { id: 1, label: '年终奖所得', interset: 0.25, type: 2 },
+  { id: 2, label: '劳务报酬所得', interset: 0.2, type: 2 },
+  { id: 3, label: '个体户，经营所得', interset: 0.05, type: 3 },
+  { id: 4, label: '对企事业单位的承包、承担经营所得', interset: 0.1, type: 3 },
+  { id: 5, label: '稿酬所得', interset: 0.14, type: 2 },
+  { id: 6, label: '特许权使用费所得', interset: 0.2, type: 2 },
+  { id: 7, label: '财产租赁所得', interset: 0.2, type: 2 },
+  { id: 8, label: '财产转让所得', interset: 0.2, type: 2 },
+  { id: 9, label: '利息、股息、红利所得', interset: 0.2, type: 2 },
+  { id: 10, label: '偶然所得', interset: 0.2, type: 2 }
+]
 export default {
-  name: 'HouseBusiness',
+  name: 'PersonalIncomeTax',
   components: {
     jndInput,
     jndTable
@@ -51,7 +66,7 @@ export default {
   },
   data() {
     return {
-      radio: 1,
+      incomeTypeOptions,
       year: 0,
       form: {
         loanAmount: 0,

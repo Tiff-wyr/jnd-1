@@ -5,7 +5,7 @@
         <leftNav :list="list" @change="handleNav"/>
       </nav>
       <section class="right-content">
-        <component :is="components"/>
+        <component :is="components" :loan-type="loanType"/>
       </section>
     </main>
   </div>
@@ -13,15 +13,17 @@
 <script>
 import leftNav from './component/nav'
 import houseBusiness from './component/houseBusiness'
-import houseAccumulationFund from './component/houseAccumulationFund'
+import common from './component/common'
+import houseAdvance from './component/houseAdvance'
+import personalIncomeTax from './component/personalIncomeTax'
 const listOptions1 = [
   {
     title: '月供计算',
     list: [
-      { id: 0, label: '购房计算器-商业贷款', type: 'houseBusiness' },
-      { id: 1, label: '购房计算器-公积金', type: 'houseAccumulationFund' },
-      { id: 2, label: '消费贷款计算器', type: 'consume' },
-      { id: 3, label: '购车贷款计算器', type: 'buyCar' },
+      { id: 0, label: '购房计算器-商业贷款', type: 'houseBusiness', arithmeticType: 'houseLoan' },
+      { id: 1, label: '购房计算器-公积金', type: 'houseAccumulationFund', arithmeticType: 'houseLoan' },
+      { id: 2, label: '消费贷款计算器', type: 'common', arithmeticType: 'common' },
+      { id: 3, label: '购车贷款计算器', type: 'common', arithmeticType: 'common' },
       { id: 4, label: '房贷提前还款计算器', type: 'houseAdvance' },
       { id: 5, label: '等额本金还款计算器', type: 'samePrincipal' },
       { id: 6, label: '等额本息还款计算器', type: 'samePrincipalAndInterest ' }
@@ -42,14 +44,17 @@ export default {
   components: {
     leftNav,
     houseBusiness,
-    houseAccumulationFund
+    common,
+    houseAdvance,
+    personalIncomeTax
   },
   data() {
     return {
       components: 'houseBusiness',
       list: listOptions1,
       ai: null,
-      ap: null
+      ap: null,
+      loanType: 'business'
     }
   },
   created() {
@@ -57,8 +62,13 @@ export default {
   },
   methods: {
     handleNav(val) {
-      console.log(val)
-      this.components = val.type
+      if (val.type === 'houseAccumulationFund') {
+        this.loanType = 'accumulationFund'
+        this.components = 'houseBusiness'
+      } else {
+        this.loanType = 'business'
+        this.components = val.type
+      }
     },
     /**
      * @params

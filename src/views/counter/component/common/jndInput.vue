@@ -1,13 +1,13 @@
 <template>
   <div class="input-wrap">
-    <span class="label">{{ label }}</span>
+    <span :style="{width: labelWidth + 'px'}" class="label">{{ label }}</span>
     <slot/>
     <div v-if="!isSlot" class="input-box" @mouseover="mouseover" @mouseout="mouseout">
       <input v-if="!select" :disabled="disabled" type="number" @input="input">
       <div v-else class="toggle">
         {{ nowItem.label }}
         <ul v-if="itemShow" class="list">
-          <li v-for="item in interestOptions" :key="item.id" @click="handleItem(item)">{{ item.label }}</li>
+          <li v-for="item in interestList" :key="item.id" @click="handleItem(item)">{{ item.label }}</li>
         </ul>
       </div>
       <span :class="{ choose: select }" class="unit">{{ unit }}</span>
@@ -29,7 +29,13 @@ const interestOptions = [
   { id: 5, interest: 1.1, label: '最新基准利率1.1倍' },
   { id: 6, interest: 1.2, label: '最新基准利率1.2倍' },
   { id: 7, interest: 1.3, label: '最新基准利率1.3倍' },
-  { id: 8, interest: 0, label: '最定义输入' }
+  { id: 8, interest: 0, label: '自定义输入' }
+]
+const accumulationFundOptions = [
+  { id: 0, interest: 1, label: '公积金基准利率' },
+  { id: 1, interest: 1.1, label: '公积金基准利率1.1倍' },
+  { id: 2, interest: 1.2, label: '公积金基准利率1.2' },
+  { id: 8, interest: 0, label: '自定义输入' }
 ]
 export default {
   model: {
@@ -37,6 +43,14 @@ export default {
     event: 'change'
   },
   props: {
+    labelWidth: {
+      type: [Number, String],
+      default: 70
+    },
+    loanType: {
+      type: String,
+      default: 'business'
+    },
     isSlot: {
       type: Boolean,
       default: false
@@ -66,7 +80,7 @@ export default {
     return {
       baseInterest: 4.9,
       nowItem: '',
-      interestOptions,
+      interestList: interestOptions,
       itemShow: false
     }
   },
@@ -76,10 +90,29 @@ export default {
       return val
     }
   },
+  watch: {
+    loanType(val) {
+      console.log(val)
+      this.setSelect(val)
+    }
+  },
   created() {
-    this.nowItem = this.interestOptions[0]
+    if (this.select) {
+      this.setSelect(this.loanType)
+    }
   },
   methods: {
+    setSelect(val) {
+      if (val === 'business') {
+        this.baseInterest = 4.9
+        this.interestList = interestOptions
+        this.nowItem = this.interestList[0]
+      } else {
+        this.baseInterest = 3.25
+        this.interestList = accumulationFundOptions
+        this.nowItem = this.interestList[0]
+      }
+    },
     input(e) {
       this.$emit('change', e.target.value)
     },
@@ -107,7 +140,6 @@ export default {
   font-size: $jnd-font-size-base;
   color: $jnd-font-color-base;
   .label {
-    width: 64px;
     margin-right: 50px;
   }
   .input-box {
@@ -163,7 +195,8 @@ export default {
         // height: 0;
         overflow: hidden;
         // opacity: 0;
-        height: 300px;
+        height: auto;
+        max-height: 300px;
         overflow-y: auto;
         width: calc(100% + 64px);
         z-index: 9;
@@ -178,13 +211,6 @@ export default {
           &:hover {
             background: #D9D9D9;
           }
-        }
-      }
-      &:hover {
-        .list {
-          height: 300px;
-          overflow-y: auto;
-          opacity: 1;
         }
       }
     }
