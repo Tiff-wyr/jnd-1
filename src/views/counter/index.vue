@@ -20,10 +20,10 @@ const listOptions1 = [
   {
     title: '月供计算',
     list: [
-      { id: 0, label: '购房计算器-商业贷款', type: 'houseBusiness', arithmeticType: 'houseLoan' },
-      { id: 1, label: '购房计算器-公积金', type: 'houseAccumulationFund', arithmeticType: 'houseLoan' },
-      { id: 2, label: '消费贷款计算器', type: 'common', arithmeticType: 'common' },
-      { id: 3, label: '购车贷款计算器', type: 'common', arithmeticType: 'common' },
+      { id: 0, label: '购房计算器-商业贷款', type: 'houseBusiness', arithmeticType: 'business' },
+      { id: 1, label: '购房计算器-公积金', type: 'houseAccumulationFund', arithmeticType: 'accumulationFund' },
+      { id: 2, label: '消费贷款计算器', type: 'common', arithmeticType: 'consume' },
+      { id: 3, label: '购车贷款计算器', type: 'common', arithmeticType: 'buyCar' },
       { id: 4, label: '房贷提前还款计算器', type: 'houseAdvance' },
       { id: 5, label: '等额本金还款计算器', type: 'samePrincipal' },
       { id: 6, label: '等额本息还款计算器', type: 'samePrincipalAndInterest ' }
@@ -57,57 +57,15 @@ export default {
       loanType: 'business'
     }
   },
-  created() {
-    this.LoanCalc(10000, 1, 3.45)
-  },
   methods: {
     handleNav(val) {
+      console.log(val)
+      this.loanType = val.arithmeticType
       if (val.type === 'houseAccumulationFund') {
-        this.loanType = 'accumulationFund'
         this.components = 'houseBusiness'
       } else {
-        this.loanType = 'business'
         this.components = val.type
       }
-    },
-    /**
-     * @params
-     * capital 本金
-     * year 还款年数
-     * apr 年利率
-     * mir 月利率
-     */
-    LoanCalc(capitals, years, aprs) {
-      const capital = Number(capitals) // 本金
-      const year = Number(years) // 还款年数
-      const apr = Number(aprs) * 0.01 // 年利率
-      const month = year * 12 // 还款月数
-      const mir = apr / 12 // 月利率
-
-      this.ai = (function() {
-        return {
-          capital: capital,
-          month: month,
-          ppm: (capital * mir * Math.pow(1 + mir, month) / (Math.pow(1 + mir, month) - 1)).toFixed(2), // 每月还款数
-          ti: (capital * month * mir * Math.pow(1 + mir, month) / (Math.pow(1 + mir, month) - 1) - capital).toFixed(2), // 还款利息总额
-          tpi: (capital * month * mir * Math.pow(1 + mir, month) / (Math.pow(1 + mir, month) - 1)).toFixed(2) // 还款本息总和
-
-        }
-      }())
-      this.ap = (function() {
-        var apy = []
-        for (var i = 1; i <= month; i++) {
-          apy[month - i] = (capital / month + (capital - (capital - i * capital / month)) * mir).toFixed(2)
-        }
-
-        return {
-          capital: capital,
-          month: month,
-          ppm: apy,
-          ti: ((month + 1) * capital * mir / 2).toFixed(2),
-          tpi: ((month + 1) * capital * mir / 2 + capital).toFixed(2)
-        }
-      }())
     }
   }
 }

@@ -124,6 +124,8 @@ export default {
         }
       }
       .consult-content {
+        line-height: 1.5;
+        font-size: 16px;
         padding: 30px 20px 140px;
         img {
           max-width: 200px;

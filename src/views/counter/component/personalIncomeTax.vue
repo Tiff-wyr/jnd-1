@@ -2,19 +2,19 @@
   <div class="house-wrap">
     <section class="top">
       <jnd-input :is-slot="true" label="收入类型" >
-        <el-select v-model="form.interset">
+        <el-select v-model="form.interset" @change="handleOptions">
           <el-option v-for="item in incomeTypeOptions" :key="item.id" :label="item.label" :value="item.id"/>
         </el-select>
       </jnd-input>
-      <template>
+      <template v-if="type === 1">
         <jnd-input v-model="form.income" label="工资月收入" unit="元"/>
         <jnd-input v-model="form.socialSecurity" label="社会保险费" unit="元"/>
-        <jnd-input v-model="form.deadLine" label="个税起征点" unit="年"/>
+        <jnd-input v-model="form.threshold" label="个税起征点" unit="年"/>
       </template>
-      <template>
+      <template v-if="type === 2">
         <jnd-input v-model="form.income" label="收入金额" unit="元"/>
       </template>
-      <template>
+      <template v-if="type === 3">
         <jnd-input v-model="form.income" label="年度总收入" unit="元"/>
         <jnd-input v-model="form.income" label="年度总成本" unit="元"/>
       </template>
@@ -26,8 +26,8 @@
     </section>
     <section class="bottom">
       <div class="table-box">
-        <jnd-table :obj="sameMoney" title="每月等额还款法"/>
-        <jnd-table :obj="decreasingMoney" title="逐月递减还款法"/>
+        <jnd-table :obj="ai" title="每月等额还款法"/>
+        <jnd-table :obj="ap" :is-same="false" title="逐月递减还款法"/>
       </div>
 
       <div class="tips-bar">
@@ -69,6 +69,8 @@ export default {
       incomeTypeOptions,
       year: 0,
       form: {
+        threshold: 0, // 起征点
+        socialSecurity: 0,
         loanAmount: 0,
         month: 0,
         time: 0,
@@ -78,7 +80,10 @@ export default {
 
       },
       sameMoney: {},
-      decreasingMoney: {}
+      decreasingMoney: {},
+      type: 1,
+      ai: {},
+      ap: {}
     }
   },
   watch: {
@@ -88,8 +93,12 @@ export default {
   },
   created() {
     console.log(this.loanType)
+    this.LoanCalc(10000, 1, 4.35)
   },
   methods: {
+    handleOptions(val) {
+      this.type = incomeTypeOptions[val].type
+    },
     handleYear(val) {
       this.month = val * 12
     },
@@ -98,6 +107,48 @@ export default {
     },
     change(val) {
       console.log(this.form.interset)
+    },
+
+    /**
+     * @params
+     * capital 本金
+     * year 还款年数
+     * apr 年利率
+     * mir 月利率
+     */
+    LoanCalc(capitals, years, aprs) {
+      const capital = Number(capitals) // 本金
+      const year = Number(years) // 还款年数
+      const apr = Number(aprs) * 0.01 // 年利率
+      const month = year * 12 // 还款月数
+      const mir = apr / 12 // 月利率
+
+      this.ai = (function() {
+        const data = {
+          loanAmount: capital,
+          month: month,
+          moneyOnce: (capital * mir * Math.pow(1 + mir, month) / (Math.pow(1 + mir, month) - 1)).toFixed(2), // 每月还款数
+          interest: (capital * month * mir * Math.pow(1 + mir, month) / (Math.pow(1 + mir, month) - 1) - capital).toFixed(2), // 还款利息总额
+          total: (capital * month * mir * Math.pow(1 + mir, month) / (Math.pow(1 + mir, month) - 1)).toFixed(2) // 还款本息总和
+
+        }
+        return data
+      }())
+      this.ap = (function() {
+        var apy = []
+        for (var i = 1; i <= month; i++) {
+          apy[month - i] = (capital / month + (capital - (capital - i * capital / month)) * mir).toFixed(2)
+        }
+
+        const data = {
+          loanAmount: capital,
+          month: month,
+          moneyOnce: apy,
+          interest: ((month + 1) * capital * mir / 2).toFixed(2),
+          total: ((month + 1) * capital * mir / 2 + capital).toFixed(2)
+        }
+        return data
+      }())
     }
   }
 }

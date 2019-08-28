@@ -1,19 +1,20 @@
 <template>
   <div class="house-wrap">
     <section class="top">
+      <p style="margin-bottom: 30px; color: #a80e0e;">自2015年10月24日起最新商贷利率 1年以内为4.35%，1-5年为4.75%，5年以上为4.90%</p>
       <jnd-input v-model="form.loanAmount" label="贷款金额" unit="元"/>
-      <jnd-input v-model="form.deadLine" label="还款期限" unit="年" @change="handleYear"/>
+      <jnd-input v-model="form.deadLine" label="还款期限" unit="年" />
 
-      <jnd-input v-model="form.interset" :select="true" label="年利率" @select="handleSelect" @change="change"/>
+      <jnd-input v-model="form.interset" :select="true" label="年利率" @select="handleSelect"/>
       <jnd-input :is-slot="true" style="margin-top: 40px">
-        <el-button style="margin-right: 20px;" type="danger">计算</el-button>
-        <el-button type="primary">重置</el-button>
+        <el-button style="margin-right: 20px;" type="danger" @click="computedMoney">计算</el-button>
+        <el-button type="primary" @click="resetForm">重置</el-button>
       </jnd-input>
     </section>
     <section class="bottom">
       <div class="table-box">
-        <jnd-table :obj="sameMoney" title="每月等额还款法"/>
-        <jnd-table :obj="decreasingMoney" title="逐月递减还款法"/>
+        <jnd-table :obj="ai" title="每月等额还款法"/>
+        <jnd-table :obj="ap" :is-same="false" title="逐月递减还款法" repay-ment="首月还款"/>
       </div>
 
       <div class="tips-bar">
@@ -31,31 +32,89 @@ export default {
     jndInput,
     jndTable
   },
+  props: {
+    loanType: {
+      type: String,
+      default: 'business'
+    }
+  },
   data() {
     return {
       year: 0,
       form: {
         loanAmount: 0,
-        month: 0,
-        time: 0,
-        interset: 0
+        year: 1,
+        interset: 4.35
       },
-      areaForm: {
-
-      },
-      sameMoney: {},
-      decreasingMoney: {}
+      ai: {},
+      ap: {}
+    }
+  },
+  watch: {
+    loanType(val) {
+      this.resetForm()
     }
   },
   methods: {
-    handleYear(val) {
-      this.month = val * 12
-    },
     handleSelect(item) {
       this.form.interset = item
     },
-    change(val) {
-      console.log(this.form.interset)
+    computedMoney() {
+      this.LoanCalc(this.form.loanAmount, this.form.year, this.form.interset)
+    },
+    /**
+     * @params
+     * capital 本金
+     * year 还款年数
+     * apr 年利率
+     * mir 月利率
+     */
+    LoanCalc(capitals, years, aprs) {
+      const capital = Number(capitals) // 本金
+      const year = Number(years) // 还款年数
+      const apr = Number(aprs) * 0.01 // 年利率
+      const month = year * 12 // 还款月数
+      const mir = apr / 12 // 月利率
+
+      this.ai = (function() {
+        const data = {
+          loanAmount: capital,
+          month: month,
+          moneyOnce: (capital * mir * Math.pow(1 + mir, month) / (Math.pow(1 + mir, month) - 1)).toFixed(2), // 每月还款数
+          interest: (capital * month * mir * Math.pow(1 + mir, month) / (Math.pow(1 + mir, month) - 1) - capital).toFixed(2), // 还款利息总额
+          total: (capital * month * mir * Math.pow(1 + mir, month) / (Math.pow(1 + mir, month) - 1)).toFixed(2) // 还款本息总和
+
+        }
+        return data
+      }())
+      this.ap = (function() {
+        var apy = []
+        for (var i = 1; i <= month; i++) {
+          apy[month - i] = (capital / month + (capital - (capital - i * capital / month)) * mir).toFixed(2)
+        }
+
+        const data = {
+          loanAmount: capital,
+          month: month,
+          moneyOnce: apy,
+          interest: ((month + 1) * capital * mir / 2).toFixed(2),
+          total: ((month + 1) * capital * mir / 2 + capital).toFixed(2)
+        }
+        return data
+      }())
+    },
+    resetForm() {
+      this.form = {
+        loanAmount: 0,
+        year: 1,
+        interset: 4.35
+      }
+      this.areaForm = {
+        area: 0,
+        unitPrice: 0
+      }
+      this.ai = {}
+      this.ap = {}
     }
   }
 }

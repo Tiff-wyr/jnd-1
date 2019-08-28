@@ -78,7 +78,7 @@ export default {
   },
   data() {
     return {
-      baseInterest: 4.9,
+      baseInterest: 4.35,
       nowItem: '',
       interestList: interestOptions,
       itemShow: false
@@ -104,7 +104,7 @@ export default {
   methods: {
     setSelect(val) {
       if (val === 'business') {
-        this.baseInterest = 4.9
+        this.baseInterest = 4.35
         this.interestList = interestOptions
         this.nowItem = this.interestList[0]
       } else {

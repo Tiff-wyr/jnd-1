@@ -11,8 +11,8 @@
         <div class="td value">{{ obj.month }} 月</div>
       </div>
       <div class="tr">
-        <div class="td key">每月还款：</div>
-        <div class="td value"><span>{{ obj.moneyOnce }}</span> 元</div>
+        <div class="td key">{{ repayMent }}：</div>
+        <div class="td value"><span>{{ moneyOnce }}</span> 元</div>
       </div>
       <div class="tr">
         <div class="td key">总支付利息：</div>
@@ -33,12 +33,31 @@ export default {
       type: String,
       default: ''
     },
+    repayMent: {
+      type: String,
+      default: '每月还款'
+    },
+    isSame: {
+      type: Boolean,
+      default: true
+    },
     obj: {
       type: Object,
       default: function() {
         return {}
       },
       required: true
+    }
+  },
+  computed: {
+    moneyOnce() {
+      if (this.isSame) {
+        return this.obj.moneyOnce
+      } else {
+        if (this.obj.moneyOnce) {
+          return this.obj.moneyOnce[0]
+        }
+      }
     }
   }
 }
