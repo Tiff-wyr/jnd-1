@@ -3,7 +3,7 @@
     <span :style="{width: labelWidth + 'px'}" class="label">{{ label }}</span>
     <slot/>
     <div v-if="!isSlot" class="input-box" @mouseover="mouseover" @mouseout="mouseout">
-      <input v-if="!select" :disabled="disabled" type="number" @input="input">
+      <input v-if="!select" :disabled="disabled" v-model="values" type="number" @input="input">
       <div v-else class="toggle">
         {{ nowItem.label }}
         <ul v-if="itemShow" class="list">
@@ -74,10 +74,15 @@ export default {
     select: {
       type: Boolean,
       default: false
+    },
+    resetFlag: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
     return {
+      values: 0,
       baseInterest: 4.35,
       nowItem: '',
       interestList: interestOptions,
@@ -91,6 +96,10 @@ export default {
     }
   },
   watch: {
+    value(val) {
+      this.values = val
+      console.log(val)
+    },
     loanType(val) {
       console.log(val)
       this.setSelect(val)
@@ -103,13 +112,22 @@ export default {
   },
   methods: {
     setSelect(val) {
-      if (val === 'business') {
-        this.baseInterest = 4.35
-        this.interestList = interestOptions
-        this.nowItem = this.interestList[0]
-      } else {
+      // if (val === 'business') {
+      //   this.baseInterest = 4.35
+      //   this.interestList = interestOptions
+      //   this.nowItem = this.interestList[0]
+      // } else {
+      //   this.baseInterest = 3.25
+      //   this.interestList = accumulationFundOptions
+      //   this.nowItem = this.interestList[0]
+      // }
+      if (val === 'accumulationFund') {
         this.baseInterest = 3.25
         this.interestList = accumulationFundOptions
+        this.nowItem = this.interestList[0]
+      } else {
+        this.baseInterest = 4.35
+        this.interestList = interestOptions
         this.nowItem = this.interestList[0]
       }
     },

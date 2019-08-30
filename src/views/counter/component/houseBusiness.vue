@@ -1,7 +1,7 @@
 <template>
   <div class="house-wrap">
     <section class="top">
-      <h3>购房计算器-商业贷款</h3>
+      <h3>购房计算器</h3>
       <jnd-input :is-slot="true" label="计算方式" >
         <el-radio v-model="radio" :label="1">按贷款额度计算</el-radio>
         <el-radio v-model="radio" :label="2">按面积计算</el-radio>
@@ -110,7 +110,6 @@ export default {
           moneyOnce: (capital * mir * Math.pow(1 + mir, month) / (Math.pow(1 + mir, month) - 1)).toFixed(2), // 每月还款数
           interest: (capital * month * mir * Math.pow(1 + mir, month) / (Math.pow(1 + mir, month) - 1) - capital).toFixed(2), // 还款利息总额
           total: (capital * month * mir * Math.pow(1 + mir, month) / (Math.pow(1 + mir, month) - 1)).toFixed(2) // 还款本息总和
-
         }
         return data
       }())

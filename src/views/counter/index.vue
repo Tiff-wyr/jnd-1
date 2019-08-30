@@ -16,6 +16,11 @@ import houseBusiness from './component/houseBusiness'
 import common from './component/common'
 import houseAdvance from './component/houseAdvance'
 import personalIncomeTax from './component/personalIncomeTax'
+import samePrincipal from './component/samePrincipal'
+import buyCarTax from './component/buyCarTax'
+import buyHouseTax from './component/buyHouseTax'
+import secondHandHouseTax from './component/secondHandHouseTax'
+
 const listOptions1 = [
   {
     title: '月供计算',
@@ -25,8 +30,8 @@ const listOptions1 = [
       { id: 2, label: '消费贷款计算器', type: 'common', arithmeticType: 'consume' },
       { id: 3, label: '购车贷款计算器', type: 'common', arithmeticType: 'buyCar' },
       { id: 4, label: '房贷提前还款计算器', type: 'houseAdvance' },
-      { id: 5, label: '等额本金还款计算器', type: 'samePrincipal' },
-      { id: 6, label: '等额本息还款计算器', type: 'samePrincipalAndInterest ' }
+      { id: 5, label: '等额本金还款计算器', type: 'samePrincipal', arithmeticType: 'samePrincipal' },
+      { id: 6, label: '等额本息还款计算器', type: 'samePrincipal', arithmeticType: 'samePrincipalAndInterest' }
     ]
   },
   {
@@ -46,7 +51,11 @@ export default {
     houseBusiness,
     common,
     houseAdvance,
-    personalIncomeTax
+    personalIncomeTax,
+    samePrincipal,
+    buyCarTax,
+    buyHouseTax,
+    secondHandHouseTax
   },
   data() {
     return {
@@ -59,7 +68,6 @@ export default {
   },
   methods: {
     handleNav(val) {
-      console.log(val)
       this.loanType = val.arithmeticType
       if (val.type === 'houseAccumulationFund') {
         this.components = 'houseBusiness'

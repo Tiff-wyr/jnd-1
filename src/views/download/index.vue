@@ -388,6 +388,7 @@ export default {
     }
     .code {
       width: 160px;
+      border: 10px solid #fff;
     }
     .info {
       float: left;

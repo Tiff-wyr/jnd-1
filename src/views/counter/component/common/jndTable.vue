@@ -2,11 +2,11 @@
   <div class="table-container">
     <h4 class="title">{{ title }}</h4>
     <div class="table">
-      <div class="tr">
-        <div class="td key">贷款金额：</div>
-        <div class="td value">{{ obj.loanAmount }} 元</div>
+      <div v-for="(item, index) in optionList" :key="index" class="tr">
+        <div class="td key">{{ item.label | textFitler(repayMent) }}</div>
+        <div class="td value">{{ obj[item.key] | showFilter(item.key, isSame) }} {{ item.unit }}</div>
       </div>
-      <div class="tr">
+      <!-- <div class="tr">
         <div class="td key">还款月数：</div>
         <div class="td value">{{ obj.month }} 月</div>
       </div>
@@ -21,17 +21,46 @@
       <div class="tr">
         <div class="td key">本息合计：</div>
         <div class="td value"><span>{{ obj.total }}</span> 元</div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 <script>
+const optionsList = [
+  { label: '贷款金额：', key: 'loanAmount', unit: '元' },
+  { label: '还款月数：', key: 'month', unit: '月' },
+  { label: '每月还款：', key: 'moneyOnce', unit: '元' },
+  { label: '总支付利息：', key: 'interest', unit: '元' },
+  { label: '本息合计：', key: 'total', unit: '元' }
+]
 export default {
   name: 'JndTable',
+  filters: {
+    textFitler(val, tips) {
+      if (val === '每月还款') {
+        return tips
+      } else {
+        return val
+      }
+    },
+    showFilter(val, key, isSame) {
+      if (typeof val === 'object') {
+        return val[0]
+      } else {
+        return val
+      }
+    }
+  },
   props: {
     title: {
       type: String,
       default: ''
+    },
+    optionList: {
+      type: Array,
+      default: function() {
+        return optionsList
+      }
     },
     repayMent: {
       type: String,

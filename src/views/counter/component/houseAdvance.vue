@@ -1,3 +1,5 @@
+/* eslint-disable no-redeclare */
+/* eslint-disable no-redeclare */
 <template>
   <div class="house-wrap">
     <section class="top">
@@ -30,7 +32,7 @@
     </section>
     <section class="bottom">
       <div class="table-box">
-        <jnd-table :obj="ai" title="每月等额还款法"/>
+        <jnd-table :obj="ai" :option-list="optionsList" title="每月等额还款法"/>
       </div>
 
       <div class="tips-bar">
@@ -42,6 +44,15 @@
 <script>
 import jndInput from './common/jndInput'
 import jndTable from './common/jndTable'
+const optionsList = [
+  { label: '原月还款额：', key: 'beforeMonthRepay', unit: '元' },
+  { label: '原最后还款期：', key: 'beforeTime', unit: '' },
+  { label: '已还款总额：', key: 'beforeRepayAll', unit: '元' },
+  { label: '该月一次还款额：', key: 'thisRepayMoney', unit: '元' },
+  { label: '下月起还款额：', key: 'afterMonthRepay', unit: '元' },
+  { label: '节省利息支出：', key: 'saveMoney', unit: '元' },
+  { label: '新的最后还款期：', key: 'newTime', unit: '' }
+]
 export default {
   name: 'HouseBusiness',
   components: {
@@ -56,6 +67,7 @@ export default {
   },
   data() {
     return {
+      optionsList,
       repayType: 1,
       loansType: 1,
       propLoanType: 'business',
@@ -128,7 +140,6 @@ export default {
         var repayNum = Number(data.repayNum)
       }
       var repayObj = this.calRepay(repayMethod, capital, month, year, mir, repayMonth, repayType, repayNum, firstRepayY, firstRepayM, repayTimeY, repayTimeM, afterRepay)
-      console.log(repayObj)
       this.ai = repayObj
     },
     /*
