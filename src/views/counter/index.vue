@@ -2,15 +2,16 @@
   <div class="app-container">
     <main class="main">
       <nav class="left-nav">
-        <leftNav :list="list" @change="handleNav"/>
+        <leftNav :list="list" :current-data="currentData" @change="handleNav"/>
       </nav>
       <section class="right-content">
-        <component :is="components" :loan-type="loanType"/>
+        <component :is="components" :loan-type="loanType" />
       </section>
     </main>
   </div>
 </template>
 <script>
+import { param2Obj } from '@/util/util'
 import leftNav from './component/nav'
 import houseBusiness from './component/houseBusiness'
 import common from './component/common'
@@ -20,7 +21,6 @@ import samePrincipal from './component/samePrincipal'
 import buyCarTax from './component/buyCarTax'
 import buyHouseTax from './component/buyHouseTax'
 import secondHandHouseTax from './component/secondHandHouseTax'
-
 const listOptions1 = [
   {
     title: '月供计算',
@@ -29,7 +29,7 @@ const listOptions1 = [
       { id: 1, label: '购房计算器-公积金', type: 'houseAccumulationFund', arithmeticType: 'accumulationFund' },
       { id: 2, label: '消费贷款计算器', type: 'common', arithmeticType: 'consume' },
       { id: 3, label: '购车贷款计算器', type: 'common', arithmeticType: 'buyCar' },
-      { id: 4, label: '房贷提前还款计算器', type: 'houseAdvance' },
+      { id: 4, label: '房贷提前还款计算器', type: 'houseAdvance', arithmeticType: '' },
       { id: 5, label: '等额本金还款计算器', type: 'samePrincipal', arithmeticType: 'samePrincipal' },
       { id: 6, label: '等额本息还款计算器', type: 'samePrincipal', arithmeticType: 'samePrincipalAndInterest' }
     ]
@@ -37,10 +37,10 @@ const listOptions1 = [
   {
     title: '税费计算器',
     list: [
-      { id: 7, label: '个人所得税计算器', type: 'personalIncomeTax' },
-      { id: 8, label: '购车税费计算器', type: 'buyCarTax' },
-      { id: 9, label: '购房税费计算器', type: 'buyHouseTax' },
-      { id: 10, label: '二手房交易税费计算器', type: 'secondHandHouseTax' }
+      { id: 7, label: '个人所得税计算器', type: 'personalIncomeTax', arithmeticType: 'personalIncomeTax' },
+      { id: 8, label: '购车税费计算器', type: 'buyCarTax', arithmeticType: '' },
+      { id: 9, label: '购房税费计算器', type: 'buyHouseTax', arithmeticType: '' },
+      { id: 10, label: '二手房交易税费计算器', type: 'secondHandHouseTax', arithmeticType: '' }
     ]
   }
 ]
@@ -63,8 +63,26 @@ export default {
       list: listOptions1,
       ai: null,
       ap: null,
-      loanType: 'business'
+      loanType: 'business',
+      currentData: {}
     }
+  },
+  created() {
+    const data = param2Obj(window.location.href)
+    this.loanType = data.arithmeticType
+    this.components = data.tips
+    for (let i = 0; i < this.list.length; i++) {
+      const item = this.list[i].list
+      for (let j = 0; j < item.length; j++) {
+        console.log(item[j].arithmeticType, data.arithmeticType)
+        if (item[j].arithmeticType === data.arithmeticType) {
+          console.log(j)
+          this.currentData = item[j]
+          this.currentData.index = j
+        }
+      }
+    }
+    console.log(this.currentData)
   },
   methods: {
     handleNav(val) {

@@ -3,7 +3,6 @@
     <h2 class="title slide-bar">常见问题</h2>
     <div class="question-main">
       <ul>
-        <li @click="handleComputed"><span>贷款计算器</span></li>
         <li v-for="item in guideList" :key="item.vlaue" @click="handleLook(item.value, 'guide')"><span>{{ item.label }}</span></li>
         <li v-for="item in matterList" :key="item.vlaue" @click="handleLook(item.value, 'matter')"><span>{{ item.label }}</span></li>
         <li v-for="item in questionList" :key="item.vlaue" @click="handleLook(item.value, 'question')"><span>{{ item.label }}</span></li>
@@ -40,11 +39,6 @@ export default {
     }
   },
   methods: {
-    handleComputed() {
-      this.$router.push({
-        path: '/counter'
-      })
-    },
     handleLook(val, type) {
       this.$router.push({
         path: '/' + type,

@@ -17,6 +17,12 @@ export default {
       default: function() {
         return []
       }
+    },
+    currentData: {
+      type: Object,
+      default: function() {
+        return {}
+      }
     }
   },
   data() {
@@ -24,9 +30,15 @@ export default {
       currentIndex: '00'
     }
   },
+  created() {
+    console.log(this.currentData)
+    this.currentIndex = this.currentData.index + '' + this.currentData.id
+    console.log(this.currentIndex)
+  },
   methods: {
     handleItem(index, item) {
       this.currentIndex = index + '' + item.id
+      console.log(this.currentIndex)
       this.$emit('change', item)
     }
   }

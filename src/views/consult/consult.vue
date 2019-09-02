@@ -31,6 +31,7 @@
         <div class="right">
           <apply/>
           <question/>
+          <calculator style="margin-top: 30px;"/>
         </div>
       </div>
       <footerSame/>
@@ -46,6 +47,7 @@ import articleList from './components/articleList'
 import loanEncyclopedia from './components/loanEncyclopedia'
 import apply from './components/apply'
 import question from './components/question'
+import calculator from './components/Calculator'
 import { fetchUp, fetchDown } from '@/api/consult'
 const tabbarArr = [
   { label: '中信银行', id: 1 },
@@ -81,7 +83,8 @@ export default {
     loanEncyclopedia,
     bottomTap,
     apply,
-    question
+    question,
+    calculator
   },
   data() {
     return {
@@ -115,7 +118,6 @@ export default {
     },
     getDown() {
       fetchDown().then(res => {
-        console.log(res)
         this.bkList = res.data.data
       })
     },
