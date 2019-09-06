@@ -98,10 +98,8 @@ export default {
   watch: {
     value(val) {
       this.values = val
-      console.log(val)
     },
     loanType(val) {
-      console.log(val)
       this.setSelect(val)
     }
   },
@@ -112,15 +110,6 @@ export default {
   },
   methods: {
     setSelect(val) {
-      // if (val === 'business') {
-      //   this.baseInterest = 4.35
-      //   this.interestList = interestOptions
-      //   this.nowItem = this.interestList[0]
-      // } else {
-      //   this.baseInterest = 3.25
-      //   this.interestList = accumulationFundOptions
-      //   this.nowItem = this.interestList[0]
-      // }
       if (val === 'accumulationFund') {
         this.baseInterest = 3.25
         this.interestList = accumulationFundOptions

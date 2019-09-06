@@ -19,8 +19,8 @@
         </el-select>
       </jnd-input>
       <jnd-input :is-slot="true" style="margin-top: 40px">
-        <el-button style="margin-right: 20px;" type="danger" @click="CarPurchaseCal(form)">计算</el-button>
-        <el-button type="primary">重置</el-button>
+        <btn type="danger" style="margin-right: 20px;" @click="CarPurchaseCal(form)">计算</btn>
+        <btn type="info" @click="resetForm">计算</btn>
       </jnd-input>
     </section>
     <section class="bottom">
@@ -37,13 +37,14 @@
 <script>
 import jndInput from './common/jndInput'
 import jndTable from './common/jndTable'
+import btn from './common/btn'
 const optionsList = [
   { label: '车辆购置税：', key: 'carTax', unit: '元' },
   { label: '车船使用税：', key: 'carUseTax', unit: '元' },
   { label: '机动车牌照费(含照相费)：', key: 'carLicence', unit: '元' },
   { label: '验车费：', key: 'carValidate', unit: '元' },
   { label: '强制保险费：', key: 'carInsurance', unit: '元' },
-  { label: '费用总和：', key: 'carSum', unit: '元' }
+  { label: '费用总和：', key: 'carSum', unit: '元', color: '#a80e0e' }
 ]
 const cityList = [
   { id: 0, label: '安徽省' },
@@ -94,7 +95,8 @@ export default {
   name: 'HouseAccumulationFund',
   components: {
     jndInput,
-    jndTable
+    jndTable,
+    btn
   },
   data() {
     return {
@@ -115,6 +117,15 @@ export default {
     console.log(cityList)
   },
   methods: {
+    resetForm() {
+      this.form = {
+        CarPrices: 0,
+        carArea: 0,
+        displacement: 1,
+        seating: 1
+      }
+      this.calData = {}
+    },
     handleYear(val) {
       this.month = val * 12
     },

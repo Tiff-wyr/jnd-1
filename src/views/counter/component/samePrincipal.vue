@@ -1,13 +1,14 @@
 <template>
   <div class="house-wrap">
     <section class="top">
+      <h3>{{ title }}</h3>
       <jnd-input v-model="form.loanAmount" label="贷款金额" unit="元"/>
       <jnd-input v-model="form.year" label="贷款期限" unit="年"/>
       <jnd-input v-model="form.rate" :select="true" :loan-type="loanType" label="年利率" @select="handleSelect"/>
 
       <jnd-input :is-slot="true" style="margin-top: 40px">
-        <el-button style="margin-right: 20px;" type="danger" @click="handleComputed">计算</el-button>
-        <el-button type="primary" @click="resetForm(1)">重置</el-button>
+        <btn type="danger" style="margin-right: 20px;" @click="handleComputed">计算</btn>
+        <btn type="info" @click="resetForm(1)">重置</btn>
       </jnd-input>
     </section>
     <section class="bottom">
@@ -24,26 +25,28 @@
 <script>
 import jndInput from './common/jndInput'
 import jndTable from './common/jndTable'
+import btn from './common/btn'
 const optionsList1 = [
   { label: '贷款总额', key: 'loanAmount', unit: '元' },
   { label: '还款月数', key: 'month', unit: '月' },
-  { label: '首月还款', key: 'moneyOnce', unit: '元' },
-  { label: '每月递减', key: 'decrease', unit: '元' },
-  { label: '总利息', key: 'interest', unit: '元' },
-  { label: '本息合计', key: 'total', unit: '元' }
+  { label: '首月还款', key: 'moneyOnce', unit: '元', color: '#a80e0e' },
+  { label: '每月递减', key: 'decrease', unit: '元', color: '#a80e0e' },
+  { label: '总利息', key: 'interest', unit: '元', color: '#a80e0e' },
+  { label: '本息合计', key: 'total', unit: '元', color: '#a80e0e' }
 ]
 const optionsList2 = [
   { label: '贷款总额', key: 'loanAmount', unit: '元' },
   { label: '还款月数', key: 'month', unit: '月' },
-  { label: '每月还款', key: 'moneyOnce', unit: '元' },
-  { label: '总利息', key: 'interest', unit: '元' },
-  { label: '本息合计', key: 'total', unit: '元' }
+  { label: '每月还款', key: 'moneyOnce', unit: '元', color: '#a80e0e' },
+  { label: '总利息', key: 'interest', unit: '元', color: '#a80e0e' },
+  { label: '本息合计', key: 'total', unit: '元', color: '#a80e0e' }
 ]
 export default {
   name: 'PersonalIncomeTax',
   components: {
     jndInput,
-    jndTable
+    jndTable,
+    btn
   },
   props: {
     loanType: {
@@ -141,6 +144,7 @@ export default {
         year: 1,
         rate: 4.35
       }
+      this.ap = {}
     }
   }
 }

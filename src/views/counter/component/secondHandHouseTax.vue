@@ -8,8 +8,8 @@
       <jnd-input v-model="form.houseNum" label="买方购房套数" unit="套" label-width="90"/>
 
       <jnd-input :is-slot="true" style="margin-top: 40px" label-width="90">
-        <el-button style="margin-right: 20px;" type="danger" @click="secondHouseCal(form)">计算</el-button>
-        <el-button type="primary">重置</el-button>
+        <btn type="danger" style="margin-right: 20px;" @click="secondHouseCal(form)">计算</btn>
+        <btn type="info" @click="resetForm">重置</btn>
       </jnd-input>
     </section>
     <section class="bottom">
@@ -26,6 +26,7 @@
 <script>
 import jndInput from './common/jndInput'
 import jndTable from './common/jndTable'
+import btn from './common/btn'
 const optionsList = [
   { label: '契税：', key: 'houseDeedTax', unit: '元' },
   { label: '营业税：', key: 'houseBusinessTax', unit: '元' },
@@ -41,7 +42,8 @@ export default {
   name: 'HouseAccumulationFund',
   components: {
     jndInput,
-    jndTable
+    jndTable,
+    btn
   },
   data() {
     return {
@@ -56,6 +58,15 @@ export default {
     }
   },
   methods: {
+    resetForm() {
+      this.form = {
+        houseNum: 0,
+        price: 0,
+        area: 0,
+        housePeriod: 0
+      }
+      this.calData = {}
+    },
     handleYear(val) {
       this.month = val * 12
     },

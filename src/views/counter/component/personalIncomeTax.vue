@@ -10,7 +10,7 @@
       <template v-if="tips === 1">
         <jnd-input v-model="form.salary" label="工资月收入" unit="元"/>
         <jnd-input v-model="form.extra" label="社会保险费" unit="元"/>
-        <jnd-input v-model="form.threshold" label="个税起征点" unit="年"/>
+        <jnd-input v-model="form.threshold" label="个税起征点" unit="元"/>
       </template>
       <template v-if="tips === 2">
         <jnd-input v-model="form.salary" label="收入金额" unit="元"/>
@@ -21,13 +21,13 @@
       </template>
 
       <jnd-input :is-slot="true" style="margin-top: 40px">
-        <el-button style="margin-right: 20px;" type="danger" @click="handleComputed">计算</el-button>
-        <el-button type="primary" @click="resetForm(1)">重置</el-button>
+        <btn type="danger" style="margin-right: 20px;" @click="handleComputed">计算</btn>
+        <btn type="info" @click="resetForm(1)">重置</btn>
       </jnd-input>
     </section>
     <section class="bottom">
       <div class="table-box">
-        <jnd-table :obj="ai" :option-list="optionsList" title="每月等额还款法"/>
+        <jnd-table :obj="ai" :option-list="optionsList"/>
       </div>
 
       <div class="tips-bar">
@@ -39,6 +39,7 @@
 <script>
 import jndInput from './common/jndInput'
 import jndTable from './common/jndTable'
+import btn from './common/btn'
 const incomeTypeOptions = [
   { id: 0, label: '工资，薪金所得（月薪税前）', interset: 0.1, type: 1, tips: 1 },
   { id: 1, label: '年终奖所得', interset: 0.25, type: 2, tips: 2 },
@@ -63,7 +64,8 @@ export default {
   name: 'PersonalIncomeTax',
   components: {
     jndInput,
-    jndTable
+    jndTable,
+    btn
   },
   props: {
     loanType: {
@@ -362,6 +364,7 @@ export default {
       this.form.salary = 0
       this.form.extra = 0
       this.form.threshold = 0
+      this.ai = {}
     }
   }
 }

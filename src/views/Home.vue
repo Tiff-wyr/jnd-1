@@ -249,6 +249,7 @@
             </div>
           </div>
           <div class="fll mt48">
+            <calculator style="width: 268px; margin-left: 20px; margin-bottom: 30px;" location="home"/>
             <div class="loans clearfix align">
               <div class="loans-use">贷款用途</div>
               <div class="loans-left fll mr60">
@@ -297,6 +298,7 @@
 import footerSame from '../component/footerSame'
 import bottomTap from '../component/bottomTap'
 import publicApi from '@/api/public'
+import calculator from '@/views/consult/components/Calculator'
 import { publics } from '@/api/validateApply'
 import emptyList from '../assets/empty-list.png'
 import { validaterPhone, validaterLoanAmount, validaterName } from '@/util/validate'
@@ -321,7 +323,8 @@ export default {
   },
   components: {
     footerSame,
-    bottomTap
+    bottomTap,
+    calculator
   },
   data() {
     const validateLoanAmount = (rule, value, callback) => {
@@ -1206,8 +1209,8 @@ $gray: #333;
 .message {
   width: 268px;
   height: 146px;
-  background: rgba(255, 255, 255, 1);
-  margin-top: 60px;
+  background: #fff;
+  margin-top: 30px;
   margin-left: 20px;
   padding: 18px 18px;
   box-sizing: border-box;

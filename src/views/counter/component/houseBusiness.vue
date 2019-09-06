@@ -1,7 +1,7 @@
 <template>
   <div class="house-wrap">
     <section class="top">
-      <h3>购房计算器</h3>
+      <h3>{{ title | titleFilter(loanType) }}</h3>
       <jnd-input :is-slot="true" label="计算方式" >
         <el-radio v-model="radio" :label="1">按贷款额度计算</el-radio>
         <el-radio v-model="radio" :label="2">按面积计算</el-radio>
@@ -14,13 +14,13 @@
       <template v-if="radio === 2">
         <jnd-input v-model="areaForm.area" label="房屋面积" unit="m²"/>
         <jnd-input v-model="areaForm.unitPrice" label="房屋单价" unit="元/m²"/>
-        <jnd-input v-model="form.year" label="还款期限" unit="年"/>
+        <jnd-input v-model="form.year" label="贷款期限" unit="年"/>
       </template>
 
       <jnd-input v-model="form.interset" :select="true" :loan-type="loanType" label="年利率" @select="handleSelect"/>
       <jnd-input :is-slot="true" style="margin-top: 40px">
-        <el-button style="margin-right: 20px;" type="danger" @click="computedMoney">计算</el-button>
-        <el-button type="primary" @click="resetForm">重置</el-button>
+        <btn type="danger" style="margin-right: 20px;" @click="computedMoney">计算</btn>
+        <btn type="info" @click="resetForm">重置</btn>
       </jnd-input>
     </section>
     <section class="bottom">
@@ -38,11 +38,22 @@
 <script>
 import jndInput from './common/jndInput'
 import jndTable from './common/jndTable'
+import btn from './common/btn'
 export default {
   name: 'HouseBusiness',
   components: {
     jndInput,
-    jndTable
+    jndTable,
+    btn
+  },
+  filters: {
+    titleFilter(val, type) {
+      if (type === 'business') {
+        return '购房计算器-商业贷款'
+      } else {
+        return '购房计算器-公积金'
+      }
+    }
   },
   props: {
     loanType: {
@@ -63,7 +74,8 @@ export default {
         unitPrice: 0
       },
       ai: {},
-      ap: {}
+      ap: {},
+      title: ''
     }
   },
   watch: {

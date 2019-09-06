@@ -7,15 +7,14 @@
       <jnd-input v-model="form.price" label="房屋单价" unit="元/m²"/>
 
       <jnd-input :is-slot="true" style="margin-top: 40px">
-        <el-button style="margin-right: 20px;" type="danger" @click="houseTaxCal(form)">计算</el-button>
-        <el-button type="primary">重置</el-button>
+        <btn type="danger" style="margin-right: 20px;" @click="houseTaxCal(form)">计算</btn>
+        <btn type="info" @click="resetForm">重置</btn>
       </jnd-input>
     </section>
     <section class="bottom">
       <div class="table-box">
         <jnd-table :obj="calData" :option-list="optionsList" title=""/>
       </div>
-
       <div class="tips-bar">
         此结果仅供参考，实际应缴费用应以当地为准
       </div>
@@ -25,6 +24,7 @@
 <script>
 import jndInput from './common/jndInput'
 import jndTable from './common/jndTable'
+import btn from './common/btn'
 const optionsList = [
   { label: '印花税：', key: 'houseStampTax', unit: '元' },
   { label: '公证费：', key: 'houseNotaryFees', unit: '元' },
@@ -38,7 +38,8 @@ export default {
   name: 'HouseAccumulationFund',
   components: {
     jndInput,
-    jndTable
+    jndTable,
+    btn
   },
   data() {
     return {
@@ -52,6 +53,14 @@ export default {
     }
   },
   methods: {
+    resetForm() {
+      this.form = {
+        houseNum: 0,
+        price: 0,
+        area: 0
+      }
+      this.calData = {}
+    },
     handleYear(val) {
       this.month = val * 12
     },

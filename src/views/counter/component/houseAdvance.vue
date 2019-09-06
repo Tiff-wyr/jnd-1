@@ -15,7 +15,7 @@
         <el-radio v-model="loansType" :label="2">公积金贷款</el-radio>
       </jnd-input>
       <jnd-input v-model="form.capital" label-width="98" label="贷款总额" unit="元"/>
-      <jnd-input v-model="form.year" label-width="98" label="原贷款期限" unit="年" @change="handleYear"/>
+      <jnd-input v-model="form.year" label-width="98" label="原还款期限" unit="年" @change="handleYear"/>
 
       <jnd-input v-model="form.rate" :select="true" :loan-type="propLoanType" label="年利率" label-width="98" @select="handleSelect"/>
 
@@ -26,13 +26,13 @@
         <el-date-picker v-model="advanceRepay" type="date" placeholder="选择日期" @change="repayTime"/>
       </jnd-input>
       <jnd-input :is-slot="true" style="margin-top: 40px">
-        <el-button style="margin-right: 20px;" type="danger" @click="computedLoan">计算</el-button>
-        <el-button type="primary">重置</el-button>
+        <btn type="danger" style="margin-right: 20px;" @click="computedLoan">计算</btn>
+        <btn type="info" @click="resetForm">重置</btn>
       </jnd-input>
     </section>
     <section class="bottom">
       <div class="table-box">
-        <jnd-table :obj="ai" :option-list="optionsList" title="每月等额还款法"/>
+        <jnd-table :obj="ai" :option-list="optionsList"/>
       </div>
 
       <div class="tips-bar">
@@ -44,20 +44,22 @@
 <script>
 import jndInput from './common/jndInput'
 import jndTable from './common/jndTable'
+import btn from './common/btn'
 const optionsList = [
-  { label: '原月还款额：', key: 'beforeMonthRepay', unit: '元' },
+  { label: '原月还款额：', key: 'beforeMonthRepay', unit: '元', color: '#a80e0e' },
   { label: '原最后还款期：', key: 'beforeTime', unit: '' },
-  { label: '已还款总额：', key: 'beforeRepayAll', unit: '元' },
-  { label: '该月一次还款额：', key: 'thisRepayMoney', unit: '元' },
-  { label: '下月起还款额：', key: 'afterMonthRepay', unit: '元' },
-  { label: '节省利息支出：', key: 'saveMoney', unit: '元' },
+  { label: '已还款总额：', key: 'beforeRepayAll', unit: '元', color: '#a80e0e' },
+  { label: '该月一次还款额：', key: 'thisRepayMoney', unit: '元', color: '#a80e0e' },
+  { label: '下月起还款额：', key: 'afterMonthRepay', unit: '元', color: '#a80e0e' },
+  { label: '节省利息支出：', key: 'saveMoney', unit: '元', color: '#a80e0e' },
   { label: '新的最后还款期：', key: 'newTime', unit: '' }
 ]
 export default {
   name: 'HouseBusiness',
   components: {
     jndInput,
-    jndTable
+    jndTable,
+    btn
   },
   props: {
     loanType: {
@@ -348,6 +350,21 @@ export default {
       rep.capital = capital1
       rep.beforeRepayAll = beforeRepayMoney
       return rep
+    },
+    resetForm() {
+      this.form = {
+        repayMethod: 1,
+        loanAmount: 0,
+        year: 0,
+        firstRepayYear: 0,
+        firstRepayMonth: 0,
+        repayTimeYear: 0,
+        repayTimeMonth: 0,
+        repayType: 1, // 默认一次性还清
+        time: 0,
+        rate: 4.35
+      }
+      this.ai = {}
     }
   }
 }

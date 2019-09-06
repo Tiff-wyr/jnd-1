@@ -31,14 +31,11 @@ export default {
     }
   },
   created() {
-    console.log(this.currentData)
     this.currentIndex = this.currentData.index + '' + this.currentData.id
-    console.log(this.currentIndex)
   },
   methods: {
     handleItem(index, item) {
       this.currentIndex = index + '' + item.id
-      console.log(this.currentIndex)
       this.$emit('change', item)
     }
   }

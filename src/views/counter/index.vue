@@ -74,15 +74,12 @@ export default {
     for (let i = 0; i < this.list.length; i++) {
       const item = this.list[i].list
       for (let j = 0; j < item.length; j++) {
-        console.log(item[j].arithmeticType, data.arithmeticType)
         if (item[j].arithmeticType === data.arithmeticType) {
-          console.log(j)
           this.currentData = item[j]
           this.currentData.index = j
         }
       }
     }
-    console.log(this.currentData)
   },
   methods: {
     handleNav(val) {

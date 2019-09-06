@@ -1,14 +1,15 @@
 <template>
   <div class="house-wrap">
     <section class="top">
+      <h3>{{ title | titleFilter(loanType) }}</h3>
       <p style="margin-bottom: 30px; color: #a80e0e;">自2015年10月24日起最新商贷利率 1年以内为4.35%，1-5年为4.75%，5年以上为4.90%</p>
       <jnd-input v-model="form.loanAmount" label="贷款金额" unit="元"/>
-      <jnd-input v-model="form.deadLine" label="还款期限" unit="年" />
+      <jnd-input v-model="form.deadLine" label="贷款期限" unit="年" />
 
       <jnd-input v-model="form.interset" :select="true" label="年利率" @select="handleSelect"/>
       <jnd-input :is-slot="true" style="margin-top: 40px">
-        <el-button style="margin-right: 20px;" type="danger" @click="computedMoney">计算</el-button>
-        <el-button type="primary" @click="resetForm">重置</el-button>
+        <btn type="danger" style="margin-right: 20px;" @click="computedMoney">计算</btn>
+        <btn type="info" @click="resetForm">重置</btn>
       </jnd-input>
     </section>
     <section class="bottom">
@@ -26,11 +27,22 @@
 <script>
 import jndInput from './common/jndInput'
 import jndTable from './common/jndTable'
+import btn from './common/btn'
 export default {
   name: 'Common',
   components: {
     jndInput,
-    jndTable
+    jndTable,
+    btn
+  },
+  filters: {
+    titleFilter(val, type) {
+      if (type === 'consume') {
+        return '消费贷款计算器'
+      } else if (type === 'buyCar') {
+        return '购车贷款计算器'
+      }
+    }
   },
   props: {
     loanType: {
@@ -41,6 +53,7 @@ export default {
   data() {
     return {
       year: 0,
+      title: '',
       form: {
         loanAmount: 0,
         year: 1,
@@ -127,6 +140,12 @@ export default {
   .top {
     padding: 50px 23px;
     margin-bottom: 24px;
+    h3 {
+      font-size: 20px;
+      color: $jnd-font-color-base;
+      font-weight: 500;
+      margin-bottom: 30px;
+    }
   }
   .bottom {
       padding: 40px 20px;

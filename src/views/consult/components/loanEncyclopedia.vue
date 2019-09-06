@@ -7,7 +7,7 @@
         <p>暂无数据...</p>
       </div>
       <div class="main">
-        <div v-for="(obj, index) in data" v-if="obj.list.length > 0" :key="index" class="item">
+        <div v-for="(obj, index) in data" :key="index" class="item">
           <h3>{{ obj.title }}</h3>
           <ul class="article-list">
             <li v-for="(item, index) in obj.list" :key="index" class="article-item" @click="handleDetail(item.id)">

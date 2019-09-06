@@ -4,24 +4,8 @@
     <div class="table">
       <div v-for="(item, index) in optionList" :key="index" class="tr">
         <div class="td key">{{ item.label | textFitler(repayMent) }}</div>
-        <div class="td value">{{ obj[item.key] | showFilter(item.key, isSame) }} {{ item.unit }}</div>
+        <div class="td value"><span :style="{color: item.color}">{{ obj[item.key] | showFilter(item.key, isSame) }}</span> {{ item.unit }}</div>
       </div>
-      <!-- <div class="tr">
-        <div class="td key">还款月数：</div>
-        <div class="td value">{{ obj.month }} 月</div>
-      </div>
-      <div class="tr">
-        <div class="td key">{{ repayMent }}：</div>
-        <div class="td value"><span>{{ moneyOnce }}</span> 元</div>
-      </div>
-      <div class="tr">
-        <div class="td key">总支付利息：</div>
-        <div class="td value"><span>{{ obj.interest }}</span> 元</div>
-      </div>
-      <div class="tr">
-        <div class="td key">本息合计：</div>
-        <div class="td value"><span>{{ obj.total }}</span> 元</div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -29,15 +13,15 @@
 const optionsList = [
   { label: '贷款金额：', key: 'loanAmount', unit: '元' },
   { label: '还款月数：', key: 'month', unit: '月' },
-  { label: '每月还款：', key: 'moneyOnce', unit: '元' },
-  { label: '总支付利息：', key: 'interest', unit: '元' },
-  { label: '本息合计：', key: 'total', unit: '元' }
+  { label: '每月还款：', key: 'moneyOnce', unit: '元', color: '#a80e0e' },
+  { label: '总支付利息：', key: 'interest', unit: '元', color: '#a80e0e' },
+  { label: '本息合计：', key: 'total', unit: '元', color: '#a80e0e' }
 ]
 export default {
   name: 'JndTable',
   filters: {
     textFitler(val, tips) {
-      if (val === '每月还款') {
+      if (val === '每月还款：') {
         return tips
       } else {
         return val
@@ -126,9 +110,6 @@ export default {
         &.value {
           flex-grow: 1;
           text-align: right;
-          span {
-            color: $jnd-font-color-theme;
-          }
         }
       }
     }
