@@ -60,15 +60,15 @@
           </div>
           <div class="img-box">
             <div>
-              <img src="../../static/resource/organ/veri.png" alt="">
+              <img src="../../../static/resource/organ/veri.png" alt="">
               <div class="organ-text">专业认证</div>
             </div>
             <div>
-              <img src="../../static/resource/organ/xin.png" alt="">
+              <img src="../../../static/resource/organ/xin.png" alt="">
               <div class="organ-text">信誉平台</div>
             </div>
             <div>
-              <img src="../../static/resource/organ/mian.png" alt="">
+              <img src="../../../static/resource/organ/mian.png" alt="">
               <div class="organ-text">免费服务</div>
             </div>
           </div>
@@ -126,11 +126,11 @@
 
 <script>
 import cityRadios from '@/component/cityRadios'
-import footerSame from '../component/footerSame'
+import footerSame from '@/component/footerSame'
 import filterList from '@/component/filter'
 import { fetchList, searchByKey } from '@/api/productList'
-import emptyList from '../assets/empty-list.png'
-import bottomTap from '../component/bottomTap'
+import emptyList from '@/assets/empty-list.png'
+import bottomTap from '@/component/bottomTap'
 import { param2Obj } from '@/util/util'
 import { fetchAmount, fetchInterest, fetchLife, fetchCondition } from '@/api/filterCondition'
 const loansTypeOptions = [
@@ -166,7 +166,7 @@ export default {
       searchKey: '',
       listQuery: {
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 10,
         address1: '',
         address2: '',
         productLoanType: '', // 贷款类型
@@ -181,7 +181,15 @@ export default {
     }
   },
   created() {
-    this.listQuery.productProperty = param2Obj(window.location.href).type
+    const params = param2Obj(window.location.href)
+    if (params.type) {
+      this.listQuery.productProperty = params.type
+    }
+    if (params.param) {
+      const param = JSON.parse(params.param)
+      this.listQuery.productAmount = param.loanAmount
+      this.listQuery.productLife = param.loanTime
+    }
     this.getList()
     this.getAmount()
     this.getInterest()

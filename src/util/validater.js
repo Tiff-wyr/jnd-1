@@ -1,8 +1,8 @@
 /**
  * Created by Administrator on 2019/1/11 0011.
  */
-const validater={
-  //手机号码校验
+const validater = {
+  // 手机号码校验
   phoneNumber(rule, value, callback) {
     value = value.trim()
     if (value && (!(/^[1][3456789]\d{9}$/).test(value) || !(/^[1-9]\d*$/).test(value) || value.length !== 11)) {
@@ -11,18 +11,17 @@ const validater={
       callback()
     }
   },
-  //邮箱校验
+  // 邮箱校验
   emailValue(rule, value, callback) {
     value = value.trim()
-    let temp = /^[\w.\-]+@(?:[a-z0-9]+(?:-[a-z0-9]+)*\.)+[a-z]{2,3}$/
-    let tempOne = /^[A-Za-zd]+([-_.][A-Za-zd]+)*@([A-Za-zd]+[-.])+[A-Za-zd]{2,5}$/
+    const temp = /^[\w.\-]+@(?:[a-z0-9]+(?:-[a-z0-9]+)*\.)+[a-z]{2,3}$/
     if (value && (!(temp).test(value))) {
       callback(new Error('邮箱格式不符合规范'))
     } else {
       callback()
     }
   },
-  //身份证号码校验
+  // 身份证号码校验
   idCard(rule, value, callback) {
     if (value) {
       value = value.trim()

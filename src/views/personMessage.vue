@@ -17,7 +17,7 @@
         :rules="formRules"
         :class="{'border-show': !isEdit}"
         label-position="right"
-        label-width="120px"
+        label-width="140px"
       >
         <el-form-item label="姓名:" prop="borrowerName">
           <el-input
@@ -72,6 +72,54 @@
             <el-option v-for="item in cityData" :key="item.cid" :label="item.city" :value="item.cid"/>
           </el-select>
           <span v-else>{{ address }}</span>
+        </el-form-item>
+
+        <el-form-item label="是否有本地社保:" prop="borrowerSex">
+          <el-radio-group v-if="isEdit" v-model="form.borrowerSex">
+            <el-radio :label="1">男</el-radio>
+            <el-radio :label="0">女</el-radio>
+          </el-radio-group>
+          <span v-else>{{ form.borrowerSex | sexFilter }}</span>
+        </el-form-item>
+
+        <el-form-item label="是否有本地公积金:" prop="borrowerSex">
+          <el-radio-group v-if="isEdit" v-model="form.borrowerSex">
+            <el-radio :label="1">男</el-radio>
+            <el-radio :label="0">女</el-radio>
+          </el-radio-group>
+          <span v-else>{{ form.borrowerSex | sexFilter }}</span>
+        </el-form-item>
+
+        <el-form-item label="名下车辆情况:" prop="borrowerSex">
+          <el-radio-group v-if="isEdit" v-model="form.borrowerSex">
+            <el-radio :label="1">男</el-radio>
+            <el-radio :label="0">女</el-radio>
+          </el-radio-group>
+          <span v-else>{{ form.borrowerSex | sexFilter }}</span>
+        </el-form-item>
+
+        <el-form-item label="名下房产信息:" prop="borrowerSex">
+          <el-radio-group v-if="isEdit" v-model="form.borrowerSex">
+            <el-radio :label="1">男</el-radio>
+            <el-radio :label="0">女</el-radio>
+          </el-radio-group>
+          <span v-else>{{ form.borrowerSex | sexFilter }}</span>
+        </el-form-item>
+
+        <el-form-item label="信用情况:" prop="borrowerSex">
+          <el-radio-group v-if="isEdit" v-model="form.borrowerSex">
+            <el-radio :label="1">男</el-radio>
+            <el-radio :label="0">女</el-radio>
+          </el-radio-group>
+          <span v-else>{{ form.borrowerSex | sexFilter }}</span>
+        </el-form-item>
+
+        <el-form-item label="是否有芝麻信用:" prop="borrowerSex">
+          <el-radio-group v-if="isEdit" v-model="form.borrowerSex">
+            <el-radio :label="1">男</el-radio>
+            <el-radio :label="0">女</el-radio>
+          </el-radio-group>
+          <span v-else>{{ form.borrowerSex | sexFilter }}</span>
         </el-form-item>
 
         <el-form-item label="手机号码">
@@ -206,39 +254,39 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_USERNAME', 'SET_SEX']),
-    getData() {
-      this.$axios
-        .get(
-          `/userBorrower/updateBorrowerById/${this.$store.state.userInfo.id}`
-        )
-        .then(res => {
-          const {
-            borrowerName,
-            borrowerId,
-            borrowerSex,
-            borrowerAge,
-            borrowerJob,
-            income,
-            borrowerAddress,
-            borrower2,
-            phone,
-            email
-          } = res
-          this.form = {
-            borrowerName,
-            borrowerId,
-            borrowerSex,
-            borrowerAge,
-            borrowerJob,
-            income,
-            borrowerAddress,
-            borrower2,
-            phone,
-            email
-          }
-          this.getCity(this.form.borrowerAddress)
-          this.getAge()
-        })
+    getData() { // 获取贷款人信息
+      // this.$axios
+      // .get(
+      //   `/userBorrower/getUserBorrowerByPhone/${this.$store.state.userInfo.phone}`
+      // )
+      // .then(res => {
+      //   const {
+      //     borrowerName,
+      //     borrowerId,
+      //     borrowerSex,
+      //     borrowerAge,
+      //     borrowerJob,
+      //     income,
+      //     borrowerAddress,
+      //     borrower2,
+      //     phone,
+      //     email
+      //   } = res
+      //   this.form = {
+      //     borrowerName,
+      //     borrowerId,
+      //     borrowerSex,
+      //     borrowerAge,
+      //     borrowerJob,
+      //     income,
+      //     borrowerAddress,
+      //     borrower2,
+      //     phone,
+      //     email
+      //   }
+      //   this.getCity(this.form.borrowerAddress)
+      //   this.getAge()
+      // })
     },
     getAge() {
       api.getAllAgeArea().then(response => {
@@ -327,7 +375,6 @@ export default {
 }
 .person {
   width: 882px;
-  height: 723px;
   background: rgba(255, 255, 255, 1);
   .el-form-item {
     margin-bottom: 0;

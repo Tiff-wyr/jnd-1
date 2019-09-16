@@ -25,8 +25,8 @@
                   <div class="fll">
                     <div class="detail-loan-title">{{ productDetailData.productName }}</div>
                     <div class="clearfix re-star">
-                      <img v-if="isCollect" src="../../static/resource/agent/star.png" class="fll" alt="" >
-                      <img v-else src="../../static/resource/agent/star1.png" class="fll" alt="" >
+                      <img v-if="isCollect" src="/static/resource/agent/star.png" class="fll" alt="" >
+                      <img v-else src="/static/resource/agent/star1.png" class="fll" alt="" >
                       <div class="fll">
                         <div v-if="isCollect" class="fll restore" @click="restore">加入收藏</div>
                         <div v-else class="fll restore" @click="cancelRestore">取消收藏</div>
@@ -66,7 +66,7 @@
                   <div class="fll yellow-line"/>
                   <div class="fll ml10 apply">申请条件</div>
                   <img
-                    src="../../static/resource/product-detail/apply.png"
+                    src="/static/resource/product-detail/apply.png"
                     alt=""
                     class="fll ml400"
                   >
@@ -175,82 +175,18 @@
         </div>
       </div>
     </div>
-    <div class="prodetai-wrap">
-      <el-dialog :visible.sync="dialogVisible" width="770px">
-        <div class="dialog-title">
-          <el-steps :active="stepStatus" align-center space="100%" class="init">
-            <el-step title="申请贷款" icon="el-icon-tickets" process-status="finish"/>
-            <el-step title="成功了" icon="el-icon-success"/>
-          </el-steps>
-        </div>
-        <div v-if="isApply" class="dialog-container">
-          <div class="left">
-            <el-form ref="applyForm" :model="applyForm" :rules="applyFormRules" label-position="right" label-width="120px">
-              <el-form-item label="您的姓名" prop="borrowerName">
-                <el-input v-model="applyForm.borrowerName" class="input-item" placeholder="请输入您的姓名"/>
-              </el-form-item>
-              <el-form-item label="性别" prop="sex">
-                <el-radio-group v-model="applyForm.sex">
-                  <el-radio label="1">男</el-radio>
-                  <el-radio label="0">女</el-radio>
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item label="贷款金额" prop="loanAmount">
-                <el-input v-model="applyForm.loanAmount" class="input-item" placeholder="请输入金额（万元）"/>
-              </el-form-item>
-              <el-form-item label="选择地区" prop="address">
-                <el-select v-model="applyForm.address1" class="select-item" placeholder="请选择地区" @change="handleProvince">
-                  <el-option v-for="item in provinceList" :value="item.pid" :key="item.pid + 'Province'" :label="item.provincial"/>
-                </el-select>
-                <el-select v-model="applyForm.address2" class="select-item address2" placeholder="请选择地区">
-                  <el-option v-for="item in cityList" :value="item.cid" :key="item.cid + 'city'" :label="item.city"/>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="联系手机" prop="phone">
-                <el-input v-model="applyForm.phone" class="input-item" placeholder="请输入手机号"/>
-              </el-form-item>
-              <el-form-item label="手机验证码" prop="code">
-                <el-input v-model="applyForm.code" class="input-item code" placeholder="请输入验证码"/>
-                <el-button v-show="codeBtnShow" type="info" style="width: 115px;" @click="getVertifyCode">{{ codeBtnText }}</el-button>
-                <el-button v-show="!codeBtnShow" type="info" style="width: 115px; margin-left: 0;">{{ times }}</el-button>
-              </el-form-item>
-              <el-form-item>
-                <span>
-                  <el-checkbox v-model="checked" class="check-box"/>阅读并同意<a href="/agreement?userRegister" target="_blank" style="color: #4a90e2;">《9能贷用户注册协议》</a><a href="/agreement?userProtect" target="_blank" style="color: #4a90e2;">《用户隐私保护政策》</a>
-                </span>
-              </el-form-item>
-              <el-form-item>
-                <el-button class="input-item confirm-btn" @click="nowApplyLoan">立即申请贷款</el-button>
-              </el-form-item>
-            </el-form>
-          </div>
-          <div class="right">
-            <h3>特别声明:</h3>
-            <p>您的信息将只作为产品推荐，贷款过程中遇到的任何预先收费行为均为诈骗，请您时刻保持警惕避免损失。</p>
-            <p>填写虚假信息将对您办理贷款带来不利影响，建议您不要这么做。</p>
-          </div>
-        </div>
-        <div v-else class="dialog-container is-finish">
-          <p>您的申请已经提交, 请保持电话联系通畅</p>
-          <p>账号：{{ applyForm.phone }}&nbsp;&nbsp;&nbsp;&nbsp;密码：（您手机收到的验证码）</p>
-          <p>这是您的平台账号，<span style="color: #A80E0E;" @click="$router.push({path:'/',query:{login:1}})">登录</span>平台，即可享受平台专业的金融服务。</p>
-          <div class="btn-box">
-            <a href="/">返回首页</a><span @click="dialogVisible = false">关闭窗口</span>
-          </div>
-        </div>
-      </el-dialog>
-    </div>
+    <div class="prodetai-wrap"/>
+    <popup :visible="dialogVisible" :options="options" @confirm="handleConfirm" @close="handleClose"/>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { validaterPhone, validaterName, validaterLoanAmount } from '@/util/validate'
-import { fetchProvince, fetchCity } from '@/api/register'
-import { saveNotLoginProductOrder } from '@/api/apply'
-import publicApi from '@/api/public'
+import popup from './component/popup'
 export default {
   name: 'ProductDetail',
+  components: {
+    popup
+  },
   metaInfo: {
     title: '9能贷款_住房公积金贷款条件_银行贷款需要哪些条件找9能贷款',
     meta: [{
@@ -271,110 +207,23 @@ export default {
     }
   },
   data() {
-    const validatePhone = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error('手机号不能为空'))
-      } else {
-        if (validaterPhone(value)) {
-          callback()
-        } else {
-          callback(new Error('手机号格式不正确'))
-        }
-      }
-    }
-    const validateName = (rule, value, callback) => {
-      if (value) {
-        if (validaterName(value)) {
-          callback()
-        } else {
-          callback(new Error('姓名格式错误'))
-        }
-      } else {
-        callback(new Error('姓名不能为空'))
-      }
-    }
-    const validateAddress = (rule, value, callback) => {
-      if (this.applyForm.address1) {
-        callback()
-      } else {
-        callback(new Error('请选择地区'))
-      }
-    }
-    const validateLoanAmount = (rule, value, callback) => {
-      if (value) {
-        if (validaterLoanAmount(value)) {
-          callback()
-        } else {
-          callback(new Error('贷款金额格式错误'))
-        }
-      } else {
-        callback(new Error('贷款金额不能为空'))
-      }
-    }
     return {
-      flag: false,
       isCollect: true, // 收藏
-      productTable: [],
-      tableData: [],
       formData: [],
-      productDetailData: {
-        productName: '',
-        productCharacteristic: '', // 特点
-        productPublisher: '', // 发型机构
-        productInterest: '', // 利率
-        productLoanType: '', // 贷款类型
-        productOccupation: '', // 职业
-        productIdentity: '', // 身份
-        productMinAge: '',
-        productMaxAge: '',
-        productProperty: '', // 资产
-        productStartAmount: '', // 额度
-        productEndAmount: '',
-        productLife: '', // 年限
-        productCondition: '' // 条件
-      },
-      organData: {
-        agencyName: '',
-        agencyLogo: '',
-        agencyAddress: '',
-        agencyURL: ''
-      },
+      productDetailData: {},
+      organData: {},
       productId: '',
       hotProductData: [],
-      isApply: true,
-      stepStatus: 0,
-      checked: false,
-      dialogVisible: false,
-      applyForm: {
-        productId: '',
-        borrowerName: '',
-        address1: '',
-        address2: '',
-        phone: '',
-        code: '',
-        sex: '1',
-        loanAmount: ''
-      },
-      applyFormRules: {
-        borrowerName: [{ required: true, trigger: 'change', validator: validateName }],
-        address: [{ required: true, trigger: 'change', validator: validateAddress }],
-        phone: [{ required: true, trigger: 'change', validator: validatePhone }],
-        code: [{ required: true, message: '验证码不能为空', trigger: 'change' }],
-        sex: [{ required: true, message: '性别不能为空', trigger: 'change' }],
-        loanAmount: [{ required: true, trigger: 'change', validator: validateLoanAmount }]
-      },
-      timer: null,
-      codeBtnText: '获取验证码',
-      times: 60,
-      codeBtnShow: true,
-      provinceList: [],
-      cityList: [],
-      isClick: true,
-      clickInterval: false
+      dialogVisible: false
     }
   },
   computed: {
-    ...mapState(['userInfo'])
+    options() {
+      return {
+        key: 'productId',
+        value: this.productId
+      }
+    }
   },
   created() {
     const id = this.$route.query.id
@@ -390,28 +239,11 @@ export default {
     }
   },
   methods: {
-    getProvinceList() {
-      fetchProvince().then(res => {
-        for (let i = 0, len = res.data.length; i < len; i++) {
-          if (res.data[i].pid !== 0) {
-            this.provinceList.push(res.data[i])
-          }
-        }
-      })
+    handleConfirm() {
+      this.dialogVisible = false
     },
-    getCityList(id) {
-      fetchCity(id).then(res => {
-        for (let i = 0, len = res.data.length; i < len; i++) {
-          if (res.data[i].cid !== 0) {
-            this.cityList.push(res.data[i])
-          }
-        }
-      })
-    },
-    handleProvince(val) {
-      this.applyForm.address2 = ''
-      this.cityList.splice(0)
-      this.getCityList(val)
+    handleClose(val) {
+      this.dialogVisible = val
     },
     // 机构详情页
     enterOrgan(id) {
@@ -422,106 +254,6 @@ export default {
       this.$router.push(`/productDetail?id=${id}`)
       this.getDetail(id)
       this.getOrgan(id)
-    },
-    // 快速申请
-    hurryUpApply() {
-      this.isApply = true
-      this.stepStatus = 0
-      if (this.$store.state.userInfo) {
-        if (this.$store.state.userInfo.roleId === 1) {
-          const data = new FormData()
-          data.append('borrowerId', this.$store.state.userInfo.id)
-          data.append('productId', this.productId)
-          this.$axios.post(`orderAll/saveProductOrder`, data).then(res => {
-            if (res.status === 200) {
-              this.$message.success(res.msg)
-            } else {
-              this.$message.warning(res.msg)
-            }
-          })
-        } else {
-          this.$message.warning('借款人方可申请')
-        }
-      } else {
-        this.resetForm()
-        this.getProvinceList()
-        this.applyForm.productId = this.productId
-        this.dialogVisible = true
-      }
-    },
-    nowApplyLoan() { // 立即申请贷款
-      this.$refs.applyForm.validate(valid => {
-        if (valid) {
-          if (this.checked) {
-            if (!this.clickInterval) {
-              saveNotLoginProductOrder(this.applyForm).then(res => {
-                if (res.data.status === 200) {
-                  this.stepStatus = 1
-                  this.isApply = false
-                } else {
-                  this.$message.warning(res.data.msg)
-                }
-              })
-              this.clickInterval = true
-              setTimeout(() => {
-                this.clickInterval = false
-              }, 5000)
-            } else {
-              this.$message.warning('请不要重复点击')
-            }
-          } else {
-            this.$message.warning('请阅读并同意《就能贷用户注册协议》')
-          }
-        } else {
-          return false
-        }
-      })
-    },
-    clearTimer() {
-      clearInterval(this.timer)
-      this.codeBtnText = '重新获取'
-      this.codeBtnShow = true
-      this.times = 60
-    },
-    getVertifyCode() {
-      if (this.applyForm.phone) {
-        if (validaterPhone(this.applyForm.phone)) {
-          if (this.isClick) {
-            this.isClick = false
-            setTimeout(() => {
-              this.isClick = true
-            }, 2000)
-            this.timer = setInterval(() => {
-              this.times--
-              this.codeBtnShow = false
-              if (this.times <= 0) {
-                this.clearTimer()
-              }
-            }, 1000)
-            publicApi.validateRegister(this.applyForm.phone).then(res => { // 检测手机号是否注册
-              if (res.data.status === 500) {
-                this.$message.success(res.data.msg)
-                this.clearTimer()
-                this.resetForm()
-              } else {
-                publicApi.sendPhoneCode(this.applyForm.phone).then(res => {
-                  if (res.data.status === 500) {
-                    this.$message.warning(res.data.msg)
-                    this.clearTimer()
-                    this.resetForm()
-                  } else {
-                    this.$message.success('验证码已发送')
-                  }
-                })
-              }
-            })
-          }
-        } else {
-          this.$message.warning('手机号错误')
-        }
-      } else {
-        this.$message.warning('请填写手机号')
-      }
     },
     // 产品详情
     getDetail(id) {
@@ -596,18 +328,6 @@ export default {
           data.append('proId', this.productId)
           this.$axios.post(`borLookPro/addLookPro`, data) // 访问记录
         }
-      }
-    },
-    resetForm() {
-      this.applyForm = {
-        productId: '',
-        borrowerName: '',
-        address1: '',
-        address2: '',
-        phone: '',
-        code: '',
-        sex: '1',
-        loanAmount: ''
       }
     }
   }

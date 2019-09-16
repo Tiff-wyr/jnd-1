@@ -7,79 +7,25 @@
         </el-carousel-item>
       </el-carousel>
       <div class="apply">
-        <div class="title">贷款申请</div>
-        <el-form ref="borrowerData" :model="borrowerData" :rules="borrowerDataRules" style="margin-left: 40px;">
-          <el-form-item prop="borrowerName">
-            <el-input v-model="borrowerData.borrowerName" :disabled="isUpdate" placeholder="请输入姓名" class="name-input"/>
-            <el-radio-group v-model="borrowerData.sex" :disabled="isUpdate" style="margin-left: 10px;">
-              <el-radio :label="1">男</el-radio>
-              <el-radio :label="0">女</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item class="input-item" prop="loanAmount">
-            <el-input v-model="borrowerData.loanAmount" placeholder="贷款金额（万元）" style="width: 256px"/>
-          </el-form-item>
-
-          <el-form-item prop="address">
-            <el-select
-              v-model="borrowerData.address1"
-              style="width: 120px;float: left"
-              placeholder="地区"
-              clearable
-              @change="getCity"
-            >
-              <el-option
-                v-for="item in provinceData"
-                :key="item.pid"
-                :label="item.provincial"
-                :value="item.pid"
-                style="width: 140px;"
-              />
-            </el-select>
-            <el-select
-              v-model="borrowerData.address2"
-              style="margin-left: 16px;width: 120px;float: left;"
-              placeholder="地区"
-              clearable
-            >
-              <el-option
-                v-for="item in cityData"
-                :key="item.cid"
-                :label="item.city"
-                :value="item.cid"
-                style="width: 140px;"
-              />
-            </el-select>
-          </el-form-item>
-          <el-form-item class="input-item" prop="phone">
-            <el-input v-model="borrowerData.phone" :disabled="isUpdate" type="text" placeholder="手机号" style="width: 256px"/>
-          </el-form-item>
-          <el-form-item prop="code">
-            <el-input
-              v-model="borrowerData.code"
-              type="text"
-              placeholder="验证码"
-              class="name-input"
-            />
-            <el-button v-if="showing" class="name-input send" @click="send">{{ verifyCode }}</el-button>
-            <el-button v-else class="name-input send">{{ time }}s</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button style="width: 212px; margin-left: 30px;" @click="apply">立即申请</el-button>
-          </el-form-item>
-        </el-form>
-        <div class="agreement">
-          <el-checkbox v-model="isChecked"/>
-          <el-dropdown trigger="click">
-            <span class="el-dropdown-link">
-              阅读并同意9能贷用户相关协议<i class="el-icon-arrow-down el-icon--right"/>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-plus"><a href="/agreement?userProtect" target="_blank">《9能贷用户隐私保护政策》</a></el-dropdown-item>
-              <el-dropdown-item icon="el-icon-circle-plus"><a href="/agreement?userRegister" target="_blank">《9能贷用户注册协议》</a></el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+        <div class="item">
+          <span class="label">贷款金额</span>
+          <el-select v-model="searchForm.loanAmount" class="option">
+            <el-option v-for="item in loanAmountOptions" :key="item.id" :label="item.label" :value="item.id"/>
+          </el-select>
         </div>
+        <div class="item">
+          <span class="label">贷款期限</span>
+          <el-select v-model="searchForm.loanTime" class="option">
+            <el-option v-for="item in loanTimeOptions" :key="item.id" :label="item.label" :value="item.id"/>
+          </el-select>
+        </div>
+        <div class="item">
+          <span class="label">职业身份</span>
+          <el-select v-model="searchForm.job" class="option">
+            <el-option v-for="item in jobOptions" :key="item.id" :label="item.label" :value="item.id"/>
+          </el-select>
+        </div>
+        <div class="btn" @click="handleSearch">搜索贷款</div>
       </div>
     </div>
     <div class="wrap pt48">
@@ -297,18 +243,41 @@
 <script>
 import footerSame from '../component/footerSame'
 import bottomTap from '../component/bottomTap'
-import publicApi from '@/api/public'
 import calculator from '@/views/consult/components/Calculator'
-import { publics } from '@/api/validateApply'
 import emptyList from '../assets/empty-list.png'
-import { validaterPhone, validaterLoanAmount, validaterName } from '@/util/validate'
 import banner01 from '@/assets/banner01.png'
 import banner02 from '@/assets/banner02.png'
 import banner03 from '@/assets/banner03.png'
 import { getGetStatus } from '@/api/activity'
-import { applyLoanByNoLogin } from '@/api/apply'
 import { fetchAgent, fetchSpecial, fetchProduct } from '@/api/home'
 const bannerList = [banner01, banner02, banner03]
+const loanAmountOptions = [
+  { id: 1, label: '0 ~ 5万' },
+  { id: 2, label: '5 ~ 10万' },
+  { id: 3, label: '10 ~ 50万' },
+  { id: 4, label: '50 ~ 200万' },
+  { id: 5, label: '200万以上' }
+]
+const loanTimeOptions = [
+  { id: 1, label: '1 ~ 3年' },
+  { id: 2, label: '3 ~ 5年' },
+  { id: 3, label: '5 ~ 10年' },
+  { id: 4, label: '10 ~ 20年' },
+  { id: 5, label: '20年以上' }
+]
+const jobOptions = [
+  { id: 1, label: '企业职员' },
+  { id: 2, label: '经商/企业法人' },
+  { id: 3, label: '公务员/教师' },
+  { id: 4, label: '律师/医生' },
+  { id: 5, label: '自由职业' },
+  { id: 6, label: '农民/务工' },
+  { id: 7, label: '学生' },
+  { id: 8, label: '上班族' },
+  { id: 9, label: '企业主' },
+  { id: 10, label: '个体户' },
+  { id: 11, label: '无工作' }
+]
 export default {
   name: 'Home',
   metaInfo: {
@@ -327,275 +296,37 @@ export default {
     calculator
   },
   data() {
-    const validateLoanAmount = (rule, value, callback) => {
-      if (value) {
-        if (validaterLoanAmount(value)) {
-          callback()
-        } else {
-          callback(new Error('×'))
-        }
-      } else {
-        callback(new Error('×'))
-      }
-    }
-    const validateAddress = (rule, value, callback) => {
-      if (this.borrowerData.address1 && this.borrowerData.address2) {
-        callback()
-      } else {
-        callback(new Error('×'))
-      }
-    }
-    const validatePhone = (rule, value, callback) => {
-      if (value) {
-        if (validaterPhone(value)) {
-          callback()
-        } else {
-          callback(new Error('×'))
-        }
-      } else {
-        callback(new Error('×'))
-      }
-    }
-    const validateName = (rule, value, callback) => {
-      if (value) {
-        if (validaterName(value)) {
-          callback()
-        } else {
-          callback(new Error('×'))
-        }
-      } else {
-        callback(new Error('×'))
-      }
-    }
     return {
+      loanAmountOptions,
+      loanTimeOptions,
+      jobOptions,
+      searchForm: {
+        loanAmount: 1,
+        loanTime: 1,
+        job: 1
+      },
       defaultOption: {
         step: 0.4,
         openWatch: true,
         waitTime: 1000
       },
-      isChecked: true,
       bannerList,
       emptyList,
-      showing: true,
-      time: 60,
-      verifyCode: '发送验证码',
-      borrowerData: {
-        borrowerName: '',
-        sex: 1,
-        loanAmount: '',
-        address1: '',
-        address2: '',
-        phone: '',
-        code: ''
-      },
-      flag: false,
-      borrowerDataRules: {
-        code: [{ required: true, message: '×', trigger: 'blur' }],
-        borrowerName: [
-          { required: true, trigger: 'blur', validator: validateName }
-        ],
-        loanAmount: [
-          { required: true, trigger: 'blur', validator: validateLoanAmount }
-        ],
-        address: [
-          { required: true, trigger: 'blur', validator: validateAddress }
-        ],
-        phone: [{ required: true, trigger: 'blur', validator: validatePhone }]
-      },
-      // 省
-      provinceData: [],
-      // 市 区
-      cityData: [],
       specialData: [],
       productData: [],
       agentData: [],
       organData: [],
-      loanData: [],
-      timer: null,
-      isUpdate: false
-    }
-  },
-  computed: {
-    getUser() {
-      return this.$store.state.userInfo
-    }
-  },
-  watch: {
-    getUser(val) {
-      if (val) {
-        this.borrowerData.borrowerName = val.name
-        this.borrowerData.sex = val.sex
-        this.borrowerData.phone = val.phone
-        this.isUpdate = true
-      } else {
-        this.borrowerData.borrowerName = ''
-        this.borrowerData.phone = ''
-        this.isUpdate = false
-      }
+      loanData: []
     }
   },
   created() {
-    let time = sessionStorage.getItem('time')
-    if (time > 0) {
-      this.timer = setInterval(() => {
-        time--
-        this.time = time
-        sessionStorage.setItem('time', time)
-        this.showing = false
-        if (time < 0) {
-          this.clearTimer()
-        }
-      }, 1000)
-    }
-    this.resetForm()
-    if (this.$store.state.userInfo && this.$store.state.userInfo.roleId === 1) {
-      this.isUpdate = true
-      this.borrowerData.phone = this.$store.state.userInfo.phone
-      this.borrowerData.borrowerName = this.$store.state.userInfo.name
-    } else {
-      this.isUpdate = false
-    }
     this.getSpecial()
     this.getProduct()
     this.getAgentData()
     this.getOrganData()
     this.getLoanData()
-    this.getProvince()
   },
   methods: {
-    clearTimer() {
-      if (this.timer !== null || this.time < 0) {
-        clearInterval(this.timer)
-        this.showing = true
-        this.verifyCode = '重新获取'
-        sessionStorage.setItem('time', 0)
-      }
-    },
-    sendPhoneCode(phone) {
-      // 发送验证码接口
-      publicApi.sendPhoneCode(phone).then(res => {
-        if (res.data.status === 200) {
-          this.$message.success('验证码发送成功')
-        } else {
-          this.$message.warning(res.data.msg)
-          this.clearTimer()
-        }
-      })
-    },
-    send() {
-      // 发送验证码按钮
-      if (this.borrowerData.phone) {
-        if (validaterPhone(this.borrowerData.phone)) {
-          sessionStorage.setItem('time', 60)
-          let time = 60
-          this.timer = setInterval(() => {
-            time--
-            this.time = time
-            sessionStorage.setItem('time', time)
-            this.showing = false
-            if (time < 0) {
-              this.clearTimer()
-            }
-          }, 1000)
-          if (this.$store.state.userInfo == null) { // 未登录状态
-            publicApi.validateRegister(this.borrowerData.phone)
-              .then(res2 => { // 验证该手机号是否已经注册
-                if (res2.data.status === 500) {
-                  this.$message.warning('该手机号已被注册，请登录后在进行申请')
-                  this.clearTimer()
-                } else {
-                  this.sendPhoneCode(this.borrowerData.phone)
-                }
-              })
-          } else {
-            if (parseInt(this.$store.state.userInfo.roleId) === 1) {
-              publics(this.borrowerData.phone).then(res => { // 验证该手机号今天是否在此申请过
-                if (res.data.status === 200) { // 可以申请
-                  this.sendPhoneCode(this.borrowerData.phone)
-                } else {
-                  this.$message.warning(res.data.msg)
-                }
-              })
-            } else {
-              this.$message.warning('贷款人方可申请')
-              this.clearTimer()
-            }
-          }
-        } else {
-          this.$message.warning('手机号格式不正确')
-        }
-      } else {
-        this.$message.warning('手机号不能为空')
-      }
-    },
-
-    apply() {
-      this.$refs.borrowerData.validate(valid => {
-        if (valid) {
-          if (this.isChecked) {
-            if (!this.flag) {
-              const data = new FormData()
-              for (const item in this.borrowerData) {
-                data.append(item, this.borrowerData[item])
-              }
-              applyLoanByNoLogin(this.borrowerData).then(res => {
-                if (res.data.status === 200) {
-                  this.clearTimer()
-                  if (this.$store.state.userInfo === null) {
-                    this.$message.success('申请并注册成功')
-                    this.$router.push({
-                      path: '/applyVictory',
-                      query: {
-                        number: this.borrowerData.phone
-                      }
-                    })
-                    this.$refs.borrowerData.resetFields()
-                  } else {
-                    this.$message.success('申请成功')
-                    this.$refs.borrowerData.resetFields()
-                    this.resetForm()
-                  }
-                } else {
-                  this.$message.warning(res.msg)
-                }
-              })
-              this.flag = true
-              if (this.flag) {
-                setTimeout(() => {
-                  this.flag = false
-                }, 5000)
-              }
-            } else {
-              this.$message.warning('请不要重复点击')
-            }
-          } else {
-            this.$message.warning('请阅读并同意9能贷用户相关协议')
-          }
-        }
-      })
-    },
-    // 获取省
-    getProvince() {
-      this.$axios.get('city/getAllProvincial').then(res => {
-        for (let i = 0, len = res.length; i < len; i++) {
-          if (res[i].pid !== 0) {
-            this.provinceData.push(res[i])
-          }
-        }
-      })
-    },
-    // 获取 市 区
-    getCity(val) {
-      this.borrowerData.address2 = ''
-      this.cityData.splice(0)
-      this.$axios.get(`city/getAllCity/${val}`).then(res => {
-        for (let i = 0, len = res.length; i < len; i++) {
-          if (res[i].cid !== 0) {
-            this.cityData.push(res[i])
-          }
-        }
-      })
-    },
     // 特别推荐详情页
     specialLook(id) {
       this.$router.push(`/productDetail?id=${id}`)
@@ -609,7 +340,9 @@ export default {
     agDetail(id) {
       this.$router.push(`/agentDetail?id=${id}`)
     },
-
+    handleSearch() {
+      this.$router.push(`/productList?param=${JSON.stringify(this.searchForm)}`)
+    },
     // 特别推荐
     getSpecial() {
       fetchSpecial().then(res => {
@@ -665,21 +398,6 @@ export default {
       } else {
         this.$router.push('/organization')
       }
-    },
-    resetForm() {
-      this.borrowerData = {
-        borrowerName: '',
-        sex: 1,
-        loanAmount: '',
-        address1: '',
-        address2: '',
-        phone: '',
-        code: ''
-      }
-      if (this.$store.state.userInfo) {
-        this.borrowerData.borrowerName = this.$store.state.userInfo.name
-        this.borrowerData.phone = this.$store.state.userInfo.phone
-      }
     }
   }
 }
@@ -689,64 +407,20 @@ export default {
   height: 368px!important;
   min-width: 1200px;
 }
+.apply {
+  .el-input__inner {
+    border: none;
+  }
+  .el-select .el-input__inner:focus {
+    border: none;
+  }
+}
 </style>
 
-<style lang="scss">
-.el-dropdown-menu__item {
-  color: #4a90e2;
-}
-.apply {
-  .el-checkbox__input.is-checked .el-checkbox__inner {
-    background-color: #fff;
-    border-color: #fff;
-  }
-  .el-checkbox__inner::after {
-    border-color: #515151;
-  }
-  .el-dropdown {
-    color: #fff;
-  }
-  .el-input {
-    font-size: 16px;
-  }
-  .el-form-item {
-    margin-bottom: 10px;
-  }
-  .el-form-item__error {
-    top: 50%;
-    right: 10px;
-    left: auto;
-    margin-top: -14px;
-    font-size: 20px;
-    font-weight: bold;
-    color: red
-  }
-}
-</style>
 <style scoped lang="scss">
 $gray: #333;
 .apply-btn {
   cursor: pointer;
-}
-.radio {
-  margin-left: 10px;
-  line-height: 35px;
-}
-/deep/ .el-radio__label {
-  color: #fff;
-}
-/deep/ .is-checked .el-radio__inner {
-  border-color: $gray;
-  background: #fff;
-  &:after {
-    background-color: $gray;
-  }
-}
-/deep/ .is-checked + .el-radio__label {
-  color: #fff;
-}
-/deep/ .el-radio__inner:hover {
-  border-color: $gray;
 }
 .mb24 {
   margin-bottom: 24px;
@@ -794,30 +468,44 @@ $gray: #333;
       position: absolute;
       left: 12.5%;
       top: 0;
-      width: 336px;
+      width: 360px;
       height: 100%;
       z-index: 998;
-      background: rgba(36,31,33,.95);
-      padding-top: 5px;
+      background: rgba(0,0,0,.4);
+      padding: 30px;
       box-sizing: border-box;
       font-family: PingFangSC-Regular;
       font-weight: 500;
-      .title {
+      .item {
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        border-radius: 6px;
+        margin-bottom: 30px;
+        height: 50px;
+        overflow: hidden;
+        .label {
+          width: 90px;
+          text-align: center;
+          color: #6A6A6A;
+          font-size: $jnd-font-size-base;
+          background: #F8F6F6;
+          height: 100%;
+          line-height: 50px;
+        }
+        .option {
+          flex: 1;
+          border: none;
+        }
+      }
+      .btn {
+        height: 60px;
+        line-height: 60px;
         text-align: center;
-        font-size: 18px;
-        font-weight: 400;
+        border-radius: 6px;
         color: #fff;
-        margin-bottom: 10px;
-      }
-      .name-input {
-        width: 120px;
-      }
-      .send {
-        margin-left: 12px;
-      }
-      .agreement {
-        color: #fff;
-        text-align: center;
+        background: #FC4546;
+        cursor: pointer;
       }
     }
   }

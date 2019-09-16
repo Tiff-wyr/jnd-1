@@ -33,9 +33,91 @@ export function validPhoneIsRegister(phone) {
   })
 }
 
+/**
+ * 申请贷款发送验证码
+ * @param {*} phone
+ *
+ */
 export function sendPhoneCode(phone) {
   return request({
     url: `base/getUpdatePhoneCode/${phone}`,
     method: 'get'
+  })
+}
+
+export function validateRegister(phone) { // 检测手机号是否注册
+  return request({
+    url: '/user/checkUserByPhone/' + phone,
+    method: 'get'
+  })
+}
+
+/**
+ * 检测是否可以申请贷款
+ * @param {String} phone
+ */
+export function validIfApply(phone) {
+  return request({
+    url: `/user/checkUserIsNotBorrower/${phone}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 检测验证码是否有效
+ * @param {String} phone
+ * @param {String} code
+ */
+export function valideCode(phone, code) {
+  return request({
+    url: `/base/checkPhoneAndCode/${phone}/${code}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 详情页面注册
+ * @param {Object} params
+ */
+export function applyRegister(params) {
+  return request({
+    url: '/userBorrower/registerBorrower1',
+    method: 'post',
+    params
+  })
+}
+
+// 注册之后进行信息完善
+export function modifyInfo(params) {
+  return request({
+    url: '/userBorrower/modify1',
+    method: 'post',
+    params
+  })
+}
+
+// 申请贷款，保存订单信息
+export function saveOrder(params) {
+  return request({
+    url: '/order/save',
+    method: 'post',
+    params
+  })
+}
+
+// 获取贷款人个人信息
+export function getUserInfo(phone) {
+  return request({
+    url: `/userBorrower/getUserBorrowerByPhone/${phone}`,
+    method: 'get'
+  })
+}
+
+// 贷款人修改个人信息
+export function updateUserInfo(params) {
+  return request({
+    url: '/userBorrower/modifyUserBorrowerByPhone',
+    method: 'post',
+    params
   })
 }

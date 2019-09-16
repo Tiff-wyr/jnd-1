@@ -39,12 +39,12 @@
               <div class="clearfix">
                 <div class="fll">
                   <div class="clearfix mb30">
+                    <div v-if="!tableData.isPawn" class="clearfix mb30">
+                      <div class="fll text-age">年龄：</div>
+                      <div class="fll w120">{{ tableData.age }}</div>
+                    </div>
                     <div class="fll text-age">所在地区：</div>
                     <div class="fll w120">{{ tableData.address }}</div>
-                  </div>
-                  <div v-if="!tableData.isPawn" class="clearfix mb30">
-                    <div class="fll text-age">年龄：</div>
-                    <div class="fll w120">{{ tableData.age }}</div>
                   </div>
                 </div>
                 <div class="fll ml30">
@@ -75,15 +75,37 @@
                     <div class="fll text-age">贷款金额：</div>
                     <div class="fll w120">{{ tableData.loanAmount }}</div>
                   </div>
+                  <div class="clearfix mb30">
+                    <div class="fll text-age">贷款期限：</div>
+                    <div class="fll w120">{{ tableData.loanAmount }}</div>
+                  </div>
+                  <div class="clearfix mb30">
+                    <div class="fll text-age">有无本地社保：</div>
+                    <div class="fll w120">{{ tableData.loanAmount }}</div>
+                  </div>
+                  <div class="clearfix mb30">
+                    <div class="fll text-age">有无本地公积金：</div>
+                    <div class="fll w120">{{ tableData.loanAmount }}</div>
+                  </div>
+                  <div class="clearfix mb30">
+                    <div class="fll text-age">名下车辆情况</div>
+                    <div class="fll w120">{{ tableData.loanAmount }}</div>
+                  </div>
+                  <div class="clearfix mb30">
+                    <div class="fll text-age">名下房产信息</div>
+                    <div class="fll w120">{{ tableData.loanAmount }}</div>
+                  </div>
+                  <div class="clearfix mb30">
+                    <div class="fll text-age">信用情况</div>
+                    <div class="fll w120">{{ tableData.loanAmount }}</div>
+                  </div>
+                  <div class="clearfix mb30">
+                    <div class="fll text-age">是否有芝麻分</div>
+                    <div class="fll w120">{{ tableData.loanAmount }}</div>
+                  </div>
                   <div class="clearfix">
                     <div class="fll text-age">发布时间：</div>
                     <div class="fll w120">{{ tableData.time }}</div>
-                  </div>
-                </div>
-                <div class="fll ml30">
-                  <div class="clearfix mb30">
-                    <div class="fll text-age">贷款类型：</div>
-                    <div class="fll w120">{{ tableData.businessType }}</div>
                   </div>
                 </div>
               </div>

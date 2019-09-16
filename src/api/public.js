@@ -13,12 +13,6 @@ const publicApi = {
       method: 'get'
     })
   },
-  validateIfApply(phone) { // 判断是否是贷款人或未注册账号
-    return request({
-      url: `sRegisuser/selectIter/${phone}`,
-      method: 'post'
-    })
-  },
   sendPhoneCode(phone) {
     return request({
       url: `base/getUpdatePhoneCode/${phone}`,

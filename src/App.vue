@@ -93,5 +93,18 @@ export default {
     color:rgba(165,165,165,1);
   }
 }
-
+/**
+  覆盖element-ui部分样式
+*/
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  background: $jnd-bg-color-theme;
+  border-color: $jnd-border-color-theme;
+}
+.el-radio__input.is-checked .el-radio__inner {
+  background: $jnd-bg-color-theme;
+  border-color: $jnd-border-color-theme;
+}
+.el-radio__input.is-checked+.el-radio__label {
+  color: $jnd-font-color-theme;
+}
 </style>

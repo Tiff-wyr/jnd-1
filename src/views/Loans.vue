@@ -83,111 +83,112 @@ export default {
   data() {
     return {
       currentIndex: 0,
-      items: [{
-        title: '车贷',
-        content: `
+      items: [
+        {
+          title: '车贷',
+          content: `
           <p>不押车当天放款</p>
           <p>抵押物: 汽车抵押</p>
           <p>到账时间: 最快2小时</p>
           <p>利率范围: 0.35% ~ 0.80%</p>
           <p>贷款金额: 车值的95%</p>
         `,
-        bg: '../static/loans/loans0.png',
-        key: 6
-      }, {
-        title: '芝麻分贷',
-        content: `
+          bg: '../static/loans/loans0.png',
+          key: 6
+        }, {
+          title: '芝麻分贷',
+          content: `
           <p>600芝麻分可以贷款</p>
           <p>抵押物: 无抵押</p>
           <p>到账时间: 最快1 ~ 2周到账</p>
           <p>利率范围: 0.72%起</p>
           <p>贷款金额: 5万</p>
         `,
-        bg: '../static/loans/loans1.png',
-        key: 9
-      }, {
-        title: '信用贷',
-        content: `
+          bg: '../static/loans/loans1.png',
+          key: 9
+        }, {
+          title: '信用贷',
+          content: `
           <p>按揭房也能贷</p>
           <p>抵押物: 房产抵押</p>
           <p>到账时间: 3 ~ 7个工作日</p>
           <p>利率范围: 0.35% ~ 0.65%</p>
           <p>贷款金额: 最高3000万</p>
         `,
-        bg: '../static/loans/loans2.png',
-        key: 8
-      }, {
-        title: '社保贷',
-        content: `
+          bg: '../static/loans/loans2.png',
+          key: 8
+        }, {
+          title: '社保贷',
+          content: `
           <p>有银行流水证明</p>
           <p>抵押物: 无抵押</p>
           <p>到账时间: 最快30分钟</p>
           <p>利率范围: 0.42% ~ 2.00%</p>
           <p>贷款金额: 最高50万</p>
         `,
-        bg: '../static/loans/loans3.png',
-        key: 3
-      }, {
-        title: '经营贷',
-        content: `
+          bg: '../static/loans/loans3.png',
+          key: 3
+        }, {
+          title: '经营贷',
+          content: `
           <p>有经营场所就能贷</p>
           <p>抵押物: 房产抵押</p>
           <p>到账时间: 最快1 ~ 2周到账</p>
           <p>利率范围: 0.48% ~ 2.00%</p>
           <p>贷款金额: 50万 ~ 无上限</p>
         `,
-        bg: '../static/loans/loans4.png',
-        key: 1
-      }, {
-        title: '公积金贷',
-        content: `
+          bg: '../static/loans/loans4.png',
+          key: 1
+        }, {
+          title: '公积金贷',
+          content: `
           <p>有公积金就能贷</p>
           <p>抵押物: 无抵押</p>
           <p>到账时间: 最快1天到账</p>
           <p>利率范围: 0.33%起</p>
           <p>贷款金额: 最高100万</p>
         `,
-        bg: '../static/loans/loans5.png',
-        key: 4
-      }, {
-        title: '房贷',
-        content: `
+          bg: '../static/loans/loans5.png',
+          key: 4
+        }, {
+          title: '房贷',
+          content: `
           <p>按揭房也能贷</p>
           <p>抵押物: 房产抵押</p>
           <p>到账时间: 3 ~ 7个工作日</p>
           <p>利率范围: 0.35% ~ 0.65%</p>
           <p>贷款金额: 最高3000万</p>
         `,
-        bg: '../static/loans/loans6.png',
-        key: 7
-      }, {
-        title: '打卡工资贷',
-        content: `
+          bg: '../static/loans/loans6.png',
+          key: 7
+        }, {
+          title: '打卡工资贷',
+          content: `
           <p>北京月入2千以上</p>
           <p>抵押物: 无</p>
           <p>到账时间: 最快1小时</p>
           <p>利率范围: 0.26% ~ 0.95%</p>
           <p>贷款金额: 最高100万</p>
         `,
-        bg: '../static/loans/loans7.png',
-        key: 5
-      }, {
-        title: '保险贷',
-        content: `
+          bg: '../static/loans/loans7.png',
+          key: 5
+        }, {
+          title: '保险贷',
+          content: `
           <p>传统型、分红型、万能型都可以</p>
           <p>抵押物: 无抵押</p>
           <p>到账时间: 最快1天到账</p>
           <p>利率范围: 0.85%起</p>
           <p>贷款金额: 最高100万</p>
         `,
-        bg: '../static/loans/loans8.png',
-        key: 2
-      }],
+          bg: '../static/loans/loans8.png',
+          key: 2
+        }],
       emptyList,
       tableData: [],
       formData: [],
       page: 1,
-      size: 5,
+      size: 10,
       count: 1
     }
   },

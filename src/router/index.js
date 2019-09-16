@@ -28,9 +28,9 @@ const components = {
 
   agentDetail: () => import('@/views/agentDetail'),
   organDetail: () => import('@/views/organDetail'),
-  productDetail: () => import('@/views/productDetail'),
   userDetail: () => import('@/views/userDetail'),
-  productList: () => import('@/views/productList'),
+  productList: () => import('@/views/product/productList'),
+  productDetail: () => import('@/views/product/productDetail'),
 
   findPassword: () => import('@/views/findPassword/index'),
   applyVictory: () => import('@/views/applyVictory'),
@@ -78,7 +78,7 @@ const components = {
 
 export default new Router({
 
-  mode: 'history',
+  // mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
 
   routes: [
