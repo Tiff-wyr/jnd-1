@@ -27,6 +27,10 @@ export default {
     options: {
       type: Object,
       required: true
+    },
+    ifRegister: { // 判定是注册场景还是申请贷款场景
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -57,58 +61,75 @@ export default {
       codeText: '获取验证码',
       isLoading: false,
       isRegister: false,
-      saveOrderForm: {}
+      saveOrderForm: {},
+      zhuce: false
     }
   },
   methods: {
     checkIsRegister(phone) {
       validateRegister(phone).then(res => {
-        if (res.data.status === '500') { // 手机号已注册
-          sessionStorage.setItem('show', false)
-          this.isRegister = true
+        if (res.data.status === 500) { // 手机号已注册
+          if (this.ifRegister) {
+            this.$message.warning('该手机号已被注册')
+            this.clearTimer()
+            return false
+          } else {
+            sessionStorage.setItem('show', false)
+            this.isRegister = true
+            this.sendCode(phone)
+          }
+            this.zhuce = true
         } else {
+            this.zhuce = false
           sessionStorage.setItem('show', true)
           this.isRegister = false
+          this.sendCode(phone)
         }
       })
     },
+
     validateCode() { // 检测验证码是否有效
-      this.$confirm('是否需要修改贷款信息?', '提示', {
-        confirmButtonText: '直接贷款',
-        cancelButtonText: '先去修改',
-        type: 'warning'
-      }).then(() => { // 直接贷款
-        sessionStorage.setItem('applyStatus', 'create')
-        const obj = {
-          phone: this.phoneForm.phone
-        }
-        obj[this.options.key] = this.options.value
-        this.saveOrders(obj)
-      }).catch(() => {
-        this.$emit('change', {
-          form: this.phoneForm,
-          step: 1.5
-        })
-        sessionStorage.setItem('applyStatus', 'update')
-      })
       valideCode(this.phoneForm.phone, this.phoneForm.password).then(res => {
-        if (res.data.code === 200) {
-          this.$confirm('是否需要修改贷款信息?', '提示', {
-            confirmButtonText: '直接贷款',
-            cancelButtonText: '先去修改',
-            type: 'warning'
-          }).then(() => { // 直接贷款
-            const obj = {
-              phone: this.phoneForm.phone
-            }
-            obj[this.options.key] = this.options.value
-            this.saveOrders(obj)
-          }).catch(() => {
-            this.$emit('change', {
-              form: this.phoneForm,
-              step: 1.5
+        if (res.data.status === 200) {
+          if (!this.ifRegister) { // 贷款流程
+          if (this.zhuce) {
+this.$confirm('是否需要修改贷款信息?', '提示', {
+              confirmButtonText: '直接贷款',
+              cancelButtonText: '先去修改',
+              type: 'warning'
+            }).then(() => { // 直接贷款
+              sessionStorage.setItem('applyStatus', 'create')
+              const obj = {
+                phone: this.phoneForm.phone
+              }
+              obj[this.options.key] = this.options.value
+              this.saveOrders(obj)
+            }).catch(() => {
+              this.$emit('change', {
+                form: this.phoneForm,
+                step: 1.5
+              })
+              sessionStorage.setItem('applyStatus', 'update')
             })
-          })
+          } else {
+this.$emit('change', {
+                form: this.phoneForm,
+                step: 1.5
+              })
+          }
+            
+          } else { // 注册流程
+            validateRegister(this.phoneForm.phone).then(res => {
+              if (res.data.status === 200) {
+                this.$emit('change', {
+                  form: this.phoneForm,
+                  step: 1.5
+                })
+              } else {
+                this.$message.warning(res.data.msg)
+              }
+            })
+          }
         } else {
           this.$message.warning(res.data.msg)
         }
@@ -116,6 +137,10 @@ export default {
       })
     },
     handleNext() {
+              this.$emit('change', {
+                form: this.phoneForm,
+                step: 1.5
+              })
       if (this.agree) {
         this.$refs.phoneForm.validate(valid => {
           if (valid) {
@@ -152,7 +177,7 @@ export default {
     checkPhone(phone) {
       validIfApply(phone).then(res => {
         if (res.data.status === 200) { // 可以进行申请操作
-          this.sendCode(phone)
+          this.checkIsRegister(phone)
         } else {
           this.$message.warning(res.data.msg)
           this.clearTimer()
@@ -161,7 +186,6 @@ export default {
     },
     sendCode(phone) {
       sendPhoneCode(phone).then(res => {
-        this.checkIsRegister(this.phoneForm.phone)
         if (res.data.status === 200) {
           this.$message.success('验证码发送成功，请注意查收')
         } else {

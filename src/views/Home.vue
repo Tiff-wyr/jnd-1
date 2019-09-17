@@ -252,20 +252,27 @@ import { getGetStatus } from '@/api/activity'
 import { fetchAgent, fetchSpecial, fetchProduct } from '@/api/home'
 const bannerList = [banner01, banner02, banner03]
 const loanAmountOptions = [
-  { id: 1, label: '0 ~ 5万' },
-  { id: 2, label: '5 ~ 10万' },
-  { id: 3, label: '10 ~ 50万' },
-  { id: 4, label: '50 ~ 200万' },
-  { id: 5, label: '200万以上' }
+  { id: 0, label: '0.3万元', value: 0.3 },
+  { id: 1, label: '1万元', value: 1 },
+  { id: 2, label: '5万元', value: 5 },
+  { id: 3, label: '10万元', value: 10 },
+  { id: 4, label: '20万元', value: 20 },
+  { id: 5, label: '50万元', value: 50 },
+  { id: 6, label: '100万元', value: 100 },
+  { id: 7, label: '500万元', value: 500 },
+  { id: 8, label: '其他', value: 0 }
 ]
 const loanTimeOptions = [
-  { id: 1, label: '1 ~ 3年' },
-  { id: 2, label: '3 ~ 5年' },
-  { id: 3, label: '5 ~ 10年' },
-  { id: 4, label: '10 ~ 20年' },
-  { id: 5, label: '20年以上' }
+  { id: 1, label: '3个月' },
+  { id: 2, label: '6个月' },
+  { id: 3, label: '12个月' },
+  { id: 4, label: '2年' },
+  { id: 5, label: '3年' },
+  { id: 6, label: '5年' },
+  { id: 7, label: '10年' }
 ]
 const jobOptions = [
+  { id: '', label: '不限' },
   { id: 1, label: '企业职员' },
   { id: 2, label: '经商/企业法人' },
   { id: 3, label: '公务员/教师' },
@@ -302,8 +309,8 @@ export default {
       jobOptions,
       searchForm: {
         loanAmount: 1,
-        loanTime: 1,
-        job: 1
+        loanTime: 3,
+        job: ''
       },
       defaultOption: {
         step: 0.4,

@@ -121,3 +121,11 @@ export function updateUserInfo(params) {
     params
   })
 }
+
+// 根据经纪人或机构id查申请记录-->get-->/api/order/getPageOrderByBrokerIdOrAgencyId-->参数brokerId(选填)、agencyId(选填)、page(必填)、pageSize(必填)，
+// 贷款人自己界面申请记录-->get-->/api/order/getOrderByBorrowerId/{borrowerId}/{page}/{pageSize}
+// 修改申请状态-->post-->/api/order/modifyOrderStatus-->参数orderId、roleId、brokerIdOrAgencyIdOrProductId、orderStatus
+// 机构详情页面获取成功案例-->get-->/api/order/getAgencySuccessOrder/{agencyId}
+// 分页 通过经纪人id查找未付费资源贷款人-->get-->/api/brokerResource/getPageBorrowerByBrokerIdUnPaid-->参数如下图
+// 分页 通过机构id查找已付费资源贷款人-->get-->/api/agencyResource//getPageBorrowerByAgencyIdPaid/{agencyId}/{page}/{pageSize}
+// 分页 通过机构id查找未付费资源贷款人-->get-->/api/agencyResource/getPageBorrowerByAgencyIdUnPaid-->参数如下图

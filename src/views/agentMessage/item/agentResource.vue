@@ -24,81 +24,6 @@
             :label="item.amountName"
           />
         </el-select>
-        <el-select
-          v-model="listQuery.fBusinessType"
-          class="filter-item filter-item-select"
-          clearable
-          placeholder="请选择贷款类型"
-        >
-          <el-option v-for="item in typeList" :key="item.id" :value="item.id" :label="item.busName"/>
-        </el-select>
-
-        <el-select
-          v-model="listQuery.fIsPawn"
-          class="filter-item filter-item-select"
-          clearable
-          placeholder="请选择是否有抵押物"
-        >
-          <el-option
-            v-for="item in isPawnList"
-            :key="item.id"
-            :value="item.id"
-            :label="item.isPawn"
-          />
-        </el-select>
-        <el-select
-          v-show="listQuery.fIsPawn === 0"
-          v-model="listQuery.fAge"
-          class="filter-item filter-item-select"
-          clearable
-          placeholder="请选择年龄范围"
-        >
-          <el-option v-for="item in ageList" :key="item.id" :value="item.id" :label="item.ageArea"/>
-        </el-select>
-        <el-select
-          v-show="listQuery.fIsPawn === 0"
-          v-model="listQuery.fJob"
-          class="filter-item filter-item-select"
-          clearable
-          placeholder="请选择从事行业"
-        >
-          <el-option
-            v-for="item in jobList"
-            :key="item.jobId"
-            :value="item.jobId"
-            :label="item.jobName"
-          />
-        </el-select>
-        <el-select
-          v-show="listQuery.fIsPawn === 0"
-          v-model="listQuery.fIncome"
-          class="filter-item filter-item-select"
-          clearable
-          placeholder="请选择收入范围"
-        >
-          <el-option
-            v-for="item in incomeList"
-            :key="item.id"
-            :value="item.id"
-            :label="item.incomeName"
-          />
-        </el-select>
-        <el-select
-          v-show="listQuery.fIsPawn === 1"
-          v-model="fPawnKey"
-          class="filter-item filter-item-select"
-          clearable
-          placeholder="请选择抵押物"
-          multiple
-          @change="choosePawn"
-        >
-          <el-option
-            v-for="item in pawnList"
-            :key="item.pawnId"
-            :value="item.pawnId"
-            :label="item.pawn"
-          />
-        </el-select>
         <el-button type="primary" @click="handleFilter">查 询</el-button>
       </div>
       <div class="title">资源中心</div>
@@ -120,7 +45,7 @@
           <div v-for="(item,index) in tableData" :key="index" class="loans-pro-item clearfix">
             <div class="fll pro-item-same">{{ item.borrowerName }}</div>
             <div class="fll pro-item-same">{{ item.address }}</div>
-            <div class="fll pro-item-same">{{ item.loanAmountValue }}万</div>
+            <div class="fll pro-item-same">{{ item.loanAmount }}</div>
             <div class="fll pro-item-same">{{ item.phone }}</div>
             <div class="fll pro-item-same">
               <div class="operate" @click="joinResource(item.borrowerId)">立即查看</div>
@@ -204,12 +129,12 @@
 <script>
 import success from '../../../assets/success.png'
 import warning from '../../../assets/warning.png'
-import api from '@/api/filterData.js'
-import getListApi from '@/api/index.js'
+import { fetchProvince, fetchCity } from '@/api/register.js'
 import { backTop } from '@/util/util'
 import { mapState, mapMutations } from 'vuex'
 import emptyList from '@/assets/empty-list2.png'
 import memberBox from '@/component/memberBox'
+import { fetchNoPayResource } from '@/api/agent'
 import { checkAliPayRusult, createAliPayOrderSn, getMemberDatas, reviewAliPay } from '@/util/pay.alipay'
 import { getQrCodes, checkWxPayRusult, reviewWxPay } from '@/util/pay.wxpay'
 export default {
@@ -233,14 +158,12 @@ export default {
         page: 1,
         pageSize: 10,
         brokerId: '', // 经纪人ID
-        fAddress: '',
-        fLoanAmount: '',
-        fBusinessType: '',
-        fAge: '',
-        fJob: '',
-        fIncome: '',
-        fIsPawn: '', // 有无抵押
-        fPawnKey: '' // 抵押物
+        address1: '',
+        address2: '',
+        loanAmountKey: '',
+        jobTypeKey: '',
+        carStatusKey: '',
+        houseInfoKey: ''
       },
       fPawnKey: '',
       listLoading: true,
@@ -302,7 +225,7 @@ export default {
           data[item] = this.listQuery[item]
         }
       }
-      getListApi.getPageBorrowerByBrokerIdUnPaid(data).then(res => {
+      fetchNoPayResource(data).then(res => {
         // 未付费资源
         this.listLoading = false
         this.tableData = res.data.rows
@@ -313,7 +236,7 @@ export default {
     handleCity(val) {
       if (val.length === 1) {
         this.listQuery.fAddress = val.toString()
-        api.getCity(val[0]).then(res => {
+        fetchCity(val[0]).then(res => {
           const data = res.data
           const arr = []
           for (let i = 0; i < data.length; i++) {
@@ -335,7 +258,7 @@ export default {
       }
     },
     handleItemChange(val) {
-      api.getCity(val[0]).then(res => {
+      fetchCity(val[0]).then(res => {
         const data = res.data
         const arr = []
         for (let i = 0; i < data.length; i++) {
@@ -352,7 +275,7 @@ export default {
       })
     },
     getFilterData() {
-      api.getProvice().then(response => {
+      fetchProvince().then(response => {
         const data = response.data
         for (let i = 0; i < data.length; i++) {
           const obj = {}
@@ -361,27 +284,6 @@ export default {
           obj['citys'] = []
           this.cityList.push(obj)
         }
-      })
-      api.getMoney().then(response => {
-        this.moneyList = response.data
-      })
-      api.getType().then(response => {
-        this.typeList = response.data
-      })
-      api.getAllAgeArea().then(response => {
-        this.ageList = response.data
-      })
-      api.getJob().then(response => {
-        this.jobList = response.data
-      })
-      api.getIncome().then(response => {
-        this.incomeList = response.data
-      })
-      api.getAllIsPawn().then(response => {
-        this.isPawnList = response.data
-      })
-      api.getAllPawn().then(response => {
-        this.pawnList = response.data
       })
     },
     handleFilter() {

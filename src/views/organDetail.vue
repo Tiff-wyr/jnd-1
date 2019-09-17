@@ -186,8 +186,8 @@ export default {
   computed: {
     options() {
       return {
-        key: 'brokerId',
-        value: this.agentId
+        key: 'agencyId',
+        value: this.organId
       }
     }
   },

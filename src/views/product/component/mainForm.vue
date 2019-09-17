@@ -2,9 +2,10 @@
   <div class="main-form">
     <el-form ref="form" :rules="formRules" :model="form" label-position="right" label-width="110px">
       <el-form-item label="贷款金额" prop="loanAmount">
-        <el-select v-model="form.loanAmount" style="width: 280px;">
+        <el-select v-if="loanAmountStatus" v-model="form.loanAmount" style="width: 280px;" @change="handleLoanAmount">
           <el-option v-for="item in loanAmountOptions" :key="item.id" :label="item.label" :value="item.value"/>
         </el-select>
+        <el-input v-else v-model="form.loanAmount" placeholder="请输入贷款金额（单位万元）" @input="handleLoanAmount"/>
       </el-form-item>
       <el-form-item label="贷款期限" prop="loanTimeKey">
         <el-select v-model="form.loanTimeKey" style="width: 280px;">
@@ -21,6 +22,7 @@
       </el-form-item>
       <el-form-item label="所在地区" prop="address">
         <el-cascader
+          v-model="address"
           :options="cityList"
           :props="props"
           :change-on-select="true"
@@ -48,7 +50,8 @@
       </el-form-item>
 
       <el-form-item label="">
-        <el-button :loading="isLoading" class="apply" @click="handleNext">下一步</el-button>
+        <el-button v-if="ifRegister" :loading="isLoading" class="apply" @click="handleRegister">注 册</el-button>
+        <el-button v-else :loading="isLoading" class="apply" @click="handleNext">下一步</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -57,43 +60,13 @@
 import { fetchProvince, fetchCity } from '@/api/register'
 import { validaterFloat, validaterInter, validaterName } from '@/util/validate'
 import { applyRegister, getUserInfo, updateUserInfo } from '@/api/apply'
-const loanAmountOptions = [
-  { id: 0, label: '0.3万元', value: 0.3 },
-  { id: 1, label: '1万元', value: 1 },
-  { id: 2, label: '5万元', value: 5 },
-  { id: 3, label: '10万元', value: 10 },
-  { id: 4, label: '20万元', value: 20 },
-  { id: 5, label: '50万元', value: 50 },
-  { id: 6, label: '100万元', value: 100 },
-  { id: 7, label: '500万元', value: 500 },
-  { id: 8, label: '其他', value: 0 }
-]
-const loanTimeOptions = [
-  { id: 1, label: '3个月' },
-  { id: 2, label: '6个月' },
-  { id: 3, label: '12个月' },
-  { id: 4, label: '2年' },
-  { id: 5, label: '3年' },
-  { id: 6, label: '5年' },
-  { id: 7, label: '10年' }
-]
+import { loanAmountList, loanTimeList, jobTypeList, monthInComeList  } from '@/util/filterData'
 
-const jobTypeOptions = [
-  { id: 1, label: '私企职员' },
-  { id: 2, label: '国企职员' },
-  { id: 3, label: '公务员/事业单位职员' },
-  { id: 4, label: '个体工商户' },
-  { id: 5, label: '小微企业主' },
-  { id: 6, label: '自由职业/求职中' }
-]
-const monthInComeOptions = [
-  { id: 1, label: '1000~3000元' },
-  { id: 2, label: '3000~5000元' },
-  { id: 3, label: '5000~10000元' },
-  { id: 4, label: '10000~20000元' },
-  { id: 5, label: '20000~50000元' },
-  { id: 6, label: '50000元以上' }
-]
+const loanAmountOptions = loanAmountList()
+const loanTimeOptions = loanTimeList()
+const jobTypeOptions = jobTypeList()
+const monthInComeOptions = monthInComeList()
+
 export default {
   name: 'MainForm',
   props: {
@@ -104,6 +77,10 @@ export default {
     code: {
       type: String,
       required: true
+    },
+    ifRegister: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -115,7 +92,7 @@ export default {
           callback(new Error('贷款金额格式错误'))
         }
       } else {
-        callback(new Error('贷款金额不能为空'))
+        callback(new Error('贷款金额不能为空并且不能为0'))
       }
     }
     const validName = (rule, value, callback) => {
@@ -152,6 +129,7 @@ export default {
       loanTimeOptions,
       jobTypeOptions,
       monthInComeOptions,
+      loanAmountStatus: true,
       formRules: {
         loanAmount: [{ required: true, trigger: 'change', validator: validLoanAmount }],
         loanTimeKey: [{ required: true, trigger: 'change', message: '请选择贷款期限' }],
@@ -167,6 +145,7 @@ export default {
         label: 'label',
         children: 'citys'
       },
+      address: [],
       form: {
         loanAmount: 0.3,
         loanTimeKey: 1,
@@ -193,14 +172,36 @@ export default {
     }
   },
   methods: {
+    handleLoanAmount(val) {
+      alert(1)
+      if (val === 0) {
+        this.loanAmountStatus = false
+      }
+      if (val === '') {
+        this.loanAmountStatus = true
+      }
+    },
     getInfo() {
       getUserInfo(this.form.phone).then(res => {
-        console.log(res)
+        if (res.status === 200) {
+          for (const i in this.form) {
+            for (const j in res.data) {
+              if (i === j) {
+                this.form[i] = res.data[j]
+              }
+            }
+          }
+          if (res.data.loanAmount === 0) {
+            this.loanAmountStatus = false
+          }
+          this.getCity(res.data.address1, () => {
+            this.address = [res.data.address1, res.data.address2]
+          })
+        }
       })
     },
     updateInfo() {
       updateUserInfo(this.form).then(res => {
-        console.log(res)
         if (res.data.status === 200) {
           this.$emit('change', {
             form: this.form,
@@ -246,23 +247,7 @@ export default {
     handleCity(val) {
       if (val.length === 1) {
         this.form.address1 = val[0]
-        fetchCity(val[0]).then(res => {
-          const data = res.data
-          const arr = []
-          for (let i = 0; i < data.length; i++) {
-            if (data[i].cid !== 0) {
-              const obj = {}
-              obj['id'] = data[i]['cid']
-              obj['label'] = data[i]['city']
-              arr.push(obj)
-            }
-          }
-          for (let i = 0; i < this.cityList.length; i++) {
-            if (this.cityList[i].id === val[0]) {
-              this.cityList[i].citys = arr
-            }
-          }
-        })
+        this.getCity(val[0])
       } else if (val.length === 2) {
         this.form.address2 = val[1]
       } else {
@@ -270,26 +255,66 @@ export default {
         this.form.address2 = ''
       }
     },
+    getCity(id, callback) {
+      fetchCity(id).then(res => {
+        const data = res.data
+        const arr = []
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].cid !== 0) {
+            const obj = {}
+            obj['id'] = data[i]['cid']
+            obj['label'] = data[i]['city']
+            arr.push(obj)
+          }
+        }
+        for (let i = 0; i < this.cityList.length; i++) {
+          if (this.cityList[i].id === id) {
+            this.cityList[i].citys = arr
+          }
+        }
+        if (callback) {
+          callback()
+        }
+      })
+    },
     handleNext() {
+            this.$emit('change', {
+              form: this.form,
+              step: 2
+            })
       this.$refs.form.validate(valid => {
         if (valid) {
           this.isLoading = true
-          if (this.status === 'create') {
-            this.form.password = this.code
-            this.registerAccount()
-          } else {
+          if (this.status === 'update') {
             this.updateInfo()
+          } else {
+            this.form.password = this.code
+            console.log(this.form)
+            this.registerAccount()
           }
+        }
+      })
+    },
+    handleRegister() {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          this.isLoading = true
+          this.form.password = this.code
+          this.registerAccount()
         }
       })
     },
     registerAccount() { // 点击下一步注册账号
       applyRegister(this.form).then(res => {
         if (res.data.status === 200) {
-          this.$emit('change', {
-            form: this.form,
-            step: 2
-          })
+          if (this.ifRegister) {
+            this.$emit('register')
+          } else {
+            this.$emit('change', {
+              form: this.form,
+              step: 2
+            })
+          }
         } else {
           this.$message.warning(res.data.msg)
         }

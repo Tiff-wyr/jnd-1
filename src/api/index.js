@@ -1,10 +1,7 @@
 import request from './request'
 
 const getListApi = {
-  getPageBorrowerByBrokerIdUnPaid(data) { // get location
-    const params = {
-      ...data
-    }
+  getPageBorrowerByBrokerIdUnPaid(params) { // get location
     return request({
       url: '/brokerResource/getPageBorrowerByBrokerIdUnPaid',
       method: 'get',

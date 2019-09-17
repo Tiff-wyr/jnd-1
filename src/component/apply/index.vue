@@ -2,9 +2,9 @@
   <div class="apply-wrap">
     <step :active="active" class="step"/>
 
-    <phone-form v-if="active === 1" :options="options" @change="handleChange"/>
-    <main-form v-if="active === 1.5" :phone="form.phone" :code="form.password" @change="handleChange"/>
-    <property-con v-if="active === 2" :phone="form.phone" :options="options" @change="handleChange"/>
+    <phone-form v-if="active === 1" :options="options" :if-register="ifRegister" @change="handleChange"/>
+    <main-form v-if="active === 1.5" :phone="form.phone" :if-register="ifRegister" :code="form.password" @change="handleChange" @register="handleRegister"/>
+    <property-con v-if="active === 2" :phone="form.phone" :options="options" :if-register="ifRegister" @change="handleChange"/>
     <finish v-if="active === 3" :phone="form.phone" @confirm="handleConfirm"/>
   </div>
 </template>
@@ -26,7 +26,17 @@ export default {
   props: {
     options: {
       type: Object,
-      required: true
+      default: function() {
+        return {}
+      }
+    },
+    ifRegister: {
+      type: Boolean,
+      default: false
+    },
+    steps: {
+      type: [String, Number],
+      default: 0
     }
   },
   data() {
@@ -35,18 +45,27 @@ export default {
       form: {}
     }
   },
-  created() {
-    console.log(this.options)
+  watch: {
+    steps(val) {
+      console.log('监听到变化了', val)
+      this.active = val
+      console.log(this.active)
+    }
   },
   methods: {
     handleChange(val) {
+      console.log(val)
       for (const i in val.form) {
         this.form[i] = val.form[i]
       }
+      console.log(this.form)
       this.active = val.step
     },
     handleConfirm() {
       this.active = 1
+    },
+    handleRegister() {
+      this.$emit('register')
     }
   }
 }

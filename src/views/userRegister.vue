@@ -9,7 +9,11 @@
             <div class="number">已有账号，</div>
             <div class="login" @click="loginPush">立即登陆</div>
           </div>
-          <el-form
+          <div class="apply-box">
+            <apply :if-register="true" :steps="step" @register="handleRegister"/>
+          </div>
+
+          <!-- <el-form
             ref="form"
             :model="form"
             :rules="rules"
@@ -93,10 +97,22 @@
                 </el-form-item>
               </div>
             </div>
-          </el-form>
+          </el-form> -->
         </div>
       </div>
     </div>
+    <el-dialog :visible.sync="dialogVisible" :show-close="false" width="700px">
+      <div class="dialog-title">
+        <img src="../assets/title.png" alt="">
+      </div>
+      <div class="dialog-container">
+        <p>恭喜您成功注册为9能贷平台会员，可享受更多平台服务。您可完善您的贷款资料，有助于提高贷款成功率，更加便捷的使用平台</p>
+        <div class="btn-box">
+          <div class="btn"><a href="/home">登录首页</a></div>
+          <div class="btn update" @click="handleUpdate">完善资料</div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -105,10 +121,12 @@ import registerTop from '../component/registerTop'
 import { mapState, mapMutations } from 'vuex'
 import validater from '../util/validater'
 import { validaterName, validaterPhone } from '@/util/validate'
+import apply from '@/component/apply'
 export default {
   name: 'UserRegister',
   components: {
-    registerTop
+    registerTop,
+    apply
   },
   data() {
     const validateName = (rule, value, callback) => {
@@ -130,6 +148,7 @@ export default {
       }
     }
     return {
+      dialogVisible: false,
       isChecked: true,
       showing: true,
       time: 60,
@@ -144,6 +163,7 @@ export default {
         loanAmount: '',
         flag: false
       },
+      step: 1,
       timer: null,
       // 省
       provinceData: [],
@@ -180,6 +200,15 @@ export default {
     this.getProvince()
   },
   methods: {
+    handleRegister() {
+      this.dialogVisible = true
+    },
+    handleUpdate() {
+      console.log(this.step)
+      this.step = 2
+      this.dialogVisible = false
+      console.log(this.step)
+    },
     ...mapMutations(['SET_USER']),
     loginPush() {
       this.$router.push({ path: '/', query: { login: 1 }})
@@ -297,6 +326,42 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.apply-box {
+  margin-top: 30px;
+}
+.dialog-title {
+  text-align: center;
+  transform: translateY(-30px);
+}
+.dialog-container {
+  margin: 0 150px;
+  font-size: 16px;
+  color: #515151;
+  line-height: 1.5;
+  .btn-box {
+    display: flex;
+    align-items:center;
+    justify-content: space-around;
+    margin-top: 30px;
+    .btn {
+      width: 90px;
+      height: 36px;
+      line-height: 36px;
+      border-radius: 4px;
+      border:1px solid #D9D8D9;
+      text-align: center;
+      a {
+        color: #515151;
+      }
+      &.update {
+        background: $jnd-bg-color-theme;
+        color: #fff;
+        border-color: transparent;
+        cursor: pointer;
+      }
+    }
+  }
+}
 .w900 {
   width: 900px;
   margin: 0 auto;
@@ -305,7 +370,6 @@ export default {
   margin-left: 20px;
 }
 .user-main {
-  height: 600px;
   position: relative;
   background: rgba(255, 255, 255, 1);
   .user-title {
@@ -344,80 +408,80 @@ export default {
       color: rgba(168, 14, 14, 1);
     }
   }
-  .user-form {
-    width: 400px;
-    margin: 20px auto;
-    .person-item {
-      .verify {
-        .send {
-          text-align: center;
-          width: 80px;
-          height: 38px;
-          border-radius: 4px;
-          border: 1px solid #ccc;
-          font-size: 12px;
-          font-family: PingFangSC-Medium;
-          font-weight: 500;
-          color: rgba(155, 155, 155, 1);
-          line-height: 38px;
-          margin-left: 20px;
-          cursor: pointer;
-        }
-        .time {
-          font-size: 16px;
-          color: #888;
-        }
-      }
-      .person-text {
-        text-align: right;
-        width: 70px;
-        height: 40px;
-        font-size: 14px;
-        font-family: PingFangSC-Regular;
-        font-weight: 400;
-        color: rgba(81, 81, 81, 1);
-        line-height: 40px;
-      }
-      input {
-        width: 250px;
-        height: 40px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 13px 10px;
-        box-sizing: border-box;
-        font-size: 14px;
-        font-family: PingFangSC-Regular;
-        font-weight: 400;
-        color: rgba(81, 81, 81, 1);
-        line-height: 40px;
-      }
-      .name,
-      .card {
-        width: 100px;
-        height: 40px;
-      }
-      .radio {
-        margin-top: 9px;
-        margin-left: 19px;
-      }
-      /deep/ .el-radio__label {
-        color: #aaa;
-      }
-      /deep/ .is-checked .el-radio__inner {
-        border-color: #333;
-        background: #fff;
-        &:after {
-          background-color: #333;
-        }
-      }
-      /deep/ .is-checked + .el-radio__label {
-        color: #333;
-      }
-      /deep/ .el-radio__inner:hover {
-        border-color: #333;
-      }
-    }
-  }
+  // .user-form {
+  //   width: 400px;
+  //   margin: 20px auto;
+  //   .person-item {
+  //     .verify {
+  //       .send {
+  //         text-align: center;
+  //         width: 80px;
+  //         height: 38px;
+  //         border-radius: 4px;
+  //         border: 1px solid #ccc;
+  //         font-size: 12px;
+  //         font-family: PingFangSC-Medium;
+  //         font-weight: 500;
+  //         color: rgba(155, 155, 155, 1);
+  //         line-height: 38px;
+  //         margin-left: 20px;
+  //         cursor: pointer;
+  //       }
+  //       .time {
+  //         font-size: 16px;
+  //         color: #888;
+  //       }
+  //     }
+  //     .person-text {
+  //       text-align: right;
+  //       width: 70px;
+  //       height: 40px;
+  //       font-size: 14px;
+  //       font-family: PingFangSC-Regular;
+  //       font-weight: 400;
+  //       color: rgba(81, 81, 81, 1);
+  //       line-height: 40px;
+  //     }
+  //     input {
+  //       width: 250px;
+  //       height: 40px;
+  //       border: 1px solid #ccc;
+  //       border-radius: 5px;
+  //       padding: 13px 10px;
+  //       box-sizing: border-box;
+  //       font-size: 14px;
+  //       font-family: PingFangSC-Regular;
+  //       font-weight: 400;
+  //       color: rgba(81, 81, 81, 1);
+  //       line-height: 40px;
+  //     }
+  //     .name,
+  //     .card {
+  //       width: 100px;
+  //       height: 40px;
+  //     }
+  //     .radio {
+  //       margin-top: 9px;
+  //       margin-left: 19px;
+  //     }
+  //     /deep/ .el-radio__label {
+  //       color: #aaa;
+  //     }
+  //     /deep/ .is-checked .el-radio__inner {
+  //       border-color: #333;
+  //       background: #fff;
+  //       &:after {
+  //         background-color: #333;
+  //       }
+  //     }
+  //     /deep/ .is-checked + .el-radio__label {
+  //       color: #333;
+  //     }
+  //     /deep/ .el-radio__inner:hover {
+  //       border-color: #333;
+  //     }
+  //   }
+  // }
   .agreement {
     margin: 20px auto;
     font-size: 12px;

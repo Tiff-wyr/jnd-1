@@ -228,7 +228,6 @@ export default {
   created() {
     const id = this.$route.query.id
     this.productId = id
-    this.applyForm.productId = id
     this.getDetail(id)
     this.getOrgan(id)
     this.getHotProduct()
@@ -239,6 +238,9 @@ export default {
     }
   },
   methods: {
+    hurryUpApply() {
+      this.dialogVisible = true
+    },
     handleConfirm() {
       this.dialogVisible = false
     },

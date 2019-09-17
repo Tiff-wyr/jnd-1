@@ -158,6 +158,7 @@
 import apply from '@/component/apply'
 import footerSame from '@/component/footerSame'
 import { formatPhone } from '@/util/util'
+import { fetchSuccessList } from '@/api/agent'
 export default {
   name: 'AgentDetail',
   metaInfo: {
@@ -237,15 +238,18 @@ export default {
     },
     // 经纪人成功案例
     getVictory(id) {
-      this.$axios.get(`orderAll/getTopSixOrderByBrokerId/${id}`).then(res => {
-        res.map(item => {
-          const firstName = item.borrowerName.substr(0, 1)
-          const allName =
-            item.sex === '0' ? `${firstName}女士` : `${firstName}先生`
-          return { ...item, allName }
-        })
-        this.loanData = res
+      fetchSuccessList(id).then(res => {
+        console.log(res)
       })
+      // this.$axios.get(`orderAll/getTopSixOrderByBrokerId/${id}`).then(res => {
+      //   res.map(item => {
+      //     const firstName = item.borrowerName.substr(0, 1)
+      //     const allName =
+      //       item.sex === '0' ? `${firstName}女士` : `${firstName}先生`
+      //     return { ...item, allName }
+      //   })
+      //   this.loanData = res
+      // })
     },
     // 经纪人贷款产品
     getProductData(id) {

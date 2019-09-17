@@ -37,14 +37,8 @@
 </template>
 <script>
 import { modifyInfo, saveOrder } from '@/api/apply'
-const creditOptions = [
-  { id: 1, label: '无信用卡或贷款' },
-  { id: 2, label: '信用良好无逾期' },
-  { id: 3, label: '少量逾期' },
-  { id: 4, label: '多次逾期' },
-  { id: 5, label: '当前逾期' },
-  { id: 6, label: '超过90天逾期' }
-]
+import { creditList } from '@/util/filterData'
+const creditOptions = creditList()
 export default {
   name: 'PropertyCon',
   props: {
@@ -55,6 +49,10 @@ export default {
     options: {
       type: Object,
       required: true
+    },
+    ifRegister: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -86,14 +84,19 @@ export default {
     this.form.phone = this.phone
     this.saveOrderForm.phone = this.phone
     this.saveOrderForm[this.options.key] = this.options.value
-    // phone、brokerId、agencyId、productId
+    console.log(this.saveOrderForm)
   },
   methods: {
     modify() {
       modifyInfo(this.form).then(res => {
+        console.log(this.form)
         if (res.data.status === 200) {
-          console.log('success', res)
-          this.saveOrders()
+          if (this.ifRegister) {
+            this.$message.success('信息完善成功')
+            window.location.href = '/home'
+          } else {
+            this.saveOrders()
+          }
         } else {
           this.$message.warning(res.data.msg)
           this.isLoading = false
@@ -102,6 +105,7 @@ export default {
     },
     saveOrders() {
       saveOrder(this.saveOrderForm).then(res => {
+        console.log(this.saveOrderForm)
         if (res.data.status === 200) {
           this.$emit('change', {
             form: this.form,
