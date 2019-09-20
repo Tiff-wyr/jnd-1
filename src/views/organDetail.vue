@@ -108,7 +108,7 @@
           </div>
           <div class="fll">
             <div class="top-form">
-              <apply :options="options"/>
+              <apply :options="options" :phone="$store.state.userInfo ? $store.state.userInfo.phone : ''"/>
             </div>
 
             <div class="bottom-form">
@@ -235,7 +235,7 @@ export default {
     },
     // 机构的成功案例
     getVictory(id) {
-      this.$axios.get(`orderAll/getAgencySuccessOrder/${id}`).then(res => {
+      this.$axios.get(`/order/getAgencySuccessOrder/${id}`).then(res => {
         this.loanData = res
       })
     },

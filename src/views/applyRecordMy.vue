@@ -170,15 +170,15 @@ export default {
       this.listLoading = true
       this.$axios
         .get(
-          `orderAll/getOrderByBorrowerId/${this.$store.state.userInfo.id}/${
+          `order/getOrderByBorrowerId/${this.$store.state.userInfo.id}/${
             this.page
           }/${this.size}`
         )
         .then(res => {
           if (res.status === 200) {
             this.listLoading = false
-            this.tableData = res.data.list
-            this.count = res.data.totalCount
+            this.tableData = res.data.rows
+            this.count = res.data.total
             backTop()
           }
         })

@@ -25,7 +25,7 @@
             <div class="fll" style="cursor: pointer" @click="enterDe(item.borrowerId)">
               <div class="fll pro-item-same">{{ item.borrowerName == null ? '-' : item.borrowerName }}</div>
               <div class="fll pro-item-same">{{ item.address == null ? '-' : item.address }}</div>
-              <div class="fll pro-item-same">{{ item.loanAmount == null ? 0 : item.loanAmount }} 万元</div>
+              <div class="fll pro-item-same">{{ item.loanAmount == null ? 0 : item.loanAmount }}</div>
               <div class="fll pro-item-same">{{ item.phone == null ? '-' : item.phone }}</div>
             </div>
             <div class="fll pro-item-same">
@@ -53,6 +53,7 @@
 <script>
 import emptyList from '../../../assets/empty-list2.png'
 import { backTop } from '@/util/util'
+import { getPayResource } from '@/api/organ'
 export default {
   name: 'PayRes',
   data() {
@@ -93,20 +94,12 @@ export default {
     },
     getData() {
       this.listLoading = true
-      this.$axios
-        .get(
-          `agencyResource/getBorByAgency/${this.$store.state.userInfo.id}/${
-            this.page
-          }/${this.size}`
-        )
-        .then(res => {
-          if (res.status === 200) {
-            this.listLoading = false
-            this.tableData = res.data.list
-            this.count = res.data.totalCount
-            backTop()
-          }
-        })
+      getPayResource(this.$store.state.userInfo.id, this.page, this.size).then(res => {
+        this.listLoading = false
+        this.tableData = res.data.rows
+        this.count = res.data.total
+        backTop()
+      })
     },
 
     deleteBorrower(id) {

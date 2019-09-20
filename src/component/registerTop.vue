@@ -5,12 +5,12 @@
         <div class="clearfix">
           <div class="fll clearfix">
             <img src="/static/1.png" alt="" style="cursor: pointer;float: left;margin-top: 7px;" @click="$router.push('/')">
-            <div class="fll user-text" style="cursor: pointer" @click="$router.push('/')">就能贷</div>
+            <div class="fll user-text" style="cursor: pointer" @click="$router.push('/')">9能贷</div>
             <div class="fll user-text"> | </div>
             <div :class="this.$route.path === '/userRegister' ? 'active fll user-text cursor-re' : 'fll user-text cursor-re'" @click="user">个人注册</div>
           </div>
           <div class="flr clearfix">
-            <div :class="this.$route.path === '/agentRegister' ? 'active fll user-text agent cursor-re' : 'fll user-text agent cursor-re'" @click="agent">经纪人注册</div>
+            <div :class="this.$route.path === '/agentRegister' ? 'active fll user-text agent cursor-re' : 'fll user-text agent cursor-re'" @click="agent">信贷经理注册</div>
             <div class="fll user-text"> | </div>
             <div :class="this.$route.path === '/organRegister' ? 'active fll user-text cursor-re' : 'fll user-text cursor-re'" @click="organ">机构注册</div>
           </div>

@@ -66,7 +66,7 @@ const listOptions = [
     url: bg1,
     lInfo: {
       title: '我是贷款用户',
-      type: '专业经纪人',
+      type: '专业信贷经理',
       p: ['10年从业经验，沟通无障碍', '安全便捷的贷款服务'],
       left: 0,
       textAlign: 'left'
@@ -118,7 +118,7 @@ const listOptions = [
   { id: 4,
     url: bg5,
     lInfo: {
-      title: '我是经纪人',
+      title: '我是信贷经理',
       type: '会员',
       p: ['专注贷款领域，每日驾到海量用户', '93%用户已申请贷款'],
       right: 0,

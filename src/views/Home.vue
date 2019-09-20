@@ -30,51 +30,43 @@
     </div>
     <div class="wrap pt48">
       <div class="w1200">
-        <div class="wrap-top clearfix mb24 ml111">
-          <div class="clearfix fll single">
-            <img src="../../static/resource/group9.png" alt="" class="fll">
-            <div class="fll common">
-              <div class="text1">放款快</div>
-              <div class="text2">最快2小时放款</div>
-            </div>
-          </div>
-          <div class="clearfix fll single ml217">
-            <img src="../../static/resource/Group7.png" alt="" class="fll">
-            <div class="fll common">
-              <div class="text1">利率低</div>
-              <div class="text2">利率低至0.26%</div>
-            </div>
-          </div>
-          <div class="clearfix fll single ml227">
-            <img src="../../static/resource/Group3.png" alt="" class="fll">
-            <div class="fll common">
-              <div class="text1">额度高</div>
-              <div class="text2">最高可贷1000万</div>
-            </div>
-          </div>
-        </div>
-        <div class="wrap-bottom clearfix ml111">
-          <div class="clearfix fll single">
-            <img src="../../static/resource/Group.png" alt="" class="fll">
-            <div class="fll common">
-              <div class="text1">门槛低</div>
-              <div class="text2">月入2000即可贷</div>
-            </div>
-          </div>
-          <div class="clearfix fll single ml208">
-            <img src="../../static/resource/Group11.png" alt="" class="fll">
-            <div class="fll common">
-              <div class="text1">渠道广</div>
-              <div class="text2">多种贷款方式供您选择</div>
-            </div>
-          </div>
-          <div class="clearfix fll single ml188">
-            <img src="../../static/resource/Group8.png" alt="" class="fll">
-            <div class="fll common">
-              <div class="text1">服务好</div>
-              <div class="text2">资深顾问在线为您解答</div>
-            </div>
-          </div>
+        <div class="count-data">
+          <dl class="count-item">
+            <dt>
+              <img src="../assets/home/proCount.png" >
+            </dt>
+            <dd>
+              <p class="num"><count-to :start-val="0" :end-val="5000" :duration="3000" class="num"/>+</p>
+              <p class="text">产品可供查看</p>
+            </dd>
+          </dl>
+          <dl class="count-item">
+            <dt>
+              <img src="../assets/home/organCount.png" >
+            </dt>
+            <dd>
+              <p class="num"><count-to :start-val="0" :end-val="1600" :duration="3000" class="num"/>+</p>
+              <p class="text">金融机构资金支持</p>
+            </dd>
+          </dl>
+          <dl class="count-item">
+            <dt>
+              <img src="../assets/home/userCount.png" >
+            </dt>
+            <dd>
+              <p class="num"><count-to :start-val="0" :end-val="5528" :duration="3000" class="num"/>+</p>
+              <p class="text">信贷经理在线沟通</p>
+            </dd>
+          </dl>
+          <dl class="count-item">
+            <dt>
+              <img src="../assets/home/moneyCount.png" >
+            </dt>
+            <dd>
+              <p class="num"><count-to :start-val="0" :end-val="52481000" :duration="3000" class="num"/></p>
+              <p class="text">累计交易金额</p>
+            </dd>
+          </dl>
         </div>
         <div class="special mt48 mb24">特别推荐</div>
         <div class="clearfix special-wrap">
@@ -142,7 +134,7 @@
               </div>
             </div>
             <div class="clearfix mt48 mb24">
-              <div class="agent fll">经纪人推荐</div>
+              <div class="agent fll">信贷经理推荐</div>
               <div class="fll">
                 <div class="more-agent fll" @click="$router.push('/agent')">更多</div>
                 <img src="../../static/resource/right.png" alt="" class="fll img-right">
@@ -249,42 +241,13 @@ import banner01 from '@/assets/banner01.png'
 import banner02 from '@/assets/banner02.png'
 import banner03 from '@/assets/banner03.png'
 import { getGetStatus } from '@/api/activity'
+import CountTo from 'vue-count-to'
 import { fetchAgent, fetchSpecial, fetchProduct } from '@/api/home'
+import { loanTimeList, jobTypeList, loanAmountList } from '@/util/filterData'
 const bannerList = [banner01, banner02, banner03]
-const loanAmountOptions = [
-  { id: 0, label: '0.3万元', value: 0.3 },
-  { id: 1, label: '1万元', value: 1 },
-  { id: 2, label: '5万元', value: 5 },
-  { id: 3, label: '10万元', value: 10 },
-  { id: 4, label: '20万元', value: 20 },
-  { id: 5, label: '50万元', value: 50 },
-  { id: 6, label: '100万元', value: 100 },
-  { id: 7, label: '500万元', value: 500 },
-  { id: 8, label: '其他', value: 0 }
-]
-const loanTimeOptions = [
-  { id: 1, label: '3个月' },
-  { id: 2, label: '6个月' },
-  { id: 3, label: '12个月' },
-  { id: 4, label: '2年' },
-  { id: 5, label: '3年' },
-  { id: 6, label: '5年' },
-  { id: 7, label: '10年' }
-]
-const jobOptions = [
-  { id: '', label: '不限' },
-  { id: 1, label: '企业职员' },
-  { id: 2, label: '经商/企业法人' },
-  { id: 3, label: '公务员/教师' },
-  { id: 4, label: '律师/医生' },
-  { id: 5, label: '自由职业' },
-  { id: 6, label: '农民/务工' },
-  { id: 7, label: '学生' },
-  { id: 8, label: '上班族' },
-  { id: 9, label: '企业主' },
-  { id: 10, label: '个体户' },
-  { id: 11, label: '无工作' }
-]
+const loanAmountOptions = loanAmountList()
+const loanTimeOptions = loanTimeList()
+const jobOptions = jobTypeList()
 export default {
   name: 'Home',
   metaInfo: {
@@ -300,7 +263,8 @@ export default {
   components: {
     footerSame,
     bottomTap,
-    calculator
+    calculator,
+    CountTo
   },
   data() {
     return {
@@ -426,8 +390,28 @@ export default {
 
 <style scoped lang="scss">
 $gray: #333;
-.apply-btn {
-  cursor: pointer;
+.count-data {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  .count-item {
+    display: flex;
+    align-items: center;
+    dt {
+      margin-right: 10px;
+      img {
+        width: 46px;
+      }
+    }
+    .num {
+      font-size: 24px;
+      color: #D51010;
+    }
+    .text {
+      color: #4A4A4A;
+      font-size: 14px;
+    }
+  }
 }
 .mb24 {
   margin-bottom: 24px;
@@ -439,9 +423,6 @@ $gray: #333;
 .mr60 {
   margin-right: 60px;
 }
-.mt28 {
-  margin-top: 28px;
-}
 .align {
   text-align: center;
 }
@@ -450,18 +431,6 @@ $gray: #333;
 }
 .mr20 {
   margin-right: 10px;
-}
-.ml188 {
-  margin-left: 188px;
-}
-.ml208 {
-  margin-left: 208px;
-}
-.ml227 {
-  margin-left: 227px;
-}
-.ml217 {
-  margin-left: 217px;
 }
 .home {
   .img {
@@ -522,28 +491,6 @@ $gray: #333;
   background: rgba(246, 246, 246, 1);
   padding-bottom: 30px;
   box-sizing: border-box;
-  .common {
-    margin-left: 24px;
-    margin-top: 11px;
-  }
-}
-.single {
-  font-size: 0;
-  .text1 {
-    width: 54px;
-    height: 25px;
-    font-size: 18px;
-    font-weight: 500;
-    color: rgba(81, 81, 81, 1);
-    line-height: 25px;
-  }
-  .text2 {
-    height: 17px;
-    font-size: 12px;
-    font-weight: 400;
-    color: rgba(155, 155, 155, 1);
-    line-height: 17px;
-  }
 }
 .special {
   width: 112px;

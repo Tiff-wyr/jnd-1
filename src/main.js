@@ -26,15 +26,15 @@ new Vue({
   router,
   store,
   components: { App },
-  mounted() {
-    const userAgent = window.navigator.userAgent
-    // eslint-disable-next-line eqeqeq
-    if (userAgent.indexOf('NET') != -1 && userAgent.indexOf('rv') != -1) {
-      console.log('IE')
-    } else {
-      document.dispatchEvent(new Event('render-event'))
-    }
-  },
+  // mounted() {
+  //   const userAgent = window.navigator.userAgent
+  //   // eslint-disable-next-line eqeqeq
+  //   if (userAgent.indexOf('NET') != -1 && userAgent.indexOf('rv') != -1) {
+  //     console.log('IE')
+  //   } else {
+  //     document.dispatchEvent(new Event('render-event'))
+  //   }
+  // },
   template: '<App/>',
   render: h => h(App)
 })

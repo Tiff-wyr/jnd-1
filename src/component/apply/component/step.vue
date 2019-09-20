@@ -2,7 +2,7 @@
   <div class="step">
     <div :class="{ active: active >= 1 }" class="item"><span>1</span>填写基本信息</div>
     <div :class="{ active: active >= 2 }" class="item"><span>2</span>完善贷款信息</div>
-    <div :class="{ active: active >= 3 }" class="item"><span>3</span>完成</div>
+    <div :class="{ active: active >= 3 }" class="item"><span>3</span>申请完成</div>
   </div>
 </template>
 <script>

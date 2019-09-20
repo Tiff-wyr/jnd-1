@@ -1,6 +1,6 @@
 <template>
   <div class="company-wrap">
-    <titles title="公司新闻"/>
+    <titles title="平台新闻"/>
     <div class="main">
       <ul>
         <li v-for="(item, index) in newList" :key="index" @click="handleDetail(item)">

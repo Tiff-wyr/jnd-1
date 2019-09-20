@@ -56,7 +56,7 @@
           </div>
         </div>
         <div class="mt48 mb24">
-          <div class="organ-loan">贷款顾问</div>
+          <div class="organ-loan">信贷经理</div>
         </div>
         <div v-if="isJianSuo">
           <div v-if="tableData.length == 0" class="empty-list">

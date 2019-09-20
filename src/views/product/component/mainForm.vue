@@ -60,7 +60,7 @@
 import { fetchProvince, fetchCity } from '@/api/register'
 import { validaterFloat, validaterInter, validaterName } from '@/util/validate'
 import { applyRegister, getUserInfo, updateUserInfo } from '@/api/apply'
-import { loanAmountList, loanTimeList, jobTypeList, monthInComeList  } from '@/util/filterData'
+import { loanAmountList, loanTimeList, jobTypeList, monthInComeList } from '@/util/filterData'
 
 const loanAmountOptions = loanAmountList()
 const loanTimeOptions = loanTimeList()
@@ -154,9 +154,9 @@ export default {
         age: '',
         address1: '',
         address2: '',
-        jobTypeKey: 1,
+        jobTypeKey: 0,
         incomeWayKey: 1,
-        monthIncome: 1
+        monthIncome: ''
       },
       isLoading: false,
       cityList: [],
@@ -165,6 +165,13 @@ export default {
   },
   created() {
     this.getFilterData()
+    const obj = sessionStorage.getItem('form')
+    if (obj && Object.keys(obj).length > 2) {
+      // this.form = Object.assign({}, sessionStorage.getItem('form'))
+      for (const i in obj) {
+        this.form[i] = obj[i]
+      }
+    }
     this.form.phone = this.phone
     this.status = sessionStorage.getItem('applyStatus')
     if (this.status === 'update') {
@@ -173,7 +180,6 @@ export default {
   },
   methods: {
     handleLoanAmount(val) {
-      alert(1)
       if (val === 0) {
         this.loanAmountStatus = false
       }
@@ -278,19 +284,19 @@ export default {
       })
     },
     handleNext() {
-            this.$emit('change', {
-              form: this.form,
-              step: 2
-            })
       this.$refs.form.validate(valid => {
         if (valid) {
+          sessionStorage.setItem('form', this.form)
           this.isLoading = true
-          if (this.status === 'update') {
+          if (sessionStorage.getItem('isPrve')) {
             this.updateInfo()
           } else {
-            this.form.password = this.code
-            console.log(this.form)
-            this.registerAccount()
+            if (this.status === 'update') {
+              this.updateInfo()
+            } else {
+              this.form.password = this.code
+              this.registerAccount()
+            }
           }
         }
       })
@@ -305,21 +311,32 @@ export default {
       })
     },
     registerAccount() { // 点击下一步注册账号
-      applyRegister(this.form).then(res => {
-        if (res.data.status === 200) {
-          if (this.ifRegister) {
-            this.$emit('register')
+      if (sessionStorage.getItem('show')) { // 未注册账号
+        applyRegister(this.form).then(res => {
+          if (res.data.status === 200) {
+            if (this.ifRegister) {
+              this.$emit('register')
+            } else {
+              this.$emit('change', {
+                form: this.form,
+                step: 2
+              })
+            }
           } else {
-            this.$emit('change', {
-              form: this.form,
-              step: 2
-            })
+            this.$message.warning(res.data.msg)
           }
-        } else {
-          this.$message.warning(res.data.msg)
-        }
+          this.isLoading = false
+        })
+      } else { // 已注册账号
+        this.$emit('change', {
+          form: this.form,
+          step: 2
+        })
         this.isLoading = false
-      })
+      }
+    },
+    beforeDestroy() {
+      sessionStorage.removeItem('isPrev')
     }
   }
 }

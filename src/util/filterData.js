@@ -1,19 +1,22 @@
-export function carStatusListOptions() {
-  const carStatusListOptions = [
-    {
-      id: 1,
-      label: '无车准备买车'
-    }, {
-      id: 2,
-      label: '按揭车'
-    }, {
-      id: 3,
-      label: '全款车'
-    }
+/**
+ * 使用期限列表
+ */
+export function useTimeList() {
+  const loanTimeOptions = [
+    { id: 1, label: '3个月' },
+    { id: 2, label: '6个月' },
+    { id: 3, label: '12个月' },
+    { id: 4, label: '2年' },
+    { id: 5, label: '3年' },
+    { id: 6, label: '5年' },
+    { id: 7, label: '10年' }
   ]
-  return carStatusListOptions
+  return loanTimeOptions
 }
 
+/**
+ * 贷款人贷款金额
+ */
 export function loanAmountList() {
   const loanAmountOptions = [
     { id: 0, label: '0.3万元', value: 0.3 },
@@ -29,6 +32,9 @@ export function loanAmountList() {
   return loanAmountOptions
 }
 
+/**
+ * 贷款人申请贷款 ———— 贷款时间
+ */
 export function loanTimeList() {
   const loanTimeOptions = [
     { id: 1, label: '3个月' },
@@ -37,26 +43,37 @@ export function loanTimeList() {
     { id: 4, label: '2年' },
     { id: 5, label: '3年' },
     { id: 6, label: '5年' },
-    { id: 7, label: '10年' }
+    { id: 7, label: '10年' },
+    { id: 8, label: '20年' }
   ]
   return loanTimeOptions
 }
 
+/**
+ * 职业类型
+ */
 export function jobTypeList() {
-  const jobTypeOptions =  [
-    { id: '', label: '不限' },
-    { id: 1, label: '私企职员' },
-    { id: 2, label: '国企职员' },
-    { id: 3, label: '公务员/事业单位职员' },
-    { id: 4, label: '个体工商户' },
-    { id: 5, label: '小微企业主' },
-    { id: 6, label: '自由职业/求职中' }
+  const jobTypeOptions = [
+    { id: 0, label: '不限' },
+    { id: 1, label: '企业职员' },
+    { id: 2, label: '经商/企业法人' },
+    { id: 3, label: '公务员/教师' },
+    { id: 4, label: '律师/医生' },
+    { id: 5, label: '自由职业' },
+    { id: 6, label: '农民/务工' },
+    { id: 7, label: '学生' },
+    { id: 8, label: '上班族' },
+    { id: 9, label: '企业主' },
+    { id: 10, label: '个体户' },
+    { id: 11, label: '无工作' }
   ]
   return jobTypeOptions
 }
-
+/**
+ * 月收入
+ */
 export function monthInComeList() {
-  const monthInComeOptions =  [
+  const monthInComeOptions = [
     { id: 1, label: '1000~3000元' },
     { id: 2, label: '3000~5000元' },
     { id: 3, label: '5000~10000元' },
@@ -67,6 +84,9 @@ export function monthInComeList() {
   return monthInComeOptions
 }
 
+/**
+ * 名下房产情况
+ */
 export function houseStatusList() {
   const houseStatusOptions = [
     { id: 1, label: '无房' },
@@ -76,9 +96,60 @@ export function houseStatusList() {
   return houseStatusOptions
 }
 
+/**
+ * 名下车辆情况
+ */
+export function carStatusListList() {
+  const carStatusListOptions = [
+    {
+      id: 1,
+      label: '无车准备买车'
+    }, {
+      id: 2,
+      label: '按揭车'
+    }, {
+      id: 3,
+      label: '全款车'
+    }
+  ]
+  return carStatusListOptions
+}
+
+/**
+ * 社保选项
+ */
+export function socialProtectList() {
+  const socialProtectOptions = [
+    { id: 1, label: '无' },
+    { id: 2, label: '有' }
+  ]
+  return socialProtectOptions
+}
+
+/**
+ * 公积金选项
+ */
+export function gongjijinList() {
+  const gongjijinOptions = [
+    { id: 1, label: '无' },
+    { id: 2, label: '有' }
+  ]
+  return gongjijinOptions
+}
+
+/**
+ * 芝麻信用分选项
+ */
+export function zhimaList() {
+  const zhimaOptions = [
+    { id: 1, label: '无' },
+    { id: 2, label: '有' }
+  ]
+  return zhimaOptions
+}
+
 export function creditList() {
   const creditOptions = [
-    { id: '', label: '请选择' },
     { id: 1, label: '无信用卡或贷款' },
     { id: 2, label: '信用良好无逾期' },
     { id: 3, label: '少量逾期' },

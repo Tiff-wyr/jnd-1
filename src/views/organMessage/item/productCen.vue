@@ -125,15 +125,23 @@
           <el-input v-model="productDetailData.productMaxAge" class="w60"/> 岁
         </el-form-item>
         <el-form-item label="使用期限" prop="productLife">
-          <el-input v-model="productDetailData.productLife" class="w60"/> 年
+          <el-select v-model="productDetailData.productLife" placeholder="请选择贷款期限" clearable class="w300">
+            <el-option
+              v-for="item in loanTimeOption"
+              :key="item.id"
+              :label="item.label"
+              :value="item.id"
+            />
+          </el-select>
+
         </el-form-item>
         <el-form-item label="职业要求" prop="productOccupation" class="cover-full">
           <el-select v-model="productDetailData.productOccupation" placeholder="请选择职业要求" multiple clearable class="w300" @change="handleWork">
             <el-option
-              v-for="item in jobData"
-              :key="item.jobId"
-              :label="item.jobName"
-              :value="item.jobId"
+              v-for="item in jobTypeOption"
+              :key="item.id"
+              :label="item.label"
+              :value="item.id"
             />
           </el-select>
         </el-form-item>
@@ -165,6 +173,9 @@ import productImg from '../../../component/productImg'
 import { randomWord } from '@/util/util'
 import { validaterInter, validaterFloat } from '@/util/validate'
 import { getCountByAgencyId } from '@/api/organ'
+import { loanTimeList, jobTypeList } from '@/util/filterData'
+const loanTimeOption = loanTimeList()
+const jobTypeOption = jobTypeList()
 export default {
   name: 'ProductCen',
   components: {
@@ -241,6 +252,8 @@ export default {
     }
 
     return {
+      loanTimeOption,
+      jobTypeOption,
       dialogVisible: false,
       phone: '',
       tableData: [],

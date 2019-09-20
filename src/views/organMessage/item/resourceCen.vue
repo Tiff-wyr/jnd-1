@@ -116,7 +116,7 @@
           </el-table-column>
           <el-table-column label="贷款金额" align="center">
             <template slot-scope="scope">
-              {{ scope.row.loanAmountValue | moneyFilter }}
+              {{ scope.row.loanAmount }}
             </template>
           </el-table-column>
           <el-table-column label="手机号" align="center">

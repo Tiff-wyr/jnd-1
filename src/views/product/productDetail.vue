@@ -176,7 +176,7 @@
       </div>
     </div>
     <div class="prodetai-wrap"/>
-    <popup :visible="dialogVisible" :options="options" @confirm="handleConfirm" @close="handleClose"/>
+    <popup :visible="dialogVisible" :options="options" @confirm="handleConfirm" @close="handleClose" :phone="$store.state.userInfo ? $store.state.userInfo.phone : ''"/>
   </div>
 </template>
 

@@ -120,7 +120,7 @@
           </div>
           <div class="fll">
             <div class="top-form">
-              <apply :options="options"/>
+              <apply :options="options" :phone="this.$store.state.userInfo ? this.$store.state.userInfo.phone : ''"/>
             </div>
             <div class="bottom-form">
               <div v-for="(item,index) in productTableData" :key="index" class="clearfix main-form">

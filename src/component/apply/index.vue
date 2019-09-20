@@ -2,8 +2,8 @@
   <div class="apply-wrap">
     <step :active="active" class="step"/>
 
-    <phone-form v-if="active === 1" :options="options" :if-register="ifRegister" @change="handleChange"/>
-    <main-form v-if="active === 1.5" :phone="form.phone" :if-register="ifRegister" :code="form.password" @change="handleChange" @register="handleRegister"/>
+    <phone-form v-if="active === 1" :options="options" :if-register="ifRegister" :phone="phone"  @change="handleChange"/>
+    <main-form v-if="active === 1.5" :phone="form.phone" :form-data="form" :if-register="ifRegister" :code="form.password" @change="handleChange" @register="handleRegister"/>
     <property-con v-if="active === 2" :phone="form.phone" :options="options" :if-register="ifRegister" @change="handleChange"/>
     <finish v-if="active === 3" :phone="form.phone" @confirm="handleConfirm"/>
   </div>
@@ -37,6 +37,10 @@ export default {
     steps: {
       type: [String, Number],
       default: 0
+    },
+    phone: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -51,6 +55,9 @@ export default {
       this.active = val
       console.log(this.active)
     }
+  },
+  created() {
+    console.log(this.phone)
   },
   methods: {
     handleChange(val) {

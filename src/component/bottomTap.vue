@@ -10,7 +10,7 @@
           </div>
           <div class="business-type">
             <h3>业务项目</h3>
-            <p class="container" @click="$router.push(`/agent`)">贷款经纪人</p>
+            <p class="container" @click="$router.push(`/agent`)">信贷经理</p>
             <p class="container" @click="$router.push(`/organization`)">贷款机构</p>
             <p class="container" @click="$router.push(`/productList`)">贷款产品</p>
           </div>

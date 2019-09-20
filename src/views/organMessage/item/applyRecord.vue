@@ -27,12 +27,12 @@
         <div class="fll table-text">{{ item.borrowerName == null ? '--' : item.borrowerName }}</div>
         <div class="fll table-text">{{ item.loanAmount == null ? '--' : item.loanAmount }}</div>
         <div class="fll table-text">{{ item.phone == null ? '--' : item.phone }}</div>
-        <div class="fll table-text">{{ item.createTime == null ? '--' : item.createTime }}</div>
+        <div class="fll table-text">{{ item.startTime == null ? '--' : item.startTime }}</div>
       </div>
     </div>
     <div class="page" style="float: right;margin-top: 30px">
       <el-pagination
-        :page-size="size"
+        :page-size="form.pageSize"
         :pager-count="5"
         :total="count"
         background=""
@@ -47,6 +47,7 @@
 <script>
 import emptyList from '../../../assets/empty-list2.png'
 import { backTop } from '@/util/util'
+import { applyRecord } from '@/api/organ'
 export default {
   name: 'ApplyRecord',
   data() {
@@ -56,10 +57,16 @@ export default {
       tableData: [],
       page: 1,
       size: 9,
-      count: 1
+      count: 1,
+      form: {
+        agencyId: '',
+        page: 1,
+        pageSize: 10
+      }
     }
   },
   created() {
+    this.form.agencyId = this.$store.state.userInfo.id
     this.getData()
   },
   methods: {
@@ -71,23 +78,18 @@ export default {
       this.getData()
     },
     handleSizeChange(val) {
-      this.size = val
+      this.pageSize = val
       this.getData()
     },
     getData() {
       this.listLoading = true
-      this.$axios
-        .get(
-          `orderAll/getOrderByAgency/${this.$store.state.userInfo.id}/${
-            this.page
-          }/${this.size}`
-        )
-        .then(res => {
-          this.listLoading = false
-          this.tableData = res.data.list
-          this.count = res.data.totalCount
-          backTop()
-        })
+      applyRecord(this.form).then(res => {
+        console.log(res)
+        this.listLoading = false
+        this.tableData = res.data.rows
+        this.count = res.data.total
+        backTop()
+      })
     }
   }
 }

@@ -30,6 +30,7 @@
       </el-form-item>
 
       <el-form-item label="">
+        <el-button v-if="ifRegister" :loading="isLoading" class="apply" @click="handlePrev">上一步</el-button>
         <el-button :loading="isLoading" class="apply" @click="handleNext">提交</el-button>
       </el-form-item>
     </el-form>
@@ -72,7 +73,7 @@ export default {
         gongJiJinKey: 1,
         carStatusKey: 1,
         houseInfoKey: 1,
-        creditStatusKey: 1,
+        creditStatusKey: '',
         zhiMaCreditKey: 1
       },
       saveOrderForm: {
@@ -84,16 +85,14 @@ export default {
     this.form.phone = this.phone
     this.saveOrderForm.phone = this.phone
     this.saveOrderForm[this.options.key] = this.options.value
-    console.log(this.saveOrderForm)
   },
   methods: {
     modify() {
       modifyInfo(this.form).then(res => {
-        console.log(this.form)
         if (res.data.status === 200) {
           if (this.ifRegister) {
             this.$message.success('信息完善成功')
-            window.location.href = '/home'
+            this.$router.push('/home')
           } else {
             this.saveOrders()
           }
@@ -101,11 +100,18 @@ export default {
           this.$message.warning(res.data.msg)
           this.isLoading = false
         }
+      }).catch(() => {
+        this.isLoading = false
       })
+    },
+    handlePrev() {
+      this.$emit('change', {
+        step: 1.5
+      })
+      sessionStorage.setItem('isPrve', true)
     },
     saveOrders() {
       saveOrder(this.saveOrderForm).then(res => {
-        console.log(this.saveOrderForm)
         if (res.data.status === 200) {
           this.$emit('change', {
             form: this.form,
@@ -114,6 +120,8 @@ export default {
         } else {
           this.$message.warning(res.data.msg)
         }
+        this.isLoading = false
+      }).catch(() => {
         this.isLoading = false
       })
     },
@@ -134,6 +142,6 @@ export default {
   background:$jnd-bg-color-theme;
   color: #fff;
   border-color: $jnd-border-color-theme;
-  width: 280px;
+  width: 140px;
 }
 </style>

@@ -29,9 +29,8 @@
 
         </div>
         <div class="right">
-          <apply/>
-          <question/>
-          <calculator style="margin-top: 30px;"/>
+          <calculator/>
+          <question style="margin-top: 30px;"/>
         </div>
       </div>
       <footerSame/>

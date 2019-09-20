@@ -11,115 +11,90 @@
       </div>
     </div>
     <div class="form-wrap">
-      <el-form
-        ref="form"
-        :model="form"
-        :rules="formRules"
-        :class="{'border-show': !isEdit}"
-        label-position="right"
-        label-width="140px"
-      >
+      <el-form ref="form" :model="form" :rules="formRules" :class="{'border-show': !isEdit}" label-position="right" label-width="140px" >
         <el-form-item label="姓名:" prop="borrowerName">
-          <el-input
-            v-if="isEdit"
-            v-model="form.borrowerName"
-            class="input-item"
-            placeholder="请输入姓名"
-          />
+          <el-input v-if="isEdit" v-model="form.borrowerName" class="input-item" placeholder="请输入姓名" />
           <span v-else>{{ form.borrowerName }}</span>
         </el-form-item>
 
-        <el-form-item label="性别:" prop="borrowerSex">
-          <el-radio-group v-if="isEdit" v-model="form.borrowerSex">
+        <el-form-item label="性别:" prop="sex">
+          <el-radio-group v-if="isEdit" v-model="form.sex">
             <el-radio :label="1">男</el-radio>
             <el-radio :label="0">女</el-radio>
           </el-radio-group>
-          <span v-else>{{ form.borrowerSex | sexFilter }}</span>
+          <span v-else>{{ form.sex | sexFilter }}</span>
         </el-form-item>
 
-        <el-form-item label="年龄:" prop="borrowerAge">
-          <el-select v-if="isEdit" :disabled="!isEdit" v-model="form.borrowerAge">
-            <el-option v-for="item in ageList" :key="item.id" :value="item.id" :label="item.ageArea" />
-          </el-select>
-          <span v-else>{{ age }}</span>
+        <el-form-item label="年龄:" prop="age">
+          <el-input v-if="isEdit" v-model="form.age" class="input-item" type="number" placeholder="请输入年龄" />
+          <span v-else>{{ form.age }} 岁</span>
         </el-form-item>
 
-        <el-form-item label="职业:" prop="borrowerJob">
-          <el-select v-if="isEdit" v-model="form.borrowerJob" placeholder="请选择">
-            <el-option
-              v-for="item in jobData"
-              :key="item.jobId"
-              :label="item.jobName"
-              :value="item.jobId"
-            />
+        <el-form-item label="职业:" prop="jobTypeKey">
+          <el-select v-if="isEdit" v-model="form.jobTypeKey" placeholder="请选择">
+            <el-option v-for="item in jobTypeOptions" :key="item.id" :label="item.label" :value="item.id" />
           </el-select>
           <span v-else>{{ job }}</span>
         </el-form-item>
 
-        <el-form-item label="月收入:" prop="income">
-          <el-select v-if="isEdit" v-model="form.income" placeholder="请选择">
-            <el-option v-for="item in monthMoneyData" :key="item.id" :label="item.incomeName" :value="item.id"/>
+        <el-form-item label="月收入:" prop="monthIncome">
+          <el-select v-if="isEdit" v-model="form.monthIncome" placeholder="请选择">
+            <el-option v-for="item in monthIncomeOptions" :key="item.id" :label="item.label" :value="item.id"/>
           </el-select>
           <span v-else>{{ income }}</span>
         </el-form-item>
 
         <el-form-item label="所在地区:" prop="address">
-          <el-select v-if="isEdit" v-model="form.borrowerAddress" clearable placeholder="请选择省" style="width: 120px;" @change="handleCity">
+          <el-select v-if="isEdit" v-model="form.address1" clearable placeholder="请选择省" style="width: 120px;" @change="handleCity">
             <el-option v-for="item in provinceData" :key="item.pid" :label="item.provincial" :value="item.pid"/>
           </el-select>
 
-          <el-select v-if="isEdit" v-model="form.borrower2" clearable placeholder="请选择城市" style="width: 120px;">
+          <el-select v-if="isEdit" v-model="form.address2" clearable placeholder="请选择城市" style="width: 120px;">
             <el-option v-for="item in cityData" :key="item.cid" :label="item.city" :value="item.cid"/>
           </el-select>
           <span v-else>{{ address }}</span>
         </el-form-item>
 
-        <el-form-item label="是否有本地社保:" prop="borrowerSex">
-          <el-radio-group v-if="isEdit" v-model="form.borrowerSex">
-            <el-radio :label="1">男</el-radio>
-            <el-radio :label="0">女</el-radio>
-          </el-radio-group>
-          <span v-else>{{ form.borrowerSex | sexFilter }}</span>
+        <el-form-item label="信用情况:" prop="creditStatusKey">
+          <el-select v-if="isEdit" v-model="form.creditStatusKey" clearable placeholder="请选择城市">
+            <el-option v-for="item in creditOptions" :key="item.id" :label="item.label" :value="item.id"/>
+          </el-select>
+          <span v-else>{{ creditStatus }}</span>
         </el-form-item>
 
-        <el-form-item label="是否有本地公积金:" prop="borrowerSex">
-          <el-radio-group v-if="isEdit" v-model="form.borrowerSex">
-            <el-radio :label="1">男</el-radio>
-            <el-radio :label="0">女</el-radio>
+        <el-form-item label="是否有本地社保:" prop="sheBaoKey">
+          <el-radio-group v-if="isEdit" v-model="form.sheBaoKey">
+            <el-radio v-for="item in socialProtectOptions" :label="item.id" :key="item.id">{{ item.label }}</el-radio>
           </el-radio-group>
-          <span v-else>{{ form.borrowerSex | sexFilter }}</span>
+          <span v-else>{{ socialProtect }}</span>
         </el-form-item>
 
-        <el-form-item label="名下车辆情况:" prop="borrowerSex">
-          <el-radio-group v-if="isEdit" v-model="form.borrowerSex">
-            <el-radio :label="1">男</el-radio>
-            <el-radio :label="0">女</el-radio>
+        <el-form-item label="是否有本地公积金:" prop="gongJiJinKey">
+          <el-radio-group v-if="isEdit" v-model="form.gongJiJinKey">
+            <el-radio v-for="item in gongjijinOptions" :label="item.id" :key="item.id">{{ item.label }}</el-radio>
           </el-radio-group>
-          <span v-else>{{ form.borrowerSex | sexFilter }}</span>
+          <span v-else>{{ gongjijin }}</span>
         </el-form-item>
 
-        <el-form-item label="名下房产信息:" prop="borrowerSex">
-          <el-radio-group v-if="isEdit" v-model="form.borrowerSex">
-            <el-radio :label="1">男</el-radio>
-            <el-radio :label="0">女</el-radio>
+        <el-form-item label="名下车辆情况:" prop="carStatusKey">
+          <el-radio-group v-if="isEdit" v-model="form.carStatusKey">
+            <el-radio v-for="item in carStatusListOptions" :label="item.id" :key="item.id">{{ item.label }}</el-radio>
           </el-radio-group>
-          <span v-else>{{ form.borrowerSex | sexFilter }}</span>
+          <span v-else>{{ carStatus }}</span>
         </el-form-item>
 
-        <el-form-item label="信用情况:" prop="borrowerSex">
-          <el-radio-group v-if="isEdit" v-model="form.borrowerSex">
-            <el-radio :label="1">男</el-radio>
-            <el-radio :label="0">女</el-radio>
+        <el-form-item label="名下房产信息:" prop="houseInfoKey">
+          <el-radio-group v-if="isEdit" v-model="form.houseInfoKey">
+            <el-radio v-for="item in houseStatusOptions" :label="item.id" :key="item.id">{{ item.label }}</el-radio>
           </el-radio-group>
-          <span v-else>{{ form.borrowerSex | sexFilter }}</span>
+          <span v-else>{{ houseStatus }}</span>
         </el-form-item>
 
-        <el-form-item label="是否有芝麻信用:" prop="borrowerSex">
-          <el-radio-group v-if="isEdit" v-model="form.borrowerSex">
-            <el-radio :label="1">男</el-radio>
-            <el-radio :label="0">女</el-radio>
+        <el-form-item label="是否有芝麻信用:" prop="zhiMaCreditKey">
+          <el-radio-group v-if="isEdit" v-model="form.zhiMaCreditKey">
+            <el-radio v-for="item in zhimaOptions" :label="item.id" :key="item.id">{{ item.label }}</el-radio>
           </el-radio-group>
-          <span v-else>{{ form.borrowerSex | sexFilter }}</span>
+          <span v-else>{{ zhima }}</span>
         </el-form-item>
 
         <el-form-item label="手机号码">
@@ -137,13 +112,23 @@
 </template>
 
 <script>
-import api from '@/api/filterData.js'
 import { mapMutations } from 'vuex'
 import { validaterName } from '@/util/validate'
+import { updateUserInfo, getUserInfo } from '@/api/apply'
+import { jobTypeList, monthInComeList, socialProtectList, gongjijinList, carStatusListList, houseStatusList, creditList, zhimaList } from '@/util/filterData'
+const jobTypeOptions = jobTypeList()
+const monthIncomeOptions = monthInComeList()
+const socialProtectOptions = socialProtectList()
+const gongjijinOptions = gongjijinList()
+const carStatusListOptions = carStatusListList()
+const houseStatusOptions = houseStatusList()
+const creditOptions = creditList()
+const zhimaOptions = zhimaList()
 export default {
   name: 'PersonMessage',
   filters: {
     sexFilter(val) {
+      console.log(val)
       const statusMap = {
         0: '女',
         1: '男'
@@ -164,13 +149,21 @@ export default {
       }
     }
     const validateAdress = (rule, value, callback) => {
-      if (this.form.borrowerAddress !== '' && this.form.borrower2) {
+      if (this.form.address1 !== '' && this.form.address2) {
         callback()
       } else {
         callback(new Error('请选择地区'))
       }
     }
     return {
+      jobTypeOptions,
+      monthIncomeOptions,
+      socialProtectOptions,
+      gongjijinOptions,
+      carStatusListOptions,
+      houseStatusOptions,
+      creditOptions,
+      zhimaOptions,
       isEdit: false,
       ageList: '',
       // 省
@@ -181,116 +174,96 @@ export default {
       jobData: [],
       form: {
         borrowerName: '',
-        borrowerSex: '',
-        borrowerAge: '',
-        borrowerJob: '',
-        income: '',
-        borrowerAddress: '',
-        borrower2: '',
+        sex: 1,
+        age: 0,
+        jobTypeKey: 1,
+        monthIncome: 1,
+        address1: '',
+        address2: '',
+        creditStatusKey: 1,
+        sheBaoKey: 1,
+        gongJiJinKey: 1,
+        carStatusKey: 1,
+        houseInfoKey: 1,
+        zhiMaCreditKey: 1,
         phone: '',
         email: '',
         borrowerId: ''
       },
       formRules: {
         borrowerName: [{ required: true, trigger: 'change', validator: validateName }],
-        borrowerSex: [{ required: true, message: '请选择性别', trigger: 'change' }],
-        borrowerAge: [{ required: true, message: '请选择年龄范围', trigger: 'change' }],
-        borrowerJob: [{ required: true, message: '请选择职业', trigger: 'change' }],
-        income: [{ required: true, message: '请选择月收入', trigger: 'change' }],
+        sex: [{ required: true, message: '请选择性别', trigger: 'change' }],
+        age: [{ required: true, message: '年龄不能为空', trigger: 'change' }],
+        jobTypeKey: [{ required: true, message: '请选择职业', trigger: 'change' }],
+        monthIncome: [{ required: true, message: '请选择月收入', trigger: 'change' }],
         address: [{ required: true, trigger: 'change', validator: validateAdress }]
       }
     }
   },
   computed: {
-    age() {
-      let str = ''
-      for (let i = 0; i < this.ageList.length; i++) {
-        if (this.ageList[i].id === this.form.borrowerAge) {
-          str = this.ageList[i].ageArea
-        }
-      }
-      return str
-    },
     job() {
-      let str = ''
-      for (let i = 0; i < this.jobData.length; i++) {
-        if (this.jobData[i].jobId === this.form.borrowerJob) {
-          str = this.jobData[i].jobName
-        }
-      }
-      return str
+      return this.getValue(this.jobTypeOptions, this.form.jobTypeKey)
     },
     income() {
-      let str = ''
-      for (let i = 0; i < this.monthMoneyData.length; i++) {
-        if (this.monthMoneyData[i].id === this.form.income) {
-          str = this.monthMoneyData[i].incomeName
-        }
-      }
-      return str
+      return this.getValue(this.monthIncomeOptions, this.form.monthIncome)
     },
     address() {
       let str = ''
       for (let i = 0; i < this.provinceData.length; i++) {
-        if (this.provinceData[i].pid === this.form.borrowerAddress) {
+        if (this.provinceData[i].pid === this.form.address1) {
           str = this.provinceData[i].provincial
         }
       }
       for (let i = 0; i < this.cityData.length; i++) {
-        if (this.cityData[i].cid === this.form.borrower2) {
+        if (this.cityData[i].cid === this.form.address2) {
           str += this.cityData[i].city
         }
       }
       return str
+    },
+    socialProtect() {
+      return this.getValue(this.socialProtectOptions, this.form.sheBaoKey)
+    },
+    gongjijin() {
+      return this.getValue(this.gongjijinOptions, this.form.gongJiJinKey)
+    },
+    carStatus() {
+      return this.getValue(this.carStatusListOptions, this.form.carStatusKey)
+    },
+    houseStatus() {
+      return this.getValue(this.houseStatusOptions, this.form.houseInfoKey)
+    },
+    creditStatus() {
+      return this.getValue(this.creditOptions, this.form.creditStatusKey)
+    },
+    zhima() {
+      return this.getValue(this.zhimaOptions, this.form.zhiMaCreditKey)
     }
+
   },
   created() {
     this.getData()
     this.getProvince()
-    // 月收入
-    this.getMonthMoney()
-    // 职业
-    this.getJob()
   },
   methods: {
     ...mapMutations(['SET_USERNAME', 'SET_SEX']),
-    getData() { // 获取贷款人信息
-      // this.$axios
-      // .get(
-      //   `/userBorrower/getUserBorrowerByPhone/${this.$store.state.userInfo.phone}`
-      // )
-      // .then(res => {
-      //   const {
-      //     borrowerName,
-      //     borrowerId,
-      //     borrowerSex,
-      //     borrowerAge,
-      //     borrowerJob,
-      //     income,
-      //     borrowerAddress,
-      //     borrower2,
-      //     phone,
-      //     email
-      //   } = res
-      //   this.form = {
-      //     borrowerName,
-      //     borrowerId,
-      //     borrowerSex,
-      //     borrowerAge,
-      //     borrowerJob,
-      //     income,
-      //     borrowerAddress,
-      //     borrower2,
-      //     phone,
-      //     email
-      //   }
-      //   this.getCity(this.form.borrowerAddress)
-      //   this.getAge()
-      // })
+    getValue(list, value) {
+      let str = ''
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].id === value) {
+          str = list[i].label
+        }
+      }
+      return str
     },
-    getAge() {
-      api.getAllAgeArea().then(response => {
-        this.ageList = response.data
+    getData() { // 获取贷款人信息
+      getUserInfo(this.$store.state.userInfo.phone).then(res => {
+        delete res.data.registrationDate
+        delete res.data.orderDate
+        delete res.data.emailVerity
+        delete res.data.realData
+        this.form = res.data
+        this.getCity(this.form.address1)
       })
     },
     // 获取省
@@ -300,28 +273,13 @@ export default {
       })
     },
     handleCity(val) {
-      this.form.borrower2 = ''
+      this.form.address2 = ''
       this.getCity(val)
     },
     // 获取 市 区
     getCity(val) {
       this.$axios.get(`city/getAllCity/${val}`).then(res => {
         this.cityData = res
-      })
-    },
-    getMonthMoney() {
-      this.$axios.get('get/getIncome').then(res => {
-        this.monthMoneyData = res
-      })
-    },
-    getJob() {
-      this.$axios.get('get/getJob').then(res => {
-        res.forEach(item => {
-          if (item.jobId === 0) {
-            item.jobName = '其他'
-          }
-        })
-        this.jobData = res
       })
     },
     // 编辑
@@ -332,22 +290,17 @@ export default {
     savePerson() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          const data = new FormData()
-          for (const item in this.form) {
-            data.append(item, this.form[item])
-          }
-          this.$axios.post('userBorrower/updateUserBorrower', data).then(res => {
-            if (res.status === 500) {
-              this.$message.warning(res.msg)
-              this.getData()
-            }
-            if (res.status === 200) {
-              this.$message.success(res.msg)
-              this.getData()
-              this.SET_USERNAME(this.form.borrowerName)
-              this.SET_SEX(this.form.borrowerSex)
-            }
+          console.log(this.form)
+          updateUserInfo(this.form).then(res => {
+            this.getData()
             this.isEdit = !this.isEdit
+            if (res.data.status === 200) {
+              this.$message.success(res.data.msg)
+              this.SET_USERNAME(this.form.borrowerName)
+              this.SET_SEX(this.form.sex)
+            } else {
+              this.$message.warning(res.data.msg)
+            }
           })
         } else {
           return false
@@ -368,6 +321,12 @@ export default {
 .form-wrap {
   .input-item {
     width: 200px;
+  }
+  .el-radio+.el-radio {
+    margin-left: 0;
+  }
+  .el-radio {
+    margin-right: 30px;
   }
 }
 .ml20 {

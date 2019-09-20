@@ -6,8 +6,7 @@
     <p>您的申请已经提交，请保持电话联系通畅</p>
     <template v-if="show">
       <p>账号：{{ phone }}  密码：（您手机收到的验证码）</p>
-      <p>您的申请已经提交，请保持电话联系通畅</p>
-      <p>这是您的平台账号，<a>登录</a>平台，即可享受平台专业的金融服务</p>
+      <p>这是您的平台账号，<a style="color: #a80e0e;" href="javascript:;" @click="$router.push({path:'/',query:{login:1}})">登录</a>平台，即可享受平台专业的金融服务</p>
     </template>
     <div class="btn-box">
       <el-button class="btn" @click="handleConfirm">完成</el-button>

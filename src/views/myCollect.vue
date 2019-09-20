@@ -2,7 +2,7 @@
   <div class="collect">
     <div class="title">我的收藏</div>
     <div class="clearfix">
-      <router-link :to="{path:`/myMessage/${userIdn}/myCollect/agentCollect`}" class="agentColl fll">经纪人收藏</router-link>
+      <router-link :to="{path:`/myMessage/${userIdn}/myCollect/agentCollect`}" class="agentColl fll">信贷经理收藏</router-link>
       <router-link :to="{path:`/myMessage/${userIdn}/myCollect/organCollect`}" class="organColl fll">机构收藏</router-link>
       <router-link :to="{path:`/myMessage/${userIdn}/myCollect/productCollect`}" class="productColl fll">产品收藏</router-link>
     </div>

@@ -97,7 +97,7 @@ import { validaterPhone } from '@/util/validate'
 const linkOptions = [
   { link: 'home', name: '首页', to: '/' },
   { link: 'loans', name: '贷款产品', to: '/loans' },
-  { link: 'agent', name: '贷款经纪人', to: '/agent' },
+  { link: 'agent', name: '信贷经理', to: '/agent' },
   { link: 'organ', name: '贷款机构', to: '/organization' },
   { link: 'consult', name: '贷款资讯', to: '/consult' },
   { link: 'aboutUs', name: '关于平台', to: '/aboutUs' }
