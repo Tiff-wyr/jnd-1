@@ -109,6 +109,9 @@ export default {
 </style>
 
 <style scoped lang="scss">
+.a {
+  margin-left: 30px;
+}
 .isShow {
   opacity: 0;
   position: absolute;
@@ -128,7 +131,7 @@ export default {
     font-weight: 400;
     color: rgba(155, 155, 155, 1);
     line-height: 40px;
-    margin-left: 30px;
+    // margin-left: 30px;
     margin-bottom: -5px;
     user-select: none;
   }
@@ -136,6 +139,7 @@ export default {
     position: absolute;
     top: 0;
     left: 95%;
+    font-size: 12px;
     width: 120px;
     list-style: none;
     margin-left: 10px;
@@ -159,7 +163,7 @@ export default {
     li {
       padding: 10px 10px 10px 20px;
       color: #9b9b9b;
-      font-size: 14px;
+      font-size: 12px;
       cursor: pointer;
       transition: all 0.5s;
       &:hover {

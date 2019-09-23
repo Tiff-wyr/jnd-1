@@ -55,8 +55,6 @@ export default {
       emptyList,
       listLoading: true,
       tableData: [],
-      page: 1,
-      size: 9,
       count: 1,
       form: {
         agencyId: '',

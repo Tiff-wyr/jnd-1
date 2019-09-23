@@ -2,9 +2,9 @@
   <div class="apply-wrap">
     <step :active="active" class="step"/>
 
-    <phone-form v-if="active === 1" :options="options" :if-register="ifRegister" :phone="phone"  @change="handleChange"/>
+    <phone-form v-if="active === 1" :options="options" :if-register="ifRegister" :phone="phone" @change="handleChange"/>
     <main-form v-if="active === 1.5" :phone="form.phone" :form-data="form" :if-register="ifRegister" :code="form.password" @change="handleChange" @register="handleRegister"/>
-    <property-con v-if="active === 2" :phone="form.phone" :options="options" :if-register="ifRegister" @change="handleChange"/>
+    <property-con v-if="active === 2" :phone="form.phone" :options="options" :code="form.password" :if-register="ifRegister" @change="handleChange"/>
     <finish v-if="active === 3" :phone="form.phone" @confirm="handleConfirm"/>
   </div>
 </template>
@@ -72,7 +72,7 @@ export default {
       this.active = 1
     },
     handleRegister() {
-      this.$emit('register')
+      this.$emit('register', this.form.phone)
     }
   }
 }

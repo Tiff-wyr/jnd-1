@@ -4,10 +4,8 @@
       <img src="../../../assets/yes.png" alt="">
     </div>
     <p>您的申请已经提交，请保持电话联系通畅</p>
-    <template v-if="show">
-      <p>账号：{{ phone }}  密码：（您手机收到的验证码）</p>
-      <p>这是您的平台账号，<a style="color: #a80e0e;" href="javascript:;" @click="$router.push({path:'/',query:{login:1}})">登录</a>平台，即可享受平台专业的金融服务</p>
-    </template>
+    <p v-if="show === 'true'">账号：{{ phone }}  密码：{{ code }}（您手机收到的验证码）</p>
+    <p v-if="show === 'true'">这是您的平台账号，<a style="color: #a80e0e;" href="javascript:;" @click="$router.push({path:'/',query:{login:1}})">登录</a>平台，即可享受平台专业的金融服务</p>
     <div class="btn-box">
       <el-button class="btn" @click="handleConfirm">完成</el-button>
     </div>
@@ -21,16 +19,32 @@ export default {
     phone: {
       type: String,
       default: ''
+    },
+    code: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
-      show: true
+      show: true,
+      userInfo: null
     }
   },
+  beforeDestroy() {
+    sessionStorage.removeItem('show')
+    sessionStorage.removeItem('form')
+    sessionStorage.removeItem('isPrve')
+  },
   created() {
+    this.userInfo = sessionStorage.getItem('userInfo')
     this.show = sessionStorage.getItem('show')
-    console.log(this.show)
+    console.log('我控制最后信息的显示', this.show)
+    console.log(this.userInfo)
+    if (this.userInfo) {
+      this.show = false
+    }
+    console.log('我控制最后信息的显示', this.show)
   },
   methods: {
     handleConfirm() {

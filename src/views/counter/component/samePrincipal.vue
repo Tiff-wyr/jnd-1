@@ -80,10 +80,10 @@ export default {
     resetOption(val) {
       if (val === 'samePrincipalAndInterest') {
         this.optionsList = optionsList2
-        this.title = '每月等额还款法'
+        this.title = '等额本息还款法'
       } else {
         this.optionsList = optionsList1
-        this.title = '逐月递减还款法'
+        this.title = '等额本金还款法'
       }
     },
     loanCalc(capitals, years, aprs) {

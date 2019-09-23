@@ -5,7 +5,7 @@
       <div class="w900">
         <div class="user-main">
           <div class="user-title">
-            <div class="title">欢迎注册就能贷网</div>
+            <div class="title">欢迎注册9能贷网</div>
             <div class="number">已有账号，</div>
             <div class="login" @click="$router.push({path:'/',query:{login:1}})">立即登陆</div>
           </div>

@@ -15,7 +15,7 @@
             </div>
             <div class="clearfix mb15">
               <div class="fll city">贷款类型</div>
-              <wradio :radios="loans" v-model="query.loanType" name="loan" class="fll"/>
+              <wradio :radios="loansTypeOptions" v-model="query.loanType" name="loan" class="fll"/>
             </div>
             <div class="clearfix mb15">
               <div class="fll city">业务分类</div>
@@ -166,6 +166,14 @@ import { backTop } from '@/util/util'
 import { formatPhone } from '@/util/util'
 import { HappyScroll } from 'vue-happy-scroll'
 import 'vue-happy-scroll/docs/happy-scroll.css'
+import { loanTypeList, businessTypeList } from '@/util/filterData'
+const loansTypeOptions = loanTypeList().map(item => {
+  const obj = {}
+  obj.value = item.id
+  obj.label = item.label
+  return obj
+})
+const businessTypeOptions = businessTypeList()
 export default {
   name: 'Agent',
   metaInfo: {
@@ -198,6 +206,8 @@ export default {
   },
   data() {
     return {
+      loansTypeOptions,
+      businessTypeOptions,
       emptyList,
       isJianSuo: true,
       isMask: false,
@@ -313,6 +323,8 @@ export default {
     // 获取擅长业务
     getGoods() {
       this.$axios.get(`business/getAllBusiness`).then(res => {
+        console.log(res)
+        res.unshift({ businessId: 0, business: '不限' })
         this.goods = res.map(item => {
           return { value: item.businessId, label: item.business }
         })

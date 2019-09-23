@@ -16,38 +16,48 @@
             <div class="filter-item">
               <div class="label">贷款类型</div>
               <div class="filter-content">
-                <filter-list :data-list="loansTypeOptions" v-model="listQuery.productLoanType" @change="handleChange"/>
+                <wRadio :radios="loansTypeOptions" v-model="listQuery.productLoanType" name="loan" class="fll"/>
               </div>
             </div>
             <div class="filter-item">
               <div class="label">业务分类</div>
               <div class="filter-content">
-                <filter-list :data-list="businessTypeOptions" v-model="listQuery.productType" @change="handleChange"/>
+                <wRadio :radios="businessTypeOptions" v-model="listQuery.productType" name="loan" class="fll"/>
               </div>
             </div>
             <template v-if="filterBoxToggle">
               <div class="filter-item">
                 <div class="label">贷款额度</div>
                 <div class="filter-content">
-                  <filter-list :data-list="loanAmountOptions" v-model="listQuery.productAmount" :options="{ key: 'amountName', value: 'id' }" @change="handleChange"/>
+                  <wRadio :radios="loanAmountOptions" v-model="listQuery.loanAmountArea" name="loan" class="fll"/>
                 </div>
               </div>
               <div class="filter-item">
                 <div class="label">贷款利率（月）</div>
                 <div class="filter-content">
-                  <filter-list :data-list="intersetOptions" v-model="listQuery.interest" :options="{ key: 'interestName', value: 'id' }" @change="handleChange"/>
+                  <wRadio :radios="intersetOptions" v-model="listQuery.interest" name="loan" class="fll"/>
                 </div>
               </div>
               <div class="filter-item">
                 <div class="label">贷款期限</div>
                 <div class="filter-content">
-                  <filter-list :data-list="lifeOptions" v-model="listQuery.productLife" :options="{ key: 'lifeName', value: 'id' }" @change="handleChange"/>
+                  <!-- <filter-list :data-list="lifeOptions" v-model="listQuery.loanTimeKey" :now-index="listQuery.loanTimeKey" @change="handleChange"/> -->
+                  <wRadio :radios="lifeOptions" v-model="listQuery.loanTimeKey" name="loan" class="fll"/>
                 </div>
               </div>
               <div class="filter-item">
                 <div class="label">贷款条件</div>
                 <div class="filter-content">
-                  <filter-list :data-list="conditionOptions" v-model="listQuery.productProperty" :options="{ key: 'lrName', value: 'lrId' }" :mutiple="true" @change="handleChange"/>
+                  <!-- <wRadio :radios="conditionOptions" v-model="listQuery.productProperty" name="loan" class="fll"/> -->
+                  <wcheckbox :radios="conditionOptions" v-model="listQuery.productProperty" name="good" class="fll"/>
+                  <!-- <filter-list :data-list="conditionOptions" v-model="listQuery.productProperty" :mutiple="true" @change="handleChange"/> -->
+                </div>
+              </div>
+              <div class="filter-item">
+                <div class="label">职业身份</div>
+                <div class="filter-content">
+                  <wRadio :radios="jobTypeOptions" v-model="listQuery.productOccupation" name="loan" class="fll"/>
+                  <!-- <filter-list :data-list="jobTypeOptions" v-model="listQuery.productIdentity" :now-index="listQuery.productIdentity" @change="handleChange"/> -->
                 </div>
               </div>
             </template>
@@ -109,7 +119,7 @@
         </div>
         <div class="page-container">
           <el-pagination
-            :current-page="listQuery.currentPage"
+            :current-page="listQuery.page"
             :page-size="listQuery.pageSize"
             :pager-count="5"
             :total="totalCount"
@@ -131,53 +141,112 @@ import filterList from '@/component/filter'
 import { fetchList, searchByKey } from '@/api/productList'
 import emptyList from '@/assets/empty-list.png'
 import bottomTap from '@/component/bottomTap'
+import wRadio from '@/component/w-radios'
+import wcheckbox from '@/component/w-checkBox'
 import { param2Obj } from '@/util/util'
-import { fetchAmount, fetchInterest, fetchLife, fetchCondition } from '@/api/filterCondition'
-const loansTypeOptions = [
-  { label: '不限', value: 0 },
-  { label: '信用贷', value: 1 },
-  { label: '抵押贷', value: 2 }
-]
-const businessTypeOptions = [
-  { label: '不限', value: 0 },
-  { label: '个人贷款', value: 1 },
-  { label: '企业贷款', value: 2 }
-]
+import { loanTypeList, businessTypeList, loanQuotaList, loanRateList, loanTimeScopeList, loanConList, jobTypeList } from '@/util/filterData'
+const loansTypeOptions = formData(loanTypeList())
+const businessTypeOptions = formData(businessTypeList())
+const loanAmountOptions = formData(loanQuotaList())
+const intersetOptions = formData(loanRateList())
+const lifeOptions = formData(loanTimeScopeList())
+const conditionOptions = formData(loanConList())
+const jobTypeOptions = formData(jobTypeList())
+function formData(array) {
+  return array.map(item => {
+    const obj = {
+      value: item.id,
+      label: item.label
+    }
+    return obj
+  })
+}
 export default {
   name: 'ProductList',
   components: {
     cityRadios,
     footerSame,
     filterList,
-    bottomTap
+    bottomTap,
+    wRadio,
+    wcheckbox
   },
   data() {
     return {
       emptyList,
       loansTypeOptions,
       businessTypeOptions,
-      loanAmountOptions: [],
-      intersetOptions: [],
-      lifeOptions: [],
-      conditionOptions: [],
+      loanAmountOptions,
+      intersetOptions,
+      lifeOptions,
+      conditionOptions,
+      jobTypeOptions,
       filterBoxToggle: false,
       cityShowNum: 6,
       listLoading: false,
       searchKey: '',
       listQuery: {
-        currentPage: 1,
+        page: 1,
         pageSize: 10,
         address1: '',
         address2: '',
         productLoanType: '', // 贷款类型
         productType: '', // 业务分类
-        productAmount: '', // 额度
         interest: '', // 利率
-        productLife: '', // 期限
-        productProperty: '' // 条件
+        loanTimeKey: '', // 贷款期限
+        productProperty: '', // 条件
+        productOccupation: '',
+        loanAmount: '', // 贷款金额
+        loanAmountArea: '' // 贷款额度
       },
       resultList: [],
       totalCount: 0
+    }
+  },
+  computed: {
+    loanAmount() {
+      const params = param2Obj(window.location.href)
+      if (params.param) {
+        const param = JSON.parse(params.param)
+        let nowIndex = 0
+        if (param.loanAmount > 200) {
+          nowIndex = 5
+        } else if (param.loanAmount > 50) {
+          nowIndex = 4
+        } else if (param.loanAmount > 10) {
+          nowIndex = 3
+        } else if (param.loanAmount > 5) {
+          nowIndex = 2
+        } else if (param.loanAmount > 0) {
+          nowIndex = 1
+        } else {
+          nowIndex = 0
+        }
+        return nowIndex
+      }
+    }
+  },
+  watch: {
+    'listQuery.productLoanType': function(val) {
+      this.getList()
+    },
+    'listQuery.productType': function(val) {
+      this.getList()
+    },
+    'listQuery.interest': function(val) {
+      this.getList()
+    },
+    'listQuery.loanTimeKey': function(val) {
+      this.getList()
+    },
+    'listQuery.productProperty': function(val) {
+      this.getList()
+    },
+    'listQuery.productOccupation': function(val) {
+      this.getList()
+    },
+    'listQuery.loanAmountArea': function(val) {
+      this.getList()
     }
   },
   created() {
@@ -187,14 +256,13 @@ export default {
     }
     if (params.param) {
       const param = JSON.parse(params.param)
-      this.listQuery.productAmount = param.loanAmount
-      this.listQuery.productLife = param.loanTime
+      this.listQuery.loanAmountArea = this.loanAmount
+      this.listQuery.loanAmount = param.loanAmount
+      this.listQuery.loanTimeKey = param.loanTime
+      this.listQuery.productOccupation = param.job
     }
+    console.log(this.listQuery)
     this.getList()
-    this.getAmount()
-    this.getInterest()
-    this.getLife()
-    this.getCondition()
   },
   methods: {
     getList() {
@@ -202,31 +270,8 @@ export default {
       this.listLoading = true
       fetchList(this.listQuery).then(res => {
         this.listLoading = false
-        this.resultList = res.data.list
-        this.totalCount = res.data.totalCount
-      })
-    },
-    getAmount() {
-      fetchAmount().then(res => {
-        this.loanAmountOptions = res.data
-      })
-    },
-    getInterest() {
-      fetchInterest().then(res => {
-        this.intersetOptions = res.data
-      })
-    },
-    getLife() {
-      fetchLife().then(res => {
-        this.lifeOptions = res.data
-      })
-    },
-    getCondition() {
-      fetchCondition().then(res => {
-        this.conditionOptions = res.data.map(item => {
-          item.flag = false
-          return item
-        })
+        this.resultList = res.data.rows
+        this.totalCount = res.data.total
       })
     },
     selectProvince(val) {
@@ -240,15 +285,15 @@ export default {
       this.getList()
     },
     handleCurrentChange(val) {
-      this.listQuery.currentPage = val
-      console.log(this.listQuery.currentPage)
+      this.listQuery.page = val
       if (this.conditionQuery) {
         this.getList()
       } else {
         this.searchList()
       }
     },
-    handleChange() {
+    handleChange(val) {
+      console.log(val)
       this.getList()
     },
     handleSearch() {
@@ -260,7 +305,7 @@ export default {
       this.conditionQuery = false
       const obj = {
         q: this.searchKey,
-        page: this.listQuery.currentPage,
+        page: this.listQuery.page,
         size: this.listQuery.pageSize
       }
       searchByKey(obj).then(res => {
@@ -280,16 +325,18 @@ export default {
     },
     resetForm() {
       this.listQuery = {
-        currentPage: 1,
+        page: 1,
         pageSize: 5,
         address1: '',
         address2: '',
         productLoanType: '', // 贷款类型
         productType: '', // 业务分类
-        productAmount: '', // 额度
         interest: '', // 利率
-        productLife: '', // 期限
-        productProperty: '' // 条件
+        loanTimeKey: '', // 贷款期限
+        productProperty: '', // 条件
+        productOccupation: '',
+        loanAmount: '', // 贷款金额
+        loanAmountArea: '' // 贷款额度
       }
     }
   }

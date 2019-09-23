@@ -79,11 +79,15 @@ export function valideCode(phone, code) {
  * 详情页面注册
  * @param {Object} params
  */
-export function applyRegister(params) {
+export function applyRegister(data) {
+  const param = new FormData()
+  for (const i in data) {
+    param.append(i, data[i])
+  }
   return request({
     url: '/userBorrower/registerBorrower1',
     method: 'post',
-    params
+    data: param
   })
 }
 
@@ -114,18 +118,14 @@ export function getUserInfo(phone) {
 }
 
 // 贷款人修改个人信息
-export function updateUserInfo(params) {
+export function updateUserInfo(data) {
+  const param = new FormData()
+  for (const i in data) {
+    param.append(i, data[i])
+  }
   return request({
     url: '/userBorrower/modifyUserBorrowerByPhone',
     method: 'post',
-    params
+    data: param
   })
 }
-
-// 根据经纪人或机构id查申请记录-->get-->/api/order/getPageOrderByBrokerIdOrAgencyId-->参数brokerId(选填)、agencyId(选填)、page(必填)、pageSize(必填)，
-// 贷款人自己界面申请记录-->get-->/api/order/getOrderByBorrowerId/{borrowerId}/{page}/{pageSize}
-// 修改申请状态-->post-->/api/order/modifyOrderStatus-->参数orderId、roleId、brokerIdOrAgencyIdOrProductId、orderStatus
-// 机构详情页面获取成功案例-->get-->/api/order/getAgencySuccessOrder/{agencyId}
-// 分页 通过经纪人id查找未付费资源贷款人-->get-->/api/brokerResource/getPageBorrowerByBrokerIdUnPaid-->参数如下图
-// 分页 通过机构id查找已付费资源贷款人-->get-->/api/agencyResource//getPageBorrowerByAgencyIdPaid/{agencyId}/{page}/{pageSize}
-// 分页 通过机构id查找未付费资源贷款人-->get-->/api/agencyResource/getPageBorrowerByAgencyIdUnPaid-->参数如下图

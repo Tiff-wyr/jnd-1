@@ -30,7 +30,7 @@
       </el-form-item>
 
       <el-form-item label="">
-        <el-button v-if="ifRegister" :loading="isLoading" class="apply" @click="handlePrev">上一步</el-button>
+        <el-button v-if="!ifRegister" :loading="isLoading" class="apply" @click="handlePrev">上一步</el-button>
         <el-button :loading="isLoading" class="apply" @click="handleNext">提交</el-button>
       </el-form-item>
     </el-form>
@@ -92,7 +92,7 @@ export default {
         if (res.data.status === 200) {
           if (this.ifRegister) {
             this.$message.success('信息完善成功')
-            this.$router.push('/home')
+            this.$router.push('/')
           } else {
             this.saveOrders()
           }

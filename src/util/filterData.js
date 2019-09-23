@@ -27,9 +27,78 @@ export function loanAmountList() {
     { id: 5, label: '50万元', value: 50 },
     { id: 6, label: '100万元', value: 100 },
     { id: 7, label: '500万元', value: 500 },
-    { id: 8, label: '其他', value: 0 }
+    { id: 8, label: '其他', value: '' }
   ]
   return loanAmountOptions
+}
+
+/**
+ * 贷款人金额范围（删选）
+ */
+export function loanQuotaList() {
+  const loanQuotaOptions = [
+    { id: 0, label: '不限' },
+    { id: 1, label: '0 ~ 5万' },
+    { id: 2, label: '5 ~ 10万' },
+    { id: 3, label: '10 ~ 50万' },
+    { id: 4, label: '50 ~ 200万' },
+    { id: 5, label: '200万以上' }
+  ]
+  return loanQuotaOptions
+}
+
+/**
+ * 贷款类型
+ */
+export function loanTypeList() {
+  const loanTypeOptions = [
+    { id: 0, label: '不限' },
+    { id: 1, label: '信用贷' },
+    { id: 2, label: '抵押贷' }
+  ]
+  return loanTypeOptions
+}
+
+/**
+ * 业务类型
+ */
+export function businessTypeList() {
+  const businessTypeOptions = [
+    { id: 0, label: '不限' },
+    { id: 1, label: '个人贷款' },
+    { id: 2, label: '企业贷款' }
+  ]
+  return businessTypeOptions
+}
+
+export function loanRateList() {
+  const loanRateOptions = [
+    { id: 0, label: '不限' },
+    { id: 1, label: '0 ~ 0.5%' },
+    { id: 2, label: '0.5 ~ 1%' },
+    { id: 3, label: '1 ~ 2%' },
+    { id: 4, label: '2%以上' }
+  ]
+  return loanRateOptions
+}
+
+/**
+ * 贷款条件
+ */
+export function loanConList() {
+  const loanConOptions = [
+    { id: 0, label: '不限' },
+    { id: 1, label: '有营业执照' },
+    { id: 2, label: '有商业保险' },
+    { id: 3, label: '有社保' },
+    { id: 4, label: '有公积金' },
+    { id: 5, label: '有打卡工资' },
+    { id: 6, label: '有车' },
+    { id: 7, label: '有房' },
+    { id: 8, label: '有信用卡' },
+    { id: 9, label: '有芝麻信用' }
+  ]
+  return loanConOptions
 }
 
 /**
@@ -50,22 +119,31 @@ export function loanTimeList() {
 }
 
 /**
+ * 贷款期限范围
+ */
+export function loanTimeScopeList() {
+  const loanTimeOptions = [
+    { id: 0, label: '不限' },
+    { id: 1, label: '1 ~ 3年' },
+    { id: 2, label: '3 ~ 5年' },
+    { id: 3, label: '5 ~ 10年' },
+    { id: 4, label: '10 ~ 20年' },
+    { id: 5, label: '20年以上' }
+  ]
+  return loanTimeOptions
+}
+
+/**
  * 职业类型
  */
 export function jobTypeList() {
   const jobTypeOptions = [
     { id: 0, label: '不限' },
-    { id: 1, label: '企业职员' },
-    { id: 2, label: '经商/企业法人' },
-    { id: 3, label: '公务员/教师' },
-    { id: 4, label: '律师/医生' },
-    { id: 5, label: '自由职业' },
-    { id: 6, label: '农民/务工' },
-    { id: 7, label: '学生' },
-    { id: 8, label: '上班族' },
-    { id: 9, label: '企业主' },
-    { id: 10, label: '个体户' },
-    { id: 11, label: '无工作' }
+    { id: 1, label: '上班族' },
+    { id: 2, label: '公务员/事业单位' },
+    { id: 3, label: '企业主' },
+    { id: 4, label: '个体户' },
+    { id: 5, label: '自由职业者' }
   ]
   return jobTypeOptions
 }

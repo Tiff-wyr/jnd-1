@@ -81,12 +81,14 @@ export default {
             this.clearTimer()
             return false
           } else {
-            sessionStorage.setItem('show', false) // 控制最后一步相关信息是否显示
             this.isRegister = true
             this.sendCode(phone)
           }
+          console.log('设置了false')
+          sessionStorage.setItem('show', false) // 控制最后一步相关信息是否显示
           this.zhuce = true
         } else {
+          console.log('设置了true')
           this.zhuce = false
           sessionStorage.setItem('show', true)
           this.isRegister = false
@@ -199,7 +201,7 @@ export default {
     saveOrders(data) { // 注册过的账号直接进行申请贷款操作
       saveOrder(data).then(res => {
         if (res.data.status === 200) {
-          this.$message.warning('申请成功')
+          this.$message.success('申请成功')
           this.$emit('change', {
             form: this.phoneForm,
             step: 3

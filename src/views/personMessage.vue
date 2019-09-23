@@ -14,7 +14,7 @@
       <el-form ref="form" :model="form" :rules="formRules" :class="{'border-show': !isEdit}" label-position="right" label-width="140px" >
         <el-form-item label="姓名:" prop="borrowerName">
           <el-input v-if="isEdit" v-model="form.borrowerName" class="input-item" placeholder="请输入姓名" />
-          <span v-else>{{ form.borrowerName }}</span>
+          <span v-else>{{ form.borrowerName | nameFilter }}</span>
         </el-form-item>
 
         <el-form-item label="性别:" prop="sex">
@@ -134,7 +134,11 @@ export default {
         1: '男'
       }
       return statusMap[val]
+    },
+    nameFilter(val) {
+      return decodeURI(val)
     }
+
   },
   data() {
     const validateName = (rule, value, callback) => {
@@ -156,6 +160,7 @@ export default {
       }
     }
     return {
+      name: '小明',
       jobTypeOptions,
       monthIncomeOptions,
       socialProtectOptions,

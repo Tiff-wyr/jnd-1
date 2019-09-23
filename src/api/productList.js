@@ -2,7 +2,7 @@ import request from './request'
 
 export function fetchList(params) {
   return request({
-    url: '/product/selectByConditionShengShi',
+    url: '/product/getProductByConditionShengShi',
     method: 'get',
     params
   })

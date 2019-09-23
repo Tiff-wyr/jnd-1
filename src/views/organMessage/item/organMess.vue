@@ -79,7 +79,7 @@
           <el-select
             v-model="organMessData.agencyAddress"
             style="width: 100px;"
-            @change="getCity"
+            @change="handleProvince"
             @visible-change="clearCity"
           >
             <el-option
@@ -311,12 +311,13 @@ export default {
     },
     // 获取 市 区
     getCity(val) {
+      fetchCity(val).then(res => {
+        this.cityData = res.data
+      })
+    },
+    handleProvince(val) {
+      this.getCity(val)
       this.organMessData.agencyAddress1 = ''
-      if (val) {
-        fetchCity(val).then(res => {
-          this.cityData = res.data
-        })
-      }
     },
     clearCity(val) {
       if (!val) {

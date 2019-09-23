@@ -9,9 +9,11 @@
       <div class="apply">
         <div class="item">
           <span class="label">贷款金额</span>
-          <el-select v-model="searchForm.loanAmount" class="option">
-            <el-option v-for="item in loanAmountOptions" :key="item.id" :label="item.label" :value="item.id"/>
+          <el-select v-if="loanAmountStatus" v-model="searchForm.loanAmount" class="option" @change="handleLoanAmount">
+            <el-option v-for="item in loanAmountOptions" :key="item.id" :label="item.label" :value="item.value"/>
           </el-select>
+          <el-input v-else ref="loanAmountInput" v-model="searchForm.loanAmount" class="option" placeholder="请输入贷款金额" @input="handleLoanAmount" @blur="handleBlur"/>
+          <span v-if="!loanAmountStatus" class="unit">万元</span>
         </div>
         <div class="item">
           <span class="label">贷款期限</span>
@@ -54,7 +56,7 @@
               <img src="../assets/home/userCount.png" >
             </dt>
             <dd>
-              <p class="num"><count-to :start-val="0" :end-val="5528" :duration="3000" class="num"/>+</p>
+              <p class="num"><count-to :start-val="0" :end-val="25500" :duration="3000" class="num"/>+</p>
               <p class="text">信贷经理在线沟通</p>
             </dd>
           </dl>
@@ -63,7 +65,7 @@
               <img src="../assets/home/moneyCount.png" >
             </dt>
             <dd>
-              <p class="num"><count-to :start-val="0" :end-val="52481000" :duration="3000" class="num"/></p>
+              <p class="num"><count-to :start-val="0" :end-val="526281000" :duration="3000" class="num"/></p>
               <p class="text">累计交易金额</p>
             </dd>
           </dl>
@@ -272,10 +274,11 @@ export default {
       loanTimeOptions,
       jobOptions,
       searchForm: {
-        loanAmount: 1,
+        loanAmount: 0.3,
         loanTime: 3,
-        job: ''
+        job: 0
       },
+      loanAmountStatus: true,
       defaultOption: {
         step: 0.4,
         openWatch: true,
@@ -298,6 +301,20 @@ export default {
     this.getLoanData()
   },
   methods: {
+    handleLoanAmount(val) {
+      if (val === 0 || val === '') {
+        this.loanAmountStatus = false
+        this.$nextTick(() => {
+          this.$refs.loanAmountInput.focus()
+        })
+      }
+    },
+    handleBlur(e) {
+      if (e.target.value === '') {
+        this.loanAmountStatus = true
+        this.searchForm.loanAmount = 0.3
+      }
+    },
     // 特别推荐详情页
     specialLook(id) {
       this.$router.push(`/productDetail?id=${id}`)
@@ -349,25 +366,26 @@ export default {
     },
     handleBanner(val) {
       if (val === 0) {
-        if (this.getUser) {
-          if (this.getUser.roleId === 2) {
-            getGetStatus(this.getUser.phone).then(res => {
-              if (res.data.status === 200) {
-                this.$router.push(`/agentMessage/${this.getUser.id}/agentMember`)
-              } else {
-                this.$message.warning(res.data.msg)
-              }
-            })
-          } else {
-            this.$message.warning('只有经纪人可以领取')
-          }
-        } else {
-          this.$message.warning('登录后方可领取')
-        }
+        return
+        // if (this.getUser) {
+        //   if (this.getUser.roleId === 2) {
+        //     getGetStatus(this.getUser.phone).then(res => {
+        //       if (res.data.status === 200) {
+        //         this.$router.push(`/agentMessage/${this.getUser.id}/agentMember`)
+        //       } else {
+        //         this.$message.warning(res.data.msg)
+        //       }
+        //     })
+        //   } else {
+        //     this.$message.warning('只有经纪人可以领取')
+        //   }
+        // } else {
+        //   this.$message.warning('登录后方可领取')
+        // }
       } else if (val === 1) {
-        this.$router.push('/agent')
+        this.$router.push('/userRegister')
       } else {
-        this.$router.push('/organization')
+        this.$router.push('/agent')
       }
     }
   }
@@ -460,6 +478,7 @@ $gray: #333;
         margin-bottom: 30px;
         height: 50px;
         overflow: hidden;
+        position: relative;
         .label {
           width: 90px;
           text-align: center;
@@ -472,6 +491,13 @@ $gray: #333;
         .option {
           flex: 1;
           border: none;
+        }
+        .unit {
+          position: absolute;
+          right: 24px;
+          font-size: 14px;
+          top: 50%;
+          transform: translateY(-50%);
         }
       }
       .btn {

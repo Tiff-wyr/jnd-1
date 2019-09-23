@@ -1,11 +1,12 @@
 <template>
   <div class="main-form">
     <el-form ref="form" :rules="formRules" :model="form" label-position="right" label-width="110px">
-      <el-form-item label="贷款金额" prop="loanAmount">
+      <el-form-item label="贷款金额" prop="loanAmount" class="loan-amount">
         <el-select v-if="loanAmountStatus" v-model="form.loanAmount" style="width: 280px;" @change="handleLoanAmount">
           <el-option v-for="item in loanAmountOptions" :key="item.id" :label="item.label" :value="item.value"/>
         </el-select>
-        <el-input v-else v-model="form.loanAmount" placeholder="请输入贷款金额（单位万元）" @input="handleLoanAmount"/>
+        <el-input v-else ref="loanAmountInput" v-model="form.loanAmount" placeholder="请输入贷款金额（单位万元）" @input="handleLoanAmount" @blur="handleBlur"/>
+        <span v-if="!loanAmountStatus" class="unit">万元</span>
       </el-form-item>
       <el-form-item label="贷款期限" prop="loanTimeKey">
         <el-select v-model="form.loanTimeKey" style="width: 280px;">
@@ -165,26 +166,37 @@ export default {
   },
   created() {
     this.getFilterData()
-    const obj = sessionStorage.getItem('form')
-    if (obj && Object.keys(obj).length > 2) {
-      // this.form = Object.assign({}, sessionStorage.getItem('form'))
-      for (const i in obj) {
-        this.form[i] = obj[i]
+    if (sessionStorage.getItem('form')) {
+      const obj = JSON.parse(sessionStorage.getItem('form'))
+      console.log(obj)
+      if (obj && Object.keys(obj).length > 2) {
+        for (const i in obj) {
+          this.form[i] = obj[i]
+        }
       }
     }
+
     this.form.phone = this.phone
     this.status = sessionStorage.getItem('applyStatus')
-    if (this.status === 'update') {
-      this.getInfo()
+    if (!this.ifRegister) {
+      if (this.status === 'update') {
+        this.getInfo()
+      }
     }
   },
   methods: {
     handleLoanAmount(val) {
-      if (val === 0) {
+      if (val === 0 || val === '') {
         this.loanAmountStatus = false
+        this.$nextTick(() => {
+          this.$refs.loanAmountInput.focus()
+        })
       }
-      if (val === '') {
+    },
+    handleBlur(e) {
+      if (e.target.value === '') {
         this.loanAmountStatus = true
+        this.form.loanAmount = 0.3
       }
     },
     getInfo() {
@@ -286,7 +298,7 @@ export default {
     handleNext() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          sessionStorage.setItem('form', this.form)
+          sessionStorage.setItem('form', JSON.stringify(this.form))
           this.isLoading = true
           if (sessionStorage.getItem('isPrve')) {
             this.updateInfo()
@@ -328,6 +340,7 @@ export default {
           this.isLoading = false
         })
       } else { // 已注册账号
+        console.log('走了已注册账号')
         this.$emit('change', {
           form: this.form,
           step: 2
@@ -348,5 +361,13 @@ export default {
   color: #fff;
   border-color: $jnd-border-color-theme;
   width: 280px;
+}
+.loan-amount {
+  position: relative;
+}
+.unit {
+  position: absolute;
+  right: 20px;
+  color: #515151;
 }
 </style>

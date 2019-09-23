@@ -32,6 +32,10 @@ export default {
           value: 'value'
         }
       }
+    },
+    nowIndex: {
+      type: [Number, String],
+      default: ''
     }
   },
   data() {
@@ -44,6 +48,7 @@ export default {
   created() {
     this.$nextTick(() => {
       this.resultList = this.dataList
+      this.currentIndex = this.nowIndex
     })
   },
   methods: {

@@ -6,10 +6,10 @@
       </div>
       <div class="main">
         <div class="left">
-          <phonform v-if="active === 1" :options="options" @change="handleChange" :phone="phone"/>
+          <phonform v-if="active === 1" :options="options" :phone="phone" @change="handleChange"/>
           <main-form v-if="active === 1.5" :phone="form.phone" :code="form.password" @change="handleChange"/>
           <property-con v-if="active === 2" :options="options" :phone="form.phone" @change="handleChange"/>
-          <finish v-if="active === 3" :phone="form.phone" @confirm="handleConfirm"/>
+          <finish v-if="active === 3" :phone="form.phone" :code="form.password" @confirm="handleConfirm"/>
         </div>
         <div class="right">
           <h3>特别声明:</h3>

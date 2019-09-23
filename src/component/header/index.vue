@@ -6,7 +6,7 @@
         <div class="action-bar">
           <div class="action-content">
             <span v-if="userInfo === null" class="text" @click="login">登录</span>
-            <span v-else class="text" @click="personDetail(userInfo.roleId,userInfo.id)">欢迎{{ userInfo === null? '' : userInfo.name }}&nbsp;&nbsp;个人中心</span>
+            <span v-else class="text" @click="personDetail(userInfo.roleId,userInfo.id)">欢迎{{ userInfo === null? '' : userInfo.name | nameFilter }}&nbsp;&nbsp;个人中心</span>
             <span class="text">|</span>
 
             <span v-if="userInfo === null" class="text" @click="register">注册</span>
@@ -104,6 +104,11 @@ const linkOptions = [
 ]
 export default {
   name: 'Header',
+  filters: {
+    nameFilter(val) {
+      return decodeURI(val)
+    }
+  },
   props: {
     styleOptions: {
       type: Object,
@@ -210,6 +215,7 @@ export default {
                     this.$message.success(res.msg)
                     this.isMask = false
                     this.isContain = false
+                    this.$router.push('/')
                   } else if (res.status === 500) {
                     this.$message.warning(res.msg)
                   }
@@ -339,6 +345,7 @@ export default {
                   this.SET_USER(res.data)
                   this.isMask = false
                   this.isContain = false
+      this.$router.push('/')
                   setToken(new Date())
                 }, 500)
               } else if (res.status === 500) {

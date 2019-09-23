@@ -34,8 +34,8 @@
     </main>
     <div class="page" style="margin-top: 30px;float: right">
       <el-pagination
-        :page-size="size"
-        :current-page="page"
+        :page-size="form.pageSize"
+        :current-page="form.page"
         :total="count"
         background
         layout="total, prev, pager, next"
@@ -49,18 +49,23 @@
 <script>
 import emptyList from '../../../assets/empty-list2.png'
 import { backTop } from '@/util/util'
+import { applyRecord } from '@/api/organ'
 export default {
   data() {
     return {
       emptyList,
       listLoading: true,
       tableData: [],
-      page: 1,
-      size: 8,
-      count: 0
+      count: 0,
+      form: {
+        brokerId: '',
+        page: 1,
+        pageSize: 10
+      }
     }
   },
   created() {
+    this.form.brokerId = this.$store.state.userInfo.id
     this.getData()
   },
   methods: {
@@ -77,18 +82,12 @@ export default {
     },
     getData() {
       this.listLoading = true
-      this.$axios
-        .get(
-          `orderAll/getPageOrderByBrokerId/${this.$store.state.userInfo.id}/${
-            this.page
-          }/${this.size}`
-        )
-        .then(res => {
-          this.listLoading = false
-          this.tableData = res.rows
-          this.count = res.total
-          backTop()
-        })
+      applyRecord(this.form).then(res => {
+        this.listLoading = false
+        this.tableData = res.data.rows
+        this.count = res.data.total
+        backTop()
+      })
     }
   }
 }

@@ -61,6 +61,7 @@
 <script>
 import emptyList from '@/assets/empty-list2.png'
 import { backTop } from '@/util/util'
+import { updateApplyStatus } from '@/api/borrower'
 export default {
   filters: {
     statusFilter(status) {
@@ -120,17 +121,18 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          const url = `/orderAll/updateState?orderId=${item.orderId}&roleId=${
-            item.roleId
-          }&ageBroId=${item.ageBroId}&state=${state}`
-          this.$axios.get(url).then(res => {
-            if (res.status === 200) {
-              this.$message.success('修改成功')
-            } else {
-              this.$message.fail(res.msg)
-            }
-            this.getData()
-          })
+          this.updateStatus(item.orderId, item.roleId, state, item.ageBroId)
+          // const url = `/orderAll/updateState?orderId=${item.orderId}&roleId=${
+          //   item.roleId
+          // }&ageBroId=${item.ageBroId}&state=${state}`
+          // this.$axios.get(url).then(res => {
+          //   if (res.status === 200) {
+          //     this.$message.success('修改成功')
+          //   } else {
+          //     this.$message.fail(res.msg)
+          //   }
+          //   this.getData()
+          // })
         })
         .catch(() => {
           this.$message({
@@ -145,43 +147,64 @@ export default {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
+      }).then(() => {
+        this.updateStatus(item.orderId, item.roleId, state, item.ageBroId)
+        // const url = `/orderAll/updateState?orderId=${item.orderId}&roleId=${
+        //   item.roleId
+        // }&ageBroId=${item.ageBroId}&state=${state}`
+        // this.$axios.get(url).then(res => {
+        //   if (res.status === 200) {
+        //     this.$message.success('修改成功')
+        //   } else {
+        //     this.$message.fail(res.msg)
+        //   }
+        //   this.getData()
+        // })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消操作'
+        })
       })
-        .then(() => {
-          const url = `/orderAll/updateState?orderId=${item.orderId}&roleId=${
-            item.roleId
-          }&ageBroId=${item.ageBroId}&state=${state}`
-          this.$axios.get(url).then(res => {
-            if (res.status === 200) {
-              this.$message.success('修改成功')
-            } else {
-              this.$message.fail(res.msg)
-            }
-            this.getData()
-          })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消操作'
-          })
-        })
+    },
+    updateStatus(orderId, roleId, orderStatus, id) {
+      // orderId、roleId、brokerIdOrAgencyIdOrProductId、orderStatus
+      const obj = {
+        orderId,
+        roleId,
+        orderStatus
+      }
+      if (roleId === 2) {
+        obj.brokerId = id
+      }
+      if (roleId === 3) {
+        obj.agencyId = id
+      }
+      if (roleId === 4) {
+        obj.productId = id
+      }
+      updateApplyStatus(obj).then(res => {
+        console.log(res)
+        if (res.data.status === 200) {
+          this.$message.success(res.msg)
+        } else {
+          this.$message.fail(res.msg)
+        }
+        this.getData()
+      })
     },
     getData() {
       this.listLoading = true
-      this.$axios
-        .get(
-          `order/getOrderByBorrowerId/${this.$store.state.userInfo.id}/${
-            this.page
-          }/${this.size}`
-        )
-        .then(res => {
-          if (res.status === 200) {
-            this.listLoading = false
-            this.tableData = res.data.rows
-            this.count = res.data.total
-            backTop()
-          }
-        })
+      this.$axios.get(`order/getOrderByBorrowerId/${this.$store.state.userInfo.id}/${this.page}/${this.size}`).then(res => {
+        if (res.status === 200) {
+          this.tableData = res.data.rows
+          this.count = res.data.total
+          backTop()
+        }
+        this.listLoading = false
+      }).catch(() => {
+        this.listLoading = false
+      })
     }
   }
 }
