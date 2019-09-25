@@ -2,27 +2,18 @@
   <div>
     <div class="resource mb24">
       <div class="filter-container">
-        <el-cascader
-          :options="cityList"
-          :props="props"
-          :change-on-select="true"
-          clearable
-          class="filter-item filter-item-select"
-          @active-item-change="handleItemChange"
-          @change="handleCity"
-        />
-        <el-select
-          v-model="listQuery.fLoanAmount"
-          class="filter-item filter-item-select"
-          clearable
-          placeholder="请选择贷款金额"
-        >
-          <el-option
-            v-for="item in moneyList"
-            :key="item.id"
-            :value="item.id"
-            :label="item.amountName"
-          />
+        <el-cascader :options="cityList" :props="props" :change-on-select="true" clearable class="filter-item filter-item-select" @active-item-change="handleItemChange" @change="handleCity" />
+        <el-select v-model="listQuery.loanAmountKey" class="filter-item filter-item-select" clearable placeholder="请选择贷款金额" >
+          <el-option v-for="item in loanQuotaOptions" :key="item.id" :value="item.id" :label="item.label" />
+        </el-select>
+        <el-select v-model="listQuery.jobTypeKey" class="filter-item filter-item-select" clearable placeholder="请选择职业类型" >
+          <el-option v-for="item in jobTypeOptions" :key="item.id" :value="item.id" :label="item.label" />
+        </el-select>
+        <el-select v-model="listQuery.houseInfoKey" class="filter-item filter-item-select" clearable placeholder="请选择房产情况" >
+          <el-option v-for="item in houseStatusOptions" :key="item.id" :value="item.id" :label="item.label" />
+        </el-select>
+        <el-select v-model="listQuery.carStatusKey" class="filter-item filter-item-select" clearable placeholder="请选择名下车辆情况" >
+          <el-option v-for="item in carStatusListOptions" :key="item.id" :value="item.id" :label="item.label" />
         </el-select>
         <el-button type="primary" @click="handleFilter">查 询</el-button>
       </div>
@@ -137,6 +128,11 @@ import memberBox from '@/component/memberBox'
 import { fetchNoPayResource } from '@/api/agent'
 import { checkAliPayRusult, createAliPayOrderSn, getMemberDatas, reviewAliPay } from '@/util/pay.alipay'
 import { getQrCodes, checkWxPayRusult, reviewWxPay } from '@/util/pay.wxpay'
+import { loanQuotaList, jobTypeList, houseStatusList, carStatusListList } from '@/util/filterData'
+const loanQuotaOptions = loanQuotaList()
+const jobTypeOptions = jobTypeList()
+const houseStatusOptions = houseStatusList()
+const carStatusListOptions = carStatusListList()
 export default {
   name: 'AgentResource',
   components: {
@@ -147,6 +143,10 @@ export default {
       emptyList,
       success,
       warning,
+      loanQuotaOptions,
+      jobTypeOptions,
+      houseStatusOptions,
+      carStatusListOptions,
       dialogVisible: false,
       dialogSuccessVisible: false,
       props: {
@@ -165,28 +165,16 @@ export default {
         carStatusKey: '',
         houseInfoKey: ''
       },
-      fPawnKey: '',
       listLoading: true,
       checked: true,
       isMask: false,
       tableData: [],
-      page: 1,
-      size: 10,
       count: 1,
       payType: '',
-      weiLu: '',
       order: '',
       money: '',
       cityList: [],
       moneyList: null,
-      typeList: null,
-      loanTypeList: null,
-      ageList: null,
-      jobList: null,
-      incomeList: null,
-      isPawnList: null,
-      pawnList: null,
-      timer: null,
       orderSn: '',
       phone: '',
       isVip: false,
@@ -297,9 +285,6 @@ export default {
     handleSizeChange(val) {
       this.listQuery.pageSize = val
       this.getData()
-    },
-    choosePawn(val) {
-      this.listQuery.fPawnKey = val.join(',')
     },
     getMemberDatas() {
       this.memberData = []

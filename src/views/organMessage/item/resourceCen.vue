@@ -10,93 +10,17 @@
           clearable
           @change="handleCity"
         />
-        <el-select
-          v-model="listQuery.fLoanAmount"
-          class="filter-item filter-item-select"
-          clearable
-          placeholder="请选择贷款金额"
-        >
-          <el-option
-            v-for="item in moneyList"
-            :key="item.id"
-            :value="item.id"
-            :label="item.amountName"
-          />
+        <el-select v-model="listQuery.loanAmountKey" class="filter-item filter-item-select" clearable placeholder="请选择贷款金额" >
+          <el-option v-for="item in loanQuotaOptions" :key="item.id" :value="item.id" :label="item.label" />
         </el-select>
-        <el-select
-          v-model="listQuery.fBusinessType"
-          class="filter-item filter-item-select"
-          clearable
-          placeholder="请选择贷款类型"
-        >
-          <el-option v-for="item in typeList" :key="item.id" :value="item.id" :label="item.busName"/>
+        <el-select v-model="listQuery.jobTypeKey" class="filter-item filter-item-select" clearable placeholder="请选择职业类型" >
+          <el-option v-for="item in jobTypeOptions" :key="item.id" :value="item.id" :label="item.label" />
         </el-select>
-        <el-select
-          v-model="listQuery.fIsPawn"
-          class="filter-item filter-item-select"
-          clearable
-          placeholder="请选择是否有抵押物"
-        >
-          <el-option
-            v-for="item in loanTypeList"
-            :key="item.id"
-            :value="item.id"
-            :label="item.isPawn"
-          />
+        <el-select v-model="listQuery.houseInfoKey" class="filter-item filter-item-select" clearable placeholder="请选择房产情况" >
+          <el-option v-for="item in houseStatusOptions" :key="item.id" :value="item.id" :label="item.label" />
         </el-select>
-        <el-select
-          v-show="listQuery.fIsPawn === 0"
-          v-model="listQuery.fAge"
-          class="filter-item filter-item-select"
-          clearable
-          placeholder="请选择年龄范围"
-        >
-          <el-option v-for="item in ageList" :key="item.id" :value="item.id" :label="item.ageArea"/>
-        </el-select>
-        <el-select
-          v-show="listQuery.fIsPawn === 0"
-          v-model="listQuery.fJob"
-          class="filter-item filter-item-select"
-          clearable
-          placeholder="请选择从事行业"
-        >
-          <el-option
-            v-for="item in jobList"
-            :key="item.jobId"
-            :value="item.jobId"
-            :label="item.jobName"
-          />
-        </el-select>
-        <el-select
-          v-show="listQuery.fIsPawn === 0"
-          v-model="listQuery.fIncome"
-          class="filter-item filter-item-select"
-          clearable
-          placeholder="请选择收入范围"
-        >
-          <el-option
-            v-for="item in incomeList"
-            :key="item.id"
-            :value="item.id"
-            :label="item.incomeName"
-          />
-        </el-select>
-        <el-select
-          v-show="listQuery.fIsPawn == 1"
-          v-model="Collateral"
-          class="filter-item filter-item-select"
-          clearable
-          multiple
-          placeholder="请选择抵押物"
-          @change="handleCollateral"
-        >
-          <el-option
-            v-for="item in pawnList"
-            :key="item.pawnId"
-            :value="item.pawnId"
-            :label="item.pawn"
-            multiple
-          />
+        <el-select v-model="listQuery.carStatusKey" class="filter-item filter-item-select" clearable placeholder="请选择名下车辆情况" >
+          <el-option v-for="item in carStatusListOptions" :key="item.id" :value="item.id" :label="item.label" />
         </el-select>
         <el-button type="primary" @click="handleFilter">查 询</el-button>
       </div>
@@ -210,6 +134,11 @@ import { getResourceCenList } from '@/api/organ'
 import memberBox from '@/component/memberBox'
 import { checkAliPayRusult, createAliPayOrderSn, getMemberDatas, reviewAliPay } from '@/util/pay.alipay'
 import { getQrCodes, checkWxPayRusult, reviewWxPay } from '@/util/pay.wxpay'
+import { loanQuotaList, jobTypeList, houseStatusList, carStatusListList } from '@/util/filterData'
+const loanQuotaOptions = loanQuotaList()
+const jobTypeOptions = jobTypeList()
+const houseStatusOptions = houseStatusList()
+const carStatusListOptions = carStatusListList()
 export default {
   name: 'ResourceCen',
   filters: {
@@ -224,6 +153,10 @@ export default {
     return {
       success,
       warning,
+      loanQuotaOptions,
+      jobTypeOptions,
+      houseStatusOptions,
+      carStatusListOptions,
       dialogVisible: false,
       dialogSuccessVisible: false,
       props: {
@@ -236,14 +169,12 @@ export default {
         agencyId: '',
         page: 1,
         pageSize: 10,
-        fAddress: '',
-        fLoanAmount: '',
-        fBusinessType: '',
-        fIsPawn: '',
-        fAge: '',
-        fJob: '',
-        fIncome: '',
-        fPawnKey: ''
+        address1: '',
+        address2: '',
+        loanAmountKey: '',
+        jobTypeKey: '',
+        carStatusKey: '',
+        houseInfoKey: ''
       },
       listLoading: true,
       checked: true,
@@ -256,15 +187,6 @@ export default {
       order: '',
       money: '',
       cityList: [],
-      moneyList: null,
-      typeList: null,
-      loanTypeList: null,
-      ageList: null,
-      jobList: null,
-      incomeList: null,
-      isPawnList: null,
-      pawnList: null,
-      timer: null,
       isVip: false,
       phone: '',
       memberData: [],
@@ -325,24 +247,6 @@ export default {
           obj['citys'] = []
           this.cityList.push(obj)
         }
-      })
-      api.getMoney().then(response => {
-        this.moneyList = response.data
-      })
-      api.getType().then(response => {
-        this.typeList = response.data
-      })
-      api.getAllAgeArea().then(response => {
-        this.ageList = response.data
-      })
-      api.getJob().then(response => {
-        this.jobList = response.data
-      })
-      api.getIncome().then(response => {
-        this.incomeList = response.data
-      })
-      api.getAllPawn().then(response => {
-        this.pawnList = response.data
       })
     },
     handleCity(val) {

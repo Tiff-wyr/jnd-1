@@ -5,7 +5,7 @@
     <phone-form v-if="active === 1" :options="options" :if-register="ifRegister" :phone="phone" @change="handleChange"/>
     <main-form v-if="active === 1.5" :phone="form.phone" :form-data="form" :if-register="ifRegister" :code="form.password" @change="handleChange" @register="handleRegister"/>
     <property-con v-if="active === 2" :phone="form.phone" :options="options" :code="form.password" :if-register="ifRegister" @change="handleChange"/>
-    <finish v-if="active === 3" :phone="form.phone" @confirm="handleConfirm"/>
+    <finish v-if="active === 3" :phone="form.phone" :code="form.password" @confirm="handleConfirm"/>
   </div>
 </template>
 <script>
@@ -51,17 +51,11 @@ export default {
   },
   watch: {
     steps(val) {
-      console.log('监听到变化了', val)
       this.active = val
-      console.log(this.active)
     }
-  },
-  created() {
-    console.log(this.phone)
   },
   methods: {
     handleChange(val) {
-      console.log(val)
       for (const i in val.form) {
         this.form[i] = val.form[i]
       }
@@ -72,7 +66,10 @@ export default {
       this.active = 1
     },
     handleRegister() {
-      this.$emit('register', this.form.phone)
+      this.$emit('register', {
+        phone: this.form.phone,
+        password: this.form.password
+      })
     }
   }
 }

@@ -39,20 +39,20 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    // new PrerenderSpaPlugin({
-    //   staticDir: path.join(__dirname, '../dist'),
-    //   routes: ['/', '/home', '/agent', '/organization', '/consult', '/aboutUs', '/help', '/productDetail', '/agentDetail', '/organDetail', '/consultDetail', '/newDetail'],
-    //   renderer: new Renderer({
-    //     inject: {
-    //         foo: 'bar'
-    //     },
-    //     headless: false,
-    //     renderAfterDocumentEvent: 'render-event',
-    //     //renderAfterTime: 5000,
-    //     //renderAfterElementExists: 'my-app-element'
-    // })
-    // }
-    // ),
+    new PrerenderSpaPlugin({
+      staticDir: path.join(__dirname, '../dist'),
+      routes: ['/', '/home', '/agent', '/organization', '/consult', '/aboutUs', '/help', '/productDetail', '/agentDetail', '/organDetail', '/consultDetail', '/newDetail'],
+      renderer: new Renderer({
+        inject: {
+            foo: 'bar'
+        },
+        headless: false,
+        renderAfterDocumentEvent: 'render-event',
+        //renderAfterTime: 5000,
+        //renderAfterElementExists: 'my-app-element'
+    })
+    }
+    ),
     new UglifyJsPlugin({
       uglifyOptions: {
         compress: {

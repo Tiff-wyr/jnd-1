@@ -23,10 +23,10 @@
           <p>暂无数据...</p>
         </div>
         <div v-for="(item,index) in tableData" :key="index" class="table clearfix">
-          <div class="fll table-text">{{ item.name }}</div>
-          <div class="fll table-text">{{ item.amount }}</div>
+          <div class="fll table-text">{{ item.name ? item.name : '-' }}</div>
+          <div class="fll table-text">{{ item.loanAmount }}</div>
           <div class="fll table-text">{{ item.phone }}</div>
-          <div class="fll table-text">{{ item.time }}</div>
+          <div class="fll table-text">{{ item.startTime }}</div>
           <template v-if="item.orderState === 0 ? true : false">
             <div class="fll btn" @click="loanFail(item, 2)">
               <el-button size="mini" type="danger">贷款失败</el-button>
@@ -121,18 +121,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.updateStatus(item.orderId, item.roleId, state, item.ageBroId)
-          // const url = `/orderAll/updateState?orderId=${item.orderId}&roleId=${
-          //   item.roleId
-          // }&ageBroId=${item.ageBroId}&state=${state}`
-          // this.$axios.get(url).then(res => {
-          //   if (res.status === 200) {
-          //     this.$message.success('修改成功')
-          //   } else {
-          //     this.$message.fail(res.msg)
-          //   }
-          //   this.getData()
-          // })
+          this.updateStatus(item.orderId, item.roleId, state, item.brokerIdOrAgencyIdOrProductId)
         })
         .catch(() => {
           this.$message({
@@ -148,18 +137,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.updateStatus(item.orderId, item.roleId, state, item.ageBroId)
-        // const url = `/orderAll/updateState?orderId=${item.orderId}&roleId=${
-        //   item.roleId
-        // }&ageBroId=${item.ageBroId}&state=${state}`
-        // this.$axios.get(url).then(res => {
-        //   if (res.status === 200) {
-        //     this.$message.success('修改成功')
-        //   } else {
-        //     this.$message.fail(res.msg)
-        //   }
-        //   this.getData()
-        // })
+        this.updateStatus(item.orderId, item.roleId, state, item.brokerIdOrAgencyIdOrProductId)
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -172,23 +150,14 @@ export default {
       const obj = {
         orderId,
         roleId,
-        orderStatus
-      }
-      if (roleId === 2) {
-        obj.brokerId = id
-      }
-      if (roleId === 3) {
-        obj.agencyId = id
-      }
-      if (roleId === 4) {
-        obj.productId = id
+        orderStatus,
+        brokerIdOrAgencyIdOrProductId: id
       }
       updateApplyStatus(obj).then(res => {
-        console.log(res)
         if (res.data.status === 200) {
-          this.$message.success(res.msg)
+          this.$message.success(res.data.msg)
         } else {
-          this.$message.fail(res.msg)
+          this.$message.fail(res.data.msg)
         }
         this.getData()
       })
@@ -196,11 +165,9 @@ export default {
     getData() {
       this.listLoading = true
       this.$axios.get(`order/getOrderByBorrowerId/${this.$store.state.userInfo.id}/${this.page}/${this.size}`).then(res => {
-        if (res.status === 200) {
-          this.tableData = res.data.rows
-          this.count = res.data.total
-          backTop()
-        }
+        this.tableData = res.rows
+        this.count = res.total
+        backTop()
         this.listLoading = false
       }).catch(() => {
         this.listLoading = false

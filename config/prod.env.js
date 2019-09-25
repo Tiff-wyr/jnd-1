@@ -18,8 +18,8 @@ if (target == 'test') {
   obj = {
     NODE_ENV: '"production"',
     // BASE_URI: '"http://192.168.0.147:8082/"'
-    // BASE_URI: '"https://www.9nengdai.com/"'
-    BASE_URI: '"http://39.107.78.209:8088/"'
+    BASE_URI: '"https://www.9nengdai.com/"'
+    // BASE_URI: '"http://39.107.78.209:8088/"'
   }
 }
 

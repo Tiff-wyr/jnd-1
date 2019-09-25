@@ -25,7 +25,7 @@
         @click="enterUser(item)"
       >
         <div class="fll table-text">{{ item.borrowerName == null ? '--' : item.borrowerName }}</div>
-        <div class="fll table-text">{{ item.loanAmount == null ? '--' : item.loanAmount }}</div>
+        <div class="fll table-text">{{ item.loanAmount == null ? '--' : item.loanAmount + '万' }}</div>
         <div class="fll table-text">{{ item.phone == null ? '--' : item.phone }}</div>
         <div class="fll table-text">{{ item.startTime == null ? '--' : item.startTime }}</div>
       </div>

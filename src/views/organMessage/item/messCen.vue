@@ -340,7 +340,7 @@ export default {
     // 从外面过来的，发信息，先获取 这个借款人的信息 名字 头像
     getUserData() {
       this.$axios
-        .get(`userBorrower/selectUserBorrowerById/${this.userId}`)
+        .get(`userBorrower/getUserBorrowerById/${this.userId}`)
         .then(res => {
           console.log('xinxi', res)
           this.detailData.fromName = res.borrowerName

@@ -22,7 +22,7 @@
       <div class="dialog-container">
         <p>恭喜您成功注册为9能贷平台会员，可享受更多平台服务。</p>
         <p>账号:{{ phone }}</p>
-        <p>密码:（您收到的手机验证码）</p>
+        <p>密码:{{ password }}</p>
         <p>您可完善您的贷款资料，有助于提高贷款成功率，更加便捷的使用平台</p>
         <div class="btn-box">
           <div class="btn"><a href="/home">登录首页</a></div>
@@ -46,12 +46,14 @@ export default {
     return {
       dialogVisible: false,
       step: 1,
-      phone: ''
+      phone: '',
+      password: ''
     }
   },
   methods: {
     handleRegister(val) {
-      this.phone = val
+      this.phone = val.phone
+      this.password = val.password
       this.dialogVisible = true
     },
     handleUpdate() {

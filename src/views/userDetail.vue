@@ -7,21 +7,11 @@
             <div class="top">
               <div class="clearfix">
                 <div class="fll">
-                  <img
-                    v-if="tableData.borrowerLogo"
-                    :src="tableData.borrowerLogo"
-                    alt=""
-                    style="width: 120px;height: 120px;border-radius: 50%"
-                  >
-                  <img
-                    v-else
-                    src="/static/resource/user.png"
-                    alt=""
-                    style="width: 120px;height: 120px;border-radius: 50%"
-                  >
+                  <img v-if="tableData.image" :src="tableData.image" alt="" style="width: 120px;height: 120px;border-radius: 50%" >
+                  <img v-else src="/static/resource/user.png" alt="" style="width: 120px;height: 120px;border-radius: 50%" >
                 </div>
                 <div class="fll">
-                  <div class="name">{{ tableData.borrowerName | nameFilter }}</div>
+                  <div class="name">{{ tableData.borrowerName }}</div>
                   <div class="clearfix">
                     <img src="../assets/message.png" class="fll" style="width: 20px;height: 20px;vertical-align: middle; margin-right: 10px;" alt="">
                     <div class="fll send" @click="sendMess">发送消息</div>
@@ -39,7 +29,7 @@
               <div class="clearfix">
                 <div class="fll">
                   <div class="clearfix mb30">
-                    <div v-if="!tableData.isPawn" class="clearfix mb30">
+                    <div class="clearfix mb30">
                       <div class="fll text-age">年龄：</div>
                       <div class="fll w120">{{ tableData.age }}</div>
                     </div>
@@ -48,15 +38,11 @@
                   </div>
                 </div>
                 <div class="fll ml30">
-                  <div v-if="tableData.isPawn" class="clearfix mb30">
-                    <div class="fll text-age">抵押物：</div>
-                    <div class="fll w120">{{ tableData.pawn }}</div>
-                  </div>
-                  <div v-if="!tableData.isPawn" class="clearfix mb30">
+                  <div class="clearfix mb30">
                     <div class="fll text-age">职业：</div>
                     <div class="fll w120">{{ tableData.jobTypeValue }}</div>
                   </div>
-                  <div v-if="!tableData.isPawn" class="clearfix">
+                  <div class="clearfix">
                     <div class="fll text-age">月收入：</div>
                     <div class="fll w120">{{ tableData.monthIncome }}</div>
                   </div>
@@ -89,7 +75,7 @@
                   </div>
                   <div class="clearfix mb30">
                     <div class="fll text-age">发布时间：</div>
-                    <div class="fll w120">{{ tableData.registrationDate | timeFilter }}</div>
+                    <div class="fll w120">{{ tableData.startTime }}</div>
                   </div>
                 </div>
                 <div class="fll ml30">
@@ -126,16 +112,12 @@
 <script>
 import footerSame from '../component/footerSame'
 import detailApi from '@/api/detail'
-import { param2Obj, parseTime } from '../util/util'
+import { param2Obj } from '../util/util'
+import { getBorDetail } from '@/api/agent'
 export default {
   name: 'UserDetail',
   components: {
     footerSame
-  },
-  filters: {
-    timeFilter(val) {
-      return parseTime(val)
-    }
   },
   data() {
     return {
@@ -146,10 +128,18 @@ export default {
   created() {
     const params = param2Obj(location.href)
     this.userId = params.borId
+
     if (params.type === 2) {
       delete params.borId
     }
-    this.getData(params)
+    if (params.orderId) {
+      getBorDetail(params.orderId).then(res => {
+        console.log(res)
+        this.tableData = res.data
+      })
+    } else {
+      this.getData(params)
+    }
     // 保存经纪人浏览贷款人记录
     this.getAgentRecord()
     // 保存机构浏览贷款人记录

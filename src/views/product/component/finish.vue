@@ -3,8 +3,8 @@
     <div class="img-box">
       <img src="../../../assets/yes.png" alt="">
     </div>
-    <p>您的申请已经提交，请保持电话联系通畅</p>
-    <p v-if="show === 'true'">账号：{{ phone }}  密码：{{ code }}（您手机收到的验证码）</p>
+    <p :class="{'text-center': show === 'false'}">您的申请已经提交，请保持电话联系通畅</p>
+    <p v-if="show === 'true'">账号：{{ phone }}  密码：{{ code }}</p>
     <p v-if="show === 'true'">这是您的平台账号，<a style="color: #a80e0e;" href="javascript:;" @click="$router.push({path:'/',query:{login:1}})">登录</a>平台，即可享受平台专业的金融服务</p>
     <div class="btn-box">
       <el-button class="btn" @click="handleConfirm">完成</el-button>
@@ -35,16 +35,14 @@ export default {
     sessionStorage.removeItem('show')
     sessionStorage.removeItem('form')
     sessionStorage.removeItem('isPrve')
+    sessionStorage.removeItem('applyStatus')
   },
   created() {
     this.userInfo = sessionStorage.getItem('userInfo')
     this.show = sessionStorage.getItem('show')
-    console.log('我控制最后信息的显示', this.show)
-    console.log(this.userInfo)
     if (this.userInfo) {
       this.show = false
     }
-    console.log('我控制最后信息的显示', this.show)
   },
   methods: {
     handleConfirm() {
@@ -68,6 +66,11 @@ export default {
   p {
     padding-left: 50px;
     margin-bottom: 10px;
+  }
+
+  .text-center {
+    text-align: center;
+    padding: 0;
   }
   .btn-box {
     text-align: center;

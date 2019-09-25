@@ -28,3 +28,10 @@ export function fetchPayResource(params) {
     params
   })
 }
+
+export function getBorDetail(orderId) {
+  return request({
+    url: `/order/getOrderByOrderId/${orderId}`,
+    method: 'get'
+  })
+}

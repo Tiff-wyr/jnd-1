@@ -3,7 +3,7 @@
     <div class="img">
       <el-carousel trigger="click">
         <el-carousel-item v-for="(item, index) in bannerList" :key="item" @click.native="handleBanner(index)">
-          <div :style="{ width: 100 + '%', height: 100 + '%', background: 'url(' + item + ') top center no-repeat', backgroundSize: '100% 100%' }"/>
+          <div :style="{ width: 100 + '%', height: 100 + '%', background: 'url(' + item + ') top center no-repeat', backgroundSize: '100% 100%', cursor: 'pointer' }"/>
         </el-carousel-item>
       </el-carousel>
       <div class="apply">
@@ -383,7 +383,12 @@ export default {
         //   this.$message.warning('登录后方可领取')
         // }
       } else if (val === 1) {
-        this.$router.push('/userRegister')
+        console.log(this.$store.state.userInfo)
+        if (this.$store.state.userInfo) {
+          this.$router.push('/productList')
+        } else {
+          this.$router.push('/userRegister')
+        }
       } else {
         this.$router.push('/agent')
       }

@@ -36,11 +36,11 @@ service.interceptors.response.use(
   },
   error => {
     console.log('err' + error) // for debug
-    Message({
-      message: '连接超时',
-      type: 'error',
-      duration: 5 * 1000
-    })
+    // Message({
+    //   message: '连接超时',
+    //   type: 'error',
+    //   duration: 5 * 1000
+    // })
     return Promise.reject(error)
   }
 )

@@ -212,6 +212,7 @@ export default {
           if (res.data.loanAmount === 0) {
             this.loanAmountStatus = false
           }
+          console.log('这里请求了getCity')
           this.getCity(res.data.address1, () => {
             this.address = [res.data.address1, res.data.address2]
           })
@@ -246,25 +247,29 @@ export default {
       })
     },
     handleItemChange(val) {
-      fetchCity(val[0]).then(res => {
-        const data = res.data
-        const arr = []
-        for (let i = 0; i < data.length; i++) {
-          const obj = {}
-          obj['id'] = data[i]['cid']
-          obj['label'] = data[i]['city']
-          arr.push(obj)
-        }
-        for (let i = 0; i < this.cityList.length; i++) {
-          if (this.cityList[i].id === val[0]) {
-            this.cityList[i].citys = arr
+      console.log(val)
+      if (val[0] !== undefined) {
+        fetchCity(val[0]).then(res => {
+          const data = res.data
+          const arr = []
+          for (let i = 0; i < data.length; i++) {
+            const obj = {}
+            obj['id'] = data[i]['cid']
+            obj['label'] = data[i]['city']
+            arr.push(obj)
           }
-        }
-      })
+          for (let i = 0; i < this.cityList.length; i++) {
+            if (this.cityList[i].id === val[0]) {
+              this.cityList[i].citys = arr
+            }
+          }
+        })
+      }
     },
     handleCity(val) {
       if (val.length === 1) {
         this.form.address1 = val[0]
+        console.log('handleCity这里请求了getCity')
         this.getCity(val[0])
       } else if (val.length === 2) {
         this.form.address2 = val[1]
@@ -369,5 +374,7 @@ export default {
   position: absolute;
   right: 20px;
   color: #515151;
+  top: 50%;
+  transform: translateY(-50%);
 }
 </style>

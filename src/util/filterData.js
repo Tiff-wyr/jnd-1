@@ -1,4 +1,24 @@
 /**
+ * 格式化数据
+ */
+export function formData(array, options) {
+  const defaultOptions = {
+    key: 'label',
+    value: 'value'
+  }
+  return array.map(item => {
+    const obj = {}
+    if (options) {
+      obj[options['key']] = item.label
+      obj[options['value']] = item.value
+    } else {
+      obj[defaultOptions['key']] = item.label
+      obj[defaultOptions['value']] = item.value
+    }
+    return obj
+  })
+}
+/**
  * 使用期限列表
  */
 export function useTimeList() {

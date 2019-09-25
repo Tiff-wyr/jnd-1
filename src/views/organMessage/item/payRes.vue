@@ -17,7 +17,7 @@
             <div class="header-same fll">手机号</div>
             <div class="header-same fll">操作</div>
           </div>
-          <div v-show="!tableData" class="empty-list-show">
+          <div v-show="!tableData.length" class="empty-list-show">
             <img :src="emptyList" alt="">
             <p>暂无数据...</p>
           </div>
