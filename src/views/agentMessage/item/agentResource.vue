@@ -222,8 +222,9 @@ export default {
       })
     },
     handleCity(val) {
+      console.log(val)
       if (val.length === 1) {
-        this.listQuery.fAddress = val.toString()
+        this.listQuery.address1 = val[0]
         fetchCity(val[0]).then(res => {
           const data = res.data
           const arr = []
@@ -240,9 +241,10 @@ export default {
           }
         })
       } else if (val.length === 2) {
-        this.listQuery.fAddress = val.toString()
+        this.listQuery.address2 = val[1]
       } else {
-        this.listQuery.fAddress = ''
+        this.listQuery.address1 = ''
+        this.listQuery.address2 = ''
       }
     },
     handleItemChange(val) {

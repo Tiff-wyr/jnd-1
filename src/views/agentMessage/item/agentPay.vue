@@ -25,7 +25,7 @@
             <div class="fll" style="cursor: pointer" @click="enterDe(item.borrowerId)">
               <div class="fll pro-item-same">{{ item.borrowerName }}</div>
               <div class="fll pro-item-same">{{ item.address }}</div>
-              <div class="fll pro-item-same">{{ item.loanAmount }}万</div>
+              <div class="fll pro-item-same">{{ item.loanAmount }}</div>
               <div class="fll pro-item-same">{{ item.phone }}</div>
             </div>
             <div class="fll pro-item-same">

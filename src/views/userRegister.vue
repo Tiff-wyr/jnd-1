@@ -25,7 +25,7 @@
         <p>密码:{{ password }}</p>
         <p>您可完善您的贷款资料，有助于提高贷款成功率，更加便捷的使用平台</p>
         <div class="btn-box">
-          <div class="btn"><a href="/home">登录首页</a></div>
+          <div class="btn"><a href="/home">首页登录</a></div>
           <div class="btn update" @click="handleUpdate">完善资料</div>
         </div>
       </div>

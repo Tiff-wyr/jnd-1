@@ -251,7 +251,7 @@ export default {
     },
     handleCity(val) {
       if (val.length === 1) {
-        this.listQuery.fAddress = val[0]
+        this.listQuery.address1 = val[0]
         api.getCity(val[0]).then(res => {
           const data = res.data
           const arr = []
@@ -268,9 +268,10 @@ export default {
           }
         })
       } else if (val.length === 2) {
-        this.listQuery.fAddress = val.join(',')
+        this.listQuery.address2 = val[1]
       } else {
-        this.listQuery.fAddress = ''
+        this.listQuery.address1 = ''
+        this.listQuery.address2 = ''
       }
     },
     handleFilter() {

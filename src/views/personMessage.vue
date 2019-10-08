@@ -56,10 +56,17 @@
         </el-form-item>
 
         <el-form-item label="信用情况:" prop="creditStatusKey">
-          <el-select v-if="isEdit" v-model="form.creditStatusKey" clearable placeholder="请选择城市">
+          <el-select v-if="isEdit" v-model="form.creditStatusKey" clearable placeholder="请选择信用情况">
             <el-option v-for="item in creditOptions" :key="item.id" :label="item.label" :value="item.id"/>
           </el-select>
           <span v-else>{{ creditStatus }}</span>
+        </el-form-item>
+
+        <el-form-item label="贷款期限:" prop="loanTimeKey">
+          <el-select v-if="isEdit" v-model="form.loanTimeKey" clearable placeholder="请选择贷款期限">
+            <el-option v-for="item in loanTimeOptions" :key="item.id" :label="item.label" :value="item.id"/>
+          </el-select>
+          <span v-else>{{ loanTime }}</span>
         </el-form-item>
 
         <el-form-item label="是否有本地社保:" prop="sheBaoKey">
@@ -115,7 +122,7 @@
 import { mapMutations } from 'vuex'
 import { validaterName } from '@/util/validate'
 import { updateUserInfo, getUserInfo } from '@/api/apply'
-import { jobTypeList, monthInComeList, socialProtectList, gongjijinList, carStatusListList, houseStatusList, creditList, zhimaList } from '@/util/filterData'
+import { jobTypeList, monthInComeList, socialProtectList, gongjijinList, carStatusListList, houseStatusList, creditList, zhimaList, loanTimeList } from '@/util/filterData'
 const jobTypeOptions = jobTypeList()
 const monthIncomeOptions = monthInComeList()
 const socialProtectOptions = socialProtectList()
@@ -124,11 +131,11 @@ const carStatusListOptions = carStatusListList()
 const houseStatusOptions = houseStatusList()
 const creditOptions = creditList()
 const zhimaOptions = zhimaList()
+const loanTimeOptions = loanTimeList()
 export default {
   name: 'PersonMessage',
   filters: {
     sexFilter(val) {
-      console.log(val)
       const statusMap = {
         0: '女',
         1: '男'
@@ -169,14 +176,12 @@ export default {
       houseStatusOptions,
       creditOptions,
       zhimaOptions,
+      loanTimeOptions,
       isEdit: false,
-      ageList: '',
       // 省
       provinceData: [],
       // 市 区
       cityData: [],
-      monthMoneyData: [],
-      jobData: [],
       form: {
         borrowerName: '',
         sex: 1,
@@ -193,7 +198,8 @@ export default {
         zhiMaCreditKey: 1,
         phone: '',
         email: '',
-        borrowerId: ''
+        borrowerId: '',
+        loanTimeKey: 1
       },
       formRules: {
         borrowerName: [{ required: true, trigger: 'change', validator: validateName }],
@@ -243,6 +249,9 @@ export default {
     },
     zhima() {
       return this.getValue(this.zhimaOptions, this.form.zhiMaCreditKey)
+    },
+    loanTime() {
+      return this.getValue(this.loanTimeOptions, this.form.loanTimeKey)
     }
 
   },

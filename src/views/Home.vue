@@ -242,11 +242,12 @@ import emptyList from '../assets/empty-list.png'
 import banner01 from '@/assets/banner01.png'
 import banner02 from '@/assets/banner02.png'
 import banner03 from '@/assets/banner03.png'
+import banner04 from '@/assets/banner04.png'
 import { getGetStatus } from '@/api/activity'
 import CountTo from 'vue-count-to'
 import { fetchAgent, fetchSpecial, fetchProduct } from '@/api/home'
 import { loanTimeList, jobTypeList, loanAmountList } from '@/util/filterData'
-const bannerList = [banner01, banner02, banner03]
+const bannerList = [banner01, banner02, banner03, banner04]
 const loanAmountOptions = loanAmountList()
 const loanTimeOptions = loanTimeList()
 const jobOptions = jobTypeList()
@@ -274,7 +275,7 @@ export default {
       loanTimeOptions,
       jobOptions,
       searchForm: {
-        loanAmount: 0.3,
+        loanAmount: 5,
         loanTime: 3,
         job: 0
       },
@@ -367,21 +368,6 @@ export default {
     handleBanner(val) {
       if (val === 0) {
         return
-        // if (this.getUser) {
-        //   if (this.getUser.roleId === 2) {
-        //     getGetStatus(this.getUser.phone).then(res => {
-        //       if (res.data.status === 200) {
-        //         this.$router.push(`/agentMessage/${this.getUser.id}/agentMember`)
-        //       } else {
-        //         this.$message.warning(res.data.msg)
-        //       }
-        //     })
-        //   } else {
-        //     this.$message.warning('只有经纪人可以领取')
-        //   }
-        // } else {
-        //   this.$message.warning('登录后方可领取')
-        // }
       } else if (val === 1) {
         console.log(this.$store.state.userInfo)
         if (this.$store.state.userInfo) {
@@ -389,8 +375,24 @@ export default {
         } else {
           this.$router.push('/userRegister')
         }
-      } else {
+      } else if (val === 2) {
         this.$router.push('/agent')
+      } else {
+        if (this.$store.state.userInfo) {
+          if (this.$store.state.userInfo.roleId === 2) {
+            getGetStatus(this.$store.state.userInfo.phone).then(res => {
+              if (res.data.status === 200) {
+                this.$router.push(`/agentMessage/${this.$store.state.userInfo.id}/agentMember`)
+              } else {
+                this.$message.warning(res.data.msg)
+              }
+            })
+          } else {
+            this.$message.warning('只有信贷经理可以领取')
+          }
+        } else {
+          this.$message.warning('登录后方可领取')
+        }
       }
     }
   }

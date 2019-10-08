@@ -96,7 +96,7 @@ export default {
 <style scoped lang="scss">
 .apply {
   width: 944px;
-  height: 696px;
+  min-height: 300px;
   background: rgba(255, 255, 255, 1);
   padding: 24px 56px;
   box-sizing: border-box;

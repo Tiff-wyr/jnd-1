@@ -115,7 +115,7 @@
                 </el-form-item>
               </div>
               <div class="person-item clearfix">
-                <el-form-item label="业务介绍:" prop="introduction" style="width: 350px;">
+                <el-form-item label="业务介绍:" style="width: 350px;">
                   <el-input v-model="formData.introduction" type="text" placeholder="各种银行贷款，提供优质金融服务"/>
                 </el-form-item>
               </div>
@@ -410,7 +410,6 @@ export default {
         identify: [
           { validator: validater.idCard, trigger: 'change' }
         ],
-        introduction: [{ required: true, trigger: 'change', message: '业务分类不能为空' }],
         image: [{ required: true, trigger: 'change', message: '头像不能为空' }],
         sex: [{ required: true, trigger: 'change', message: '性别不能为空' }]
       },
@@ -617,7 +616,7 @@ export default {
                   this.formData.loanInfos = []
                   this.$router.push({
                     path: '/registerJump',
-                    query: { number: this.formData.phone }
+                    query: { number: this.formData.phone, code: this.formData.password }
                   })
                 } else {
                   this.$message.warning(res.data.msg)

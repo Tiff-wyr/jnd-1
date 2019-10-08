@@ -117,6 +117,7 @@ export function timeToTimeStamp(time) {
 
 export function createA(url) {
   const a = document.createElement('a')
+  // const src = url.indexOf('#') >= 0 ? url : '#' + url
   a.href = url
   a.target = '_blank'
   console.log(a)

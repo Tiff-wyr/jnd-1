@@ -399,7 +399,7 @@ export default {
                   this.$message.success(res.msg)
                   this.$router.push({
                     path: '/registerJump',
-                    query: { number: this.organMess.phone }
+                    query: { number: this.organMess.phone, code: this.organMess.password }
                   })
                 } else {
                   this.$message.warning(res.msg)

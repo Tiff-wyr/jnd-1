@@ -75,9 +75,11 @@ export default {
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
-          font-weight: 500;
+          font-weight:normal;
+          font-size: 16px;
           &.active {
             font-weight: 600;
+            font-size: 19px;
           }
         }
         .article-main {

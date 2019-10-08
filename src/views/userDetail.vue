@@ -147,7 +147,6 @@ export default {
   },
   methods: {
     getData(params) {
-      console.log(params)
       detailApi.getUserDetail(params).then(res => {
         this.tableData = res.data.data
       })

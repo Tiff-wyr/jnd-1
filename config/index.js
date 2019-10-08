@@ -9,16 +9,16 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    // proxyTable: {
-    //   '/': {
-    //     // target: 'https://www.9nengdai.com/api',
-    //     target: 'http://192.168.0.120:8099/api',
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^/api': '/'
-    //     }
-    //   }
-    // },
+    proxyTable: {
+      '/': {
+        target: 'https://www.9nengdai.com/api',
+        // target: 'http://192.168.0.120:8099/api',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': '/'
+        }
+      }
+    },
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined

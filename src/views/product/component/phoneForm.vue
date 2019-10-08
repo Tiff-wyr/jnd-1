@@ -14,6 +14,7 @@
       </el-form-item>
       <el-form-item label="">
         <el-button :loading="isLoading" class="apply" @click="handleNext">下一步</el-button>
+        <p v-if="ifRegister" style="color: #9b9b9b; font-size: 12px;">提示：平台不会查询您的征信，所有信息仅供申请参考。</p>
       </el-form-item>
     </el-form>
   </div>
@@ -21,6 +22,7 @@
 <script>
 import { validaterPhone } from '@/util/validate'
 import { sendPhoneCode, validateRegister, validIfApply, valideCode, saveOrder } from '@/api/apply'
+import { mapState } from 'vuex'
 export default {
   name: 'PhoneForm',
   props: {
@@ -68,6 +70,9 @@ export default {
       saveOrderForm: {},
       zhuce: false
     }
+  },
+  computed: {
+    ...mapState(['userInfo'])
   },
   created() {
     this.phoneForm.phone = this.phone
@@ -166,14 +171,29 @@ export default {
     },
     getCode() {
       if (this.phoneForm.phone && validaterPhone(this.phoneForm.phone)) {
-        this.isDownCount = true
-        this.timer = setInterval(() => {
-          this.times--
-          if (this.times <= 0) {
-            this.clearTimer()
+        if (this.userInfo) { // 登陆状态
+          if (this.userInfo.roleId !== 1) {
+            this.$message.warning('贷款人方可申请')
+          } else {
+            this.isDownCount = true
+            this.timer = setInterval(() => {
+              this.times--
+              if (this.times <= 0) {
+                this.clearTimer()
+              }
+            }, 1000)
+            this.checkPhone(this.phoneForm.phone)
           }
-        }, 1000)
-        this.checkPhone(this.phoneForm.phone)
+        } else { // 未登录状态
+          this.isDownCount = true
+          this.timer = setInterval(() => {
+            this.times--
+            if (this.times <= 0) {
+              this.clearTimer()
+            }
+          }, 1000)
+          this.checkPhone(this.phoneForm.phone)
+        }
       } else {
         this.$message.warning('手机号为空或格式不正确')
       }

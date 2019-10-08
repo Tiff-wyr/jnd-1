@@ -120,6 +120,7 @@ export function getUserInfo(phone) {
 // 贷款人修改个人信息
 export function updateUserInfo(data) {
   const param = new FormData()
+  console.log(data)
   for (const i in data) {
     param.append(i, data[i])
   }

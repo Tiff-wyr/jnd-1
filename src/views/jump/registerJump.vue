@@ -9,7 +9,7 @@
           <div class="fll">
             <div class="same">恭喜您成为9能贷平台会员，您可以通过</div>
             <div class="same">账号：{{ number }}</div>
-            <div class="same">密码：（您手机收到的验证码）</div>
+            <div class="same">密码：{{ code }}</div>
             <div class="same">
               <span class="reHome" @click="$router.push({path:'/',query:{login:1}})">登录</span>平台，即可享受平台专业的金融服务
             </div>
@@ -34,12 +34,15 @@ export default {
   data() {
     return {
       number: '',
+      code: '',
       flag: true
     }
   },
   created() {
+    console.log(this.$route.query)
     if (this.$route.query.number) {
       this.number = this.$route.query.number
+      this.code = this.$route.query.code
     }
   },
   methods: {

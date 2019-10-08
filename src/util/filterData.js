@@ -201,7 +201,7 @@ export function carStatusListList() {
   const carStatusListOptions = [
     {
       id: 1,
-      label: '无车准备买车'
+      label: '无车'
     }, {
       id: 2,
       label: '按揭车'

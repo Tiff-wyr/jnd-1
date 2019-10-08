@@ -10,7 +10,7 @@
         <el-radio v-model="form.gongJiJinKey" :label="2">有</el-radio>
       </el-form-item>
       <el-form-item label="名下车辆情况" prop="carStatusKey">
-        <el-radio v-model="form.carStatusKey" :label="1">无车准备买车</el-radio>
+        <el-radio v-model="form.carStatusKey" :label="1">无车</el-radio>
         <el-radio v-model="form.carStatusKey" :label="2">按揭车</el-radio>
         <el-radio v-model="form.carStatusKey" :label="3">全款车</el-radio>
       </el-form-item>

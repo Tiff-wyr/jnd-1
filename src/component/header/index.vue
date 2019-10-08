@@ -5,12 +5,28 @@
       <main class="header-main">
         <div class="action-bar">
           <div class="action-content">
-            <span v-if="userInfo === null" class="text" @click="login">登录</span>
-            <span v-else class="text" @click="personDetail(userInfo.roleId,userInfo.id)">欢迎{{ userInfo === null? '' : userInfo.name | nameFilter }}&nbsp;&nbsp;个人中心</span>
-            <span class="text">|</span>
-
-            <span v-if="userInfo === null" class="text" @click="register">注册</span>
-            <span v-else class="text" @click="logout">退出</span>
+            <template v-if="!userInfo">
+              <span class="agent tag">
+                <span class="tag-text">信贷经理</span>
+                <div class="toggle">
+                  <p @click="login">信贷经理登录</p>
+                  <p @click="handleRegister('agent')">信贷经理入驻</p>
+                </div>
+              </span>
+              <span class="cut-off">|</span>
+              <span class="agent tag">
+                <span class="tag-text" @click="login">用户登录</span>
+                <div class="toggle">
+                  <p @click="login">贷款用户登录</p>
+                  <p @click="handleRegister('user')">贷款用户注册</p>
+                </div>
+              </span>
+            </template>
+            <template v-else>
+              <span class="text" @click="personDetail(userInfo.roleId,userInfo.id)">欢迎{{ userInfo === null? '' : userInfo.name }}&nbsp;&nbsp;个人中心</span>
+              <span class="text">|</span>
+              <span class="text" @click="logout">退出</span>
+            </template>
             <a class="text gray download tips" href="/guide">帮助中心</a>
             <a class="text gray tips" href="/download">
               下载APP
@@ -104,11 +120,6 @@ const linkOptions = [
 ]
 export default {
   name: 'Header',
-  filters: {
-    nameFilter(val) {
-      return decodeURI(val)
-    }
-  },
   props: {
     styleOptions: {
       type: Object,
@@ -160,6 +171,7 @@ export default {
     }
   },
   created() {
+    console.log(!this.userInfo)
     this.loginFrame = this.$route.query.login
     if (this.loginFrame) {
       this.isMask = true
@@ -345,7 +357,7 @@ export default {
                   this.SET_USER(res.data)
                   this.isMask = false
                   this.isContain = false
-      this.$router.push('/')
+                  this.$router.push('/')
                   setToken(new Date())
                 }, 500)
               } else if (res.status === 500) {
@@ -367,8 +379,12 @@ export default {
       }
       this.handlePasswordLogin()
     },
-    register() {
-      this.$router.push('/userRegister')
+    handleRegister(val) {
+      if (val === 'user') {
+        this.$router.push('/userRegister')
+      } else {
+        this.$router.push('/agentRegister')
+      }
     },
     // 点击登录，弹框
     login() {
@@ -441,6 +457,64 @@ export default {
           margin-left: 10px;
           display: inline-block;
           height: 100%;
+        }
+        .tag {
+          position: relative;
+          display: inline-block;
+          height: 32px;
+          padding: 0 16px;
+          color: #4A4A4A;
+          border: 1px solid transparent;
+          font-size: 14px;
+          box-sizing: border-box;
+          cursor: pointer;
+          &:after {
+            display: inline-block;
+            content: ' ';
+            width: 0;
+            height: 0;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #4A4A4A transparent transparent transparent;
+            vertical-align: text-bottom;
+            margin-left: 4px;
+          }
+          &:hover {
+            background: #fff;
+            border: 1px solid #CBCBD0;
+            border-bottom: none;
+            p {
+              color: #4A4A4A;
+            }
+            &:after {
+              transform: rotate(-180deg);
+              vertical-align: text-top;
+            }
+            .toggle {
+              display: block;
+            }
+          }
+          .tag-text:hover {
+            color: #A80E0E;
+          }
+          .toggle {
+            position: absolute;
+            display: none;
+            top: 100%;
+            width: 100%;
+            background: #fff;
+            left: -1px;
+            text-align: center;
+            border: 1px solid #CBCBD0;
+            border-top: none;
+            z-index: 999;
+            p:hover {
+              color: #A80E0E;
+            }
+          }
+        }
+        .cut-off {
+          margin: 0 10px;
         }
       }
     }
