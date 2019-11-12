@@ -144,7 +144,7 @@ export default {
     }
   },
   created() {
-    // 根据经纪人id查所贷产品
+    // 根据信贷经理id查所贷产品
     this.getProduct()
     this.proSheng()
   },

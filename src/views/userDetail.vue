@@ -140,7 +140,7 @@ export default {
     } else {
       this.getData(params)
     }
-    // 保存经纪人浏览贷款人记录
+    // 保存信贷经理浏览贷款人记录
     this.getAgentRecord()
     // 保存机构浏览贷款人记录
     this.getOrganRecord()
@@ -155,7 +155,7 @@ export default {
     sendMess() {
       if (this.$store.state.userInfo) {
         if (this.$store.state.userInfo.roleId === 2) {
-          // 经纪人
+          // 信贷经理
           this.$router.push({
             path: `/agentMessage/${
               this.$store.state.userInfo.id
@@ -204,7 +204,7 @@ export default {
             `/organMessage/${this.$store.state.userInfo.id}/memberCen`
           )
         } else {
-          // 经纪人
+          // 信贷经理
           this.$router.push(
             `/agentMessage/${this.$store.state.userInfo.id}/agentMember`
           )

@@ -330,7 +330,7 @@ export default {
         })
       })
     },
-    // 经纪人详情
+    // 信贷经理详情
     detail(id) {
       this.$router.push(`/agentDetail?id=${id}`)
     },
@@ -603,7 +603,6 @@ export default {
     text-align: center;
     img {
       width: 100%;
-      transform: translateY(-14px);
     }
   }
   .adviser-name {

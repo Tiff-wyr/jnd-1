@@ -178,6 +178,10 @@ export default {
       this.isContain = true
     }
     this.autoLogin()
+    console.log(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent))
+    if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+      window.location.href = 'http://m.9nengdai.com/'
+    }
   },
   methods: {
     ...mapMutations(['SET_USER']),

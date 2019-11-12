@@ -168,7 +168,7 @@ export default {
       content: '助学贷款申请,贷款申请,申请贷款,助学贷款申请表,信用贷款申请,公积金贷款申请,个人贷款申请书,个人贷款申请,企业贷款申请书,贷款卡申请书,公司贷款申请书范文,大学生创业贷款申请,银行申请贷款,申请公积金贷款,申请贷款表,贷款申请表,银行贷款申请,个人申请贷款,贷款申请条件,申请创业贷款,公司贷款申请,小额贷款申请,申请小额贷款,装修贷款申请,企业贷款申请,网上申请贷款'
     }, {
       name: 'description',
-      content: '9能贷款联合各类大型的金融机构,深度挖掘安全的金融服务渠道机构,为用户提供安全、多元的贷款产品和定制化的专业资金服务,打造更契合用户自身需求的贷款管理方案.找贷款,找经纪人,找机构,办理贷款上9能贷款;放款快,利率低0.35%,额度高,门槛低,渠道广.怎样申请助学贷款,如何申请助学贷款,助学贷款怎么申请,怎样申请小额贷款,怎样写贷款申请书,如何向银行申请贷款,如何申请创业贷款'
+      content: '9能贷款联合各类大型的金融机构,深度挖掘安全的金融服务渠道机构,为用户提供安全、多元的贷款产品和定制化的专业资金服务,打造更契合用户自身需求的贷款管理方案.找贷款,找信贷经理,找机构,办理贷款上9能贷款;放款快,利率低0.35%,额度高,门槛低,渠道广.怎样申请助学贷款,如何申请助学贷款,助学贷款怎么申请,怎样申请小额贷款,怎样写贷款申请书,如何向银行申请贷款,如何申请创业贷款'
     }]
   },
   components: {
@@ -229,14 +229,14 @@ export default {
         this.$message.warning('请先登录')
       }
     },
-    // 经纪人详情
+    // 信贷经理详情
     getAgentData(id) {
       this.$axios.get(`userBroker/getUserBrokerById/${id}`).then(res => {
         res.businessScopeInfo = res.businessScopeInfo.split(',')
         this.agentDetail = Object.assign({}, res)
       })
     },
-    // 经纪人成功案例
+    // 信贷经理成功案例
     getVictory(id) {
       fetchSuccessList(id).then(res => {
         console.log(res)
@@ -251,7 +251,7 @@ export default {
       //   this.loanData = res
       // })
     },
-    // 经纪人贷款产品
+    // 信贷经理贷款产品
     getProductData(id) {
       this.$axios.get(`loanInfo/getAllLoanInfoByBrokerId/${id}`).then(res => {
         this.productTableData = res
@@ -291,7 +291,7 @@ export default {
           this.$message.success('取消收藏')
         })
     },
-    // 保存经纪人被贷款人浏览记录
+    // 保存信贷经理被贷款人浏览记录
     skimRecord() {
       if (this.$store.state.userInfo) {
         if (this.$store.state.userInfo.roleId === 1) {

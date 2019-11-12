@@ -419,7 +419,7 @@ export default {
         }
       })
     },
-    // //初始化经纪人个人信息
+    // //初始化信贷经理个人信息
     getPersonal() {
       this.$axios.get(`userBroker/getUserBrokerById/${this.id}`).then(res => {
         this.email = res.email

@@ -157,7 +157,7 @@ export default {
       listQuery: {
         page: 1,
         pageSize: 10,
-        brokerId: '', // 经纪人ID
+        brokerId: '', // 信贷经理ID
         address1: '',
         address2: '',
         loanAmountKey: '',

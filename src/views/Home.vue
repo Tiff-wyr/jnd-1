@@ -27,7 +27,8 @@
             <el-option v-for="item in jobOptions" :key="item.id" :label="item.label" :value="item.id"/>
           </el-select>
         </div>
-        <div class="btn" @click="handleSearch">搜索贷款</div>
+        <div class="btn qucik-apply" @click="handleApply">快速申请</div>
+        <div class="btn search" @click="handleSearch">搜索产品</div>
       </div>
     </div>
     <div class="wrap pt48">
@@ -247,6 +248,7 @@ import { getGetStatus } from '@/api/activity'
 import CountTo from 'vue-count-to'
 import { fetchAgent, fetchSpecial, fetchProduct } from '@/api/home'
 import { loanTimeList, jobTypeList, loanAmountList } from '@/util/filterData'
+import { mapGetters } from 'vuex'
 const bannerList = [banner01, banner02, banner03, banner04]
 const loanAmountOptions = loanAmountList()
 const loanTimeOptions = loanTimeList()
@@ -260,7 +262,7 @@ export default {
       content: '贷款,平台贷款,平台 贷款,贷款 平台,贷款的平台,好贷款平台,小额贷款平台,手机贷款平台,学生贷款平台,靠谱贷款平台,容易贷款平台,分期贷款平台,好贷款的平台,抵押贷款平台,信用贷款平台,企业贷款平台,大额贷款平台,网上贷款平台,线上贷款平台,可靠的贷款平台,靠谱的贷款平台,公积金贷款平台,网络小额贷款平台,小微企业贷款平台'
     }, {
       name: 'description',
-      content: '9能贷款联合各类大型的金融机构,深度挖掘安全的金融服务渠道机构,为用户提供安全、多元的贷款产品和定制化的专业资金服务,打造更契合用户自身需求的贷款管理方案.找贷款,找经纪人,找机构,办理贷款上9能贷款;放款快,利率低0.35%,额度高,门槛低,渠道广.贷款平台哪个好,贷款哪个平台好,有什么贷款平台,什么平台可以贷款,贷款平台哪个靠谱,哪个贷款平台靠谱.'
+      content: '9能贷款联合各类大型的金融机构,深度挖掘安全的金融服务渠道机构,为用户提供安全、多元的贷款产品和定制化的专业资金服务,打造更契合用户自身需求的贷款管理方案.找贷款,找信贷经理,找机构,办理贷款上9能贷款;放款快,利率低0.35%,额度高,门槛低,渠道广.贷款平台哪个好,贷款哪个平台好,有什么贷款平台,什么平台可以贷款,贷款平台哪个靠谱,哪个贷款平台靠谱.'
     }]
   },
   components: {
@@ -293,6 +295,9 @@ export default {
       organData: [],
       loanData: []
     }
+  },
+  computed: {
+    ...mapGetters(['userInfo'])
   },
   created() {
     this.getSpecial()
@@ -329,6 +334,17 @@ export default {
     agDetail(id) {
       this.$router.push(`/agentDetail?id=${id}`)
     },
+    handleApply() {
+      if (this.userInfo) {
+        if (this.userInfo.roleId === 1) {
+          this.$message.success('平台已受理了您的快速申请，您可以查看平台其它产品')
+        } else {
+          this.$message.warning('您不是贷款用户，无法使用该功能')
+        }
+      } else {
+        this.$router.push('/userRegister')
+      }
+    },
     handleSearch() {
       this.$router.push(`/productList?param=${JSON.stringify(this.searchForm)}`)
     },
@@ -344,7 +360,7 @@ export default {
         this.productData = res.data
       })
     },
-    // 经纪人推荐
+    // 信贷经理推荐
     getAgentData() {
       fetchAgent().then(res => {
         this.agentData = res.data
@@ -477,12 +493,13 @@ $gray: #333;
       box-sizing: border-box;
       font-family: PingFangSC-Regular;
       font-weight: 500;
+
       .item {
         background: #ffffff;
         display: flex;
         align-items: center;
         border-radius: 6px;
-        margin-bottom: 30px;
+        margin-bottom: 12px;
         height: 50px;
         overflow: hidden;
         position: relative;
@@ -508,13 +525,20 @@ $gray: #333;
         }
       }
       .btn {
-        height: 60px;
-        line-height: 60px;
+        height: 50px;
+        line-height: 50px;
         text-align: center;
         border-radius: 6px;
         color: #fff;
-        background: #FC4546;
         cursor: pointer;
+      }
+      .qucik-apply {
+        background: #FC4546;
+        margin: 20px 0 14px;
+      }
+      .search {
+        background: #F5E3E3;
+        color: #F05B5C;
       }
     }
   }

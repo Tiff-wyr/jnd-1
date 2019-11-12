@@ -104,7 +104,7 @@ export default {
   methods: {
     enterDetail(role, id) {
       if (role === 2) {
-        // 经纪人
+        // 信贷经理
         this.$router.push(`/agentDetail?id=${id}`)
       } else if (role === 3) {
         // 机构
@@ -116,7 +116,7 @@ export default {
     },
     enter(role, id) {
       if (role === 2) {
-        // 经纪人
+        // 信贷经理
         this.$router.push(`/agentDetail?id=${id}`)
       } else if (role === 3) {
         // 机构

@@ -351,8 +351,8 @@ export default {
       formData: {
         businessType: [],
         loanType: [],
-        // brokerId:'',//经纪人编号
-        brokerName: '', // 经纪人姓名
+        // brokerId:'',//信贷经理编号
+        brokerName: '', // 信贷经理姓名
         phone: '', // 手机号
         image: '', // 图片
         sex: 1, // 性别

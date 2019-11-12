@@ -59,7 +59,7 @@
 </template>
 <script>
 import { fetchProvince, fetchCity } from '@/api/register'
-import { validaterFloat, validaterInter, validaterName } from '@/util/validate'
+import { validaterInter, validaterName } from '@/util/validate'
 import { applyRegister, getUserInfo, updateUserInfo } from '@/api/apply'
 import { loanAmountList, loanTimeList, jobTypeList, monthInComeList } from '@/util/filterData'
 
@@ -87,10 +87,15 @@ export default {
   data() {
     const validLoanAmount = (rule, value, callback) => {
       if (value) {
-        if (validaterFloat(value)) {
+        console.log(value, value === 0.3)
+        if (Number(value) === 0.3) {
           callback()
         } else {
-          callback(new Error('贷款金额格式错误'))
+          if (validaterInter(value)) {
+            callback()
+          } else {
+            callback(new Error('贷款金额格式只能是整数'))
+          }
         }
       } else {
         callback(new Error('贷款金额不能为空并且不能为0'))

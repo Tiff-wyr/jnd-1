@@ -7,7 +7,7 @@ export function publics(phone) { // 检查当天该用户是否在公共申请
   })
 }
 
-export function agent(phone, brokerId) { // 检查当天该用户是否在该经纪人下申请过
+export function agent(phone, brokerId) { // 检查当天该用户是否在该信贷经理下申请过
   const params = {
     phone,
     brokerId

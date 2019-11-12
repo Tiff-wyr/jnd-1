@@ -1,7 +1,7 @@
 import request from './request'
 /**
- * 获取经纪人成功案例
- * @param {String | Number} brokerId 经纪人ID
+ * 获取信贷经理成功案例
+ * @param {String | Number} brokerId 信贷经理ID
  */
 export function fetchSuccessList(brokerId) {
   return request({
@@ -11,7 +11,7 @@ export function fetchSuccessList(brokerId) {
 }
 
 /**
- * 获取经纪人未付费资源
+ * 获取信贷经理未付费资源
  */
 export function fetchNoPayResource(params) {
   return request({

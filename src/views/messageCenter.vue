@@ -156,14 +156,14 @@ export default {
   created() {
     this.getSMessage()
     this.getFMessage()
-    // agentOrganId 经纪人 机构 的id
+    // agentOrganId 信贷经理 机构 的id
     this.agentOrganId = this.$route.query.id
     this.role = this.$route.query.roleId
     if (this.agentOrganId && this.role) {
       this.isInbox = false
       this.isChange = true
       if (this.role === 2) {
-        // 经纪人
+        // 信贷经理
         this.$axios.get(`userBroker/getUserBrokerById/${this.agentOrganId}`).then(res => {
           this.detailData.fromName = res.brokerName
           this.shouPhone = res.phone
