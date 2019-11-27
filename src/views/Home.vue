@@ -248,7 +248,7 @@ import { getGetStatus } from '@/api/activity'
 import CountTo from 'vue-count-to'
 import { fetchAgent, fetchSpecial, fetchProduct } from '@/api/home'
 import { loanTimeList, jobTypeList, loanAmountList } from '@/util/filterData'
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 const bannerList = [banner01, banner02, banner03, banner04]
 const loanAmountOptions = loanAmountList()
 const loanTimeOptions = loanTimeList()
@@ -297,7 +297,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapState(['userInfo'])
   },
   created() {
     this.getSpecial()
@@ -335,6 +335,7 @@ export default {
       this.$router.push(`/agentDetail?id=${id}`)
     },
     handleApply() {
+      console.log(this.userInfo)
       if (this.userInfo) {
         if (this.userInfo.roleId === 1) {
           this.$message.success('平台已受理了您的快速申请，您可以查看平台其它产品')

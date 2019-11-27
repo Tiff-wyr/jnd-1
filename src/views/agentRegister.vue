@@ -368,6 +368,7 @@ export default {
         businessScope: [],
         introduction: '',
         password: '',
+        terminalType: 'pc',
         loanInfos: [] // 贷款信息
       },
       isMask: false,

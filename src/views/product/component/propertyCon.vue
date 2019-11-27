@@ -77,7 +77,8 @@ export default {
         zhiMaCreditKey: 1
       },
       saveOrderForm: {
-        phone: ''
+        phone: '',
+        terminalType: 'pc'
       }
     }
   },
@@ -96,6 +97,10 @@ export default {
           } else {
             this.saveOrders()
           }
+          sessionStorage.removeItem('applyStatus')
+          sessionStorage.removeItem('show')
+          sessionStorage.removeItem('form')
+          sessionStorage.removeItem('isPrve')
         } else {
           this.$message.warning(res.data.msg)
           this.isLoading = false

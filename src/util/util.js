@@ -142,3 +142,27 @@ export function backTop() {
     return -c / 2 * (--t * (t - 2) - 1) + b
   }
 }
+
+export function getBrowserInfo() {
+  const ua = navigator.userAgent.toLocaleLowerCase()
+  let browserType = null
+  if (ua.match(/msie/) != null || ua.match(/trident/) != null) {
+    browserType = 'IE'
+    // browserVersion = ua.match(/msie ([\d.]+)/) != null ? ua.match(/msie ([\d.]+)/)[1] : ua.match(/rv:([\d.]+)/)[1]
+  } else if (ua.match(/firefox/) != null) {
+    browserType = 'firefox'
+  } else if (ua.match(/ubrowser/) != null) {
+    browserType = 'UC'
+  } else if (ua.match(/opera/) != null) {
+    browserType = 'opera'
+  } else if (ua.match(/bidubrowser/) != null) {
+    browserType = 'baidu'
+  } else if (ua.match(/metasr/) != null) {
+    browserType = 'sogou'
+  } else if (ua.match(/tencenttraveler/) != null || ua.match(/qqbrowse/) != null) {
+    browserType = 'QQ'
+  } else if (ua.match(/safari/) != null) {
+    browserType = 'Safari'
+  }
+  return browserType
+}

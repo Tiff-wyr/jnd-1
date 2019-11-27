@@ -40,7 +40,19 @@ export function validPhoneIsRegister(phone) {
  */
 export function sendPhoneCode(phone) {
   return request({
-    url: `base/getUpdatePhoneCode/${phone}`,
+    url: `/base/getUpdatePhoneCode/${phone}`,
+    method: 'get'
+  })
+}
+
+/**
+ * 未注册账号发送验证码
+ * @param {*} phone
+ */
+
+export function sendPhoneCodeForRegister(phone) {
+  return request({
+    url: `/base/getRegisterCode/${phone}`,
     method: 'get'
   })
 }

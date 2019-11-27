@@ -21,7 +21,7 @@
 </template>
 <script>
 import { validaterPhone } from '@/util/validate'
-import { sendPhoneCode, validateRegister, validIfApply, valideCode, saveOrder } from '@/api/apply'
+import { sendPhoneCode, sendPhoneCodeForRegister, validateRegister, validIfApply, valideCode, saveOrder } from '@/api/apply'
 import { mapState } from 'vuex'
 export default {
   name: 'PhoneForm',
@@ -97,7 +97,7 @@ export default {
           this.zhuce = false
           sessionStorage.setItem('show', true)
           this.isRegister = false
-          this.sendCode(phone)
+          this.sendCodeForRegister(phone)
         }
       })
     },
@@ -114,7 +114,8 @@ export default {
               }).then(() => { // 直接贷款
                 sessionStorage.setItem('applyStatus', 'create')
                 const obj = {
-                  phone: this.phoneForm.phone
+                  phone: this.phoneForm.phone,
+                  terminalType: 'pc'
                 }
                 obj[this.options.key] = this.options.value
                 this.saveOrders(obj)
@@ -210,6 +211,16 @@ export default {
     },
     sendCode(phone) {
       sendPhoneCode(phone).then(res => {
+        if (res.data.status === 200) {
+          this.$message.success('验证码发送成功，请注意查收')
+        } else {
+          this.$message.warning(res.data.msg)
+          this.clearTimer()
+        }
+      })
+    },
+    sendCodeForRegister(phone) {
+      sendPhoneCodeForRegister(phone).then(res => {
         if (res.data.status === 200) {
           this.$message.success('验证码发送成功，请注意查收')
         } else {

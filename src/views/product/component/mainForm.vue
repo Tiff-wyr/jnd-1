@@ -162,7 +162,8 @@ export default {
         address2: '',
         jobTypeKey: 0,
         incomeWayKey: 1,
-        monthIncome: ''
+        monthIncome: '',
+        terminalType: 'pc'
       },
       isLoading: false,
       cityList: [],

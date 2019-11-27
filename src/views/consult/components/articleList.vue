@@ -13,7 +13,7 @@
             </dt>
             <dd>
               <h3 :title="item.topic" :class="{active: index === 0}">{{ item.topic }}</h3>
-              <div v-if="index === 0" :title="item.introduction" class="article-main">{{ item.introduction }}</div>
+              <div v-if="index === 0" :title="item.introduction" :style="styleObj" class="article-main">{{ item.introduction }}</div>
             </dd>
           </dl>
         </li>
@@ -23,6 +23,7 @@
 </template>
 <script>
 import emptyList from '@/assets/empty-list.png'
+import { getBrowserInfo } from '@/util/util'
 export default {
   name: 'ArticleList',
   props: {
@@ -33,7 +34,19 @@ export default {
   },
   data() {
     return {
-      emptyList
+      emptyList,
+      styleObj: {}
+    }
+  },
+  created() {
+    console.log(getBrowserInfo())
+    if (getBrowserInfo() === 'firefox') {
+      this.styleObj = {
+        display: 'block',
+        overflow: 'hidden',
+        'text-overflow': 'ellipsis',
+        'white-space': 'nowrap'
+      }
     }
   },
   methods: {
