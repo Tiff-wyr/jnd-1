@@ -12,6 +12,7 @@ const components = {
   newDetail: () => import('@/views/aboutUs/newDetail'),
   consult: () => import('@/views/consult/consult'),
   consultDetail: () => import('@/views/consult/consultDetail'),
+  consultList: () => import('@/views/consult/consultList'),
   layout: () => import('@/layout/layout'),
 
   myMessage: () => import('@/views/myMessage'),
@@ -142,6 +143,11 @@ export default new Router({
           path: 'consultDetail',
           name: 'consultDetail',
           component: components.consultDetail
+        },
+        {
+          path: 'consultList',
+          name: 'consultList',
+          component: components.consultList
         },
         {
           path: 'aboutUs',

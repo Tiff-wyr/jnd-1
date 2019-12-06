@@ -54,12 +54,7 @@
                   </div>
                 </div>
                 <div style="margin-left: 20px" class="clearfix fll">
-                  <img
-                    src="../../static/resource/agent/tel.png"
-                    alt=""
-                    class="fll"
-                    style="width: 56px;height: 47px"
-                  >
+                  <img src="../../static/resource/agent/tel.png" alt="" class="fll" style="width: 56px;height: 47px">
                   <div class="fll">
                     <div class="text1">电话咨询贷款，最快捷，最方便！</div>
                     <div class="text2">{{ agentDetail.phone | phoneFilter }}</div>
@@ -69,12 +64,7 @@
             </div>
             <div class="clearfix">
               <div class="clearfix fll ml20" style="margin-top: 16px;">
-                <img
-                  src="../assets/message.png"
-                  alt=""
-                  class="fll"
-                  style="width: 20px;height: 20px;vertical-align: middle; margin-right: 10px;"
-                >
+                <img src="../assets/message.png" alt="" class="fll" style="width: 20px;height: 20px;vertical-align: middle; margin-right: 10px;">
                 <div class="restore fll" @click="sendMess">发送消息</div>
               </div>
               <div class="clearfix flr" style="margin-top: 16px;">
@@ -113,8 +103,8 @@
             <div v-if="loanData.length > 0" class="bottom">
               <div class="title">成功案例</div>
               <div v-for="(item,index) in loanData" :key="index" class="content-item-victory">
-                <span class="name">{{ item.borrowerName }}</span>
-                <span class="money">贷款金额：{{ item.loanAmountValue }}万</span>
+                <span class="name">{{ item.name }}</span>
+                <span class="money">贷款金额：{{ item.loanAmount }}</span>
               </div>
             </div>
           </div>
@@ -209,7 +199,6 @@ export default {
     this.getVictory(id)
     this.getProductData(id)
     this.skimRecord()
-
     // 收藏判断
     this.collectPan()
   },
@@ -239,17 +228,12 @@ export default {
     // 信贷经理成功案例
     getVictory(id) {
       fetchSuccessList(id).then(res => {
-        console.log(res)
+        this.loanData = res.data.map(item => {
+          const sex = item.sexValue === '男' ? '先生' : '女士'
+          item.name = `${item.borrowerName.substr(0, 1)}${sex}`
+          return item
+        })
       })
-      // this.$axios.get(`orderAll/getTopSixOrderByBrokerId/${id}`).then(res => {
-      //   res.map(item => {
-      //     const firstName = item.borrowerName.substr(0, 1)
-      //     const allName =
-      //       item.sex === '0' ? `${firstName}女士` : `${firstName}先生`
-      //     return { ...item, allName }
-      //   })
-      //   this.loanData = res
-      // })
     },
     // 信贷经理贷款产品
     getProductData(id) {

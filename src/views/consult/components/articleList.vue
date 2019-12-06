@@ -17,6 +17,13 @@
             </dd>
           </dl>
         </li>
+        <li v-if="data.length > 0" class="article-item" @click="handleMore">
+          <dl>
+            <dd>
+              <h3>更多》</h3>
+            </dd>
+          </dl>
+        </li>
       </ul>
     </div>
   </div>
@@ -39,7 +46,6 @@ export default {
     }
   },
   created() {
-    console.log(getBrowserInfo())
     if (getBrowserInfo() === 'firefox') {
       this.styleObj = {
         display: 'block',
@@ -52,6 +58,9 @@ export default {
   methods: {
     handleDetail(id) {
       this.$router.push({ path: '/consultDetail', query: { id }})
+    },
+    handleMore() {
+      this.$router.push({ path: '/consultList', query: { id: 0 }})
     }
   }
 }

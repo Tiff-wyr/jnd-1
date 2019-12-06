@@ -1,6 +1,6 @@
 <template>
   <div class="loan-bk-wrap">
-    <h3>贷款百科</h3>
+    <h3 class="h3">贷款百科<span class="more" @click="handleMore">更多》</span></h3>
     <div class="loan-bk-main">
       <div v-if="!data.length" class="empty-list">
         <img :src="emptyList" alt="" class="empty-img">
@@ -46,6 +46,9 @@ export default {
   methods: {
     handleDetail(id) {
       this.$router.push({ path: '/consultDetail', query: { id }})
+    },
+    handleMore() {
+      this.$router.push({ path: '/consultList', query: { id: 2 }})
     }
   }
 }
@@ -54,6 +57,17 @@ export default {
 .loan-bk-wrap {
   padding: 20px 18px 50px;
   background: #fff;
+  .h3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .more {
+      font-size:14px;
+      font-weight:400;
+      color:#9B9B9B;
+      cursor: pointer;
+    }
+  }
   & > h3 {
     padding-bottom: 20px;
     border-bottom: 1px solid #D8D8D8;

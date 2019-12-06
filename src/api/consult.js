@@ -38,3 +38,25 @@ export function fetchDown() {
     method: 'get'
   })
 }
+
+export function fetchAtricle(params) {
+  return request({
+    url: `/information/getUpList2`,
+    method: 'get',
+    params
+  })
+}
+
+export function viewTop9Article() {
+  return request({
+    url: '/information/getTop9',
+    method: 'get'
+  })
+}
+
+export function getNewArticle() {
+  return request({
+    url: '/information/getTop9Latest',
+    method: 'get'
+  })
+}
