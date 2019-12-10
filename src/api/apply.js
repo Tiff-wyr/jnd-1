@@ -38,10 +38,14 @@ export function validPhoneIsRegister(phone) {
  * @param {*} phone
  *
  */
-export function sendPhoneCode(phone) {
+export function sendPhoneCode(phone, code) {
+  const params = {
+    code
+  }
   return request({
     url: `/base/getUpdatePhoneCode/${phone}`,
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 
@@ -50,10 +54,14 @@ export function sendPhoneCode(phone) {
  * @param {*} phone
  */
 
-export function sendPhoneCodeForRegister(phone) {
+export function sendPhoneCodeForRegister(phone, code) {
+  const params = {
+    code
+  }
   return request({
     url: `/base/getRegisterCode/${phone}`,
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 
@@ -140,5 +148,22 @@ export function updateUserInfo(data) {
     url: '/userBorrower/modifyUserBorrowerByPhone',
     method: 'post',
     data: param
+  })
+}
+
+// 获取图片验证码
+export function fetchImgCode() {
+  return request({
+    url: '/verify/createImg',
+    method: 'get'
+  })
+}
+
+// 保存图片验证码
+export function saveImgCode(params) {
+  return request({
+    url: '/base/saveCode',
+    method: 'post',
+    params
   })
 }

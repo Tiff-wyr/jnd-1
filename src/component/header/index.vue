@@ -62,6 +62,15 @@
               <el-form-item prop="phone" style="width: 360px;margin-left: -80px;">
                 <el-input v-model="loginNum.phone" type="text" placeholder="输入手机号"/>
               </el-form-item>
+
+              <div class="img-code-wrap">
+                <el-form-item prop="code">
+                  <div class="img-code">
+                    <el-input v-model="loginNum.imgCode" type="text" placeholder="验证码" style="margin-right: 10px"/>
+                    <identify :identify-code="identifyCode" title="点击切换验证码" style="cursor: pointer;" @click.native="handleToggleCode"/>
+                  </div>
+                </el-form-item>
+              </div>
               <div class="clearfix">
                 <el-form-item style="width: 250px;margin-left: -80px;float: left;">
                   <el-input v-model="loginNum.code" type="password" placeholder="输入短信验证码"/>
@@ -110,6 +119,11 @@ import { mapState, mapMutations } from 'vuex'
 import validater from '@/util/validater'
 import { setToken, removeToken } from '@/util/auth'
 import { validaterPhone } from '@/util/validate'
+import { randomWord } from '@/util/util'
+import identify from '@/component/identify'
+import { fetchCodeByLogin, checkPhoneStatus } from '@/api/layout'
+import { saveImgCode } from '@/api/apply'
+
 const linkOptions = [
   { link: 'home', name: '首页', to: '/' },
   { link: 'loans', name: '贷款产品', to: '/loans' },
@@ -118,8 +132,12 @@ const linkOptions = [
   { link: 'consult', name: '贷款资讯', to: '/consult' },
   { link: 'aboutUs', name: '关于平台', to: '/aboutUs' }
 ]
+
 export default {
   name: 'Header',
+  components: {
+    identify
+  },
   props: {
     styleOptions: {
       type: Object,
@@ -139,10 +157,12 @@ export default {
         number: '',
         verifyCode: ''
       },
+      identifyCode: '',
       verifyCode: '发送验证码',
       // 验证码登录
       loginNum: {
         code: '',
+        imgCode: '',
         phone: ''
       },
       // 密码登录
@@ -171,14 +191,13 @@ export default {
     }
   },
   created() {
-    console.log(!this.userInfo)
     this.loginFrame = this.$route.query.login
     if (this.loginFrame) {
       this.isMask = true
       this.isContain = true
     }
+    this.identifyCode = randomWord(false, 4)
     this.autoLogin()
-    console.log(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent))
     if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
       window.location.href = 'http://m.9nengdai.com/'
     }
@@ -218,24 +237,18 @@ export default {
               this.passwordLogin.phone = ''
               this.passwordLogin.password = ''
             } else {
-              this.$axios
-                .get(
-                  `user/loginByPhoneAndPassword/${this.passwordLogin.phone}/${
-                    this.passwordLogin.password
-                  }/0`
-                )
-                .then(res => {
-                  if (res.status === 200) {
-                    setToken(new Date())
-                    this.SET_USER(res.data)
-                    this.$message.success(res.msg)
-                    this.isMask = false
-                    this.isContain = false
-                    this.$router.push('/')
-                  } else if (res.status === 500) {
-                    this.$message.warning(res.msg)
-                  }
-                })
+              this.$axios.get(`user/loginByPhoneAndPassword/${this.passwordLogin.phone}/${this.passwordLogin.password}/0`).then(res => {
+                if (res.status === 200) {
+                  setToken(new Date())
+                  this.SET_USER(res.data)
+                  this.$message.success(res.msg)
+                  this.isMask = false
+                  this.isContain = false
+                  this.$router.push('/')
+                } else if (res.status === 500) {
+                  this.$message.warning(res.msg)
+                }
+              })
             }
           })
         } else {
@@ -268,49 +281,63 @@ export default {
     },
     // 获取验证码
     send() {
-      if (this.loginNum.phone) {
-        if (validaterPhone(this.loginNum.phone)) {
-          this.time = 60
-          this.showing = false
-          this.timer = setInterval(() => {
-            this.time--
-            console.log(this.time)
-            if (this.time < 0) {
-              clearInterval(this.timer)
-              this.showing = true
-              this.verifyCode = '重新获取'
-              this.time = 60
-            }
-          }, 1000)
-          const phone = this.loginNum.phone.trim()
-          this.$axios.get(`user/selectPhone/${phone}`).then(res => {
-            if (res.status === 500) {
-              this.$message.warning(res.msg)
-              this.loginNum.phone = ''
-              clearInterval(this.timer)
-              this.showing = true
-              this.verifyCode = '重新获取'
-              this.time = 60
-            } else {
-              this.$axios
-                .get(`base/getLoginCode/${this.loginNum.phone}`)
-                .then(res => {
-                  if (res.status !== 200) {
-                    clearInterval(this.timer)
-                    this.showing = true
-                    this.verifyCode = '重新获取'
-                    this.time = 60
-                    this.$message.warning(res.msg)
-                  }
-                })
-            }
-          })
+      if (this.loginNum.phone && validaterPhone(this.loginNum.phone)) {
+        if (this.loginNum.imgCode) {
+          if (this.loginNum.imgCode.toLowerCase() === this.identifyCode.toLowerCase()) {
+            this.time = 60
+            this.showing = false
+            this.timer = setInterval(() => {
+              this.time--
+              if (this.time < 0) {
+                clearInterval(this.timer)
+                this.showing = true
+                this.verifyCode = '重新获取'
+                this.time = 60
+              }
+            }, 1000)
+            this.checkPhone()
+          } else {
+            this.$message.warning('图片验证码输入错误')
+          }
         } else {
-          this.$message.warning('手机号格式错误')
+          this.$message.warning('图片验证码不能为空')
         }
       } else {
-        this.$message.warning('手机号不能为空')
+        this.$message.warning('手机号不能为空或格式错误')
       }
+    },
+
+    saveCode(phone) { // 将图片交由后端保存
+      saveImgCode({ phone, code: this.loginNum.imgCode }).then(res => {
+        if (res.data.status === 200) { // 保存成功后请求发送验证码接口
+          this.getLoginCode()
+        }
+      })
+    },
+    checkPhone() {
+      checkPhoneStatus(this.loginNum.phone).then(res => {
+        if (res.data.status === 500) {
+          this.$message.warning(res.data.msg)
+          this.loginNum.phone = ''
+          clearInterval(this.timer)
+          this.showing = true
+          this.verifyCode = '重新获取'
+          this.time = 60
+        } else {
+          this.saveCode()
+        }
+      })
+    },
+    getLoginCode() {
+      fetchCodeByLogin(this.loginNum.phone, this.loginNum.imgCode).then(res => {
+        if (res.data.status !== 200) {
+          clearInterval(this.timer)
+          this.showing = true
+          this.verifyCode = '重新获取'
+          this.time = 60
+          this.$message.warning(res.msg)
+        }
+      })
     },
     findPassword() {
       this.$router.push('/findPassword')
@@ -348,32 +375,29 @@ export default {
     handleLogin() {
       if (this.loginNum.phone) {
         if (this.loginNum.code) {
-          this.$axios
-            .get(
-              `user/loginByPhoneAndCode/${this.loginNum.phone}/${
-                this.loginNum.code
-              }`
-            )
-            .then(res => {
-              if (res.status === 200) {
-                setTimeout(() => {
-                  this.$message.success(res.msg)
-                  this.SET_USER(res.data)
-                  this.isMask = false
-                  this.isContain = false
-                  this.$router.push('/')
-                  setToken(new Date())
-                }, 500)
-              } else if (res.status === 500) {
-                this.$message.warning(res.msg)
-              }
-            })
+          this.$axios.get(`user/loginByPhoneAndCode/${this.loginNum.phone}/${this.loginNum.code}`).then(res => {
+            if (res.status === 200) {
+              setTimeout(() => {
+                this.$message.success(res.msg)
+                this.SET_USER(res.data)
+                this.isMask = false
+                this.isContain = false
+                this.$router.push('/')
+                setToken(new Date())
+              }, 500)
+            } else if (res.status === 500) {
+              this.$message.warning(res.msg)
+            }
+          })
         } else {
           this.$message.warning('验证码不能为空')
         }
       } else {
         this.$message.warning('手机号不能为空')
       }
+    },
+    handleToggleCode() {
+      this.identifyCode = randomWord(false, 4)
     },
     // 密码登录
     loginTrue() {
@@ -405,6 +429,21 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+
+.img-code-wrap {
+  .el-form-item__content {
+    margin-left: 0!important;
+  }
+  .img-code {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 280px;
+  }
+}
+</style>
+
 <style lang="scss" scoped>
 @mixin hover {
   position: relative;
@@ -560,7 +599,7 @@ export default {
   top: 40%;
   transform: translate(-50%, -50%);
   width: 388px;
-  height: 368px;
+  height: 388px;
   background: rgba(255, 255, 255, 1);
   border-radius: 4px;
   z-index: 1001;

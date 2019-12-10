@@ -59,7 +59,7 @@ import { fetchAtricle, viewTop9Article, getNewArticle } from '@/api/consult.js'
 const navList = [
   {
     id: 0,
-    label: '银行咨询',
+    label: '银行咨讯',
     list: [
       { label: '中信银行', id: 1 },
       { label: '工商银行', id: 2 },

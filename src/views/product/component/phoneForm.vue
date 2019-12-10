@@ -4,6 +4,14 @@
       <el-form-item label="手机号：" prop="phone">
         <el-input v-model="phoneForm.phone" :disabled="phone !== ''" placeholder="请输入手机号" style="width: 280px"/>
       </el-form-item>
+
+      <el-form-item label="图片验证码" prop="code">
+        <div class="img-code">
+          <el-input v-model="phoneForm.code" type="text" placeholder="验证码" style="margin-right: 10px"/>
+          <identify :identify-code="identifyCode" title="点击切换验证码" style="cursor: pointer;" @click.native="handleToggleCode"/>
+        </div>
+      </el-form-item>
+
       <el-form-item label="手机验证码：" prop="password">
         <el-input v-model="phoneForm.password" placeholder="请输入验证码" style="width: 170px"/>
         <div v-if="!isDownCount" class="btn" @click="getCode">{{ codeText }}</div>
@@ -17,14 +25,20 @@
         <p v-if="ifRegister" style="color: #9b9b9b; font-size: 12px;">提示：平台不会查询您的征信，所有信息仅供申请参考。</p>
       </el-form-item>
     </el-form>
+
   </div>
 </template>
 <script>
+import { randomWord } from '@/util/util'
+import identify from '@/component/identify'
 import { validaterPhone } from '@/util/validate'
-import { sendPhoneCode, sendPhoneCodeForRegister, validateRegister, validIfApply, valideCode, saveOrder } from '@/api/apply'
+import { sendPhoneCode, sendPhoneCodeForRegister, validateRegister, validIfApply, valideCode, saveOrder, saveImgCode } from '@/api/apply'
 import { mapState } from 'vuex'
 export default {
   name: 'PhoneForm',
+  components: {
+    identify
+  },
   props: {
     options: {
       type: Object,
@@ -36,7 +50,7 @@ export default {
     },
     phone: {
       type: String,
-      default: ''
+      default: '12sd'
     }
   },
   data() {
@@ -51,15 +65,28 @@ export default {
         }
       }
     }
+    const validateImgCode = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('图片验证码不能为空'))
+      } else {
+        if (value.toLowerCase() === this.identifyCode.toLowerCase()) {
+          callback()
+        } else {
+          callback(new Error('图片验证码不匹配'))
+        }
+      }
+    }
     return {
       agree: true,
       phoneForm: {
         phone: '',
-        password: ''
+        password: '',
+        code: ''
       },
       phoneFormRule: {
         phone: [{ required: true, trigger: 'change', validator: validatePhone }],
-        password: [{ required: true, message: '验证码不能为空', trigger: 'change' }]
+        password: [{ required: true, message: '验证码不能为空', trigger: 'change' }],
+        code: [{ required: true, trigger: 'change', validator: validateImgCode }]
       },
       isDownCount: false,
       times: 60,
@@ -68,7 +95,8 @@ export default {
       isLoading: false,
       isRegister: false,
       saveOrderForm: {},
-      zhuce: false
+      zhuce: false,
+      identifyCode: ''
     }
   },
   computed: {
@@ -76,8 +104,12 @@ export default {
   },
   created() {
     this.phoneForm.phone = this.phone
+    this.identifyCode = randomWord(false, 4)
   },
   methods: {
+    handleToggleCode() {
+      this.identifyCode = randomWord(false, 4)
+    },
     checkIsRegister(phone) {
       validateRegister(phone).then(res => {
         if (res.data.status === 500) { // 手机号已注册
@@ -87,21 +119,29 @@ export default {
             return false
           } else {
             this.isRegister = true
-            this.sendCode(phone)
+            this.saveCode(phone, 1)
           }
-          console.log('设置了false')
           sessionStorage.setItem('show', false) // 控制最后一步相关信息是否显示
           this.zhuce = true
         } else {
-          console.log('设置了true')
           this.zhuce = false
           sessionStorage.setItem('show', true)
           this.isRegister = false
-          this.sendCodeForRegister(phone)
+          this.saveCode(phone, 2)
         }
       })
     },
-
+    saveCode(phone, type) { // 将图片交由后端保存
+      saveImgCode({ phone, code: this.phoneForm.code }).then(res => {
+        if (res.data.status === 200) { // 保存成功后请求发送验证码接口
+          if (type === 1) {
+            this.sendCode(phone, this.phoneForm.code)
+          } else {
+            this.sendCodeForRegister(phone, this.phoneForm.code)
+          }
+        }
+      })
+    },
     validateCode() { // 检测验证码是否有效
       valideCode(this.phoneForm.phone, this.phoneForm.password).then(res => {
         if (res.data.status === 200) {
@@ -171,11 +211,23 @@ export default {
       this.codeText = '重新获取'
     },
     getCode() {
-      if (this.phoneForm.phone && validaterPhone(this.phoneForm.phone)) {
-        if (this.userInfo) { // 登陆状态
-          if (this.userInfo.roleId !== 1) {
-            this.$message.warning('贷款人方可申请')
-          } else {
+      this.$refs.phoneForm.clearValidate()
+      this.$refs.phoneForm.validateField(['phone', 'code'], valid => {
+        if (!valid) {
+          if (this.userInfo) { // 登陆状态
+            if (this.userInfo.roleId !== 1) {
+              this.$message.warning('贷款人方可申请')
+            } else {
+              this.isDownCount = true
+              this.timer = setInterval(() => {
+                this.times--
+                if (this.times <= 0) {
+                  this.clearTimer()
+                }
+              }, 1000)
+              this.checkPhone(this.phoneForm.phone)
+            }
+          } else { // 未登录状态
             this.isDownCount = true
             this.timer = setInterval(() => {
               this.times--
@@ -185,19 +237,8 @@ export default {
             }, 1000)
             this.checkPhone(this.phoneForm.phone)
           }
-        } else { // 未登录状态
-          this.isDownCount = true
-          this.timer = setInterval(() => {
-            this.times--
-            if (this.times <= 0) {
-              this.clearTimer()
-            }
-          }, 1000)
-          this.checkPhone(this.phoneForm.phone)
         }
-      } else {
-        this.$message.warning('手机号为空或格式不正确')
-      }
+      })
     },
     checkPhone(phone) {
       validIfApply(phone).then(res => {
@@ -209,8 +250,8 @@ export default {
         }
       })
     },
-    sendCode(phone) {
-      sendPhoneCode(phone).then(res => {
+    sendCode(phone, code) {
+      sendPhoneCode(phone, code).then(res => {
         if (res.data.status === 200) {
           this.$message.success('验证码发送成功，请注意查收')
         } else {
@@ -219,8 +260,8 @@ export default {
         }
       })
     },
-    sendCodeForRegister(phone) {
-      sendPhoneCodeForRegister(phone).then(res => {
+    sendCodeForRegister(phone, code) {
+      sendPhoneCodeForRegister(phone, code).then(res => {
         if (res.data.status === 200) {
           this.$message.success('验证码发送成功，请注意查收')
         } else {
@@ -266,5 +307,11 @@ export default {
     border-color: $jnd-border-color-theme;
     width: 280px;
   }
+}
+.img-code {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 280px;
 }
 </style>
