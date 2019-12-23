@@ -203,7 +203,15 @@
                 </el-form-item>
               </div>
               <div class="person-item clearfix">
-                <el-form-item label="验证码:" prop="password" style="width: 250px; float: left">
+                <el-form-item label="图形验证码:" prop="code" style="width: 250px; float: left">
+                  <el-input v-model="code" type="text" autocomplete="off"/>
+                </el-form-item>
+                <div class="fll verify">
+                  <img :src="codeUrl" alt="点击切换验证码" title="点击切换验证码" class="img-code" style="cursor: pointer; margin-left: 20px;" @click="handleUpdateImgCode">
+                </div>
+              </div>
+              <div class="person-item clearfix">
+                <el-form-item label="短信验证码:" prop="password" style="width: 250px; float: left">
                   <el-input v-model="formData.password" type="text" autocomplete="off"/>
                 </el-form-item>
                 <div class="fll verify">
@@ -265,6 +273,7 @@ import { randomWord } from '@/util/util'
 import { mapState, mapMutations } from 'vuex'
 import { validaterName, validaterPhone } from '@/util/validate'
 import { registerAccount, fetchProvince, fetchCity } from '@/api/register'
+import { sendPhoneCodeForRegister } from '@/api/apply'
 import uploadImg from '@/component/uploadImg'
 const reg = /^\d+(\.(?!.*0$)\d{1,2})?$/
 const regZ = /^\d+$/
@@ -414,19 +423,28 @@ export default {
         image: [{ required: true, trigger: 'change', message: '头像不能为空' }],
         sex: [{ required: true, trigger: 'change', message: '性别不能为空' }]
       },
-      flag: false
+      imgUrl: 'http://www.9nengdai.com/api/verify/createImg?',
+      flag: false,
+      code: ''
     }
   },
   computed: {
-    ...mapState(['userInfo'])
+    ...mapState(['userInfo']),
+    codeUrl() {
+      return this.imgUrl
+    }
   },
   created() {
     this.phone = new Date().getTime() + randomWord(false, 10)
+    this.handleUpdateImgCode()
     this.getProvince()
     this.getGoodBusiness()
   },
   methods: {
     ...mapMutations(['SET_USER']),
+    handleUpdateImgCode() {
+      this.imgUrl = 'https://www.9nengdai.com/api/verify/createImg?' + new Date().getTime()
+    },
     closeMask() {
       this.formData.businessScope = []
       this.isMask = false
@@ -486,16 +504,17 @@ export default {
           this.clearTimer(timer)
         } else if (res.status === 500) {
           // 手机号未被注册
+
           this.getCode()
         }
       })
     },
     getCode() {
-      this.$axios.get(`base/getRegisterCode/${this.formData.phone}`).then(res => {
-        if (res.status === 200) {
+      sendPhoneCodeForRegister(this.formData.phone, this.code).then(res => {
+        if (res.data.status === 200) {
           this.$message.success('验证码发送成功，请注意查收')
         } else {
-          this.$message.warning(res.msg)
+          this.$message.warning(res.data.msg)
           this.clearTimer(this.timer)
         }
       })
@@ -510,14 +529,18 @@ export default {
     send() {
       if (this.formData.phone) {
         if (validaterPhone(this.formData.phone)) {
-          this.showing = false
-          this.timer = setInterval(() => {
-            this.time--
-            if (this.time < 0) {
-              this.clearTimer(this.timer)
-            }
-          }, 1000)
-          this.checkPhone(this.timer)
+          if (this.code) {
+            this.showing = false
+            this.timer = setInterval(() => {
+              this.time--
+              if (this.time < 0) {
+                this.clearTimer(this.timer)
+              }
+            }, 1000)
+            this.checkPhone(this.timer)
+          } else {
+            this.$message.warning('请输入图形验证码')
+          }
         } else {
           this.$message.warning('手机号格式不正确')
         }

@@ -67,7 +67,7 @@
                 <el-form-item prop="code">
                   <div class="img-code">
                     <el-input v-model="loginNum.imgCode" type="text" placeholder="验证码" style="margin-right: 10px"/>
-                    <identify :identify-code="identifyCode" title="点击切换验证码" style="cursor: pointer;" @click.native="handleToggleCode"/>
+                    <img :src="codeUrl" alt="点击切换验证码" title="点击切换验证码" class="img-code" style="cursor: pointer;" @click="handleUpdateImgCode">
                   </div>
                 </el-form-item>
               </div>
@@ -119,10 +119,7 @@ import { mapState, mapMutations } from 'vuex'
 import validater from '@/util/validater'
 import { setToken, removeToken } from '@/util/auth'
 import { validaterPhone } from '@/util/validate'
-import { randomWord } from '@/util/util'
-import identify from '@/component/identify'
 import { fetchCodeByLogin, checkPhoneStatus } from '@/api/layout'
-import { saveImgCode } from '@/api/apply'
 
 const linkOptions = [
   { link: 'home', name: '首页', to: '/' },
@@ -135,9 +132,6 @@ const linkOptions = [
 
 export default {
   name: 'Header',
-  components: {
-    identify
-  },
   props: {
     styleOptions: {
       type: Object,
@@ -157,7 +151,6 @@ export default {
         number: '',
         verifyCode: ''
       },
-      identifyCode: '',
       verifyCode: '发送验证码',
       // 验证码登录
       loginNum: {
@@ -176,17 +169,26 @@ export default {
       rule: {
         phone: [{ validator: validater.phoneNumber, trigger: 'change' }]
       },
-      checked: false // 是否使用自动登录
+      checked: false, // 是否使用自动登录
+      imgUrl: 'https://www.9nengdai.com/api/verify/createImg?'
     }
   },
   computed: {
-    ...mapState(['userInfo'])
+    ...mapState(['userInfo']),
+    codeUrl() {
+      return this.imgUrl
+    }
   },
   watch: {
     '$route': function(val) {
       if (val.path === '/' && val.query.login === 1) {
         this.isMask = true
         this.isContain = true
+      }
+    },
+    isContain(val) {
+      if (val) {
+        this.handleUpdateImgCode()
       }
     }
   },
@@ -196,7 +198,6 @@ export default {
       this.isMask = true
       this.isContain = true
     }
-    this.identifyCode = randomWord(false, 4)
     this.autoLogin()
     if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
       window.location.href = 'http://m.9nengdai.com/'
@@ -204,6 +205,9 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_USER']),
+    handleUpdateImgCode() {
+      this.imgUrl = 'https://www.9nengdai.com/api/verify/createImg?' + new Date().getTime()
+    },
     // 检测是否 自动登录
     autoLogin() {
       const phone = localStorage.getItem('phone')
@@ -283,22 +287,18 @@ export default {
     send() {
       if (this.loginNum.phone && validaterPhone(this.loginNum.phone)) {
         if (this.loginNum.imgCode) {
-          if (this.loginNum.imgCode.toLowerCase() === this.identifyCode.toLowerCase()) {
-            this.time = 60
-            this.showing = false
-            this.timer = setInterval(() => {
-              this.time--
-              if (this.time < 0) {
-                clearInterval(this.timer)
-                this.showing = true
-                this.verifyCode = '重新获取'
-                this.time = 60
-              }
-            }, 1000)
-            this.checkPhone()
-          } else {
-            this.$message.warning('图片验证码输入错误')
-          }
+          this.time = 60
+          this.showing = false
+          this.timer = setInterval(() => {
+            this.time--
+            if (this.time < 0) {
+              clearInterval(this.timer)
+              this.showing = true
+              this.verifyCode = '重新获取'
+              this.time = 60
+            }
+          }, 1000)
+          this.checkPhone()
         } else {
           this.$message.warning('图片验证码不能为空')
         }
@@ -306,16 +306,9 @@ export default {
         this.$message.warning('手机号不能为空或格式错误')
       }
     },
-
-    saveCode(phone) { // 将图片交由后端保存
-      saveImgCode({ phone, code: this.loginNum.imgCode }).then(res => {
-        if (res.data.status === 200) { // 保存成功后请求发送验证码接口
-          this.getLoginCode()
-        }
-      })
-    },
     checkPhone() {
       checkPhoneStatus(this.loginNum.phone).then(res => {
+        console.log(res)
         if (res.data.status === 500) {
           this.$message.warning(res.data.msg)
           this.loginNum.phone = ''
@@ -324,18 +317,20 @@ export default {
           this.verifyCode = '重新获取'
           this.time = 60
         } else {
-          this.saveCode()
+          this.getLoginCode()
         }
       })
     },
     getLoginCode() {
       fetchCodeByLogin(this.loginNum.phone, this.loginNum.imgCode).then(res => {
         if (res.data.status !== 200) {
+          this.$message.warning(res.data.msg)
           clearInterval(this.timer)
           this.showing = true
           this.verifyCode = '重新获取'
           this.time = 60
-          this.$message.warning(res.msg)
+        } else {
+          this.$message.success(res.data.msg)
         }
       })
     },
@@ -395,9 +390,6 @@ export default {
       } else {
         this.$message.warning('手机号不能为空')
       }
-    },
-    handleToggleCode() {
-      this.identifyCode = randomWord(false, 4)
     },
     // 密码登录
     loginTrue() {

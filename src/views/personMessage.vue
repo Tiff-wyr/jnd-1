@@ -62,6 +62,13 @@
           <span v-else>{{ creditStatus }}</span>
         </el-form-item>
 
+        <el-form-item label="贷款金额:" prop="loanAmount">
+          <el-select v-if="isEdit" v-model="form.loanAmount" clearable placeholder="请选择贷款金额">
+            <el-option v-for="item in loanAmountOptions" :key="item.id" :label="item.label" :value="item.value"/>
+          </el-select>
+          <span v-else>{{ loanAmount }}</span>
+        </el-form-item>
+
         <el-form-item label="贷款期限:" prop="loanTimeKey">
           <el-select v-if="isEdit" v-model="form.loanTimeKey" clearable placeholder="请选择贷款期限">
             <el-option v-for="item in loanTimeOptions" :key="item.id" :label="item.label" :value="item.id"/>
@@ -122,7 +129,7 @@
 import { mapMutations } from 'vuex'
 import { validaterName } from '@/util/validate'
 import { updateUserInfo, getUserInfo } from '@/api/apply'
-import { jobTypeList, monthInComeList, socialProtectList, gongjijinList, carStatusListList, houseStatusList, creditList, zhimaList, loanTimeList } from '@/util/filterData'
+import { jobTypeList, monthInComeList, socialProtectList, gongjijinList, carStatusListList, houseStatusList, creditList, zhimaList, loanTimeList, loanAmountList } from '@/util/filterData'
 const jobTypeOptions = jobTypeList()
 const monthIncomeOptions = monthInComeList()
 const socialProtectOptions = socialProtectList()
@@ -132,6 +139,9 @@ const houseStatusOptions = houseStatusList()
 const creditOptions = creditList()
 const zhimaOptions = zhimaList()
 const loanTimeOptions = loanTimeList()
+const loanAmountOptions = loanAmountList().filter(item => {
+  return item.id !== 8
+})
 export default {
   name: 'PersonMessage',
   filters: {
@@ -177,6 +187,7 @@ export default {
       creditOptions,
       zhimaOptions,
       loanTimeOptions,
+      loanAmountOptions,
       isEdit: false,
       // 省
       provinceData: [],
@@ -199,7 +210,8 @@ export default {
         phone: '',
         email: '',
         borrowerId: '',
-        loanTimeKey: 1
+        loanTimeKey: 1,
+        loanAmount: ''
       },
       formRules: {
         borrowerName: [{ required: true, trigger: 'change', validator: validateName }],
@@ -207,6 +219,7 @@ export default {
         age: [{ required: true, message: '年龄不能为空', trigger: 'change' }],
         jobTypeKey: [{ required: true, message: '请选择职业', trigger: 'change' }],
         monthIncome: [{ required: true, message: '请选择月收入', trigger: 'change' }],
+        loanAmount: [{ required: true, message: '请选择贷款金额', trigger: 'change' }],
         address: [{ required: true, trigger: 'change', validator: validateAdress }]
       }
     }
@@ -252,8 +265,11 @@ export default {
     },
     loanTime() {
       return this.getValue(this.loanTimeOptions, this.form.loanTimeKey)
+    },
+    loanAmount() {
+      const loanAmount = this.form.loanAmount ? this.form.loanAmount + '万元' : ''
+      return loanAmount
     }
-
   },
   created() {
     this.getData()

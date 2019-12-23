@@ -23,9 +23,7 @@
             </div>
             <div class="clearfix area-item">
               <div class="fll city">擅长业务</div>
-              <div
-                :class="goodUp? 'fll radio-wrap clearfix radio-wrap-active' : 'fll radio-wrap clearfix'"
-              >
+              <div :class="goodUp? 'fll radio-wrap clearfix radio-wrap-active' : 'fll radio-wrap clearfix'" >
                 <wcheckbox :radios="goods" v-model="query.selectedBusiness" name="good" class="fll"/>
               </div>
               <div class="up" @click="goodSpread">
@@ -65,16 +63,8 @@
           </div>
           <div v-for="(item, index) in tableData" :key="index" class="adviser clearfix">
             <div class="pic fll">
-              <img
-                v-if="item.image"
-                :src="item.image"
-                alt=""
-              >
-              <img
-                v-else
-                src="/static/resource/pic/agent.png"
-                alt=""
-              >
+              <img v-if="item.image" :src="item.image" alt="">
+              <img v-else src="/static/resource/pic/agent.png" alt="" >
             </div>
             <div class="fll ml36">
               <div class="adviser-name">{{ item.brokerName }}</div>
@@ -323,8 +313,6 @@ export default {
     // 获取擅长业务
     getGoods() {
       this.$axios.get(`business/getAllBusiness`).then(res => {
-        console.log(res)
-        res.unshift({ businessId: 0, business: '不限' })
         this.goods = res.map(item => {
           return { value: item.businessId, label: item.business }
         })

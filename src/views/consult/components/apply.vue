@@ -25,10 +25,18 @@
         <el-form-item prop="phone">
           <el-input v-model="applyForm.phone" :disabled="isUpdate" placeholder="请输入手机号"/>
         </el-form-item>
+
+        <el-form-item prop="imgCode">
+          <div class="img-code-wrap">
+            <el-input v-model="imgCode" class="w160" placeholder="请输入图片验证码"/>
+            <img :src="codeUrl" alt="点击切换验证码" title="点击切换验证码" class="img-code" @click="handleUpdateImgCode">
+          </div>
+        </el-form-item>
+
         <el-form-item prop="code">
           <el-input v-model="applyForm.code" class="w160" placeholder="请输入验证码"/>
-          <span v-if="!isSend" class="btn" @click="handleSendCode">{{ sendStatus | sendStatusFilter }}</span>
-          <span v-else class="btn">{{ time }}s</span>
+          <span v-if="!isDownCount" class="btn" @click="handleSendCode">{{ codeText }}</span>
+          <span v-else class="btn">{{ times }}s</span>
         </el-form-item>
         <el-form-item class="apply-now">
           <span class="btn apply" @click="handleApply">立即申请</span>
@@ -53,19 +61,10 @@
 <script>
 import { validaterPhone, validaterLoanAmount, validaterName } from '@/util/validate'
 import { fetchProvince, fetchCity } from '@/api/register'
-import { applyLoanByNoLogin, validPhoneIsRegister, sendPhoneCode } from '@/api/apply'
-import { publics } from '@/api/validateApply'
+import { validateRegister, sendPhoneCode, applyLoanByNoLogin } from '@/api/apply'
+// import { sendPhoneCode, sendPhoneCodeForRegister, validateRegister, validIfApply, valideCode, saveOrder, saveImgCode } from '@/api/apply'
 export default {
   name: 'Apply',
-  filters: {
-    sendStatusFilter(val) {
-      const map = {
-        init: '发送验证码',
-        send: '重新发送'
-      }
-      return map[val]
-    }
-  },
   data() {
     const validateName = (rule, value, callback) => {
       if (value) {
@@ -107,6 +106,13 @@ export default {
         callback(new Error('手机号不能为空'))
       }
     }
+    const validatorImgCode = (rule, value, callback) => {
+      if (this.imgCode) {
+        callback()
+      } else {
+        callback(new Error('图片验证码不能为空'))
+      }
+    }
     return {
       checked: true,
       applyForm: {
@@ -118,19 +124,22 @@ export default {
         phone: '',
         code: ''
       },
+      imgCode: '',
       applyRules: {
         borrowerName: [{ required: true, trigger: 'blur', validator: validateName }],
         loanAmount: [{ required: true, trigger: 'change', validator: validateLoanAmount }],
         address: [{ required: true, trigger: 'change', validator: validateAddress }],
         phone: [{ required: true, trigger: 'change', validator: validatePhone }],
-        code: [{ required: true, trigger: 'change', message: '验证码不能为空' }]
+        code: [{ required: true, trigger: 'change', message: '验证码不能为空' }],
+        imgCode: [{ required: true, trigger: 'change', validator: validatorImgCode }]
       },
       provinceData: [],
       cityData: [],
+      imgUrl: 'http://www.9nengdai.com/api/verify/createImg?',
       btnLoading: false,
-      time: 60,
-      sendStatus: 'init',
-      isSend: false,
+      times: 60,
+      codeText: '获取验证码',
+      isDownCount: false,
       timer: null,
       isUpdate: false
     }
@@ -140,6 +149,10 @@ export default {
       if (this.$store.state.userInfo) {
         return this.$store.state.userInfo
       }
+    },
+
+    codeUrl() {
+      return this.imgUrl
     }
   },
   watch: {
@@ -162,8 +175,12 @@ export default {
       this.applyForm.borrowerName = data.name
       this.applyForm.sex = data.sex
     }
+    this.handleUpdateImgCode()
   },
   methods: {
+    handleUpdateImgCode() {
+      this.imgUrl = 'https://www.9nengdai.com/api/verify/createImg?' + new Date().getTime()
+    },
     // 获取省
     getProvince() {
       fetchProvince().then(res => {
@@ -189,68 +206,65 @@ export default {
       this.applyForm.address2 = ''
       this.getCity(val)
     },
-    ifRegister() {
-      validPhoneIsRegister(this.applyForm.phone).then(res => {
-        if (res.data.status === 200) {
-          this.$message.warning('您的手机号已注册，请登录后再进行操作')
-          this.clearTimer(this.timer)
-        } else if (res.data.status === 500) {
-          this.sendCode()
+    clearTimer() {
+      clearInterval(this.timer)
+      this.times = 60
+      this.isDownCount = false
+      this.codeText = '重新获取'
+    },
+    handleSendCode() {
+      this.$refs.applyForm.clearValidate()
+      this.$refs.applyForm.validateField('phone', valid => {
+        if (!valid) {
+          this.$refs.applyForm.validateField('imgCode', valid => {
+            if (!valid) {
+              if (this.userInfo) { // 登陆状态
+                if (this.userInfo.roleId !== 1) {
+                  this.$message.warning('贷款人方可申请')
+                } else {
+                  this.isDownCount = true
+                  this.timer = setInterval(() => {
+                    this.times--
+                    if (this.times <= 0) {
+                      this.clearTimer()
+                    }
+                  }, 1000)
+                  this.sendCode(this.applyForm.phone, this.imgCode)
+                }
+              } else { // 未登录状态
+                this.isDownCount = true
+                this.timer = setInterval(() => {
+                  this.times--
+                  if (this.times <= 0) {
+                    this.clearTimer()
+                  }
+                }, 100)
+                this.checkIsRegister(this.applyForm.phone)
+              }
+            }
+          })
         }
       })
     },
-    ifApplyInToday() {
-      publics(this.applyForm.phone).then(res => { // 只针对登录状态
-        if (res.data.status === 200) { // 可以申请贷款
-          this.sendCode()
+    checkIsRegister(phone) {
+      validateRegister(phone).then(res => {
+        if (res.data.status === 500) { // 手机号已注册
+          this.$message.warning('该手机号已被注册,请登录后在进行申请')
+          this.clearTimer()
         } else {
-          this.$message.warning(res.data.msg)
+          this.sendCode(phone, this.imgCode)
         }
       })
     },
-    sendCode() {
-      sendPhoneCode(this.applyForm.phone).then(res => {
+    sendCode(phone, code) {
+      sendPhoneCode(phone, code).then(res => {
         if (res.data.status === 200) {
           this.$message.success('验证码发送成功，请注意查收')
         } else {
           this.$message.warning(res.data.msg)
+          this.clearTimer()
         }
       })
-    },
-    setTimer() {
-      this.isSend = true
-      this.timer = setInterval(() => {
-        this.time -= 1
-        if (this.time < 0) {
-          this.clearTimer(this.timer)
-        }
-      }, 1000)
-    },
-    clearTimer(timer) {
-      clearInterval(timer)
-      this.time = 60
-      this.isSend = false
-      this.sendStatus = 'send'
-    },
-    handleSendCode() {
-      if (this.applyForm.phone) {
-        if (validaterPhone(this.applyForm.phone)) {
-          this.setTimer()
-          if (this.$store.state.userInfo) { // 登录状态
-            if (this.$store.state.userInfo.roleId === 1) {
-              this.ifApplyInToday()
-            } else {
-              this.$message.warning('贷款人方可申请')
-            }
-          } else {
-            this.ifRegister()
-          }
-        } else {
-          this.$message.warning('手机号格式错误')
-        }
-      } else {
-        this.$message.warning('手机号不能为空')
-      }
     },
     applyByNoLogin(callback) {
       applyLoanByNoLogin(this.applyForm).then(res => {
@@ -306,6 +320,14 @@ export default {
 
 <style lang="scss" scoped>
 @import './common.scss';
+.img-code-wrap {
+  display: flex;
+  .img-code {
+    width: 100px;
+    margin-left: 5px;
+    cursor: pointer;
+  }
+}
 .apply-wrap {
   margin-bottom: 30px;
   .el-radio+.el-radio {

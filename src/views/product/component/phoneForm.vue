@@ -8,7 +8,7 @@
       <el-form-item label="图片验证码" prop="code">
         <div class="img-code">
           <el-input v-model="phoneForm.code" type="text" placeholder="验证码" style="margin-right: 10px"/>
-          <identify :identify-code="identifyCode" title="点击切换验证码" style="cursor: pointer;" @click.native="handleToggleCode"/>
+          <img :src="codeUrl" alt="点击切换验证码" title="点击切换验证码" class="img-code" style="cursor: pointer;" @click="handleUpdateImgCode">
         </div>
       </el-form-item>
 
@@ -29,16 +29,11 @@
   </div>
 </template>
 <script>
-import { randomWord } from '@/util/util'
-import identify from '@/component/identify'
 import { validaterPhone } from '@/util/validate'
 import { sendPhoneCode, sendPhoneCodeForRegister, validateRegister, validIfApply, valideCode, saveOrder, saveImgCode } from '@/api/apply'
 import { mapState } from 'vuex'
 export default {
   name: 'PhoneForm',
-  components: {
-    identify
-  },
   props: {
     options: {
       type: Object,
@@ -69,11 +64,7 @@ export default {
       if (!value) {
         callback(new Error('图片验证码不能为空'))
       } else {
-        if (value.toLowerCase() === this.identifyCode.toLowerCase()) {
-          callback()
-        } else {
-          callback(new Error('图片验证码不匹配'))
-        }
+        callback()
       }
     }
     return {
@@ -96,19 +87,27 @@ export default {
       isRegister: false,
       saveOrderForm: {},
       zhuce: false,
-      identifyCode: ''
+      imgUrl: 'https://www.9nengdai.com/api/verify/createImg?'
     }
   },
   computed: {
-    ...mapState(['userInfo'])
+    ...mapState(['userInfo']),
+    codeUrl() {
+      return this.imgUrl
+    }
+  },
+  watch: {
+    '$route': function(val) {
+      console.log(val)
+    }
   },
   created() {
     this.phoneForm.phone = this.phone
-    this.identifyCode = randomWord(false, 4)
+    this.handleUpdateImgCode()
   },
   methods: {
-    handleToggleCode() {
-      this.identifyCode = randomWord(false, 4)
+    handleUpdateImgCode() {
+      this.imgUrl = 'https://www.9nengdai.com/api/verify/createImg?' + new Date().getTime()
     },
     checkIsRegister(phone) {
       validateRegister(phone).then(res => {
@@ -212,31 +211,36 @@ export default {
     },
     getCode() {
       this.$refs.phoneForm.clearValidate()
-      this.$refs.phoneForm.validateField(['phone', 'code'], valid => {
+      this.$refs.phoneForm.validateField('phone', valid => {
+        console.log(valid)
         if (!valid) {
-          if (this.userInfo) { // 登陆状态
-            if (this.userInfo.roleId !== 1) {
-              this.$message.warning('贷款人方可申请')
-            } else {
-              this.isDownCount = true
-              this.timer = setInterval(() => {
-                this.times--
-                if (this.times <= 0) {
-                  this.clearTimer()
+          this.$refs.phoneForm.validateField('code', valid => {
+            if (!valid) {
+              if (this.userInfo) { // 登陆状态
+                if (this.userInfo.roleId !== 1) {
+                  this.$message.warning('贷款人方可申请')
+                } else {
+                  this.isDownCount = true
+                  this.timer = setInterval(() => {
+                    this.times--
+                    if (this.times <= 0) {
+                      this.clearTimer()
+                    }
+                  }, 1000)
+                  this.checkPhone(this.phoneForm.phone)
                 }
-              }, 1000)
-              this.checkPhone(this.phoneForm.phone)
-            }
-          } else { // 未登录状态
-            this.isDownCount = true
-            this.timer = setInterval(() => {
-              this.times--
-              if (this.times <= 0) {
-                this.clearTimer()
+              } else { // 未登录状态
+                this.isDownCount = true
+                this.timer = setInterval(() => {
+                  this.times--
+                  if (this.times <= 0) {
+                    this.clearTimer()
+                  }
+                }, 1000)
+                this.checkPhone(this.phoneForm.phone)
               }
-            }, 1000)
-            this.checkPhone(this.phoneForm.phone)
-          }
+            }
+          })
         }
       })
     },

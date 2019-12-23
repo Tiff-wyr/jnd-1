@@ -14,7 +14,7 @@
       <div class="center">
         <h3 class="title p12">{{ navName }}</h3>
         <div class="article-list">
-          <dl v-for="(item, index) in resultList" :key="index" class="article-item p12">
+          <dl v-for="(item, index) in resultList" :key="index" class="article-item p12" @click="handleDetail(item)">
             <dt class="article-img">
               <img :src="item.image" alt="">
             </dt>
@@ -155,6 +155,9 @@ export default {
       getNewArticle().then(res => {
         this.newList = res.data
       })
+    },
+    handleDetail(item) {
+      this.$router.push({ path: '/consultDetail', query: { id: item.id }})
     },
     handleCurrentChange(val) {
       this.listQuery.page = val

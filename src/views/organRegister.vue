@@ -9,13 +9,7 @@
             <div class="number">已有账号，</div>
             <div class="login" @click="$router.push({path:'/',query:{login:1}})">立即登陆</div>
           </div>
-          <el-form
-            ref="organMess"
-            :model="organMess"
-            :rules="rules"
-            label-position="right"
-            label-width="130px"
-          >
+          <el-form ref="organMess" :model="organMess" :rules="rules" label-position="right" label-width="130px">
             <div class="user-form">
               <div class="person-item clearfix">
                 <el-form-item label="机构名称:" prop="agencyName">
@@ -29,28 +23,13 @@
               </div>
               <div class="person-item clearfix">
                 <el-form-item label="机构属性:" prop="agencyProperty">
-                  <el-select
-                    v-model="organMess.agencyProperty"
-                    multiple
-                    placeholder="请选择"
-                    style="width: 250px;"
-                  >
-                    <el-option
-                      v-for="item in options"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
-                    />
-                  </el-select>
+                  <el-select v-model="organMess.agencyProperty" multiple placeholder="请选择" style="width: 250px;">
+                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"/></el-select>
                 </el-form-item>
               </div>
               <div class="person-item clearfix">
                 <el-form-item label="上传营业执照:" prop="agencyLicense">
-                  <personImg
-                    v-model="organMess.agencyLicense"
-                    :phone="phone"
-                    @success="uploadSuccess"
-                  />
+                  <personImg v-model="organMess.agencyLicense" :phone="phone" @success="uploadSuccess" />
                   <div class="fll text-desc">请上传营业执照正面照，支持JPG/JPEG/PNG格式图片，照片不大于2M</div>
                 </el-form-item>
               </div>
@@ -61,52 +40,19 @@
               </div>
               <div class="person-item clearfix">
                 <el-form-item label="机构所在地:" prop="agencyAddress">
-                  <el-select
-                    v-model="organMess.agencyAddress"
-                    style="width: 155px;"
-                    @change="getCity"
-                  >
-                    <el-option
-                      v-for="item in provinceData"
-                      :key="item.pid"
-                      :label="item.provincial"
-                      :value="item.pid"
-                      style="width: 155px;"
-                    />
+                  <el-select v-model="organMess.agencyAddress" style="width: 155px;" @change="getCity" >
+                    <el-option v-for="item in provinceData" :key="item.pid" :label="item.provincial" :value="item.pid" style="width: 155px;" />
                   </el-select>
-                  <el-select
-                    v-model="organMess.agencyAddress1"
-                    style="margin-left: 5px;width: 140px;"
-                  >
-                    <el-option
-                      v-for="item in cityData"
-                      :key="item.cid"
-                      :label="item.city"
-                      :value="item.cid"
-                      style="width: 140px;"
-                    />
+                  <el-select v-model="organMess.agencyAddress1" style="margin-left: 5px;width: 140px;" >
+                    <el-option v-for="item in cityData" :key="item.cid" :label="item.city" :value="item.cid" style="width: 140px;" />
                   </el-select>
                 </el-form-item>
               </div>
               <div class="person-item clearfix">
                 <el-form-item label="营业期限:" prop="startBusiness">
                   <div>
-                    <el-date-picker
-                      v-model="organMess.startBusiness"
-                      type="date"
-                      placeholder="开始日期"
-                      style="width: 135px;"
-                      format="yyyy-MM-dd"
-                      value-format="yyyy-MM-dd"
-                    />
-                    <el-date-picker
-                      v-model="organMess.endBusiness"
-                      style="width: 135px;"
-                      type="date"
-                      placeholder="结束日期"
-                      format="yyyy-MM-dd"
-                      value-format="yyyy-MM-dd"
-                    />
+                    <el-date-picker v-model="organMess.startBusiness" type="date" placeholder="开始日期" style="width: 135px;" format="yyyy-MM-dd" value-format="yyyy-MM-dd" />
+                    <el-date-picker v-model="organMess.endBusiness" style="width: 135px;" type="date" placeholder="结束日期" format="yyyy-MM-dd" value-format="yyyy-MM-dd" />
                   </div>
                 </el-form-item>
               </div>
@@ -135,8 +81,17 @@
                   />
                 </el-form-item>
               </div>
+
               <div class="person-item clearfix">
-                <el-form-item label="验证码:" prop="password" style="width: 250px; float: left">
+                <el-form-item label="图形验证码:" prop="code" style="width: 250px; float: left">
+                  <el-input v-model="code" type="text" autocomplete="off"/>
+                </el-form-item>
+                <div class="fll verify">
+                  <img :src="codeUrl" alt="点击切换验证码" title="点击切换验证码" class="img-code" style="cursor: pointer; margin-left: 20px;" @click="handleUpdateImgCode">
+                </div>
+              </div>
+              <div class="person-item clearfix">
+                <el-form-item label="短信验证码:" prop="password" style="width: 250px; float: left">
                   <el-input v-model="organMess.password" type="text" autocomplete="off"/>
                 </el-form-item>
                 <div class="fll verify">
@@ -186,6 +141,7 @@ import personImg from '../component/imgUpload'
 import { randomWord } from '@/util/util'
 import { validaterPhone, validaterName } from '@/util/validate'
 import { fetchProvince, fetchCity } from '@/api/register'
+import { sendPhoneCodeForRegister } from '@/api/apply'
 export default {
   name: 'OrganRegister',
   components: {
@@ -324,18 +280,27 @@ export default {
         agencyIdentity: [
           { required: true, trigger: 'change', message: '填写人身份不能为空' }
         ]
-      }
+      },
+      code: '',
+      imgUrl: 'https://www.9nengdai.com/api/verify/createImg?'
     }
   },
   computed: {
-    ...mapState(['userInfo'])
+    ...mapState(['userInfo']),
+    codeUrl() {
+      return this.imgUrl
+    }
   },
   created() {
     this.phone = new Date().getTime() + randomWord(false, 10)
     this.getProvince()
+    this.handleUpdateImgCode()
   },
   methods: {
     ...mapMutations(['SET_USER']),
+    handleUpdateImgCode() {
+      this.imgUrl = 'https://www.9nengdai.com/api/verify/createImg?' + new Date().getTime()
+    },
     // 检测手机号是否被注册
     checkPhone(timer) {
       this.$axios.get(`user/selectPhone/${this.organMess.phone}`).then(res => {
@@ -349,11 +314,11 @@ export default {
       })
     },
     getCode() {
-      this.$axios.get(`base/getRegisterCode/${this.organMess.phone}`).then(res => {
-        if (res.status === 200) {
+      sendPhoneCodeForRegister(this.organMess.phone, this.code).then(res => {
+        if (res.data.status === 200) {
           this.$message.success('验证码发送成功，请注意查收')
         } else {
-          this.$message.warning(res.msg)
+          this.$message.warning(res.data.msg)
           this.clearTimer(this.timer)
         }
       })
@@ -367,14 +332,20 @@ export default {
     send() {
       if (this.organMess.phone) {
         if (validaterPhone(this.organMess.phone)) {
-          this.showing = false
-          this.timer = setInterval(() => {
-            this.time--
-            if (this.time < 0) {
-              this.clearTimer(this.timer)
-            }
-          }, 1000)
-          this.checkPhone(this.timer)
+          if (this.code) {
+            this.showing = false
+            this.timer = setInterval(() => {
+              this.time--
+              if (this.time < 0) {
+                this.clearTimer(this.timer)
+              }
+            }, 1000)
+            this.checkPhone(this.timer)
+          } else {
+            this.$message.warning('请输入图形验证码')
+          }
+        } else {
+          this.$message.warning('手机号格式错误')
         }
       } else {
         this.$message.warning('请输入手机号')
