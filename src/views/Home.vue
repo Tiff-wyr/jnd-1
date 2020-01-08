@@ -72,8 +72,8 @@
           </dl>
         </div>
         <div class="special mt48 mb24">特别推荐</div>
-        <div class="clearfix special-wrap">
-          <div v-for="(item,index) in specialData" :key="index" class="fll com mr20">
+        <div class=" special-wrap">
+          <div v-for="(item,index) in specialData" :key="index" class="com">
             <div class="word1">{{ item.productType }}</div>
             <div>
               <div class="word2">{{ item.productPublisher }}</div>
@@ -87,9 +87,9 @@
             <div class="btn" @click="specialLook(item.productId)">立即查看</div>
           </div>
         </div>
-        <div class="main clearfix">
-          <div class="fll">
-            <div class="clearfix mt48 mb24">
+        <div class="main mt48">
+          <div>
+            <div class="clearfix mb24">
               <div class="product fll">产品推荐</div>
               <div class="fll">
                 <div class="more fll" @click="$router.push('/loans')">更多</div>
@@ -189,7 +189,7 @@
               </div>
             </div>
           </div>
-          <div class="fll mt48">
+          <div>
             <calculator style="width: 268px; margin-left: 20px; margin-bottom: 30px;" location="home"/>
             <div class="loans clearfix align">
               <div class="loans-use">贷款用途</div>
@@ -256,13 +256,13 @@ const jobOptions = jobTypeList()
 export default {
   name: 'Home',
   metaInfo: {
-    title: '9能贷-专业的大型一站式金融服务平台，万款产品汇聚，100%下款_9能贷款',
+    title: '9能金科-专业的大型一站式金融服务平台，万款产品汇聚，100%下款_9能金科款',
     meta: [{
       name: 'keyWords',
       content: '贷款,平台贷款,平台 贷款,贷款 平台,贷款的平台,好贷款平台,小额贷款平台,手机贷款平台,学生贷款平台,靠谱贷款平台,容易贷款平台,分期贷款平台,好贷款的平台,抵押贷款平台,信用贷款平台,企业贷款平台,大额贷款平台,网上贷款平台,线上贷款平台,可靠的贷款平台,靠谱的贷款平台,公积金贷款平台,网络小额贷款平台,小微企业贷款平台'
     }, {
       name: 'description',
-      content: '9能贷款联合各类大型的金融机构,深度挖掘安全的金融服务渠道机构,为用户提供安全、多元的贷款产品和定制化的专业资金服务,打造更契合用户自身需求的贷款管理方案.找贷款,找信贷经理,找机构,办理贷款上9能贷款;放款快,利率低0.35%,额度高,门槛低,渠道广.贷款平台哪个好,贷款哪个平台好,有什么贷款平台,什么平台可以贷款,贷款平台哪个靠谱,哪个贷款平台靠谱.'
+      content: '9能金科款联合各类大型的金融机构,深度挖掘安全的金融服务渠道机构,为用户提供安全、多元的贷款产品和定制化的专业资金服务,打造更契合用户自身需求的贷款管理方案.找贷款,找信贷经理,找机构,办理贷款上9能金科款;放款快,利率低0.35%,额度高,门槛低,渠道广.贷款平台哪个好,贷款哪个平台好,有什么贷款平台,什么平台可以贷款,贷款平台哪个靠谱,哪个贷款平台靠谱.'
     }]
   },
   components: {
@@ -561,6 +561,8 @@ $gray: #333;
 .special-wrap {
   width: 1200px;
   overflow: hidden;
+  display: flex;
+  justify-content: space-between;
   .com {
     position: relative;
     text-align: center;
@@ -648,6 +650,8 @@ $gray: #333;
   }
 }
 .main {
+  display: flex;
+  justify-content: space-between;
   .more {
     height: 14px;
     font-size: 14px;

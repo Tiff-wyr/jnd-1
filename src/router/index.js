@@ -4,6 +4,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 const components = {
   home: () => import('@/views/Home'),
+  creditCard: () => import('@/views/creditCard/index'),
   loans: () => import('@/views/Loans'),
   agent: () => import('@/views/Agent'),
   organization: () => import('@/views/Organization'),
@@ -97,6 +98,14 @@ export default new Router({
             classify: 'home',
             setSeo: true,
             seoKey: 'home'
+          }
+        },
+        {
+          path: 'creditCard',
+          name: 'creditCard',
+          component: components.creditCard,
+          meta: {
+            classify: 'creditCard'
           }
         },
         {

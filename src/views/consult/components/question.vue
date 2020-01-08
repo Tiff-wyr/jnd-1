@@ -13,7 +13,7 @@
 <script>
 const guideList = [
   { value: 1, label: '怎么办贷款?' },
-  { value: 2, label: '为什么选择9能贷?' },
+  { value: 2, label: '为什么选择9能金科?' },
   { value: 3, label: '贷款流程是怎样的?' },
   { value: 4, label: '办贷款，我需要准备哪些资料?' },
   { value: 5, label: '办理贷款，金额多久可以到账？' }

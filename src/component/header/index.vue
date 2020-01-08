@@ -32,7 +32,7 @@
               下载APP
               <div class="code-box">
                 <img src="../../assets/download/code.png" alt="">
-                <span>9能贷APP</span>
+                <span>9能金科APP</span>
               </div>
             </a>
           </div>
@@ -41,7 +41,7 @@
         <nav class="nav-bar">
           <div class="nav-content">
             <div>
-              <img src="/static/1.png" alt="">
+              <img src="/static/1.png" alt="" style="width: 124px;">
             </div>
             <div>
               <router-link v-for="(item, index) in linkList" :key="index" :style="$route.meta.classify === item.link ? 'color:#a80e0e' : 'color:#333333'" :to="item.to">{{ item.name }}</router-link>
@@ -123,6 +123,7 @@ import { fetchCodeByLogin, checkPhoneStatus } from '@/api/layout'
 
 const linkOptions = [
   { link: 'home', name: '首页', to: '/' },
+  { link: 'creditCard', name: '信用卡申请', to: '/creditCard' },
   { link: 'loans', name: '贷款产品', to: '/loans' },
   { link: 'agent', name: '信贷经理', to: '/agent' },
   { link: 'organ', name: '贷款机构', to: '/organization' },
@@ -308,7 +309,6 @@ export default {
     },
     checkPhone() {
       checkPhoneStatus(this.loginNum.phone).then(res => {
-        console.log(res)
         if (res.data.status === 500) {
           this.$message.warning(res.data.msg)
           this.loginNum.phone = ''

@@ -65,6 +65,18 @@ export function sendPhoneCodeForRegister(phone, code) {
   })
 }
 
+// 申请贷款时  新手机号获取验证码
+export function sendNewPhoneCodeForApply(phone, code) {
+  const params = {
+    code
+  }
+  return request({
+    url: `/base/getDefaultRegisterCode/${phone}`,
+    method: 'get',
+    params
+  })
+}
+
 export function validateRegister(phone) { // 检测手机号是否注册
   return request({
     url: '/user/checkUserByPhone/' + phone,
@@ -156,14 +168,5 @@ export function fetchImgCode() {
   return request({
     url: '/verify/createImg',
     method: 'get'
-  })
-}
-
-// 保存图片验证码
-export function saveImgCode(params) {
-  return request({
-    url: '/base/saveCode',
-    method: 'post',
-    params
   })
 }

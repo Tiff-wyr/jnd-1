@@ -7,7 +7,7 @@
         <div class="clearfix w350">
           <img src="/static/resource/appVic.png" alt="">
           <div class="fll">
-            <div class="same">恭喜您成为9能贷平台会员，您可以通过</div>
+            <div class="same">恭喜您成为9能金科平台会员，您可以通过</div>
             <div class="same">账号：{{ number }}</div>
             <div class="same">密码：{{ code }}</div>
             <div class="same">

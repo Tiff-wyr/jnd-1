@@ -22,7 +22,7 @@
       </div>
       <div class="member-container">
         <div v-for="item in memberData.vipLevel" :class="{'member0': item.vid == 0, 'member1': item.vid == 1, 'member2': item.vid == 2, 'member3': item.vid == 3, }" :key="item.vid" class="item">
-          <div class="title"><i class="logo"/>9能贷</div>
+          <div class="title"><i class="logo"/>9能金科</div>
           <div class="container">{{ item.vipName }}</div>
           <div class="price">￥{{ item.price }}</div>
           <img :src="item.vid === 3 ? cNum : oNum" alt="">

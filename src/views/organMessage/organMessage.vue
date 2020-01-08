@@ -9,10 +9,7 @@
                 <div class="clearfix" style="width: 76px;height: 76px;margin: 0 auto">
                   <upload-img :img-url="image" class="fll" @uploadSuccess="uploadSuccess" @uploadFail="uploadFail"/>
                 </div>
-                <div
-                  class="clearfix fs"
-                  style="width: 120px;text-align: center;margin: 10px auto 0"
-                >
+                <div class="clearfix fs" style="width: 120px;text-align: center;margin: 10px auto 0">
                   <span class="text-main">{{ name }} <img v-if="userIdentity > 0" src="../../../static/resource/organMessage/vip.png" alt="" class="vip"></span>
                 </div>
               </div>

@@ -5,7 +5,7 @@
       <div class="w900">
         <div class="user-main">
           <div class="user-title">
-            <div class="title">欢迎注册9能贷网</div>
+            <div class="title">欢迎注册9能金科网</div>
             <div class="number">已有账号，</div>
             <div class="login" @click="loginPush">立即登陆</div>
           </div>
@@ -20,7 +20,7 @@
         <img src="../assets/title.png" alt="">
       </div>
       <div class="dialog-container">
-        <p>恭喜您成功注册为9能贷平台会员，可享受更多平台服务。</p>
+        <p>恭喜您成功注册为9能金科平台会员，可享受更多平台服务。</p>
         <p>账号:{{ phone }}</p>
         <p>密码:{{ password }}</p>
         <p>您可完善您的贷款资料，有助于提高贷款成功率，更加便捷的使用平台</p>

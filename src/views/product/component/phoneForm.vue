@@ -18,7 +18,7 @@
         <div v-else class="btn">{{ times }}s</div>
       </el-form-item>
       <el-form-item label="">
-        <el-checkbox v-model="agree" style="display: inline-block;margin-right: 6px;"/>阅读并同意<a href="/agreement?userProtect" target="_blank" style="color: #4a90e2;">《9能贷用户相关协议》</a>
+        <el-checkbox v-model="agree" style="display: inline-block;margin-right: 6px;"/>阅读并同意<a href="/agreement?userProtect" target="_blank" style="color: #4a90e2;">《9能金科用户相关协议》</a>
       </el-form-item>
       <el-form-item label="">
         <el-button :loading="isLoading" class="apply" @click="handleNext">下一步</el-button>
@@ -30,7 +30,7 @@
 </template>
 <script>
 import { validaterPhone } from '@/util/validate'
-import { sendPhoneCode, sendPhoneCodeForRegister, validateRegister, validIfApply, valideCode, saveOrder, saveImgCode } from '@/api/apply'
+import { sendPhoneCode, sendPhoneCodeForRegister, validateRegister, validIfApply, valideCode, saveOrder, sendNewPhoneCodeForApply } from '@/api/apply'
 import { mapState } from 'vuex'
 export default {
   name: 'PhoneForm',
@@ -102,6 +102,7 @@ export default {
     }
   },
   created() {
+    console.log(this.ifRegister)
     this.phoneForm.phone = this.phone
     this.handleUpdateImgCode()
   },
@@ -118,7 +119,7 @@ export default {
             return false
           } else {
             this.isRegister = true
-            this.saveCode(phone, 1)
+            this.sendCode(phone, this.phoneForm.code)
           }
           sessionStorage.setItem('show', false) // 控制最后一步相关信息是否显示
           this.zhuce = true
@@ -126,17 +127,10 @@ export default {
           this.zhuce = false
           sessionStorage.setItem('show', true)
           this.isRegister = false
-          this.saveCode(phone, 2)
-        }
-      })
-    },
-    saveCode(phone, type) { // 将图片交由后端保存
-      saveImgCode({ phone, code: this.phoneForm.code }).then(res => {
-        if (res.data.status === 200) { // 保存成功后请求发送验证码接口
-          if (type === 1) {
-            this.sendCode(phone, this.phoneForm.code)
-          } else {
+          if (this.ifRegister) {
             this.sendCodeForRegister(phone, this.phoneForm.code)
+          } else {
+            this.sendNewPhoneForApply(phone, this.phoneForm.code)
           }
         }
       })
@@ -256,6 +250,16 @@ export default {
     },
     sendCode(phone, code) {
       sendPhoneCode(phone, code).then(res => {
+        if (res.data.status === 200) {
+          this.$message.success('验证码发送成功，请注意查收')
+        } else {
+          this.$message.warning(res.data.msg)
+          this.clearTimer()
+        }
+      })
+    },
+    sendNewPhoneForApply(phone, code) {
+      sendNewPhoneCodeForApply(phone, code).then(res => {
         if (res.data.status === 200) {
           this.$message.success('验证码发送成功，请注意查收')
         } else {

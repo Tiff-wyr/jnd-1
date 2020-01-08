@@ -5,7 +5,7 @@
         <div class="left">
           <div class="about">
             <h3>关于我们</h3>
-            <p class="container">9能贷联合各类大型的金融机构，深度挖掘安全的金融服务渠道机构，为用户提供安全、多元的贷款产品和定制化的专业资金服务，打造更契合用户自身需求的贷款管理方案。</p>
+            <p class="container">9能金科联合各类大型的金融机构，深度挖掘安全的金融服务渠道机构，为用户提供安全、多元的贷款产品和定制化的专业资金服务，打造更契合用户自身需求的贷款管理方案。</p>
             <p class="container">我们将人文情怀融入金融服务之中，为用户创造更多价值，为社会营造诚信健康的金融环境，有效推动普惠金融发展。</p>
           </div>
           <div class="business-type">
@@ -37,7 +37,7 @@
       </div>
 
       <div class="copy-right">
-        <p>9能贷-信息平台 版权所有 Copyright @2019 www.9nengdai.com</p>
+        <p>9能金科-信息平台 版权所有 Copyright @2019 www.9nengdai.com</p>
         <p class="copy-info">
           <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502037638" target="_blank"><i/>京公网安备11010502037638号</a>
           &nbsp;

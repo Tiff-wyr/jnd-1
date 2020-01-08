@@ -6,7 +6,7 @@
       <div class="w900">
         <div class="user-main">
           <div class="user-title">
-            <div class="title">欢迎注册9能贷网</div>
+            <div class="title">欢迎注册9能金科网</div>
             <div class="number">已有账号，</div>
             <div class="login" @click="$router.push({path:'/',query:{login:1}})">立即登陆</div>
           </div>
@@ -228,7 +228,7 @@
                       @click="$router.push({path:'/',query:{login:1}})"
                     >已有账号？立即登陆</div>
                   </div>
-                  <div class="agreement"><el-checkbox v-model="isChecked"/> 阅读并同意 <a href="/agreement?loanOfficerRegister" target="_blank">《9能贷信贷员注册协议》</a><a href="/agreement?loanOfficerCodeConduct" target="_blank">《9能贷信贷员行为规范》</a></div>
+                  <div class="agreement"><el-checkbox v-model="isChecked"/> 阅读并同意 <a href="/agreement?loanOfficerRegister" target="_blank">《9能金科信贷员注册协议》</a><a href="/agreement?loanOfficerCodeConduct" target="_blank">《9能金科信贷员行为规范》</a></div>
                 </el-form-item>
               </div>
             </div>

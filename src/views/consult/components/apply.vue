@@ -44,14 +44,14 @@
             <el-checkbox v-model="checked"/>
             <el-dropdown trigger="click">
               <span class="el-dropdown-link">
-                阅读并同意9能贷用户相关协议<i class="el-icon-arrow-down el-icon--right"/>
+                阅读并同意9能金科用户相关协议<i class="el-icon-arrow-down el-icon--right"/>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item icon="el-icon-plus"><a class="link" href="/agreement?userProtect" target="_blank">《9能贷用户隐私保护政策》</a></el-dropdown-item>
-                <el-dropdown-item icon="el-icon-circle-plus"><a class="link" href="/agreement?userRegister" target="_blank">《9能贷用户注册协议》</a></el-dropdown-item>
+                <el-dropdown-item icon="el-icon-plus"><a class="link" href="/agreement?userProtect" target="_blank">《9能金科用户隐私保护政策》</a></el-dropdown-item>
+                <el-dropdown-item icon="el-icon-circle-plus"><a class="link" href="/agreement?userRegister" target="_blank">《9能金科用户注册协议》</a></el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <!-- <a href="/agreement?loanOfficerRegister" target="_blank">阅读并同意9能贷相关注册协议</a> -->
+            <!-- <a href="/agreement?loanOfficerRegister" target="_blank">阅读并同意9能金科相关注册协议</a> -->
           </p>
         </el-form-item>
       </el-form>
@@ -62,7 +62,6 @@
 import { validaterPhone, validaterLoanAmount, validaterName } from '@/util/validate'
 import { fetchProvince, fetchCity } from '@/api/register'
 import { validateRegister, sendPhoneCode, applyLoanByNoLogin } from '@/api/apply'
-// import { sendPhoneCode, sendPhoneCodeForRegister, validateRegister, validIfApply, valideCode, saveOrder, saveImgCode } from '@/api/apply'
 export default {
   name: 'Apply',
   data() {
@@ -299,7 +298,7 @@ export default {
               })
             }
           } else {
-            this.$message.warning('请阅读并同意9能贷平台相关协议')
+            this.$message.warning('请阅读并同意9能金科平台相关协议')
           }
         } else {
           return false
