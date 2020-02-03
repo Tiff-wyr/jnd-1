@@ -141,6 +141,7 @@ export default {
   methods: {
     getList() {
       fetchAtricle(this.listQuery).then(res => {
+        console.log(res)
         this.resultList = res.data.data.rows
         this.total = res.data.data.total
         window.scrollTo(0, 0)

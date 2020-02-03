@@ -2,7 +2,7 @@
   <div class="app-container">
     <main class="credit-card-main">
       <section class="credit-list">
-        <div class="credit-item" v-for="(item, index) in resultList" :key="index">
+        <div v-for="(item, index) in resultList" :key="index" class="credit-item">
           <div class="credit-main">
             <div class="credit-info">
               <div class="img-wrap">
@@ -69,7 +69,7 @@ export default {
       if (val) {
         return val.replace(/<br>/g, ',')
       }
-    },
+    }
   },
   data() {
     return {
@@ -93,7 +93,7 @@ export default {
       })
     },
     handleApply() {
-      window.location.href="https://creditcard.cmbc.com.cn/wsv2/"
+      window.location.href = 'https://creditcard.cmbc.com.cn/wsv2/'
     }
   }
 }
