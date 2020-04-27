@@ -34,6 +34,10 @@
                 <img src="../../assets/download/code.png" alt="">
                 <span>9能金科APP</span>
               </div>
+              <div class="code-box cardCode">
+                <img src="../../assets/download/cardCode.png" alt="">
+                <span>9能卡圈APP</span>
+              </div>
             </a>
           </div>
         </div>
@@ -442,14 +446,15 @@ export default {
   & > .code-box {
     position: absolute;
     top: 100%;
-    left: 50%;
+    left: -20px;
     width: 100px;
     padding: 8px 8px 5px;
     display: none;
     box-sizing: border-box;
     transform: translateX(-50%);
     background: $jnd-bg-color-white;
-    border: 1px solid #D9D9D9;
+    border-left: 1px solid #D9D9D9;
+    border-bottom: 1px solid #D9D9D9;
     z-index: 99999;
     text-align: center;
     color: $jnd-font-color-base;
@@ -457,6 +462,11 @@ export default {
     line-height: 1.5;
     img {
       width: 100%;
+    }
+    &.cardCode {
+      left: 80px;
+      border-right: 1px solid #D9D9D9;
+      border-left: none;
     }
   }
   &:hover {
